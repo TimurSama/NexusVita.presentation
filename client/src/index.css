@@ -43,39 +43,44 @@
 }
 
 :root {
-  --primary: var(--color-blue-700);
-  --primary-foreground: var(--color-blue-50);
-  --sidebar-primary: var(--color-blue-600);
-  --sidebar-primary-foreground: var(--color-blue-50);
-  --chart-1: var(--color-blue-300);
-  --chart-2: var(--color-blue-500);
-  --chart-3: var(--color-blue-600);
-  --chart-4: var(--color-blue-700);
-  --chart-5: var(--color-blue-800);
-  --radius: 0.65rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.235 0.015 65);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.235 0.015 65);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.235 0.015 65);
-  --secondary: oklch(0.98 0.001 286.375);
-  --secondary-foreground: oklch(0.4 0.015 65);
-  --muted: oklch(0.967 0.001 286.375);
-  --muted-foreground: oklch(0.552 0.016 285.938);
-  --accent: oklch(0.967 0.001 286.375);
-  --accent-foreground: oklch(0.141 0.005 285.823);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.92 0.004 286.32);
-  --input: oklch(0.92 0.004 286.32);
-  --ring: oklch(0.623 0.214 259.815);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.235 0.015 65);
-  --sidebar-accent: oklch(0.967 0.001 286.375);
-  --sidebar-accent-foreground: oklch(0.141 0.005 285.823);
-  --sidebar-border: oklch(0.92 0.004 286.32);
-  --sidebar-ring: oklch(0.623 0.214 259.815);
+  /* NexusVita Sketch-UI Palette */
+  --primary: oklch(0.65 0.2 28); /* Coral */
+  --primary-foreground: oklch(1 0 0);
+  --sidebar-primary: oklch(0.65 0.2 28);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --chart-1: oklch(0.65 0.2 28); /* Coral */
+  --chart-2: oklch(0.7 0.15 175); /* Mint */
+  --chart-3: oklch(0.7 0.15 320); /* Fuchsia */
+  --chart-4: oklch(0.8 0.1 85); /* Yellow */
+  --chart-5: oklch(0.65 0.2 28);
+  --radius: 0.75rem;
+  /* Light pastel background */
+  --background: oklch(0.96 0.01 70);
+  --foreground: oklch(0.25 0.02 65);
+  --card: oklch(0.98 0.005 70);
+  --card-foreground: oklch(0.25 0.02 65);
+  --popover: oklch(0.98 0.005 70);
+  --popover-foreground: oklch(0.25 0.02 65);
+  /* Mint accent */
+  --secondary: oklch(0.7 0.15 175);
+  --secondary-foreground: oklch(0.25 0.02 65);
+  /* Soft fuchsia */
+  --muted: oklch(0.75 0.08 320);
+  --muted-foreground: oklch(0.35 0.02 65);
+  --accent: oklch(0.7 0.15 175);
+  --accent-foreground: oklch(0.25 0.02 65);
+  --destructive: oklch(0.65 0.2 28);
+  --destructive-foreground: oklch(1 0 0);
+  /* Soft borders */
+  --border: oklch(0.9 0.01 70);
+  --input: oklch(0.92 0.01 70);
+  --ring: oklch(0.65 0.2 28);
+  --sidebar: oklch(0.96 0.01 70);
+  --sidebar-foreground: oklch(0.25 0.02 65);
+  --sidebar-accent: oklch(0.7 0.15 175);
+  --sidebar-accent-foreground: oklch(0.25 0.02 65);
+  --sidebar-border: oklch(0.9 0.01 70);
+  --sidebar-ring: oklch(0.65 0.2 28);
 }
 
 .dark {
@@ -83,28 +88,28 @@
   --primary-foreground: var(--color-blue-50);
   --sidebar-primary: var(--color-blue-500);
   --sidebar-primary-foreground: var(--color-blue-50);
-  --background: oklch(0.141 0.005 285.823);
-  --foreground: oklch(0.85 0.005 65);
-  --card: oklch(0.21 0.006 285.885);
-  --card-foreground: oklch(0.85 0.005 65);
-  --popover: oklch(0.21 0.006 285.885);
-  --popover-foreground: oklch(0.85 0.005 65);
-  --secondary: oklch(0.24 0.006 286.033);
-  --secondary-foreground: oklch(0.7 0.005 65);
-  --muted: oklch(0.274 0.006 286.033);
-  --muted-foreground: oklch(0.705 0.015 286.067);
-  --accent: oklch(0.274 0.006 286.033);
-  --accent-foreground:  oklch(0.92 0.005 65);
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.488 0.243 264.376);
-  --chart-1: var(--color-blue-300);
-  --chart-2: var(--color-blue-500);
-  --chart-3: var(--color-blue-600);
-  --chart-4: var(--color-blue-700);
-  --chart-5: var(--color-blue-800);
+  --background: oklch(0.96 0.01 70);
+  --foreground: oklch(0.25 0.02 65);
+  --card: oklch(0.98 0.005 70);
+  --card-foreground: oklch(0.25 0.02 65);
+  --popover: oklch(0.98 0.005 70);
+  --popover-foreground: oklch(0.25 0.02 65);
+  --secondary: oklch(0.7 0.15 175);
+  --secondary-foreground: oklch(0.25 0.02 65);
+  --muted: oklch(0.75 0.08 320);
+  --muted-foreground: oklch(0.35 0.02 65);
+  --accent: oklch(0.7 0.15 175);
+  --accent-foreground: oklch(0.25 0.02 65);
+  --destructive: oklch(0.65 0.2 28);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.9 0.01 70);
+  --input: oklch(0.92 0.01 70);
+  --ring: oklch(0.65 0.2 28);
+  --chart-1: oklch(0.65 0.2 28);
+  --chart-2: oklch(0.7 0.15 175);
+  --chart-3: oklch(0.7 0.15 320);
+  --chart-4: oklch(0.8 0.1 85);
+  --chart-5: oklch(0.65 0.2 28);
   --sidebar: oklch(0.21 0.006 285.885);
   --sidebar-foreground: oklch(0.85 0.005 65);
   --sidebar-accent: oklch(0.274 0.006 286.033);
@@ -173,5 +178,169 @@
       padding-right: 2rem;
       max-width: 1280px; /* Standard content width */
     }
+  }
+}
+
+/* Sketch-UI Elements */
+.sketch-panel {
+  @apply rounded-2xl bg-card text-card-foreground;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  position: relative;
+}
+
+.sketch-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  background-image: 
+    linear-gradient(45deg, transparent 48%, rgba(168, 144, 128, 0.03) 49%, rgba(168, 144, 128, 0.03) 51%, transparent 52%),
+    linear-gradient(-45deg, transparent 48%, rgba(168, 144, 128, 0.02) 49%, rgba(168, 144, 128, 0.02) 51%, transparent 52%);
+  background-size: 2px 2px, 2px 2px;
+  border-radius: 1rem;
+}
+
+.sketch-divider {
+  @apply my-6 md:my-8;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(168, 144, 128, 0.3) 10%, rgba(168, 144, 128, 0.3) 90%, transparent);
+  position: relative;
+}
+
+.sketch-divider::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  background-image: linear-gradient(90deg, transparent 0%, rgba(168, 144, 128, 0.1) 50%, transparent 100%);
+  opacity: 0.5;
+}
+
+/* Sketch-UI Button Styles */
+.btn-sketch {
+  @apply px-6 py-3 rounded-full font-semibold transition-all duration-300;
+  font-family: 'Poppins', sans-serif;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-sketch::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: linear-gradient(45deg, transparent 48%, rgba(255, 255, 255, 0.1) 49%, rgba(255, 255, 255, 0.1) 51%, transparent 52%);
+  background-size: 2px 2px;
+  pointer-events: none;
+  border-radius: 9999px;
+}
+
+.btn-sketch:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.btn-sketch:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Mode Switcher */
+.mode-switcher {
+  @apply flex gap-2 p-1 rounded-full bg-card;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.mode-button {
+  @apply px-4 py-2 rounded-full text-sm font-medium transition-all duration-300;
+  font-family: 'Poppins', sans-serif;
+  color: oklch(0.5 0.02 65);
+}
+
+.mode-button.active {
+  @apply text-white;
+  background: oklch(0.65 0.2 28);
+  box-shadow: 0 2px 8px rgba(255, 138, 101, 0.3);
+}
+
+.mode-button:hover:not(.active) {
+  @apply bg-muted;
+}
+
+/* Fade-in animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Pulse animation for interactive elements */
+@keyframes pulse-soft {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+}
+
+h1 {
+  font-size: 2.25rem;
+  letter-spacing: -0.02em;
+}
+
+@media (min-width: 768px) {
+  h1 {
+    font-size: 3rem;
+  }
+}
+
+h2 {
+  font-size: 1.875rem;
+  letter-spacing: -0.01em;
+}
+
+@media (min-width: 768px) {
+  h2 {
+    font-size: 2.25rem;
+  }
+}
+
+h3 {
+  font-size: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  h3 {
+    font-size: 1.875rem;
   }
 }
