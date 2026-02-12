@@ -5,52 +5,74 @@ import { ChevronRight } from 'lucide-react';
 import { PremiumCard } from '@/components/PremiumCard';
 import { StatCounter } from '@/components/StatCounter';
 import SketchIcon from '@/components/SketchIcon';
+import { DetailPopup } from '@/components/DetailPopup';
+import { InfoIndicator } from '@/components/InfoIndicator';
+import { whitepaperContent } from '@/data/whitepaperContent';
+import type { PopupContent } from '@/components/DetailPopup';
 
 export default function Presentation() {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+  const [openPopup, setOpenPopup] = useState<string | null>(null);
+
+  const modulePopupMap: Record<string, string> = {
+    'Медицина': 'medicine-module',
+    'Питание': 'nutrition-module',
+    'Движение': 'movement-module',
+    'Психология': 'psychology-module',
+    'Сон': 'sleep-module',
+    'Отношения': 'relationships-module',
+    'Духовность': 'spirituality-module',
+  };
 
   const healthModules = [
     {
       title: 'Медицина',
       icon: 'medicine' as const,
       description: 'Комплексная диагностика и профилактика заболеваний',
-      path: '/medicine'
+      path: '/medicine',
+      popupId: 'medicine-module'
     },
     {
       title: 'Питание',
       icon: 'nutrition' as const,
       description: 'Персональные рекомендации и анализ макронутриентов',
-      path: '/nutrition'
+      path: '/nutrition',
+      popupId: 'nutrition-module'
     },
     {
       title: 'Движение',
       icon: 'movement' as const,
       description: 'Фитнес, активность и интеграция с носимыми устройствами',
-      path: '/movement'
+      path: '/movement',
+      popupId: 'movement-module'
     },
     {
       title: 'Психология',
       icon: 'psychology' as const,
       description: 'Психическое здоровье и управление стрессом',
-      path: '/psychology'
+      path: '/psychology',
+      popupId: 'psychology-module'
     },
     {
       title: 'Сон',
       icon: 'sleep' as const,
       description: 'Качество сна и оптимизация циркадных ритмов',
-      path: '/sleep'
+      path: '/sleep',
+      popupId: 'sleep-module'
     },
     {
       title: 'Отношения',
       icon: 'relationships' as const,
       description: 'Социальные связи и здоровые отношения',
-      path: '/relationships'
+      path: '/relationships',
+      popupId: 'relationships-module'
     },
     {
       title: 'Духовность',
       icon: 'spirituality' as const,
       description: 'Личностный рост и смысл жизни',
-      path: '/spirituality'
+      path: '/spirituality',
+      popupId: 'spirituality-module'
     },
   ];
 
@@ -129,11 +151,18 @@ export default function Presentation() {
                 transition={{ delay: 0.1 }}
                 className="mb-8"
               >
-                <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold text-foreground mb-6 leading-tight tracking-tight">
-                  Экосистема здоровья
-                  <br />
-                  <span className="text-primary">нового поколения</span>
-                </h2>
+                <div className="flex items-start justify-between mb-6">
+                  <div className="flex-1">
+                    <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold text-foreground mb-6 leading-tight tracking-tight">
+                      Экосистема здоровья
+                      <br />
+                      <span className="text-primary">нового поколения</span>
+                    </h2>
+                  </div>
+                  <div className="ml-4">
+                    <InfoIndicator onClick={() => setOpenPopup('platform-overview')} />
+                  </div>
+                </div>
                 
                 <motion.p
                   initial={{ opacity: 0, y: 20 }}
@@ -218,12 +247,21 @@ export default function Presentation() {
                       <div className="p-3 bg-primary/10 rounded-xl">
                         <SketchIcon icon={module.icon} size={24} className="text-primary" />
                       </div>
-                      <motion.div
-                        animate={{ x: hoveredCard === idx ? 5 : 0 }}
-                        className="text-foreground/40"
-                      >
-                        <ChevronRight className="w-5 h-5" />
-                      </motion.div>
+                      <div className="flex items-center gap-2">
+                        <InfoIndicator 
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setOpenPopup(module.popupId);
+                          }} 
+                        />
+                        <motion.div
+                          animate={{ x: hoveredCard === idx ? 5 : 0 }}
+                          className="text-foreground/40"
+                        >
+                          <ChevronRight className="w-5 h-5" />
+                        </motion.div>
+                      </div>
                     </div>
                     
                     <h3 className="text-2xl font-bold mb-2 text-foreground">{module.title}</h3>
@@ -295,35 +333,51 @@ export default function Presentation() {
               {
                 title: 'AI-диагностика',
                 description: 'Анализ 2000+ показателей здоровья с точностью 95%',
-                icon: 'ai' as const
+                icon: 'ai' as const,
+                popupId: 'ai-diagnostics'
               },
               {
                 title: 'Персонализация',
                 description: 'Индивидуальные планы на основе ваших данных и целей',
-                icon: 'brain' as const
+                icon: 'brain' as const,
+                popupId: 'personalization'
               },
               {
                 title: 'Интеграции',
                 description: 'Подключение к медицинским учреждениям и устройствам',
-                icon: 'network' as const
+                icon: 'network' as const,
+                popupId: 'integrations'
               },
               {
                 title: 'Мониторинг 24/7',
                 description: 'Непрерывное отслеживание показателей здоровья',
-                icon: 'monitor' as const
+                icon: 'monitor' as const,
+                popupId: 'monitoring'
               },
             ].map((feature, idx) => (
-              <PremiumCard key={idx} delay={idx * 0.1}>
-                <div className="p-3 bg-primary/10 rounded-xl w-fit mb-4">
-                  <SketchIcon icon={feature.icon} size={32} className="text-primary" />
-                </div>
-                <h3 className="text-xl font-bold text-foreground mb-2">{feature.title}</h3>
-                <p className="text-foreground/70">{feature.description}</p>
-              </PremiumCard>
+              <div key={idx} className="relative">
+                <PremiumCard delay={idx * 0.1}>
+                  <div className="absolute top-4 right-4 z-10">
+                    <InfoIndicator onClick={() => setOpenPopup(feature.popupId)} />
+                  </div>
+                  <div className="p-3 bg-primary/10 rounded-xl w-fit mb-4">
+                    <SketchIcon icon={feature.icon} size={32} className="text-primary" />
+                  </div>
+                  <h3 className="text-xl font-bold text-foreground mb-2">{feature.title}</h3>
+                  <p className="text-foreground/70">{feature.description}</p>
+                </PremiumCard>
+              </div>
             ))}
           </div>
         </motion.section>
       </main>
+
+      {/* Detail Popup */}
+      <DetailPopup
+        isOpen={openPopup !== null}
+        onClose={() => setOpenPopup(null)}
+        content={openPopup ? whitepaperContent[openPopup] || null : null}
+      />
     </div>
   );
 }
