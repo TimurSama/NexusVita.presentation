@@ -86,7 +86,7 @@ export default function Home() {
       title: 'Инвестиции',
       description: 'Раунды финансирования и стратегии выхода',
       icon: '💼',
-      path: '/investment-proposal',
+      path: '/investment',
       color: 'from-amber-500 to-amber-600'
     },
   ];
