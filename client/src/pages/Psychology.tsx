@@ -192,6 +192,32 @@ export default function Psychology() {
             </div>
           </TabsContent>
 
+          <TabsContent value="questionnaire" className="space-y-6">
+            <div className="premium-card p-6">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h2 className="text-2xl font-bold text-foreground mb-2">Опросник ментального здоровья</h2>
+                  <p className="text-foreground/60">
+                    Помогите нам лучше понять ваше ментальное состояние
+                  </p>
+                </div>
+                {questionnaireCompleted && (
+                  <div className="flex items-center gap-2 text-primary">
+                    <CheckCircle2 className="h-5 w-5" />
+                    <span className="font-medium">Анкета заполнена</span>
+                  </div>
+                )}
+              </div>
+              <QuestionnaireComponent
+                questionnaire={psychologyQuestionnaire}
+                onComplete={(answers) => {
+                  console.log('Psychology questionnaire answers:', answers);
+                  setQuestionnaireCompleted(true);
+                }}
+              />
+            </div>
+          </TabsContent>
+
           <TabsContent value="tools" className="space-y-6">
             <div className="premium-card p-6">
               <h2 className="text-2xl font-bold text-foreground mb-4">Инструменты</h2>
