@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { Link } from 'wouter';
 import { motion } from 'framer-motion';
-import { ChevronRight, Heart, Brain, Users, Zap, TrendingUp } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import { PremiumCard } from '@/components/PremiumCard';
 import { StatCounter } from '@/components/StatCounter';
+import SketchIcon from '@/components/SketchIcon';
 
 export default function Home() {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
@@ -11,51 +12,44 @@ export default function Home() {
   const healthModules = [
     {
       title: 'Медицина',
-      icon: '⚕️',
+      icon: 'medicine' as const,
       description: 'Комплексная диагностика и профилактика заболеваний',
-      color: 'from-blue-500 to-blue-600',
       path: '/medicine'
     },
     {
       title: 'Питание',
-      icon: '🥗',
+      icon: 'nutrition' as const,
       description: 'Персональные рекомендации и анализ макронутриентов',
-      color: 'from-green-500 to-green-600',
       path: '/nutrition'
     },
     {
       title: 'Движение',
-      icon: '🏃',
+      icon: 'movement' as const,
       description: 'Фитнес, активность и интеграция с носимыми устройствами',
-      color: 'from-orange-500 to-orange-600',
       path: '/movement'
     },
     {
       title: 'Психология',
-      icon: '🧠',
+      icon: 'psychology' as const,
       description: 'Психическое здоровье и управление стрессом',
-      color: 'from-purple-500 to-purple-600',
       path: '/psychology'
     },
     {
       title: 'Сон',
-      icon: '😴',
+      icon: 'sleep' as const,
       description: 'Качество сна и оптимизация циркадных ритмов',
-      color: 'from-indigo-500 to-indigo-600',
       path: '/sleep'
     },
     {
       title: 'Отношения',
-      icon: '💑',
+      icon: 'relationships' as const,
       description: 'Социальные связи и здоровые отношения',
-      color: 'from-pink-500 to-pink-600',
       path: '/relationships'
     },
     {
       title: 'Духовность',
-      icon: '🕉️',
+      icon: 'spirituality' as const,
       description: 'Личностный рост и смысл жизни',
-      color: 'from-amber-500 to-amber-600',
       path: '/spirituality'
     },
   ];
@@ -64,30 +58,26 @@ export default function Home() {
     {
       title: 'Систематизация',
       description: '5 интегрированных комплексов здоровья',
-      icon: '🔗',
+      icon: 'systematization' as const,
       path: '/systematization',
-      color: 'from-cyan-500 to-cyan-600'
     },
     {
       title: 'Экономическая модель',
       description: 'Устойчивые источники дохода и прогнозы',
-      icon: '💰',
+      icon: 'economic' as const,
       path: '/economic-model',
-      color: 'from-green-500 to-green-600'
     },
     {
       title: 'Дорожная карта',
       description: '5-летний план развития и инвестиции',
-      icon: '🗺️',
+      icon: 'roadmap' as const,
       path: '/roadmap',
-      color: 'from-indigo-500 to-indigo-600'
     },
     {
       title: 'Инвестиции',
       description: 'Раунды финансирования и стратегии выхода',
-      icon: '💼',
+      icon: 'investment' as const,
       path: '/investment',
-      color: 'from-amber-500 to-amber-600'
     },
   ];
 
@@ -113,69 +103,98 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-sm border-b border-border">
+      <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-md border-b border-border/50">
         <div className="container py-4 flex items-center justify-between">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             className="flex items-center gap-3"
           >
-            <div className="text-3xl">🧬</div>
-            <h1 className="text-2xl font-bold text-foreground">NexusVita</h1>
+            <SketchIcon icon="dna" size={32} className="text-primary" />
+            <h1 className="text-2xl font-bold text-foreground tracking-tight">NexusVita</h1>
           </motion.div>
-          <p className="text-sm text-foreground/60">Экосистема здоровья</p>
+          <p className="text-sm text-foreground/60 font-medium">Экосистема здоровья</p>
         </div>
       </header>
 
       <main className="container py-12">
-        {/* Hero Section */}
+        {/* Hero Section - Premium Description */}
         <motion.section
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-16"
+          className="mb-20"
         >
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary/20 via-primary/10 to-primary/5 p-16 border border-border/50">
-            <motion.div
-              className="absolute inset-0 opacity-30"
-              animate={{
-                backgroundPosition: ['0% 0%', '100% 100%'],
-              }}
-              transition={{ duration: 8, repeat: Infinity, repeatType: 'reverse' }}
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary/5 via-background to-secondary/5 p-12 md:p-20 border border-border/50 shadow-lg">
+            {/* Subtle grid pattern */}
+            <div 
+              className="absolute inset-0 opacity-[0.03]"
               style={{
-                backgroundImage: 'radial-gradient(circle, rgba(59, 130, 246, 0.1) 1px, transparent 1px)',
-                backgroundSize: '50px 50px',
+                backgroundImage: `
+                  linear-gradient(to right, currentColor 1px, transparent 1px),
+                  linear-gradient(to bottom, currentColor 1px, transparent 1px)
+                `,
+                backgroundSize: '40px 40px',
               }}
             />
             
-            <div className="relative z-10">
-              <motion.h2
+            <div className="relative z-10 max-w-4xl">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className="mb-8"
+              >
+                <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold text-foreground mb-6 leading-tight tracking-tight">
+                  Экосистема здоровья
+                  <br />
+                  <span className="text-primary">нового поколения</span>
+                </h2>
+              </motion.div>
+              
+              <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="text-5xl md:text-6xl font-bold text-foreground mb-6"
+                className="space-y-4 mb-12"
               >
-                Экосистема здоровья нового поколения
-              </motion.h2>
-              
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                className="text-xl text-foreground/70 mb-8 max-w-3xl"
-              >
-                Интегрированная платформа для комплексного развития 7 направлений здоровья с AI-диагностикой и персональными рекомендациями
-              </motion.p>
+                <p className="text-xl md:text-2xl text-foreground/80 leading-relaxed font-light">
+                  Комплексная платформа для системного управления здоровьем, объединяющая 
+                  <span className="font-medium text-foreground"> семь взаимосвязанных модулей</span> в единую 
+                  интеллектуальную экосистему.
+                </p>
+                <p className="text-lg text-foreground/70 leading-relaxed">
+                  NexusVita обеспечивает глубокий анализ показателей здоровья, персональные рекомендации 
+                  на основе искусственного интеллекта и непрерывный мониторинг всех аспектов благополучия 
+                  через интеграцию с медицинскими системами, носимыми устройствами и партнёрской сетью.
+                </p>
+                <p className="text-base text-foreground/60 leading-relaxed">
+                  Научно обоснованный подход к профилактике, диагностике и оптимизации здоровья 
+                  с применением передовых технологий и системного анализа данных.
+                </p>
+              </motion.div>
 
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="grid grid-cols-1 md:grid-cols-4 gap-4"
+                className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6"
               >
-                <StatCounter value={9.3} label="Триллионов рынка" suffix="T$" delay={0.5} />
-                <StatCounter value={7} label="Модулей здоровья" delay={0.6} />
-                <StatCounter value={2000} label="Показателей" suffix="+" delay={0.7} />
-                <StatCounter value={95} label="Точность диагностики" suffix="%" delay={0.8} />
+                <div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-xl p-4 md:p-6">
+                  <div className="text-3xl md:text-4xl font-bold text-primary mb-1">9.3T$</div>
+                  <div className="text-sm text-foreground/60">Адресуемый рынок</div>
+                </div>
+                <div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-xl p-4 md:p-6">
+                  <div className="text-3xl md:text-4xl font-bold text-primary mb-1">7</div>
+                  <div className="text-sm text-foreground/60">Модулей здоровья</div>
+                </div>
+                <div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-xl p-4 md:p-6">
+                  <div className="text-3xl md:text-4xl font-bold text-primary mb-1">2000+</div>
+                  <div className="text-sm text-foreground/60">Показателей</div>
+                </div>
+                <div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-xl p-4 md:p-6">
+                  <div className="text-3xl md:text-4xl font-bold text-primary mb-1">95%</div>
+                  <div className="text-sm text-foreground/60">Точность диагностики</div>
+                </div>
               </motion.div>
             </div>
           </div>
@@ -204,23 +223,27 @@ export default function Home() {
                   onMouseEnter={() => setHoveredCard(idx)}
                   onMouseLeave={() => setHoveredCard(null)}
                   whileHover={{ y: -8 }}
-                  className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${module.color} p-6 text-white border border-white/10 cursor-pointer block h-full`}
+                  className="relative overflow-hidden rounded-2xl bg-card border border-border/50 p-6 cursor-pointer block h-full group hover:border-primary/30 transition-all"
                 >
-                  <div className="absolute top-0 right-0 text-6xl opacity-20">{module.icon}</div>
+                  <div className="absolute top-0 right-0 opacity-5 group-hover:opacity-10 transition-opacity">
+                    <SketchIcon icon={module.icon} size={80} className="text-primary" />
+                  </div>
                   
                   <div className="relative z-10">
                     <div className="flex items-center justify-between mb-4">
-                      <span className="text-4xl">{module.icon}</span>
+                      <div className="p-3 bg-primary/10 rounded-xl">
+                        <SketchIcon icon={module.icon} size={24} className="text-primary" />
+                      </div>
                       <motion.div
                         animate={{ x: hoveredCard === idx ? 5 : 0 }}
-                        className="text-white/70"
+                        className="text-foreground/40"
                       >
                         <ChevronRight className="w-5 h-5" />
                       </motion.div>
                     </div>
                     
-                    <h3 className="text-2xl font-bold mb-2">{module.title}</h3>
-                    <p className="text-white/80 text-sm">{module.description}</p>
+                    <h3 className="text-2xl font-bold mb-2 text-foreground">{module.title}</h3>
+                    <p className="text-foreground/70 text-sm leading-relaxed">{module.description}</p>
                   </div>
                 </motion.a>
               </Link>
@@ -249,14 +272,18 @@ export default function Home() {
                 <motion.a
                   variants={itemVariants}
                   whileHover={{ y: -5 }}
-                  className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${section.color} p-8 text-white border border-white/10 cursor-pointer block`}
+                  className="relative overflow-hidden rounded-2xl bg-card border border-border/50 p-8 cursor-pointer block group hover:border-primary/30 transition-all"
                 >
-                  <div className="absolute top-0 right-0 text-6xl opacity-20">{section.icon}</div>
+                  <div className="absolute top-0 right-0 opacity-5 group-hover:opacity-10 transition-opacity">
+                    <SketchIcon icon={section.icon} size={100} className="text-primary" />
+                  </div>
                   
                   <div className="relative z-10">
-                    <div className="text-5xl mb-4">{section.icon}</div>
-                    <h3 className="text-2xl font-bold mb-2">{section.title}</h3>
-                    <p className="text-white/80">{section.description}</p>
+                    <div className="mb-4 inline-block p-3 bg-primary/10 rounded-xl">
+                      <SketchIcon icon={section.icon} size={32} className="text-primary" />
+                    </div>
+                    <h3 className="text-2xl font-bold mb-2 text-foreground">{section.title}</h3>
+                    <p className="text-foreground/70">{section.description}</p>
                   </div>
                 </motion.a>
               </Link>
@@ -284,37 +311,39 @@ export default function Home() {
               {
                 title: 'AI-диагностика',
                 description: 'Анализ 2000+ показателей здоровья с точностью 95%',
-                icon: '🤖'
+                icon: 'ai' as const
               },
               {
                 title: 'Персональные рекомендации',
                 description: '1000+ рекомендаций для каждого пользователя',
-                icon: '✨'
+                icon: 'brain' as const
               },
               {
                 title: 'Интеграция партнёров',
                 description: 'Сеть 5000+ партнёрских организаций',
-                icon: '🤝'
+                icon: 'network' as const
               },
               {
                 title: 'Мониторинг 24/7',
                 description: 'Постоянное отслеживание ключевых показателей',
-                icon: '📊'
+                icon: 'monitor' as const
               },
               {
                 title: 'Синергия данных',
                 description: 'Холистический анализ всех направлений здоровья',
-                icon: '🔗'
+                icon: 'link' as const
               },
               {
                 title: 'Масштабируемость',
                 description: 'Готовность к 100M+ пользователей',
-                icon: '📈'
+                icon: 'trending' as const
               },
             ].map((feature, idx) => (
               <PremiumCard key={idx} delay={idx * 0.1}>
                 <div className="flex items-start gap-4">
-                  <span className="text-4xl flex-shrink-0">{feature.icon}</span>
+                  <div className="p-2 bg-primary/10 rounded-lg flex-shrink-0">
+                    <SketchIcon icon={feature.icon} size={20} className="text-primary" />
+                  </div>
                   <div>
                     <h3 className="text-lg font-bold text-foreground mb-2">{feature.title}</h3>
                     <p className="text-foreground/70 text-sm">{feature.description}</p>
@@ -332,7 +361,7 @@ export default function Home() {
           viewport={{ once: true }}
           className="mb-16"
         >
-          <PremiumCard gradient="from-primary/20 to-primary/10">
+          <PremiumCard gradient="from-primary/10 to-secondary/5">
             <div className="text-center py-12">
               <h3 className="text-3xl font-bold text-foreground mb-4">Начните исследование</h3>
               <p className="text-foreground/70 mb-8 max-w-2xl mx-auto">
