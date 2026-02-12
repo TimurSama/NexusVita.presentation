@@ -11,33 +11,36 @@
     // https://github.com/rafgraph/spa-github-pages
     var pathSegmentsToKeep = 1; // Keep /NexusVita.presentation/
     var l = window.location;
+    var path = l.pathname;
+    var segments = path.split('/').filter(Boolean);
     
-    // If we're at the root or 404, redirect to index.html
-    if (l.pathname === '/' || l.pathname === '/NexusVita.presentation/' || l.pathname.endsWith('/404.html')) {
-      var basePath = '/NexusVita.presentation/';
-      var redirect = basePath + 'index.html';
-      if (l.pathname !== basePath && l.pathname !== basePath + 'index.html') {
-        // Preserve the original path for SPA routing
-        var originalPath = l.pathname.replace(basePath, '').replace('/404.html', '');
-        if (originalPath && originalPath !== '/') {
-          redirect += '#!' + originalPath;
+    // Determine base path
+    var basePath = '/NexusVita.presentation/';
+    
+    // If we're at 404.html, redirect to index.html
+    if (path.endsWith('/404.html') || path.endsWith('404.html')) {
+      // Extract the original path before 404.html
+      var originalPath = path.replace('/404.html', '').replace('404.html', '');
+      if (originalPath === basePath || originalPath === '/NexusVita.presentation') {
+        // Root path - go to home
+        l.replace(basePath + 'index.html');
+      } else {
+        // Preserve the route
+        var route = originalPath.replace(basePath, '');
+        if (route && route !== '/') {
+          sessionStorage.setItem('wouter-location', '/' + route);
         }
+        l.replace(basePath + 'index.html');
       }
-      l.replace(redirect);
+    } else if (path === '/' || path === basePath || path === '/NexusVita.presentation') {
+      // Root path - redirect to index.html
+      l.replace(basePath + 'index.html');
     } else {
-      // Handle SPA routing
-      var path = l.pathname;
-      var segments = path.split('/').filter(Boolean);
-      var baseSegments = segments.slice(0, pathSegmentsToKeep);
-      var routeSegments = segments.slice(pathSegmentsToKeep);
-      
-      var basePath = '/' + baseSegments.join('/') + '/';
-      var route = routeSegments.length > 0 ? '/' + routeSegments.join('/') : '/';
-      
-      // Store the route in sessionStorage for the SPA router
-      sessionStorage.setItem('wouter-location', route);
-      
-      // Redirect to index.html
+      // Other paths - redirect to index.html with route preservation
+      var route = path.replace(basePath, '');
+      if (route && route !== '/') {
+        sessionStorage.setItem('wouter-location', '/' + route);
+      }
       l.replace(basePath + 'index.html');
     }
   </script>
