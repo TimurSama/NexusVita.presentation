@@ -1,15 +1,18 @@
 import { useState } from 'react';
-import { ChevronLeft, Activity, TrendingUp, Target, Zap } from 'lucide-react';
+import { ChevronLeft, Activity, TrendingUp, Target, Zap, ClipboardList, CheckCircle2 } from 'lucide-react';
 import { useLocation } from 'wouter';
 import { motion } from 'framer-motion';
 import SketchIcon from '@/components/SketchIcon';
 import { HealthMetricCard } from '@/components/HealthMetricCard';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
+import { QuestionnaireComponent } from '@/components/Questionnaire';
+import { movementQuestionnaire } from '@/data/questionnaires/movement';
 
 export default function Movement() {
   const [, setLocation] = useLocation();
   const [selectedTab, setSelectedTab] = useState('overview');
+  const [questionnaireCompleted, setQuestionnaireCompleted] = useState(false);
 
   const todayStats = [
     {
@@ -96,11 +99,15 @@ export default function Movement() {
         </motion.div>
 
         <Tabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="overview">Обзор</TabsTrigger>
             <TabsTrigger value="workouts">Тренировки</TabsTrigger>
             <TabsTrigger value="programs">Программы</TabsTrigger>
             <TabsTrigger value="analytics">Аналитика</TabsTrigger>
+            <TabsTrigger value="questionnaire">
+              <ClipboardList className="w-4 h-4 mr-2" />
+              Анкета
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">

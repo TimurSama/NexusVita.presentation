@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronLeft, Smile, Frown, Meh, TrendingUp } from 'lucide-react';
+import { ChevronLeft, Smile, Frown, Meh, TrendingUp, ClipboardList, CheckCircle2 } from 'lucide-react';
 import { useLocation } from 'wouter';
 import { motion } from 'framer-motion';
 import SketchIcon from '@/components/SketchIcon';
@@ -7,11 +7,14 @@ import { HealthMetricCard } from '@/components/HealthMetricCard';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
+import { QuestionnaireComponent } from '@/components/Questionnaire';
+import { psychologyQuestionnaire } from '@/data/questionnaires/psychology';
 
 export default function Psychology() {
   const [, setLocation] = useLocation();
   const [selectedTab, setSelectedTab] = useState('overview');
   const [mood, setMood] = useState(7);
+  const [questionnaireCompleted, setQuestionnaireCompleted] = useState(false);
 
   const moodData = [
     { date: '2025-02-12', value: 8, icon: Smile },
@@ -54,11 +57,15 @@ export default function Psychology() {
         </motion.div>
 
         <Tabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="overview">Обзор</TabsTrigger>
             <TabsTrigger value="mood">Настроение</TabsTrigger>
             <TabsTrigger value="stress">Стресс</TabsTrigger>
             <TabsTrigger value="tools">Инструменты</TabsTrigger>
+            <TabsTrigger value="questionnaire">
+              <ClipboardList className="w-4 h-4 mr-2" />
+              Анкета
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">

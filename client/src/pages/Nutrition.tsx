@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronLeft, Plus, Camera, Search } from 'lucide-react';
+import { ChevronLeft, Plus, Camera, Search, ClipboardList, CheckCircle2 } from 'lucide-react';
 import { useLocation } from 'wouter';
 import { motion } from 'framer-motion';
 import SketchIcon from '@/components/SketchIcon';
@@ -7,10 +7,13 @@ import { HealthMetricCard } from '@/components/HealthMetricCard';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
+import { QuestionnaireComponent } from '@/components/Questionnaire';
+import { nutritionQuestionnaire } from '@/data/questionnaires/nutrition';
 
 export default function Nutrition() {
   const [, setLocation] = useLocation();
   const [selectedTab, setSelectedTab] = useState('overview');
+  const [questionnaireCompleted, setQuestionnaireCompleted] = useState(false);
 
   const todayMacros = [
     {
@@ -107,11 +110,15 @@ export default function Nutrition() {
         </motion.div>
 
         <Tabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="overview">Обзор</TabsTrigger>
             <TabsTrigger value="diary">Дневник</TabsTrigger>
             <TabsTrigger value="macros">Макронутриенты</TabsTrigger>
             <TabsTrigger value="plans">Планы</TabsTrigger>
+            <TabsTrigger value="questionnaire">
+              <ClipboardList className="w-4 h-4 mr-2" />
+              Анкета
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
