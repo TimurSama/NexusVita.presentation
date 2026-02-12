@@ -71,7 +71,7 @@ export default function Calendar() {
   const dayEvents = events[selectedDateKey] || [];
 
   return (
-    <div className="min-h-screen bg-background pb-20 md:pb-0 md:ml-64">
+    <div className="min-h-screen bg-background pb-20 md:pb-0 pt-20">
       <div className="container py-6 md:py-8">
         {/* Header */}
         <motion.div

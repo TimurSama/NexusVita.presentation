@@ -5,8 +5,9 @@ import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { MobileNavigation } from "./components/MobileNavigation";
-import { DesktopNavigation } from "./components/DesktopNavigation";
+import { Header } from "./components/Header";
 import Home from "./pages/Home";
+import Presentation from "./pages/Presentation";
 import Dashboard from "./pages/Dashboard";
 import Calendar from "./pages/Calendar";
 import Profile from "./pages/Profile";
@@ -29,6 +30,7 @@ function Router() {
   return (
     <Switch>
       <Route path={"/"} component={Home} />
+      <Route path={"/presentation"} component={Presentation} />
       <Route path={"/dashboard"} component={Dashboard} />
       <Route path={"/medicine"} component={Medicine} />
       <Route path={"/nutrition"} component={Nutrition} />
@@ -60,7 +62,7 @@ function App() {
       <ThemeProvider defaultTheme="light">
         <TooltipProvider>
           <Toaster />
-          <DesktopNavigation />
+          <Header />
           <Router />
           <MobileNavigation />
         </TooltipProvider>
