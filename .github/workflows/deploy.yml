@@ -48,10 +48,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build
+      - name: Build with base path
         env:
           VITE_BASE_PATH: /NexusVita.presentation/
-        run: pnpm run build
+        run: |
+          echo "Building with VITE_BASE_PATH=$VITE_BASE_PATH"
+          pnpm run build
+          echo "Verifying paths in index.html:"
+          grep -E "(href|src)=.*assets" dist/public/index.html | head -2 || echo "No assets found"
 
       - name: Verify build output
         run: |
@@ -64,6 +68,7 @@ jobs:
             exit 1
           fi
           echo "Build output verified successfully"
+          ls -la dist/public/assets/ || echo "Assets directory check"
 
       - name: Copy 404.html for SPA routing
         run: |
