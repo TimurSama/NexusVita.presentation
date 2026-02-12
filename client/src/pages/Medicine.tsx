@@ -10,6 +10,7 @@ import { Card } from '@/components/ui/card';
 import { QuestionnaireComponent } from '@/components/Questionnaire';
 import { SettingsPanel, Setting } from '@/components/SettingsPanel';
 import { medicalQuestionnaire } from '@/data/questionnaires/medicine';
+import { medicineSettings } from '@/data/settings/medicine';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
 export default function Medicine() {
@@ -89,6 +90,28 @@ export default function Medicine() {
                 <p className="text-foreground/60">Диагностика и профилактика</p>
               </div>
             </div>
+            <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
+              <DialogTrigger asChild>
+                <Button variant="outline" className="gap-2">
+                  <Settings className="h-4 w-4" />
+                  Настройки
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle>Настройки модуля Медицина</DialogTitle>
+                </DialogHeader>
+                <SettingsPanel
+                  title="Настройки"
+                  settings={medicineSettings}
+                  onSave={(settings) => {
+                    console.log('Settings saved:', settings);
+                    setIsSettingsOpen(false);
+                  }}
+                  categories={['Общие', 'Уведомления', 'Интеграции']}
+                />
+              </DialogContent>
+            </Dialog>
           </div>
         </motion.div>
 

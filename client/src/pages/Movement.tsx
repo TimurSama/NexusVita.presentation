@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronLeft, Activity, TrendingUp, Target, Zap, ClipboardList, CheckCircle2 } from 'lucide-react';
+import { ChevronLeft, Activity, TrendingUp, Target, Zap, ClipboardList, CheckCircle2, Settings } from 'lucide-react';
 import { useLocation } from 'wouter';
 import { motion } from 'framer-motion';
 import SketchIcon from '@/components/SketchIcon';
@@ -8,6 +8,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { QuestionnaireComponent } from '@/components/Questionnaire';
 import { movementQuestionnaire } from '@/data/questionnaires/movement';
+import { SettingsPanel } from '@/components/SettingsPanel';
+import { movementSettings } from '@/data/settings/movement';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
 export default function Movement() {
   const [, setLocation] = useLocation();

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronLeft, Smile, Frown, Meh, TrendingUp, ClipboardList, CheckCircle2 } from 'lucide-react';
+import { ChevronLeft, Smile, Frown, Meh, TrendingUp, ClipboardList, CheckCircle2, Settings } from 'lucide-react';
 import { useLocation } from 'wouter';
 import { motion } from 'framer-motion';
 import SketchIcon from '@/components/SketchIcon';
@@ -9,6 +9,9 @@ import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { QuestionnaireComponent } from '@/components/Questionnaire';
 import { psychologyQuestionnaire } from '@/data/questionnaires/psychology';
+import { SettingsPanel } from '@/components/SettingsPanel';
+import { psychologySettings } from '@/data/settings/psychology';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
 export default function Psychology() {
   const [, setLocation] = useLocation();
