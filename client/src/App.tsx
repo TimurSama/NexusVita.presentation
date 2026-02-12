@@ -4,7 +4,13 @@ import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import { MobileNavigation } from "./components/MobileNavigation";
+import { DesktopNavigation } from "./components/DesktopNavigation";
 import Home from "./pages/Home";
+import Dashboard from "./pages/Dashboard";
+import Calendar from "./pages/Calendar";
+import Profile from "./pages/Profile";
+import Habits from "./pages/Habits";
 import Medicine from "./pages/Medicine";
 import Nutrition from "./pages/Nutrition";
 import Movement from "./pages/Movement";
@@ -23,6 +29,7 @@ function Router() {
   return (
     <Switch>
       <Route path={"/"} component={Home} />
+      <Route path={"/dashboard"} component={Dashboard} />
       <Route path={"/medicine"} component={Medicine} />
       <Route path={"/nutrition"} component={Nutrition} />
       <Route path={"/movement"} component={Movement} />
@@ -36,6 +43,11 @@ function Router() {
       <Route path={"/investment"} component={InvestmentProposal} />
       <Route path={"/ai-planner"} component={AiPlanner} />
       <Route path={"/tokenomics"} component={Tokenomics} />
+      <Route path={"/calendar"} component={Calendar} />
+      <Route path={"/profile"} component={Profile} />
+      <Route path={"/settings"} component={() => <div className="p-8">Настройки (в разработке)</div>} />
+      <Route path={"/habits"} component={Habits} />
+      <Route path={"/environment"} component={() => <div className="p-8">Среда (в разработке)</div>} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
     </Switch>
@@ -48,7 +60,9 @@ function App() {
       <ThemeProvider defaultTheme="light">
         <TooltipProvider>
           <Toaster />
+          <DesktopNavigation />
           <Router />
+          <MobileNavigation />
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>

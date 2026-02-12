@@ -2,13 +2,17 @@ import { motion } from 'framer-motion';
 import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
 import SketchIcon from './SketchIcon';
 
+type SketchIconType = 'medicine' | 'nutrition' | 'movement' | 'psychology' | 'sleep' | 'relationships' | 'spirituality' | 
+  'systematization' | 'economic' | 'roadmap' | 'investment' | 'ai' | 'tokenomics' | 'dna' | 'chart' | 
+  'network' | 'monitor' | 'link' | 'scale' | 'brain' | 'heart' | 'users' | 'zap' | 'trending';
+
 interface HealthMetricCardProps {
   title: string;
   value: number | string;
   unit?: string;
   trend?: 'up' | 'down' | 'stable';
   target?: number;
-  icon?: 'chart' | 'monitor' | 'heart' | 'brain';
+  icon?: SketchIconType;
   description?: string;
   delay?: number;
 }

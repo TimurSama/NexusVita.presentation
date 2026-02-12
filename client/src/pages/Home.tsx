@@ -101,23 +101,8 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-md border-b border-border/50">
-        <div className="container py-4 flex items-center justify-between">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="flex items-center gap-3"
-          >
-            <SketchIcon icon="dna" size={32} className="text-primary" />
-            <h1 className="text-2xl font-bold text-foreground tracking-tight">NexusVita</h1>
-          </motion.div>
-          <p className="text-sm text-foreground/60 font-medium">Экосистема здоровья</p>
-        </div>
-      </header>
-
-      <main className="container py-12">
+    <div className="min-h-screen bg-background pb-20 md:pb-0 md:ml-64">
+      <main className="container py-6 md:py-8">
         {/* Hero Section - Premium Description */}
         <motion.section
           initial={{ opacity: 0, y: 30 }}
