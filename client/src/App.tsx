@@ -12,6 +12,8 @@ import Dashboard from "./pages/Dashboard";
 import Calendar from "./pages/Calendar";
 import Profile from "./pages/Profile";
 import Habits from "./pages/Habits";
+import Journal from "./pages/Journal";
+import AIChat from "./pages/AIChat";
 import Medicine from "./pages/Medicine";
 import Nutrition from "./pages/Nutrition";
 import Movement from "./pages/Movement";
@@ -49,6 +51,8 @@ function Router() {
       <Route path={"/profile"} component={Profile} />
       <Route path={"/settings"} component={() => <div className="p-8">Настройки (в разработке)</div>} />
       <Route path={"/habits"} component={Habits} />
+      <Route path={"/journal"} component={Journal} />
+      <Route path={"/ai-chat"} component={AIChat} />
       <Route path={"/environment"} component={() => <div className="p-8">Среда (в разработке)</div>} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
