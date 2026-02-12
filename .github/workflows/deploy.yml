@@ -49,6 +49,8 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build
+        env:
+          VITE_BASE_PATH: /NexusVita.presentation/
         run: pnpm run build
 
       - name: Verify build output
