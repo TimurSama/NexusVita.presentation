@@ -16,6 +16,33 @@
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     <!-- Analytics script removed for production build -->
+    <script>
+      // Handle SPA routing for GitHub Pages
+      (function() {
+        // Check if we have a stored route from 404.html
+        var storedRoute = sessionStorage.getItem('wouter-location');
+        if (storedRoute) {
+          sessionStorage.removeItem('wouter-location');
+          // Update the URL without reload
+          if (window.history && window.history.replaceState) {
+            var basePath = '/NexusVita.presentation';
+            var newPath = basePath + storedRoute;
+            if (window.location.pathname !== newPath) {
+              window.history.replaceState(null, '', newPath);
+            }
+          }
+        }
+        
+        // Handle hash-based routing from 404.html
+        if (window.location.hash && window.location.hash.startsWith('#!')) {
+          var route = window.location.hash.substring(2);
+          var basePath = '/NexusVita.presentation';
+          if (window.history && window.history.replaceState) {
+            window.history.replaceState(null, '', basePath + route);
+          }
+        }
+      })();
+    </script>
   </body>
 
 </html>

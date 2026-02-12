@@ -4,32 +4,42 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NexusVita - Health Ecosystem</title>
-  <script>
-    // Single Page Apps for GitHub Pages
-    // https://github.com/rafgraph/spa-github-pages
-    (function() {
-      var redirect = sessionStorage.redirect;
-      delete sessionStorage.redirect;
-      if (redirect && redirect != location.href) {
-        history.replaceState(null, null, redirect);
-      }
-    })();
-  </script>
 </head>
 <body>
   <script>
-    // Redirect to index.html with base path support
-    sessionStorage.redirect = location.href;
-    var path = location.pathname;
-    // Remove trailing slash if present
-    if (path.endsWith('/')) {
-      path = path.slice(0, -1);
+    // Single Page Apps for GitHub Pages
+    // https://github.com/rafgraph/spa-github-pages
+    var pathSegmentsToKeep = 1; // Keep /NexusVita.presentation/
+    var l = window.location;
+    
+    // If we're at the root or 404, redirect to index.html
+    if (l.pathname === '/' || l.pathname === '/NexusVita.presentation/' || l.pathname.endsWith('/404.html')) {
+      var basePath = '/NexusVita.presentation/';
+      var redirect = basePath + 'index.html';
+      if (l.pathname !== basePath && l.pathname !== basePath + 'index.html') {
+        // Preserve the original path for SPA routing
+        var originalPath = l.pathname.replace(basePath, '').replace('/404.html', '');
+        if (originalPath && originalPath !== '/') {
+          redirect += '#!' + originalPath;
+        }
+      }
+      l.replace(redirect);
+    } else {
+      // Handle SPA routing
+      var path = l.pathname;
+      var segments = path.split('/').filter(Boolean);
+      var baseSegments = segments.slice(0, pathSegmentsToKeep);
+      var routeSegments = segments.slice(pathSegmentsToKeep);
+      
+      var basePath = '/' + baseSegments.join('/') + '/';
+      var route = routeSegments.length > 0 ? '/' + routeSegments.join('/') : '/';
+      
+      // Store the route in sessionStorage for the SPA router
+      sessionStorage.setItem('wouter-location', route);
+      
+      // Redirect to index.html
+      l.replace(basePath + 'index.html');
     }
-    // Go up one level and add index.html
-    var segments = path.split('/').filter(Boolean);
-    segments.pop(); // Remove last segment (404.html or empty)
-    var basePath = segments.length > 0 ? '/' + segments.join('/') + '/' : '/';
-    location.replace(basePath + 'index.html');
   </script>
 </body>
 </html>
