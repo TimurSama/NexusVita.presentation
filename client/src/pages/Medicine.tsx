@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronLeft, Upload, FileText, TrendingUp, AlertCircle } from 'lucide-react';
+import { ChevronLeft, Upload, FileText, TrendingUp, AlertCircle, Settings, ClipboardList, CheckCircle2 } from 'lucide-react';
 import { useLocation, Link } from 'wouter';
 import { motion } from 'framer-motion';
 import SketchIcon from '@/components/SketchIcon';
@@ -7,10 +7,17 @@ import { HealthMetricCard } from '@/components/HealthMetricCard';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { QuestionnaireComponent } from '@/components/Questionnaire';
+import { SettingsPanel, Setting } from '@/components/SettingsPanel';
+import { medicalQuestionnaire } from '@/data/questionnaires/medicine';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
 export default function Medicine() {
   const [, setLocation] = useLocation();
   const [selectedTab, setSelectedTab] = useState('overview');
+  const [isQuestionnaireOpen, setIsQuestionnaireOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [questionnaireCompleted, setQuestionnaireCompleted] = useState(false);
 
   const diagnosticAreas = [
     {
@@ -86,11 +93,15 @@ export default function Medicine() {
         </motion.div>
 
         <Tabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="overview">Обзор</TabsTrigger>
             <TabsTrigger value="labs">Анализы</TabsTrigger>
             <TabsTrigger value="diagnostics">Диагностика</TabsTrigger>
             <TabsTrigger value="prevention">Профилактика</TabsTrigger>
+            <TabsTrigger value="questionnaire">
+              <ClipboardList className="w-4 h-4 mr-2" />
+              Анкета
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
@@ -234,6 +245,33 @@ export default function Medicine() {
                   </div>
                 </motion.div>
               ))}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="questionnaire" className="space-y-6">
+            <div className="premium-card p-6">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h2 className="text-2xl font-bold text-foreground mb-2">Медицинская анкета</h2>
+                  <p className="text-foreground/60">
+                    Заполните анкету для создания полного профиля здоровья
+                  </p>
+                </div>
+                {questionnaireCompleted && (
+                  <div className="flex items-center gap-2 text-primary">
+                    <CheckCircle2 className="h-5 w-5" />
+                    <span className="font-medium">Анкета заполнена</span>
+                  </div>
+                )}
+              </div>
+              <QuestionnaireComponent
+                questionnaire={medicalQuestionnaire}
+                onComplete={(answers) => {
+                  console.log('Medical questionnaire answers:', answers);
+                  setQuestionnaireCompleted(true);
+                  // Здесь будет сохранение в API
+                }}
+              />
             </div>
           </TabsContent>
 
