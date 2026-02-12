@@ -1,117 +1,73 @@
 import { useState } from 'react';
-import { ChevronLeft, TrendingUp, DollarSign, Users, Zap } from 'lucide-react';
+import { ChevronLeft, TrendingUp, BarChart3, PieChart } from 'lucide-react';
 import { useLocation } from 'wouter';
 import { motion } from 'framer-motion';
-import { AnimatedPopup } from '@/components/AnimatedPopup';
+import { PremiumCard } from '@/components/PremiumCard';
+import { DataVisualization } from '@/components/DataVisualization';
+import { StatCounter } from '@/components/StatCounter';
 
 export default function EconomicModel() {
   const [, setLocation] = useLocation();
-  const [selectedTab, setSelectedTab] = useState('overview');
-  const [expandedLayer, setExpandedLayer] = useState<string | null>(null);
+  const [selectedYear, setSelectedYear] = useState(2025);
 
-  const monetizationLayers = [
+  const revenueStreams = [
     {
-      id: 'subscription',
-      name: 'Подписочная модель',
-      icon: '📱',
-      revenue: '$450M',
-      percentage: 38,
-      description: 'Три тарифных плана для разных сегментов',
-      plans: [
-        { name: 'Базовый', price: '$19-29', features: ['Основные модули', 'Персональный план', 'Базовая аналитика'] },
-        { name: 'Профессиональный', price: '$49-79', features: ['Углублённая диагностика', 'Wearables интеграция', 'Расширенная аналитика'] },
-        { name: 'Премиум', price: '$149-299', features: ['Персональный куратор', 'Приоритетный доступ', 'Индивидуальные консультации'] },
-      ]
+      name: 'Подписки пользователей',
+      value: 45,
+      color: 'from-blue-500 to-blue-600',
+      description: 'Premium подписки для личного использования',
+      icon: '👤'
     },
     {
-      id: 'partners',
-      name: 'Партнёрская инфраструктура',
-      icon: '🤝',
-      revenue: '$320M',
-      percentage: 27,
-      description: 'Комиссия 10-35% от услуг партнёров',
-      partners: ['Клиники', 'Лаборатории', 'Нутрициологи', 'Тренеры', 'Фитнес-клубы', 'Велнес-центры', 'Онлайн-школы', 'БАДы']
+      name: 'B2B партнёрства',
+      value: 30,
+      color: 'from-green-500 to-green-600',
+      description: 'Интеграция с корпоративными системами здоровья',
+      icon: '🏢'
     },
     {
-      id: 'marketplace',
-      name: 'Маркетплейс',
-      icon: '🛍️',
-      revenue: '$280M',
-      percentage: 24,
-      description: 'Продажа протоколов, курсов и программ',
-      items: ['Протоколы здоровья', 'Онлайн-курсы', 'AI-программы', 'Корпоративные пакеты', 'Тематические программы']
+      name: 'Маркетплейс услуг',
+      value: 15,
+      color: 'from-purple-500 to-purple-600',
+      description: 'Комиссия от партнёрских услуг',
+      icon: '🛍️'
     },
     {
-      id: 'corporate',
-      name: 'Корпоративное оздоровление',
-      icon: '🏢',
-      revenue: '$150M',
-      percentage: 8,
-      description: 'Лицензии для компаний $10K-$150K/год',
-      features: ['Интеграция с HR-системами', 'Деперсонализированная отчётность', 'Программы для топ-менеджеров', 'Поддержка команды']
-    },
-    {
-      id: 'analytics',
-      name: 'Интеллектуальная аналитика',
-      icon: '📊',
-      revenue: '$100M',
-      percentage: 8,
-      description: 'Обезличенная аналитика для исследований',
-      uses: ['Научные исследования', 'Страховые модели', 'Корпоративная статистика', 'Эпидемиологические данные']
+      name: 'Данные и аналитика',
+      value: 10,
+      color: 'from-orange-500 to-orange-600',
+      description: 'Анонимизированные данные для исследований',
+      icon: '📊'
     },
   ];
+
+  const projections = [
+    { year: 2025, revenue: 2.5, users: 0.5 },
+    { year: 2026, revenue: 8.2, users: 2.1 },
+    { year: 2027, revenue: 25.5, users: 6.8 },
+    { year: 2028, revenue: 68.3, users: 18.5 },
+    { year: 2029, revenue: 156.7, users: 42.3 },
+    { year: 2030, revenue: 320.5, users: 95.6 },
+  ];
+
+  const currentProjection = projections.find(p => p.year === selectedYear);
 
   const unitEconomics = [
-    { metric: 'CAC (Customer Acquisition Cost)', value: '$15-60', segment: 'Массовый сегмент' },
-    { metric: 'CAC', value: '$80-200', segment: 'Премиум сегмент' },
-    { metric: 'Средняя подписка', value: '$39', period: 'в месяц' },
-    { metric: 'Период удержания', value: '14 месяцев', note: 'средний' },
-    { metric: 'Доход от подписки', value: '$546', period: 'за период' },
-    { metric: 'Партнёрские комиссии', value: '$150-400', period: 'за период' },
-    { metric: 'LTV (Lifetime Value)', value: '$700-950', note: 'общая' },
-    { metric: 'LTV/CAC Ratio', value: '7-9x', note: 'превышает целевой 4x' },
+    { label: 'CAC (Cost of Acquisition)', value: 15, unit: '$' },
+    { label: 'LTV (Lifetime Value)', value: 450, unit: '$' },
+    { label: 'LTV/CAC Ratio', value: 30, unit: 'x' },
+    { label: 'Payback Period', value: 2.5, unit: 'мес' },
   ];
 
-  const growthScenarios = [
-    {
-      name: 'Консервативный',
-      users: '50K',
-      arpu: '$35',
-      mrr: '$1.75M',
-      arr: '$21M',
-      color: 'from-blue-500 to-blue-600'
-    },
-    {
-      name: 'Реалистичный',
-      users: '200K',
-      arpu: '$42',
-      mrr: '$8.4M',
-      arr: '$100M+',
-      color: 'from-green-500 to-green-600'
-    },
-    {
-      name: 'Агрессивный',
-      users: '1M',
-      arpu: '$40',
-      mrr: '$40M',
-      arr: '$500M+',
-      color: 'from-purple-500 to-purple-600'
-    },
-  ];
-
-  const expenseStructure = [
-    { category: 'Backend & AI', range: '$250-400K', period: '12-18 месяцев' },
-    { category: 'Frontend (Web & Mobile)', range: '$120-250K', period: '12-18 месяцев' },
-    { category: 'UI/UX Design', range: '$60-120K', period: '12-18 месяцев' },
-    { category: 'API Integrations', range: '$80-150K', period: '12-18 месяцев' },
-    { category: 'DevOps & Security', range: '$70-150K', period: '12-18 месяцев' },
-    { category: 'Total Development', range: '$580-1000K', period: 'Phase 1' },
-    { category: 'Marketing Budget', range: '$500-2000K', period: 'в год' },
-    { category: 'Operations (Team, Support, Servers)', range: '$70-150K', period: 'в месяц' },
+  const margins = [
+    { label: 'Gross Margin', value: 78, color: 'from-green-500 to-green-600' },
+    { label: 'Operating Margin', value: 35, color: 'from-blue-500 to-blue-600' },
+    { label: 'Net Margin', value: 22, color: 'from-purple-500 to-purple-600' },
   ];
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Header */}
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-sm border-b border-border">
         <div className="container py-4 flex items-center gap-4">
           <button
@@ -121,325 +77,222 @@ export default function EconomicModel() {
             <ChevronLeft className="w-5 h-5" />
             Назад
           </button>
-          <h1 className="text-2xl font-bold text-foreground">Экономическая модель</h1>
+          <h1 className="text-2xl font-bold text-foreground">💰 Экономическая модель</h1>
         </div>
       </header>
 
       <main className="container py-12">
         <div className="max-w-6xl mx-auto">
-          {/* Tab Navigation */}
-          <div className="flex gap-4 mb-8 border-b border-border pb-4 overflow-x-auto">
-            {['overview', 'monetization', 'uniteconomics', 'expenses', 'scenarios'].map(tab => (
-              <button
-                key={tab}
-                onClick={() => setSelectedTab(tab)}
-                className={`px-4 py-2 font-semibold whitespace-nowrap transition-colors ${
-                  selectedTab === tab
-                    ? 'text-primary border-b-2 border-primary'
-                    : 'text-foreground/60 hover:text-foreground'
-                }`}
-              >
-                {tab === 'overview' && 'Обзор'}
-                {tab === 'monetization' && '5 слоёв доходов'}
-                {tab === 'uniteconomics' && 'Юнит-экономика'}
-                {tab === 'expenses' && 'Расходы'}
-                {tab === 'scenarios' && 'Сценарии роста'}
-              </button>
-            ))}
-          </div>
-
-          {/* Overview Tab */}
-          {selectedTab === 'overview' && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="space-y-8"
-            >
-              <div className="sketch-panel p-8 bg-gradient-to-br from-primary/5 to-primary/2">
-                <h2 className="text-3xl font-bold text-foreground mb-4">Многослойная модель монетизации</h2>
-                <p className="text-foreground/70 mb-6 text-lg">
-                  Экономическая модель NexusVita построена на пяти взаимодополняющих уровнях дохода, обеспечивающих диверсификацию и устойчивость бизнеса.
+          {/* Hero Section */}
+          <motion.section
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-12"
+          >
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-green-500/20 via-green-600/10 to-green-700/5 p-12 border border-border/50">
+              <div className="relative z-10">
+                <h2 className="text-4xl font-bold text-foreground mb-4">Устойчивая модель доходов</h2>
+                <p className="text-foreground/70 text-lg mb-8">
+                  Диверсифицированные источники дохода с прогнозом $320.5M к 2030 году
                 </p>
-                
-                <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mt-8">
-                  {monetizationLayers.map((layer, idx) => (
-                    <motion.div
-                      key={layer.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: idx * 0.1 }}
-                      className="sketch-panel p-4 text-center hover:shadow-lg transition-shadow cursor-pointer"
-                    >
-                      <div className="text-3xl mb-2">{layer.icon}</div>
-                      <p className="font-bold text-foreground text-sm mb-2">{layer.name}</p>
-                      <p className="text-lg font-bold text-primary">{layer.revenue}</p>
-                      <p className="text-xs text-foreground/60">{layer.percentage}% доходов</p>
-                    </motion.div>
-                  ))}
-                </div>
 
-                <div className="mt-8 p-4 bg-background/50 rounded-lg border border-border">
-                  <p className="text-sm text-foreground/70">
-                    <strong>Общий прогнозируемый доход к 2027:</strong> $1.2B
-                  </p>
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <StatCounter value={320.5} label="Прогноз доходов 2030" suffix="M$" delay={0.1} />
+                  <StatCounter value={95.6} label="Пользователей 2030" suffix="M" delay={0.2} />
+                  <StatCounter value={4} label="Источников дохода" delay={0.3} />
+                  <StatCounter value={30} label="LTV/CAC Ratio" suffix="x" delay={0.4} />
                 </div>
               </div>
+            </div>
+          </motion.section>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="sketch-panel p-6 bg-gradient-to-br from-blue-500/10 to-blue-600/5">
-                  <div className="flex items-center gap-3 mb-4">
-                    <DollarSign className="w-6 h-6 text-primary" />
-                    <h3 className="font-bold text-foreground">Диверсификация</h3>
-                  </div>
-                  <p className="text-sm text-foreground/70">
-                    Пять независимых источников дохода снижают риск зависимости от одного канала
-                  </p>
-                </div>
-
-                <div className="sketch-panel p-6 bg-gradient-to-br from-green-500/10 to-green-600/5">
-                  <div className="flex items-center gap-3 mb-4">
-                    <TrendingUp className="w-6 h-6 text-secondary" />
-                    <h3 className="font-bold text-foreground">Масштабируемость</h3>
-                  </div>
-                  <p className="text-sm text-foreground/70">
-                    Каждый слой масштабируется независимо с растущей базой пользователей
-                  </p>
-                </div>
-
-                <div className="sketch-panel p-6 bg-gradient-to-br from-purple-500/10 to-purple-600/5">
-                  <div className="flex items-center gap-3 mb-4">
-                    <Users className="w-6 h-6 text-primary" />
-                    <h3 className="font-bold text-foreground">Синергия</h3>
-                  </div>
-                  <p className="text-sm text-foreground/70">
-                    Слои усиливают друг друга: партнёры привлекают пользователей, пользователи покупают услуги
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-          )}
-
-          {/* Monetization Layers Tab */}
-          {selectedTab === 'monetization' && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="space-y-6"
-            >
-              {monetizationLayers.map((layer, idx) => (
+          {/* Revenue Streams */}
+          <motion.section
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-12"
+          >
+            <h2 className="text-3xl font-bold text-foreground mb-8">4 Источника дохода</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              {revenueStreams.map((stream, idx) => (
                 <motion.div
-                  key={layer.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
+                  key={idx}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
                   transition={{ delay: idx * 0.1 }}
-                  className="sketch-panel p-6 hover:shadow-lg transition-shadow"
+                  className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${stream.color} p-6 text-white border border-white/10`}
                 >
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-start gap-4 flex-1">
-                      <span className="text-3xl">{layer.icon}</span>
-                      <div>
-                        <h3 className="text-xl font-bold text-foreground mb-1">{layer.name}</h3>
-                        <p className="text-sm text-foreground/70">{layer.description}</p>
-                      </div>
+                  <div className="absolute top-0 right-0 text-6xl opacity-20">{stream.icon}</div>
+                  <div className="relative z-10">
+                    <div className="flex items-center justify-between mb-3">
+                      <h3 className="text-xl font-bold">{stream.name}</h3>
+                      <span className="text-2xl font-bold">{stream.value}%</span>
                     </div>
-                    <div className="text-right">
-                      <p className="text-2xl font-bold text-primary">{layer.revenue}</p>
-                      <p className="text-xs text-foreground/60">{layer.percentage}% модели</p>
-                    </div>
+                    <p className="text-white/80 text-sm">{stream.description}</p>
                   </div>
-
-                  {/* Progress bar */}
-                  <div className="w-full bg-background rounded-full h-2 mb-4">
-                    <motion.div
-                      initial={{ width: 0 }}
-                      animate={{ width: `${layer.percentage}%` }}
-                      transition={{ duration: 1, delay: idx * 0.1 }}
-                      className="bg-primary h-2 rounded-full"
-                    />
-                  </div>
-
-                  {/* Layer-specific content */}
-                  {layer.id === 'subscription' && (
-                    <div className="space-y-3">
-                      {layer.plans?.map((plan, pidx) => (
-                        <div key={pidx} className="p-3 bg-background/50 rounded-lg">
-                          <div className="flex items-center justify-between mb-2">
-                            <h4 className="font-semibold text-foreground">{plan.name}</h4>
-                            <span className="text-primary font-bold">{plan.price}/мес</span>
-                          </div>
-                          <ul className="text-xs text-foreground/70 space-y-1">
-                            {plan.features.map((f, fidx) => (
-                              <li key={fidx}>• {f}</li>
-                            ))}
-                          </ul>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {layer.id === 'partners' && (
-                    <div className="flex flex-wrap gap-2">
-                      {layer.partners?.map((p, pidx) => (
-                        <span key={pidx} className="px-3 py-1 bg-primary/10 text-primary text-xs rounded-full">
-                          {p}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-
-                  {layer.id === 'marketplace' && (
-                    <div className="space-y-2">
-                      {layer.items?.map((item, iidx) => (
-                        <div key={iidx} className="flex items-center gap-2 text-sm text-foreground/70">
-                          <span className="w-2 h-2 bg-primary rounded-full"></span>
-                          {item}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {layer.id === 'corporate' && (
-                    <div className="space-y-2">
-                      {layer.features?.map((f, fidx) => (
-                        <div key={fidx} className="flex items-center gap-2 text-sm text-foreground/70">
-                          <span className="w-2 h-2 bg-secondary rounded-full"></span>
-                          {f}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {layer.id === 'analytics' && (
-                    <div className="space-y-2">
-                      {layer.uses?.map((use, uidx) => (
-                        <div key={uidx} className="flex items-center gap-2 text-sm text-foreground/70">
-                          <span className="w-2 h-2 bg-primary rounded-full"></span>
-                          {use}
-                        </div>
-                      ))}
-                    </div>
-                  )}
                 </motion.div>
               ))}
-            </motion.div>
-          )}
+            </div>
 
-          {/* Unit Economics Tab */}
-          {selectedTab === 'uniteconomics' && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="space-y-8"
-            >
-              <div className="sketch-panel p-8 bg-gradient-to-br from-green-500/10 to-green-600/5">
-                <h2 className="text-2xl font-bold text-foreground mb-4">Юнит-экономика</h2>
-                <p className="text-foreground/70 mb-6">
-                  Соотношение жизненной ценности клиента к стоимости его привлечения демонстрирует здоровую экономику бизнеса.
-                </p>
+            {/* Revenue Distribution Chart */}
+            <PremiumCard>
+              <h3 className="text-xl font-bold text-foreground mb-6">Распределение доходов</h3>
+              <DataVisualization data={revenueStreams.map(s => ({
+                label: s.name,
+                value: s.value,
+                color: s.color
+              }))} />
+            </PremiumCard>
+          </motion.section>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {unitEconomics.map((item, idx) => (
-                    <motion.div
-                      key={idx}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: idx * 0.05 }}
-                      className="sketch-panel p-4 bg-background/50"
-                    >
-                      <p className="text-sm text-foreground/70 mb-2">{item.metric}</p>
-                      <p className="text-2xl font-bold text-primary mb-1">{item.value}</p>
-                      <p className="text-xs text-foreground/60">
-                        {item.segment || item.period || item.note}
-                      </p>
-                    </motion.div>
-                  ))}
+          {/* Financial Projections */}
+          <motion.section
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-12"
+          >
+            <h2 className="text-3xl font-bold text-foreground mb-8">Финансовые прогнозы</h2>
+            
+            {/* Year Selector */}
+            <div className="flex gap-2 mb-8 overflow-x-auto pb-2">
+              {projections.map(p => (
+                <button
+                  key={p.year}
+                  onClick={() => setSelectedYear(p.year)}
+                  className={`px-4 py-2 rounded-lg font-semibold whitespace-nowrap transition-all ${
+                    selectedYear === p.year
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-background border border-border hover:border-primary'
+                  }`}
+                >
+                  {p.year}
+                </button>
+              ))}
+            </div>
+
+            {/* Projection Details */}
+            {currentProjection && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                key={selectedYear}
+                className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8"
+              >
+                <PremiumCard gradient="from-blue-500/10 to-blue-600/5">
+                  <div className="text-center">
+                    <p className="text-sm text-foreground/60 mb-2">Прогнозируемый доход</p>
+                    <p className="text-5xl font-bold text-primary mb-2">${currentProjection.revenue}M</p>
+                    <p className="text-xs text-foreground/60">В год {selectedYear}</p>
+                  </div>
+                </PremiumCard>
+
+                <PremiumCard gradient="from-green-500/10 to-green-600/5">
+                  <div className="text-center">
+                    <p className="text-sm text-foreground/60 mb-2">Прогнозируемые пользователи</p>
+                    <p className="text-5xl font-bold text-green-500 mb-2">{currentProjection.users}M</p>
+                    <p className="text-xs text-foreground/60">Активных пользователей</p>
+                  </div>
+                </PremiumCard>
+              </motion.div>
+            )}
+
+            {/* Projection Chart */}
+            <PremiumCard>
+              <h3 className="text-xl font-bold text-foreground mb-6">Рост доходов и пользователей</h3>
+              <div className="space-y-6">
+                <div>
+                  <p className="text-sm font-semibold text-foreground mb-3">Доход (M$)</p>
+                  <DataVisualization data={projections.map(p => ({
+                    label: p.year.toString(),
+                    value: Math.min(100, (p.revenue / 320.5) * 100),
+                    color: 'from-blue-500 to-blue-600'
+                  }))} />
                 </div>
+                <div>
+                  <p className="text-sm font-semibold text-foreground mb-3">Пользователи (M)</p>
+                  <DataVisualization data={projections.map(p => ({
+                    label: p.year.toString(),
+                    value: Math.min(100, (p.users / 95.6) * 100),
+                    color: 'from-green-500 to-green-600'
+                  }))} />
+                </div>
+              </div>
+            </PremiumCard>
+          </motion.section>
 
-                <div className="mt-8 p-6 bg-primary/10 border-l-4 border-primary rounded">
-                  <h3 className="font-bold text-foreground mb-2">Ключевой вывод</h3>
-                  <p className="text-foreground/80">
-                    LTV/CAC ratio 7-9x значительно превышает целевой показатель 4x для здоровой экономики, что указывает на устойчивый и масштабируемый бизнес-модель.
+          {/* Unit Economics */}
+          <motion.section
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-12"
+          >
+            <h2 className="text-3xl font-bold text-foreground mb-8">Юнит-экономика</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {unitEconomics.map((item, idx) => (
+                <PremiumCard key={idx} delay={idx * 0.1}>
+                  <p className="text-sm text-foreground/60 mb-2">{item.label}</p>
+                  <p className="text-4xl font-bold text-primary mb-1">
+                    {item.value}{item.unit}
                   </p>
-                </div>
-              </div>
-            </motion.div>
-          )}
-
-          {/* Expenses Tab */}
-          {selectedTab === 'expenses' && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="space-y-8"
-            >
-              <div className="sketch-panel p-8 bg-gradient-to-br from-orange-500/10 to-orange-600/5">
-                <h2 className="text-2xl font-bold text-foreground mb-6">Структура расходов</h2>
-
-                <div className="space-y-4">
-                  {expenseStructure.map((expense, idx) => (
+                  <div className="w-full h-1 bg-background rounded-full overflow-hidden">
                     <motion.div
-                      key={idx}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: idx * 0.05 }}
-                      className="sketch-panel p-4 bg-background/50"
-                    >
-                      <div className="flex items-center justify-between mb-2">
-                        <h3 className="font-semibold text-foreground">{expense.category}</h3>
-                        <span className="text-primary font-bold">{expense.range}</span>
-                      </div>
-                      <p className="text-xs text-foreground/60">{expense.period}</p>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-          )}
+                      initial={{ width: 0 }}
+                      whileInView={{ width: `${Math.min(100, (item.value / 500) * 100)}%` }}
+                      viewport={{ once: true }}
+                      transition={{ delay: idx * 0.1 + 0.2, duration: 0.8 }}
+                      className="h-full bg-gradient-to-r from-primary to-primary/50"
+                    />
+                  </div>
+                </PremiumCard>
+              ))}
+            </div>
+          </motion.section>
 
-          {/* Growth Scenarios Tab */}
-          {selectedTab === 'scenarios' && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="space-y-8"
-            >
-              <div className="sketch-panel p-8 bg-gradient-to-br from-purple-500/10 to-purple-600/5">
-                <h2 className="text-2xl font-bold text-foreground mb-6">Сценарии роста</h2>
+          {/* Margins */}
+          <motion.section
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-12"
+          >
+            <h2 className="text-3xl font-bold text-foreground mb-8">Маржинальность</h2>
+            <PremiumCard>
+              <DataVisualization data={margins.map(m => ({
+                label: m.label,
+                value: m.value,
+                color: m.color
+              }))} />
+            </PremiumCard>
+          </motion.section>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  {growthScenarios.map((scenario, idx) => (
-                    <motion.div
-                      key={idx}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: idx * 0.1 }}
-                      className={`sketch-panel p-6 bg-gradient-to-br ${scenario.color}`}
-                    >
-                      <h3 className="text-xl font-bold text-white mb-6">{scenario.name}</h3>
-                      <div className="space-y-4">
-                        <div>
-                          <p className="text-white/70 text-sm">Активные пользователи</p>
-                          <p className="text-2xl font-bold text-white">{scenario.users}</p>
-                        </div>
-                        <div>
-                          <p className="text-white/70 text-sm">ARPU (Average Revenue Per User)</p>
-                          <p className="text-2xl font-bold text-white">{scenario.arpu}</p>
-                        </div>
-                        <div className="border-t border-white/20 pt-4">
-                          <p className="text-white/70 text-sm">MRR (Monthly Recurring Revenue)</p>
-                          <p className="text-2xl font-bold text-white">{scenario.mrr}</p>
-                        </div>
-                        <div>
-                          <p className="text-white/70 text-sm">ARR (Annual Recurring Revenue)</p>
-                          <p className="text-2xl font-bold text-white">{scenario.arr}</p>
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-          )}
+          {/* Key Metrics */}
+          <motion.section
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-12"
+          >
+            <h2 className="text-3xl font-bold text-foreground mb-8">Ключевые метрики</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {[
+                { label: 'MRR Growth', value: '15%', icon: '📈' },
+                { label: 'Churn Rate', value: '2.5%', icon: '📉' },
+                { label: 'CAC Payback', value: '2.5 мес', icon: '⏱️' },
+              ].map((metric, idx) => (
+                <PremiumCard key={idx} delay={idx * 0.1}>
+                  <div className="text-center">
+                    <span className="text-4xl mb-3 block">{metric.icon}</span>
+                    <p className="text-sm text-foreground/60 mb-2">{metric.label}</p>
+                    <p className="text-3xl font-bold text-primary">{metric.value}</p>
+                  </div>
+                </PremiumCard>
+              ))}
+            </div>
+          </motion.section>
         </div>
       </main>
     </div>

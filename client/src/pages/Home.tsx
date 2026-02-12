@@ -1,67 +1,61 @@
 import { useState } from 'react';
-import { useLocation } from 'wouter';
+import { Link } from 'wouter';
 import { motion } from 'framer-motion';
-import { ChevronRight, Menu, X } from 'lucide-react';
+import { ChevronRight, Heart, Brain, Users, Zap, TrendingUp } from 'lucide-react';
+import { PremiumCard } from '@/components/PremiumCard';
+import { StatCounter } from '@/components/StatCounter';
 
 export default function Home() {
-  const [, setLocation] = useLocation();
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
 
   const healthModules = [
     {
-      id: 'medicine',
-      name: 'Медицина',
+      title: 'Медицина',
       icon: '⚕️',
+      description: 'Комплексная диагностика и профилактика заболеваний',
       color: 'from-blue-500 to-blue-600',
-      description: 'Диагностика, профилактика и лечение',
       path: '/medicine'
     },
     {
-      id: 'nutrition',
-      name: 'Питание',
+      title: 'Питание',
       icon: '🥗',
+      description: 'Персональные рекомендации и анализ макронутриентов',
       color: 'from-green-500 to-green-600',
-      description: 'Персональные рекомендации по питанию',
       path: '/nutrition'
     },
     {
-      id: 'movement',
-      name: 'Движение',
+      title: 'Движение',
       icon: '🏃',
+      description: 'Фитнес, активность и интеграция с носимыми устройствами',
       color: 'from-orange-500 to-orange-600',
-      description: 'Фитнес, активность и реабилитация',
       path: '/movement'
     },
     {
-      id: 'psychology',
-      name: 'Психология',
+      title: 'Психология',
       icon: '🧠',
+      description: 'Психическое здоровье и управление стрессом',
       color: 'from-purple-500 to-purple-600',
-      description: 'Психическое здоровье и благополучие',
       path: '/psychology'
     },
     {
-      id: 'sleep',
-      name: 'Сон',
+      title: 'Сон',
       icon: '😴',
+      description: 'Качество сна и оптимизация циркадных ритмов',
       color: 'from-indigo-500 to-indigo-600',
-      description: 'Качество сна и восстановление',
       path: '/sleep'
     },
     {
-      id: 'relationships',
-      name: 'Отношения',
+      title: 'Отношения',
       icon: '💑',
+      description: 'Социальные связи и здоровые отношения',
       color: 'from-pink-500 to-pink-600',
-      description: 'Социальные связи и общение',
       path: '/relationships'
     },
     {
-      id: 'spirituality',
-      name: 'Духовность',
+      title: 'Духовность',
       icon: '🕉️',
+      description: 'Личностный рост и смысл жизни',
       color: 'from-amber-500 to-amber-600',
-      description: 'Смысл жизни и развитие личности',
       path: '/spirituality'
     },
   ];
@@ -69,45 +63,31 @@ export default function Home() {
   const ecosystemSections = [
     {
       title: 'Систематизация',
-      description: '5 комплексов здоровья и их взаимодействие',
+      description: '5 интегрированных комплексов здоровья',
       icon: '🔗',
       path: '/systematization',
       color: 'from-cyan-500 to-cyan-600'
     },
     {
       title: 'Экономическая модель',
-      description: '5 слоёв доходов и монетизация',
+      description: 'Устойчивые источники дохода и прогнозы',
       icon: '💰',
       path: '/economic-model',
       color: 'from-green-500 to-green-600'
     },
     {
       title: 'Дорожная карта',
-      description: '5 фаз развития до $1.2B',
+      description: '5-летний план развития и инвестиции',
       icon: '🗺️',
       path: '/roadmap',
-      color: 'from-purple-500 to-purple-600'
+      color: 'from-indigo-500 to-indigo-600'
     },
     {
       title: 'Инвестиции',
-      description: 'Раунды финансирования и выходы',
-      icon: '📈',
-      path: '/investment',
-      color: 'from-orange-500 to-orange-600'
-    },
-    {
-      title: 'AI-Планировщик',
-      description: '6-этапный алгоритм персонализации',
-      icon: '🤖',
-      path: '/ai-planner',
-      color: 'from-blue-500 to-blue-600'
-    },
-    {
-      title: 'Токеномика',
-      description: 'DAO управление и распределение',
-      icon: '🪙',
-      path: '/tokenomics',
-      color: 'from-yellow-500 to-yellow-600'
+      description: 'Раунды финансирования и стратегии выхода',
+      icon: '💼',
+      path: '/investment-proposal',
+      color: 'from-amber-500 to-amber-600'
     },
   ];
 
@@ -117,7 +97,6 @@ export default function Home() {
       opacity: 1,
       transition: {
         staggerChildren: 0.1,
-        delayChildren: 0.2,
       },
     },
   };
@@ -141,50 +120,11 @@ export default function Home() {
             animate={{ opacity: 1, x: 0 }}
             className="flex items-center gap-3"
           >
-            <span className="text-3xl">🧬</span>
+            <div className="text-3xl">🧬</div>
             <h1 className="text-2xl font-bold text-foreground">NexusVita</h1>
           </motion.div>
-          
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="md:hidden p-2 hover:bg-background/50 rounded-lg transition-colors"
-          >
-            {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+          <p className="text-sm text-foreground/60">Экосистема здоровья</p>
         </div>
-
-        {/* Mobile Menu */}
-        {menuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden border-t border-border bg-background/50 backdrop-blur-sm"
-          >
-            <div className="container py-4 space-y-2">
-              {healthModules.map(module => (
-                <button
-                  key={module.id}
-                  onClick={() => { setLocation(module.path); setMenuOpen(false); }}
-                  className="w-full text-left px-4 py-2 rounded-lg hover:bg-primary/10 transition-colors text-foreground/70 hover:text-foreground"
-                >
-                  {module.icon} {module.name}
-                </button>
-              ))}
-              <div className="border-t border-border pt-2 mt-2">
-                {ecosystemSections.map(section => (
-                  <button
-                    key={section.title}
-                    onClick={() => { setLocation(section.path); setMenuOpen(false); }}
-                    className="w-full text-left px-4 py-2 rounded-lg hover:bg-primary/10 transition-colors text-foreground/70 hover:text-foreground text-sm"
-                  >
-                    {section.icon} {section.title}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-        )}
       </header>
 
       <main className="container py-12">
@@ -192,38 +132,56 @@ export default function Home() {
         <motion.section
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
           className="mb-16"
         >
-          <div className="sketch-panel p-12 bg-gradient-to-br from-primary/10 to-primary/5 text-center mb-8">
-            <motion.h2
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2 }}
-              className="text-5xl md:text-6xl font-bold text-foreground mb-4"
-            >
-              Экосистема здоровья
-            </motion.h2>
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.3 }}
-              className="text-xl text-foreground/70 mb-8"
-            >
-              Интегрированная платформа для комплексного развития 7 направлений здоровья
-            </motion.p>
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary/20 via-primary/10 to-primary/5 p-16 border border-border/50">
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.4 }}
-              className="inline-block px-8 py-3 bg-primary text-primary-foreground rounded-lg font-semibold hover:shadow-lg transition-shadow cursor-pointer"
-            >
-              Начать исследование
-            </motion.div>
+              className="absolute inset-0 opacity-30"
+              animate={{
+                backgroundPosition: ['0% 0%', '100% 100%'],
+              }}
+              transition={{ duration: 8, repeat: Infinity, repeatType: 'reverse' }}
+              style={{
+                backgroundImage: 'radial-gradient(circle, rgba(59, 130, 246, 0.1) 1px, transparent 1px)',
+                backgroundSize: '50px 50px',
+              }}
+            />
+            
+            <div className="relative z-10">
+              <motion.h2
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="text-5xl md:text-6xl font-bold text-foreground mb-6"
+              >
+                Экосистема здоровья нового поколения
+              </motion.h2>
+              
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="text-xl text-foreground/70 mb-8 max-w-3xl"
+              >
+                Интегрированная платформа для комплексного развития 7 направлений здоровья с AI-диагностикой и персональными рекомендациями
+              </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+                className="grid grid-cols-1 md:grid-cols-4 gap-4"
+              >
+                <StatCounter value={9.3} label="Триллионов рынка" suffix="T$" delay={0.5} />
+                <StatCounter value={7} label="Модулей здоровья" delay={0.6} />
+                <StatCounter value={2000} label="Показателей" suffix="+" delay={0.7} />
+                <StatCounter value={95} label="Точность диагностики" suffix="%" delay={0.8} />
+              </motion.div>
+            </div>
           </div>
         </motion.section>
 
-        {/* Health Modules Section */}
+        {/* 7 Health Modules */}
         <motion.section
           initial="hidden"
           whileInView="visible"
@@ -231,26 +189,41 @@ export default function Home() {
           variants={containerVariants}
           className="mb-16"
         >
-          <h2 className="text-4xl font-bold text-foreground mb-8">7 Модулей здоровья</h2>
+          <motion.h2
+            variants={itemVariants}
+            className="text-4xl font-bold text-foreground mb-10"
+          >
+            7 Модулей здоровья
+          </motion.h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {healthModules.map((module, idx) => (
-              <motion.button
-                key={module.id}
-                variants={itemVariants}
-                onClick={() => setLocation(module.path)}
-                className="sketch-panel p-6 bg-gradient-to-br from-background to-background/50 hover:shadow-lg transition-all group text-left h-full"
-              >
-                <div className={`text-4xl mb-3 group-hover:scale-110 transition-transform`}>
-                  {module.icon}
-                </div>
-                <h3 className="text-lg font-bold text-foreground mb-2">{module.name}</h3>
-                <p className="text-sm text-foreground/70 mb-4">{module.description}</p>
-                <div className="flex items-center gap-2 text-primary text-sm font-semibold">
-                  Подробнее
-                  <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </motion.button>
+              <Link key={idx} href={module.path}>
+                <motion.a
+                  variants={itemVariants}
+                  onMouseEnter={() => setHoveredCard(idx)}
+                  onMouseLeave={() => setHoveredCard(null)}
+                  whileHover={{ y: -8 }}
+                  className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${module.color} p-6 text-white border border-white/10 cursor-pointer block h-full`}
+                >
+                  <div className="absolute top-0 right-0 text-6xl opacity-20">{module.icon}</div>
+                  
+                  <div className="relative z-10">
+                    <div className="flex items-center justify-between mb-4">
+                      <span className="text-4xl">{module.icon}</span>
+                      <motion.div
+                        animate={{ x: hoveredCard === idx ? 5 : 0 }}
+                        className="text-white/70"
+                      >
+                        <ChevronRight className="w-5 h-5" />
+                      </motion.div>
+                    </div>
+                    
+                    <h3 className="text-2xl font-bold mb-2">{module.title}</h3>
+                    <p className="text-white/80 text-sm">{module.description}</p>
+                  </div>
+                </motion.a>
+              </Link>
             ))}
           </div>
         </motion.section>
@@ -263,31 +236,35 @@ export default function Home() {
           variants={containerVariants}
           className="mb-16"
         >
-          <h2 className="text-4xl font-bold text-foreground mb-8">Экосистема</h2>
+          <motion.h2
+            variants={itemVariants}
+            className="text-4xl font-bold text-foreground mb-10"
+          >
+            Экосистема
+          </motion.h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {ecosystemSections.map((section, idx) => (
-              <motion.button
-                key={section.title}
-                variants={itemVariants}
-                onClick={() => setLocation(section.path)}
-                className={`sketch-panel p-6 bg-gradient-to-br ${section.color} hover:shadow-xl transition-all group text-white text-left h-full`}
-              >
-                <div className="text-4xl mb-3 group-hover:scale-110 transition-transform">
-                  {section.icon}
-                </div>
-                <h3 className="text-lg font-bold mb-2">{section.title}</h3>
-                <p className="text-sm text-white/80 mb-4">{section.description}</p>
-                <div className="flex items-center gap-2 text-white text-sm font-semibold">
-                  Изучить
-                  <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </motion.button>
+              <Link key={idx} href={section.path}>
+                <motion.a
+                  variants={itemVariants}
+                  whileHover={{ y: -5 }}
+                  className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${section.color} p-8 text-white border border-white/10 cursor-pointer block`}
+                >
+                  <div className="absolute top-0 right-0 text-6xl opacity-20">{section.icon}</div>
+                  
+                  <div className="relative z-10">
+                    <div className="text-5xl mb-4">{section.icon}</div>
+                    <h3 className="text-2xl font-bold mb-2">{section.title}</h3>
+                    <p className="text-white/80">{section.description}</p>
+                  </div>
+                </motion.a>
+              </Link>
             ))}
           </div>
         </motion.section>
 
-        {/* Key Metrics */}
+        {/* Key Features */}
         <motion.section
           initial="hidden"
           whileInView="visible"
@@ -295,24 +272,55 @@ export default function Home() {
           variants={containerVariants}
           className="mb-16"
         >
-          <h2 className="text-4xl font-bold text-foreground mb-8 text-center">Ключевые показатели</h2>
+          <motion.h2
+            variants={itemVariants}
+            className="text-4xl font-bold text-foreground mb-10"
+          >
+            Ключевые возможности
+          </motion.h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {[
-              { label: 'Модулей здоровья', value: '7', icon: '📊' },
-              { label: 'Комплексов', value: '5', icon: '🔗' },
-              { label: 'Источников дохода', value: '5', icon: '💰' },
-              { label: 'Фаз развития', value: '5', icon: '🚀' },
-            ].map((metric, idx) => (
-              <motion.div
-                key={idx}
-                variants={itemVariants}
-                className="sketch-panel p-6 text-center bg-gradient-to-br from-primary/10 to-primary/5"
-              >
-                <div className="text-4xl mb-3">{metric.icon}</div>
-                <p className="text-3xl font-bold text-primary mb-2">{metric.value}</p>
-                <p className="text-foreground/70 text-sm">{metric.label}</p>
-              </motion.div>
+              {
+                title: 'AI-диагностика',
+                description: 'Анализ 2000+ показателей здоровья с точностью 95%',
+                icon: '🤖'
+              },
+              {
+                title: 'Персональные рекомендации',
+                description: '1000+ рекомендаций для каждого пользователя',
+                icon: '✨'
+              },
+              {
+                title: 'Интеграция партнёров',
+                description: 'Сеть 5000+ партнёрских организаций',
+                icon: '🤝'
+              },
+              {
+                title: 'Мониторинг 24/7',
+                description: 'Постоянное отслеживание ключевых показателей',
+                icon: '📊'
+              },
+              {
+                title: 'Синергия данных',
+                description: 'Холистический анализ всех направлений здоровья',
+                icon: '🔗'
+              },
+              {
+                title: 'Масштабируемость',
+                description: 'Готовность к 100M+ пользователей',
+                icon: '📈'
+              },
+            ].map((feature, idx) => (
+              <PremiumCard key={idx} delay={idx * 0.1}>
+                <div className="flex items-start gap-4">
+                  <span className="text-4xl flex-shrink-0">{feature.icon}</span>
+                  <div>
+                    <h3 className="text-lg font-bold text-foreground mb-2">{feature.title}</h3>
+                    <p className="text-foreground/70 text-sm">{feature.description}</p>
+                  </div>
+                </div>
+              </PremiumCard>
             ))}
           </div>
         </motion.section>
@@ -322,33 +330,43 @@ export default function Home() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="sketch-panel p-12 bg-gradient-to-br from-primary/10 to-primary/5 text-center"
+          className="mb-16"
         >
-          <h2 className="text-3xl font-bold text-foreground mb-4">Готовы начать?</h2>
-          <p className="text-foreground/70 mb-8 max-w-2xl mx-auto">
-            Исследуйте полную экосистему здоровья, узнайте о нашей экономической модели и инвестиционных возможностях.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button
-              onClick={() => setLocation('/medicine')}
-              className="px-8 py-3 bg-primary text-primary-foreground rounded-lg font-semibold hover:shadow-lg transition-shadow"
-            >
-              Начать с модулей
-            </button>
-            <button
-              onClick={() => setLocation('/investment')}
-              className="px-8 py-3 border-2 border-primary text-primary rounded-lg font-semibold hover:bg-primary/5 transition-colors"
-            >
-              Узнать об инвестициях
-            </button>
-          </div>
+          <PremiumCard gradient="from-primary/20 to-primary/10">
+            <div className="text-center py-12">
+              <h3 className="text-3xl font-bold text-foreground mb-4">Начните исследование</h3>
+              <p className="text-foreground/70 mb-8 max-w-2xl mx-auto">
+                Откройте для себя полный потенциал экосистемы здоровья NexusVita
+              </p>
+              <div className="flex gap-4 justify-center flex-wrap">
+                <Link href="/medicine">
+                  <motion.a
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="px-8 py-3 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-primary/90 transition-colors cursor-pointer"
+                  >
+                    Начать с медицины
+                  </motion.a>
+                </Link>
+                <Link href="/systematization">
+                  <motion.a
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="px-8 py-3 bg-background border-2 border-primary text-primary rounded-lg font-semibold hover:bg-primary/10 transition-colors cursor-pointer"
+                  >
+                    Узнать о системе
+                  </motion.a>
+                </Link>
+              </div>
+            </div>
+          </PremiumCard>
         </motion.section>
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-border bg-background/50 mt-16">
-        <div className="container py-8 text-center text-foreground/60 text-sm">
-          <p>© 2024 NexusVita. Экосистема интегрированного здоровья.</p>
+      <footer className="border-t border-border bg-background/50 py-8">
+        <div className="container text-center text-foreground/60 text-sm">
+          <p>© 2025 NexusVita. Экосистема здоровья нового поколения.</p>
         </div>
       </footer>
     </div>

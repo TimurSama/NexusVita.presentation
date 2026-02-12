@@ -1,52 +1,96 @@
 import { useState } from 'react';
-import { ChevronLeft, X } from 'lucide-react';
+import { ChevronLeft, Heart, TrendingUp, Activity, AlertCircle } from 'lucide-react';
 import { useLocation } from 'wouter';
-
-interface Popup {
-  type: string;
-  title: string;
-  content: string;
-  details?: string[];
-}
+import { motion } from 'framer-motion';
+import { PremiumCard } from '@/components/PremiumCard';
+import { DataVisualization } from '@/components/DataVisualization';
+import { StatCounter } from '@/components/StatCounter';
 
 export default function Medicine() {
   const [, setLocation] = useLocation();
   const [selectedTab, setSelectedTab] = useState('overview');
-  const [activePopup, setActivePopup] = useState<Popup | null>(null);
 
-  const medicineCategories = [
+  const diagnosticAreas = [
     {
-      id: 'analysis',
-      title: 'Анализы и диагностика',
-      icon: '🔬',
-      description: 'Лабораторные исследования и инструментальная диагностика'
+      name: 'Кардиоваскулярная система',
+      icon: '❤️',
+      metrics: [
+        { label: 'Артериальное давление', value: 'Норма' },
+        { label: 'Частота сердечных сокращений', value: '60-100 уд/мин' },
+        { label: 'Холестерин', value: 'Контроль' },
+      ]
     },
     {
-      id: 'treatment',
-      title: 'Лечение',
-      icon: '💊',
-      description: 'Медикаментозное лечение и терапевтические протоколы'
+      name: 'Дыхательная система',
+      icon: '🫁',
+      metrics: [
+        { label: 'Функция легких', value: 'FEV1 норма' },
+        { label: 'Кислород в крови', value: '95-100%' },
+        { label: 'Дыхательный индекс', value: 'Оптимальный' },
+      ]
     },
     {
-      id: 'recovery',
-      title: 'Восстановление',
-      icon: '🏥',
-      description: 'Реабилитационные программы и восстановительные процедуры'
+      name: 'Метаболизм',
+      icon: '⚗️',
+      metrics: [
+        { label: 'Глюкоза крови', value: '70-100 мг/дл' },
+        { label: 'Индекс массы тела', value: '18.5-24.9' },
+        { label: 'Метаболический возраст', value: 'Оптимальный' },
+      ]
     },
     {
-      id: 'prevention',
-      title: 'Профилактика',
+      name: 'Иммунная система',
       icon: '🛡️',
-      description: 'Профилактические меры и скрининги'
+      metrics: [
+        { label: 'Лейкоциты', value: 'Норма' },
+        { label: 'Антитела', value: 'Защита' },
+        { label: 'Воспаление', value: 'Контроль' },
+      ]
     },
   ];
 
-  const showPopup = (popup: Popup) => {
-    setActivePopup(popup);
-  };
+  const preventionPrograms = [
+    {
+      name: 'Скрининг здоровья',
+      description: 'Комплексная диагностика основных показателей',
+      frequency: 'Ежегодно',
+      color: 'from-blue-500 to-blue-600',
+      icon: '🔍'
+    },
+    {
+      name: 'Вакцинация',
+      description: 'Профилактика инфекционных заболеваний',
+      frequency: 'По графику',
+      color: 'from-green-500 to-green-600',
+      icon: '💉'
+    },
+    {
+      name: 'Физическое обследование',
+      description: 'Детальный осмотр у специалистов',
+      frequency: 'Ежегодно',
+      color: 'from-purple-500 to-purple-600',
+      icon: '👨‍⚕️'
+    },
+    {
+      name: 'Лабораторные тесты',
+      description: 'Анализ крови и биохимические исследования',
+      frequency: 'По показаниям',
+      color: 'from-orange-500 to-orange-600',
+      icon: '🧪'
+    },
+  ];
+
+  const riskFactors = [
+    { label: 'Курение', value: 85, color: 'from-red-500 to-red-600' },
+    { label: 'Гиподинамия', value: 72, color: 'from-orange-500 to-orange-600' },
+    { label: 'Неправильное питание', value: 68, color: 'from-yellow-500 to-yellow-600' },
+    { label: 'Стресс', value: 65, color: 'from-pink-500 to-pink-600' },
+    { label: 'Лишний вес', value: 58, color: 'from-red-400 to-red-500' },
+  ];
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Header */}
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-sm border-b border-border">
         <div className="container py-4 flex items-center gap-4">
           <button
@@ -56,14 +100,53 @@ export default function Medicine() {
             <ChevronLeft className="w-5 h-5" />
             Назад
           </button>
-          <h1 className="text-2xl font-bold text-foreground">Медицина</h1>
+          <h1 className="text-2xl font-bold text-foreground">⚕️ Медицина</h1>
         </div>
       </header>
 
       <main className="container py-12">
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-6xl mx-auto">
+          {/* Hero Section */}
+          <motion.section
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-12"
+          >
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-500/20 via-blue-600/10 to-blue-700/5 p-12 border border-border/50">
+              <motion.div
+                className="absolute inset-0 opacity-30"
+                animate={{
+                  backgroundPosition: ['0% 0%', '100% 100%'],
+                }}
+                transition={{ duration: 8, repeat: Infinity, repeatType: 'reverse' }}
+                style={{
+                  backgroundImage: 'radial-gradient(circle, rgba(59, 130, 246, 0.1) 1px, transparent 1px)',
+                  backgroundSize: '50px 50px',
+                }}
+              />
+              
+              <div className="relative z-10">
+                <div className="flex items-start justify-between mb-6">
+                  <div>
+                    <h2 className="text-4xl font-bold text-foreground mb-2">Комплексная диагностика здоровья</h2>
+                    <p className="text-foreground/70 text-lg">Интегрированная система мониторинга и профилактики заболеваний</p>
+                  </div>
+                  <Heart className="w-16 h-16 text-primary opacity-20" />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-8">
+                  <StatCounter value={95} label="Точность диагностики" suffix="%" delay={0.1} />
+                  <StatCounter value={2000} label="Интегрированных показателей" delay={0.2} />
+                  <StatCounter value={150} label="Партнёрских клиник" delay={0.3} />
+                  <StatCounter value={24} label="Часовой мониторинг" suffix="/7" delay={0.4} />
+                </div>
+              </div>
+            </div>
+          </motion.section>
+
+          {/* Tab Navigation */}
           <div className="flex gap-4 mb-8 border-b border-border pb-4 overflow-x-auto">
-            {['overview', 'assessment', 'infrastructure', 'research'].map(tab => (
+            {['overview', 'diagnostics', 'prevention', 'risks'].map(tab => (
               <button
                 key={tab}
                 onClick={() => setSelectedTab(tab)}
@@ -74,135 +157,147 @@ export default function Medicine() {
                 }`}
               >
                 {tab === 'overview' && 'Обзор'}
-                {tab === 'assessment' && 'Диагностика'}
-                {tab === 'infrastructure' && 'Инфраструктура'}
-                {tab === 'research' && 'Исследования'}
+                {tab === 'diagnostics' && 'Диагностика'}
+                {tab === 'prevention' && 'Профилактика'}
+                {tab === 'risks' && 'Факторы риска'}
               </button>
             ))}
           </div>
 
+          {/* Overview Tab */}
           {selectedTab === 'overview' && (
-            <div className="space-y-8">
-              <div className="sketch-panel p-8 bg-gradient-to-br from-primary/5 to-primary/2">
-                <h2 className="text-2xl font-bold text-foreground mb-4">Медицина: Фундамент диагностики и лечения</h2>
-                <p className="text-foreground/70 mb-6">
-                  Медицинский модуль интегрирует лабораторную диагностику, клинические исследования, назначение лечения и мониторинг восстановления в единую систему управления здоровьем.
-                </p>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {medicineCategories.map(category => (
-                    <div
-                      key={category.id}
-                      onClick={() => showPopup({
-                        type: 'category',
-                        title: category.title,
-                        content: category.description
-                      })}
-                      className="sketch-panel p-6 cursor-pointer hover:shadow-lg hover:ring-2 hover:ring-primary transition-all"
-                    >
-                      <div className="text-4xl mb-4">{category.icon}</div>
-                      <h3 className="font-bold text-foreground mb-2">{category.title}</h3>
-                      <p className="text-sm text-foreground/70">{category.description}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {selectedTab === 'assessment' && (
-            <div className="space-y-8">
-              <div className="sketch-panel p-8">
-                <h2 className="text-2xl font-bold text-foreground mb-8">Интерактивная медицинская диагностика</h2>
-                
-                <div className="space-y-8">
-                  <div>
-                    <h3 className="font-bold text-foreground mb-4">Хронические заболевания</h3>
-                    <div className="sketch-panel p-6 bg-background space-y-3">
-                      {['Диабет', 'Гипертензия', 'Сердечные заболевания', 'Астма', 'Артрит'].map((condition, idx) => (
-                        <label key={idx} className="flex items-center gap-3 cursor-pointer">
-                          <input type="checkbox" className="rounded" />
-                          <span className="text-foreground/70">{condition}</span>
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div>
-                    <h3 className="font-bold text-foreground mb-4">Текущие препараты</h3>
-                    <div className="sketch-panel p-6 bg-background">
-                      <textarea
-                        placeholder="Перечислите принимаемые препараты"
-                        className="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                        rows={4}
-                      />
-                    </div>
-                  </div>
-
-                  <button className="btn-sketch bg-primary text-white w-full py-3 rounded-lg font-semibold hover:shadow-lg transition-shadow">
-                    Завершить диагностику
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {selectedTab === 'infrastructure' && (
-            <div className="space-y-8">
-              <h2 className="text-2xl font-bold text-foreground mb-8">Подключение медицинской инфраструктуры</h2>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="space-y-8"
+            >
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {[
-                  { title: 'Клиники', icon: '🏥', count: '2,500+' },
-                  { title: 'Лаборатории', icon: '🔬', count: '1,200+' },
-                  { title: 'Врачи-специалисты', icon: '👨‍⚕️', count: '15,000+' },
-                  { title: 'Интеграции с системами', icon: '🔗', count: '50+' },
+                  {
+                    title: 'Персональная диагностика',
+                    description: 'AI-анализ 2000+ медицинских показателей для выявления рисков',
+                    icon: '🔬'
+                  },
+                  {
+                    title: 'Интеграция с клиниками',
+                    description: 'Прямая связь с 150+ медицинскими учреждениями',
+                    icon: '🏥'
+                  },
+                  {
+                    title: 'Мониторинг в реальном времени',
+                    description: '24/7 отслеживание ключевых показателей здоровья',
+                    icon: '📊'
+                  },
+                  {
+                    title: 'Профилактические рекомендации',
+                    description: 'Персональные протоколы предотвращения заболеваний',
+                    icon: '✅'
+                  },
                 ].map((item, idx) => (
-                  <div key={idx} className="sketch-panel p-6 hover:shadow-lg transition-shadow">
-                    <div className="text-4xl mb-4">{item.icon}</div>
-                    <h3 className="font-bold text-foreground mb-2">{item.title}</h3>
-                    <p className="text-2xl font-bold text-primary">{item.count}</p>
-                  </div>
+                  <PremiumCard key={idx} delay={idx * 0.1}>
+                    <div className="text-4xl mb-3">{item.icon}</div>
+                    <h3 className="text-lg font-bold text-foreground mb-2">{item.title}</h3>
+                    <p className="text-foreground/70 text-sm">{item.description}</p>
+                  </PremiumCard>
                 ))}
               </div>
-            </div>
+            </motion.div>
           )}
 
-          {selectedTab === 'research' && (
-            <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-foreground mb-8">Последние медицинские исследования</h2>
-              {[
-                { title: 'Новые маркеры воспаления и долголетия', date: '2026-02-10', source: 'Nature Medicine' },
-                { title: 'Персонализированная медицина и генетика', date: '2026-02-08', source: 'The Lancet' },
-                { title: 'Профилактика сердечно-сосудистых заболеваний', date: '2026-02-05', source: 'JAMA Cardiology' },
-              ].map((research, idx) => (
-                <div key={idx} className="sketch-panel p-6 hover:shadow-lg hover:ring-2 hover:ring-primary transition-all cursor-pointer">
-                  <h3 className="font-bold text-foreground mb-2">{research.title}</h3>
-                  <p className="text-sm text-foreground/60">{research.source} • {research.date}</p>
+          {/* Diagnostics Tab */}
+          {selectedTab === 'diagnostics' && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="space-y-8"
+            >
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {diagnosticAreas.map((area, idx) => (
+                  <PremiumCard key={idx} delay={idx * 0.1} gradient="from-blue-500/10 to-blue-600/5">
+                    <div className="flex items-center gap-3 mb-4">
+                      <span className="text-3xl">{area.icon}</span>
+                      <h3 className="text-lg font-bold text-foreground">{area.name}</h3>
+                    </div>
+                    <div className="space-y-3">
+                      {area.metrics.map((metric, midx) => (
+                        <motion.div
+                          key={midx}
+                          initial={{ opacity: 0, x: -10 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ delay: idx * 0.1 + midx * 0.05 }}
+                          className="flex items-center justify-between p-2 bg-background/50 rounded-lg"
+                        >
+                          <span className="text-sm text-foreground/70">{metric.label}</span>
+                          <span className="text-sm font-semibold text-primary">{metric.value}</span>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </PremiumCard>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          {/* Prevention Tab */}
+          {selectedTab === 'prevention' && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="space-y-8"
+            >
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {preventionPrograms.map((program, idx) => (
+                  <motion.div
+                    key={idx}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: idx * 0.1 }}
+                    whileHover={{ y: -5 }}
+                    className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${program.color} p-6 text-white border border-white/10`}
+                  >
+                    <div className="absolute top-0 right-0 text-6xl opacity-20">{program.icon}</div>
+                    <div className="relative z-10">
+                      <h3 className="text-xl font-bold mb-2">{program.name}</h3>
+                      <p className="text-white/80 text-sm mb-4">{program.description}</p>
+                      <div className="inline-block px-3 py-1 bg-white/20 rounded-full text-xs font-semibold">
+                        {program.frequency}
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          {/* Risk Factors Tab */}
+          {selectedTab === 'risks' && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="space-y-8"
+            >
+              <PremiumCard>
+                <h3 className="text-2xl font-bold text-foreground mb-6">Факторы риска заболеваний</h3>
+                <DataVisualization data={riskFactors} />
+              </PremiumCard>
+
+              <PremiumCard gradient="from-orange-500/10 to-orange-600/5">
+                <div className="flex items-start gap-3">
+                  <AlertCircle className="w-6 h-6 text-orange-500 flex-shrink-0 mt-1" />
+                  <div>
+                    <h3 className="font-bold text-foreground mb-2">Важно знать</h3>
+                    <p className="text-foreground/70 text-sm">
+                      Регулярный мониторинг факторов риска и своевременная коррекция образа жизни могут снизить вероятность развития хронических заболеваний на 70-80%.
+                    </p>
+                  </div>
                 </div>
-              ))}
-            </div>
+              </PremiumCard>
+            </motion.div>
           )}
         </div>
       </main>
-
-      {activePopup && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="sketch-panel bg-background rounded-2xl max-w-2xl w-full">
-            <div className="bg-background border-b border-border p-6 flex items-center justify-between">
-              <h3 className="text-xl font-bold text-foreground">{activePopup.title}</h3>
-              <button
-                onClick={() => setActivePopup(null)}
-                className="text-foreground/60 hover:text-foreground"
-              >
-                <X className="w-6 h-6" />
-              </button>
-            </div>
-            <div className="p-6">
-              <p className="text-foreground/70">{activePopup.content}</p>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

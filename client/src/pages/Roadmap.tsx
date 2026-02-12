@@ -1,164 +1,132 @@
-import { useState } from 'react';
-import { ChevronLeft, CheckCircle2, Target, Zap } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 import { useLocation } from 'wouter';
 import { motion } from 'framer-motion';
+import { PremiumCard } from '@/components/PremiumCard';
+import { StatCounter } from '@/components/StatCounter';
 
 export default function Roadmap() {
   const [, setLocation] = useLocation();
-  const [expandedPhase, setExpandedPhase] = useState<string | null>('phase1');
 
   const phases = [
     {
-      id: 'phase1',
-      name: 'Фаза 1: Альфа-разработка',
-      duration: '0–6 месяцев',
+      phase: 1,
+      name: 'MVP & Фундамент',
+      period: 'Q1-Q2 2025',
+      investment: '$500K',
+      goals: [
+        'Запуск MVP с 3 модулями здоровья',
+        '10,000 первых пользователей',
+        'Интеграция с 50 партнёрскими клиниками',
+        'Базовая AI-диагностика'
+      ],
+      metrics: [
+        { label: 'DAU', value: '5K' },
+        { label: 'Retention', value: '45%' },
+        { label: 'NPS', value: '42' }
+      ],
       color: 'from-blue-500 to-blue-600',
-      icon: '🚀',
-      description: 'Создание MVP с 2-3 ключевыми модулями',
-      goals: [
-        'Запуск платформы в одном регионе на одном языке',
-        'Привлечение 3-5 первых партнёров для тестирования',
-        'Закрытая бета-версия с 500-1000 активными пользователями',
-        'Удержание 40% через 30 дней',
-        'Положительные отзывы о пользовательском опыте'
-      ],
-      technical: [
-        'Базовая архитектура платформы',
-        'Система аутентификации пользователей',
-        'Система сбора данных',
-        'Простой интерфейс'
-      ],
-      investment: '$100-250K (ангельский раунд)',
-      metrics: {
-        users: '500-1K',
-        retention: '40%',
-        partners: '3-5',
-        arr: '$0-50K'
-      }
+      icon: '🚀'
     },
     {
-      id: 'phase2',
-      name: 'Фаза 2: Бета-запуск',
-      duration: '6–12 месяцев',
-      color: 'from-green-500 to-green-600',
-      icon: '📱',
-      description: 'Расширение до всех 5 модулей здоровья',
+      phase: 2,
+      name: 'Расширение',
+      period: 'Q3-Q4 2025',
+      investment: '$1.5M',
       goals: [
-        'Расширение функциональности до всех пяти модулей',
-        'Интеграции с носимыми устройствами',
-        'Маркетплейс услуг',
-        'Пилотная программа для корпоративных клиентов',
-        '10,000–25,000 активных пользователей'
+        'Добавить 4 новых модуля здоровья',
+        '100,000 активных пользователей',
+        'Интеграция с 200 клиниками',
+        'Маркетплейс услуг'
       ],
-      technical: [
-        'Все 5 модулей здоровья',
-        'Wearables интеграция',
-        'Маркетплейс платформа',
-        'Корпоративный API'
+      metrics: [
+        { label: 'DAU', value: '45K' },
+        { label: 'Retention', value: '52%' },
+        { label: 'NPS', value: '58' }
       ],
-      investment: '$150-350K (пре-сид раунд)',
-      metrics: {
-        users: '10-25K',
-        paying: '500-2K',
-        retention: '35%',
-        arr: '$50-150K',
-        partners: '20-50'
-      }
-    },
-    {
-      id: 'phase3',
-      name: 'Фаза 3: Региональное расширение',
-      duration: '12–24 месяца',
       color: 'from-purple-500 to-purple-600',
-      icon: '🌍',
-      description: 'Масштабирование в пределах региона',
-      goals: [
-        'Локализация на дополнительные языки',
-        'Расширение партнёрской сети до 100-200 организаций',
-        'Медицинские интеграции с лабораториями и клиниками',
-        '100,000+ активных пользователей',
-        'Корпоративная программа для 20-50 компаний'
-      ],
-      technical: [
-        'Многоязычная поддержка',
-        'Медицинские интеграции',
-        'Оптимизация инфраструктуры',
-        'Улучшенные AI алгоритмы'
-      ],
-      investment: '$2-4M (сид раунд)',
-      metrics: {
-        users: '100K+',
-        paying: '10-20K',
-        retention: '30%+',
-        arr: '$5-10M',
-        partners: '100-200',
-        corporate: '20-50'
-      }
+      icon: '📈'
     },
     {
-      id: 'phase4',
-      name: 'Фаза 4: Международное масштабирование',
-      duration: '24–48 месяцев',
+      phase: 3,
+      name: 'Масштабирование',
+      period: 'H1 2026',
+      investment: '$5M',
+      goals: [
+        'Полная экосистема 7 модулей',
+        '1 миллион пользователей',
+        'Интеграция с 1000 партнёров',
+        'Расширение на новые рынки'
+      ],
+      metrics: [
+        { label: 'DAU', value: '350K' },
+        { label: 'Retention', value: '58%' },
+        { label: 'NPS', value: '68' }
+      ],
+      color: 'from-green-500 to-green-600',
+      icon: '🌍'
+    },
+    {
+      phase: 4,
+      name: 'Глобализация',
+      period: 'H2 2026-2027',
+      investment: '$15M',
+      goals: [
+        'Запуск в 15 странах',
+        '10 миллионов пользователей',
+        'Интеграция с 5000 партнёров',
+        'Локализация контента'
+      ],
+      metrics: [
+        { label: 'DAU', value: '2.5M' },
+        { label: 'Retention', value: '62%' },
+        { label: 'NPS', value: '72' }
+      ],
       color: 'from-orange-500 to-orange-600',
-      icon: '🌐',
-      description: 'Выход на международные рынки',
-      goals: [
-        'Запуск в США, Европе и Азии',
-        'Адаптация под местные рынки и регуляторные требования',
-        'Стратегические партнёрства со страховыми компаниями',
-        '500,000+ активных пользователей',
-        'Расширение корпоративного сегмента до 200+ компаний'
-      ],
-      technical: [
-        'Продвинутые AI функции',
-        'Предиктивная аналитика',
-        'Персонализированные протоколы ML',
-        'Международная инфраструктура'
-      ],
-      investment: '$8-15M (серия А)',
-      metrics: {
-        users: '500K+',
-        paying: '50-100K',
-        arr: '$50-100M',
-        partners: '2000+',
-        corporate: '100-200',
-        regions: '3+'
-      }
+      icon: '🗺️'
     },
     {
-      id: 'phase5',
-      name: 'Фаза 5: Экосистемный слой',
-      duration: '48+ месяцев',
-      color: 'from-pink-500 to-pink-600',
-      icon: '🔗',
-      description: 'Открытая экосистема для сторонних разработчиков',
+      phase: 5,
+      name: 'Лидерство',
+      period: '2028-2030',
+      investment: '$50M',
       goals: [
-        'API для сторонних разработчиков',
-        'White-label решения для партнёров',
-        'SDK для интеграций',
-        'Платформа исследований на основе данных',
-        '1,000,000+ активных пользователей'
+        'Выход на IPO',
+        '100 миллионов пользователей',
+        'Глобальный лидер в health-tech',
+        'Расширение в смежные рынки'
       ],
-      technical: [
-        'Открытый API',
-        'White-label платформа',
-        'SDK и документация',
-        'Платформа исследований'
+      metrics: [
+        { label: 'DAU', value: '25M' },
+        { label: 'Retention', value: '65%' },
+        { label: 'NPS', value: '75' }
       ],
-      investment: '$25-50M (серия Б)',
-      metrics: {
-        users: '1M+',
-        arr: '$150-300M',
-        partners: '5000+',
-        corporate: '500+',
-        regions: '10+',
-        developers: '1000+'
-      }
+      color: 'from-pink-500 to-pink-600',
+      icon: '👑'
     }
   ];
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, x: -50 },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: { duration: 0.5 },
+    },
+  };
+
   return (
     <div className="min-h-screen bg-background">
+      {/* Header */}
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-sm border-b border-border">
         <div className="container py-4 flex items-center gap-4">
           <button
@@ -168,132 +136,200 @@ export default function Roadmap() {
             <ChevronLeft className="w-5 h-5" />
             Назад
           </button>
-          <h1 className="text-2xl font-bold text-foreground">Дорожная карта развития</h1>
+          <h1 className="text-2xl font-bold text-foreground">🗺️ Дорожная карта</h1>
         </div>
       </header>
 
       <main className="container py-12">
-        <div className="max-w-5xl mx-auto">
-          {/* Timeline Overview */}
-          <div className="mb-12">
-            <h2 className="text-3xl font-bold text-foreground mb-8 text-center">5 Фаз развития</h2>
-            
-            {/* Timeline visualization */}
-            <div className="relative mb-12">
-              <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-500 via-purple-500 to-pink-500 ml-8"></div>
-              
-              <div className="space-y-8">
+        <div className="max-w-6xl mx-auto">
+          {/* Hero Section */}
+          <motion.section
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-12"
+          >
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-500/20 via-indigo-600/10 to-indigo-700/5 p-12 border border-border/50">
+              <div className="relative z-10">
+                <h2 className="text-4xl font-bold text-foreground mb-4">5-летний план развития</h2>
+                <p className="text-foreground/70 text-lg mb-8">
+                  От MVP к глобальному лидеру в экосистеме здоровья
+                </p>
+
+                <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                  <StatCounter value={71.5} label="Инвестиции" suffix="M$" delay={0.1} />
+                  <StatCounter value={100} label="Миллионов пользователей" delay={0.2} />
+                  <StatCounter value={5} label="Фаз развития" delay={0.3} />
+                  <StatCounter value={5000} label="Партнёров" suffix="+" delay={0.4} />
+                  <StatCounter value={2030} label="Год IPO" delay={0.5} />
+                </div>
+              </div>
+            </div>
+          </motion.section>
+
+          {/* Timeline */}
+          <motion.section
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={containerVariants}
+            className="mb-12"
+          >
+            <div className="relative">
+              {/* Timeline line */}
+              <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-primary via-primary to-transparent opacity-20" />
+
+              {/* Phases */}
+              <div className="space-y-12">
                 {phases.map((phase, idx) => (
                   <motion.div
-                    key={phase.id}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: idx * 0.1 }}
-                    onClick={() => setExpandedPhase(expandedPhase === phase.id ? null : phase.id)}
-                    className="cursor-pointer"
+                    key={idx}
+                    variants={itemVariants}
+                    className={`flex gap-8 ${idx % 2 === 0 ? 'flex-row' : 'flex-row-reverse'}`}
                   >
-                    <div className="ml-20 sketch-panel p-6 hover:shadow-lg transition-all">
-                      <div className={`absolute -left-5 top-6 w-10 h-10 rounded-full bg-gradient-to-br ${phase.color} flex items-center justify-center text-white font-bold`}>
-                        {idx + 1}
-                      </div>
+                    {/* Timeline dot */}
+                    <motion.div
+                      animate={{ scale: [1, 1.2, 1] }}
+                      transition={{ duration: 2, repeat: Infinity, delay: idx * 0.2 }}
+                      className="flex-shrink-0 w-12 h-12 rounded-full bg-gradient-to-br from-primary to-primary/50 flex items-center justify-center text-white font-bold text-lg relative z-10"
+                    >
+                      {phase.phase}
+                    </motion.div>
 
-                      <div className="flex items-start justify-between mb-2">
-                        <div>
-                          <h3 className="text-xl font-bold text-foreground">{phase.name}</h3>
-                          <p className="text-sm text-foreground/60">{phase.duration}</p>
-                        </div>
-                        <span className="text-3xl">{phase.icon}</span>
-                      </div>
+                    {/* Content */}
+                    <div className="flex-1">
+                      <motion.div
+                        whileHover={{ y: -5 }}
+                        className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${phase.color} p-6 text-white border border-white/10`}
+                      >
+                        <div className="absolute top-0 right-0 text-6xl opacity-20">{phase.icon}</div>
+                        
+                        <div className="relative z-10">
+                          <div className="flex items-start justify-between mb-4">
+                            <div>
+                              <h3 className="text-2xl font-bold mb-1">{phase.name}</h3>
+                              <p className="text-white/80 text-sm">{phase.period}</p>
+                            </div>
+                            <div className="text-right">
+                              <p className="text-xs text-white/70 mb-1">Инвестиции</p>
+                              <p className="text-2xl font-bold">{phase.investment}</p>
+                            </div>
+                          </div>
 
-                      <p className="text-foreground/70 mb-4">{phase.description}</p>
-
-                      {/* Expandable content */}
-                      {expandedPhase === phase.id && (
-                        <motion.div
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: 'auto' }}
-                          exit={{ opacity: 0, height: 0 }}
-                          className="mt-6 pt-6 border-t border-border space-y-6"
-                        >
-                          {/* Goals */}
-                          <div>
-                            <h4 className="font-bold text-foreground mb-3 flex items-center gap-2">
-                              <Target className="w-4 h-4" />
-                              Ключевые цели
-                            </h4>
+                          <div className="mb-6 pb-6 border-b border-white/20">
+                            <h4 className="text-sm font-semibold mb-3 text-white/90">Цели:</h4>
                             <ul className="space-y-2">
                               {phase.goals.map((goal, gidx) => (
-                                <li key={gidx} className="flex items-start gap-2 text-sm text-foreground/70">
-                                  <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                                  {goal}
+                                <li key={gidx} className="text-sm text-white/80 flex items-start gap-2">
+                                  <span className="text-lg leading-none">✓</span>
+                                  <span>{goal}</span>
                                 </li>
                               ))}
                             </ul>
                           </div>
 
-                          {/* Technical */}
                           <div>
-                            <h4 className="font-bold text-foreground mb-3 flex items-center gap-2">
-                              <Zap className="w-4 h-4" />
-                              Технические фокусы
-                            </h4>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                              {phase.technical.map((tech, tidx) => (
-                                <div key={tidx} className="px-3 py-2 bg-background/50 rounded text-sm text-foreground/70">
-                                  • {tech}
+                            <h4 className="text-sm font-semibold mb-3 text-white/90">Ключевые метрики:</h4>
+                            <div className="grid grid-cols-3 gap-4">
+                              {phase.metrics.map((metric, midx) => (
+                                <div key={midx} className="text-center">
+                                  <p className="text-xs text-white/70 mb-1">{metric.label}</p>
+                                  <p className="text-xl font-bold">{metric.value}</p>
                                 </div>
                               ))}
                             </div>
                           </div>
-
-                          {/* Investment */}
-                          <div className="p-4 bg-primary/10 rounded-lg border border-primary/20">
-                            <p className="text-sm text-foreground/60 mb-1">Требуемое финансирование</p>
-                            <p className="text-lg font-bold text-primary">{phase.investment}</p>
-                          </div>
-
-                          {/* Metrics */}
-                          <div>
-                            <h4 className="font-bold text-foreground mb-3">Целевые метрики</h4>
-                            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                              {Object.entries(phase.metrics).map(([key, value]) => (
-                                <div key={key} className="sketch-panel p-3 text-center">
-                                  <p className="text-xs text-foreground/60 mb-1 capitalize">{key}</p>
-                                  <p className="text-lg font-bold text-primary">{value}</p>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        </motion.div>
-                      )}
+                        </div>
+                      </motion.div>
                     </div>
                   </motion.div>
                 ))}
               </div>
             </div>
-          </div>
+          </motion.section>
 
-          {/* Summary */}
-          <div className="sketch-panel p-8 bg-gradient-to-br from-primary/5 to-primary/2">
-            <h2 className="text-2xl font-bold text-foreground mb-4">Путь к масштабированию</h2>
-            <div className="space-y-4 text-foreground/80">
-              <p>
-                <strong>Альфа-фаза</strong> подтверждает основные гипотезы и создаёт рабочий прототип.
-              </p>
-              <p>
-                <strong>Бета-фаза</strong> расширяет функциональность и начинает монетизацию.
-              </p>
-              <p>
-                <strong>Региональная фаза</strong> масштабирует платформу в пределах одного региона с 100K+ пользователей.
-              </p>
-              <p>
-                <strong>Международная фаза</strong> выводит продукт на глобальные рынки с 500K+ пользователей.
-              </p>
-              <p>
-                <strong>Экосистемная фаза</strong> превращает платформу в открытую экосистему с 1M+ пользователей и становится стандартом в индустрии.
-              </p>
+          {/* Key Milestones */}
+          <motion.section
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-12"
+          >
+            <h2 className="text-3xl font-bold text-foreground mb-8">Ключевые вехи</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {[
+                {
+                  date: 'Q2 2025',
+                  event: 'Запуск MVP',
+                  description: 'Первая версия платформы с 3 модулями здоровья'
+                },
+                {
+                  date: 'Q4 2025',
+                  event: 'Серия A',
+                  description: 'Привлечение $2M инвестиций'
+                },
+                {
+                  date: 'H1 2026',
+                  event: 'Миллион пользователей',
+                  description: 'Достижение 1M активных пользователей'
+                },
+                {
+                  date: 'H2 2026',
+                  event: 'Серия B',
+                  description: 'Привлечение $10M инвестиций'
+                },
+                {
+                  date: '2027',
+                  event: 'Глобальное расширение',
+                  description: 'Запуск в 15 странах'
+                },
+                {
+                  date: '2030',
+                  event: 'IPO',
+                  description: 'Выход на публичный рынок'
+                },
+              ].map((milestone, idx) => (
+                <PremiumCard key={idx} delay={idx * 0.1}>
+                  <div className="flex items-start gap-4">
+                    <div className="text-3xl">📅</div>
+                    <div className="flex-1">
+                      <p className="text-xs text-foreground/60 mb-1">{milestone.date}</p>
+                      <h3 className="text-lg font-bold text-foreground mb-1">{milestone.event}</h3>
+                      <p className="text-sm text-foreground/70">{milestone.description}</p>
+                    </div>
+                  </div>
+                </PremiumCard>
+              ))}
             </div>
-          </div>
+          </motion.section>
+
+          {/* Investment Summary */}
+          <motion.section
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-12"
+          >
+            <h2 className="text-3xl font-bold text-foreground mb-8">Инвестиционный план</h2>
+            <PremiumCard gradient="from-green-500/10 to-green-600/5">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                  <p className="text-sm text-foreground/60 mb-2">Общие инвестиции</p>
+                  <p className="text-4xl font-bold text-primary mb-2">$71.5M</p>
+                  <p className="text-xs text-foreground/60">На 5 лет развития</p>
+                </div>
+                <div>
+                  <p className="text-sm text-foreground/60 mb-2">Средний раунд</p>
+                  <p className="text-4xl font-bold text-green-500 mb-2">$14.3M</p>
+                  <p className="text-xs text-foreground/60">На фазу</p>
+                </div>
+                <div>
+                  <p className="text-sm text-foreground/60 mb-2">ROI прогноз</p>
+                  <p className="text-4xl font-bold text-blue-500 mb-2">25-30x</p>
+                  <p className="text-xs text-foreground/60">К 2030 году</p>
+                </div>
+              </div>
+            </PremiumCard>
+          </motion.section>
         </div>
       </main>
     </div>
