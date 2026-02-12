@@ -98,6 +98,27 @@ export default function Movement() {
                 <p className="text-foreground/60">Трекинг активности и тренировок</p>
               </div>
             </div>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="outline" className="gap-2">
+                  <Settings className="h-4 w-4" />
+                  Настройки
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle>Настройки модуля Движение</DialogTitle>
+                </DialogHeader>
+                <SettingsPanel
+                  title="Настройки"
+                  settings={movementSettings}
+                  onSave={(settings) => {
+                    console.log('Movement settings saved:', settings);
+                  }}
+                  categories={['Общие', 'Цели', 'Интеграции', 'Уведомления']}
+                />
+              </DialogContent>
+            </Dialog>
           </div>
         </motion.div>
 

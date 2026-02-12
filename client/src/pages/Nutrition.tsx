@@ -109,6 +109,27 @@ export default function Nutrition() {
                 <p className="text-foreground/60">Дневник питания и анализ макронутриентов</p>
               </div>
             </div>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="outline" className="gap-2">
+                  <Settings className="h-4 w-4" />
+                  Настройки
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle>Настройки модуля Питание</DialogTitle>
+                </DialogHeader>
+                <SettingsPanel
+                  title="Настройки"
+                  settings={nutritionSettings}
+                  onSave={(settings) => {
+                    console.log('Nutrition settings saved:', settings);
+                  }}
+                  categories={['Общие', 'Цели', 'Уведомления', 'Интеграции']}
+                />
+              </DialogContent>
+            </Dialog>
           </div>
         </motion.div>
 
