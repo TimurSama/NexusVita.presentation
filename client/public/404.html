@@ -18,9 +18,18 @@
 </head>
 <body>
   <script>
-    // Redirect to index.html
+    // Redirect to index.html with base path support
     sessionStorage.redirect = location.href;
-    location.replace(location.pathname.split('/').slice(0, -1).join('/') + '/index.html');
+    var path = location.pathname;
+    // Remove trailing slash if present
+    if (path.endsWith('/')) {
+      path = path.slice(0, -1);
+    }
+    // Go up one level and add index.html
+    var segments = path.split('/').filter(Boolean);
+    segments.pop(); // Remove last segment (404.html or empty)
+    var basePath = segments.length > 0 ? '/' + segments.join('/') + '/' : '/';
+    location.replace(basePath + 'index.html');
   </script>
 </body>
 </html>
