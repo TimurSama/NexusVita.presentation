@@ -220,6 +220,32 @@ export default function Movement() {
             </div>
           </TabsContent>
 
+          <TabsContent value="questionnaire" className="space-y-6">
+            <div className="premium-card p-6">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h2 className="text-2xl font-bold text-foreground mb-2">Опросник активности</h2>
+                  <p className="text-foreground/60">
+                    Расскажите о вашей физической активности и целях
+                  </p>
+                </div>
+                {questionnaireCompleted && (
+                  <div className="flex items-center gap-2 text-primary">
+                    <CheckCircle2 className="h-5 w-5" />
+                    <span className="font-medium">Анкета заполнена</span>
+                  </div>
+                )}
+              </div>
+              <QuestionnaireComponent
+                questionnaire={movementQuestionnaire}
+                onComplete={(answers) => {
+                  console.log('Movement questionnaire answers:', answers);
+                  setQuestionnaireCompleted(true);
+                }}
+              />
+            </div>
+          </TabsContent>
+
           <TabsContent value="analytics" className="space-y-6">
             <div className="premium-card p-6">
               <h2 className="text-2xl font-bold text-foreground mb-4">Аналитика</h2>
