@@ -172,10 +172,10 @@ export const nutritionQuestionnaire: Questionnaire = {
       description: 'Примерный бюджет на питание в месяц',
       required: false,
       options: [
-        { label: 'Экономный (до 10,000₽)', value: 'budget' },
-        { label: 'Средний (10,000-20,000₽)', value: 'medium' },
-        { label: 'Выше среднего (20,000-35,000₽)', value: 'high' },
-        { label: 'Премиум (35,000₽+)', value: 'premium' },
+        { label: 'Экономный (до $110)', value: 'budget' },
+        { label: 'Средний ($110-220)', value: 'medium' },
+        { label: 'Выше среднего ($220-380)', value: 'high' },
+        { label: 'Премиум ($380+)', value: 'premium' },
       ],
     },
     {
