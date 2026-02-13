@@ -82,24 +82,28 @@ export default function Presentation() {
       description: '5 интегрированных комплексов здоровья',
       icon: 'systematization' as const,
       path: '/systematization',
+      popupId: 'systematization',
     },
     {
       title: 'Экономическая модель',
       description: 'Устойчивые источники дохода и прогнозы',
       icon: 'economic' as const,
       path: '/economic-model',
+      popupId: 'economic-model',
     },
     {
       title: 'Дорожная карта',
       description: '5-летний план развития и инвестиции',
       icon: 'roadmap' as const,
       path: '/roadmap',
+      popupId: 'roadmap',
     },
     {
       title: 'Инвестиции',
       description: 'Раунды финансирования и стратегии выхода',
       icon: 'investment' as const,
       path: '/investment',
+      popupId: 'investment',
     },
   ];
 
@@ -301,8 +305,17 @@ export default function Presentation() {
                   </div>
                   
                   <div className="relative z-10">
-                    <div className="mb-4 inline-block p-3 bg-primary/10 rounded-xl">
-                      <SketchIcon icon={section.icon} size={32} className="text-primary" />
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="inline-block p-3 bg-primary/10 rounded-xl">
+                        <SketchIcon icon={section.icon} size={32} className="text-primary" />
+                      </div>
+                      <InfoIndicator 
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setOpenPopup(section.popupId);
+                        }} 
+                      />
                     </div>
                     <h3 className="text-2xl font-bold mb-2 text-foreground">{section.title}</h3>
                     <p className="text-foreground/70">{section.description}</p>
