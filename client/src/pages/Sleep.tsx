@@ -1,51 +1,86 @@
 import { useState } from 'react';
-import { ChevronLeft } from 'lucide-react';
+import { ChevronLeft, Settings } from 'lucide-react';
 import { useLocation } from 'wouter';
 import { motion } from 'framer-motion';
+import SketchIcon from '@/components/SketchIcon';
+import { Button } from '@/components/ui/button';
+import { SettingsPanel } from '@/components/SettingsPanel';
+import { sleepSettings } from '@/data/settings/sleep';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
 export default function Sleep() {
   const [, setLocation] = useLocation();
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-sm border-b border-border">
-        <div className="container py-4 flex items-center gap-4">
-          <button
-            onClick={() => setLocation('/')}
-            className="flex items-center gap-2 text-foreground/70 hover:text-foreground transition-colors"
-          >
-            <ChevronLeft className="w-5 h-5" />
-            Назад
-          </button>
-          <h1 className="text-2xl font-bold text-foreground">😴 Сон</h1>
-        </div>
-      </header>
-
-      <main className="container py-12">
-        <div className="max-w-4xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="sketch-panel p-8 bg-gradient-to-br from-indigo-500/10 to-indigo-600/5"
-          >
-            <h2 className="text-3xl font-bold text-foreground mb-4">Модуль сна</h2>
-            <p className="text-foreground/70 mb-6">
-              Качество сна, восстановление и оптимизация циркадных ритмов.
-            </p>
-            <div className="space-y-4">
-              <div className="p-4 bg-background/50 rounded-lg">
-                <h3 className="font-bold text-foreground mb-2">Основные функции</h3>
-                <ul className="space-y-2 text-foreground/70">
-                  <li>• Отслеживание качества сна</li>
-                  <li>• Анализ циркадных ритмов</li>
-                  <li>• Рекомендации по улучшению сна</li>
-                  <li>• Интеграция с трекерами сна</li>
-                </ul>
+    <div className="min-h-screen bg-background pb-20 md:pb-0 pt-20">
+      <div className="container py-6 md:py-8">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-8"
+        >
+          <div className="flex items-center gap-4 mb-4">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setLocation('/')}
+              className="md:hidden"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </Button>
+            <div className="flex items-center gap-3">
+              <SketchIcon icon="sleep" size={32} className="text-primary" />
+              <div>
+                <h1 className="text-4xl font-bold text-foreground">Сон</h1>
+                <p className="text-foreground/60">Качество сна и восстановление</p>
               </div>
             </div>
-          </motion.div>
-        </div>
-      </main>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="outline" className="gap-2">
+                  <Settings className="h-4 w-4" />
+                  Настройки
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle>Настройки модуля Сон</DialogTitle>
+                </DialogHeader>
+                <SettingsPanel
+                  title="Настройки"
+                  settings={sleepSettings}
+                  onSave={(settings) => {
+                    console.log('Sleep settings saved:', settings);
+                  }}
+                  categories={['Общие', 'Уведомления', 'Цели', 'Интеграции']}
+                />
+              </DialogContent>
+            </Dialog>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="premium-card p-8"
+        >
+          <h2 className="text-3xl font-bold text-foreground mb-4">Модуль сна</h2>
+          <p className="text-foreground/70 mb-6">
+            Качество сна, восстановление и оптимизация циркадных ритмов.
+          </p>
+          <div className="space-y-4">
+            <div className="p-4 bg-background/50 rounded-lg">
+              <h3 className="font-bold text-foreground mb-2">Основные функции</h3>
+              <ul className="space-y-2 text-foreground/70">
+                <li>• Отслеживание качества сна</li>
+                <li>• Анализ циркадных ритмов</li>
+                <li>• Рекомендации по улучшению сна</li>
+                <li>• Интеграция с трекерами сна</li>
+              </ul>
+            </div>
+          </div>
+        </motion.div>
+      </div>
     </div>
   );
 }
