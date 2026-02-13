@@ -142,7 +142,7 @@ export default function EconomicModel() {
     },
   ];
 
-  const currentProjection = projections.find(p => p.year === selectedYear);
+  const currentProjection = projections.find(p => p.year === selectedYear) || projections[0];
 
   const unitEconomics = [
     { label: 'CAC (Cost of Acquisition)', value: 15, unit: '$' },
