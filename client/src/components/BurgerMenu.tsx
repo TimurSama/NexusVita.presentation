@@ -74,6 +74,7 @@ export function BurgerMenu({ isOpen, onClose }: BurgerMenuProps) {
     { path: '/presentation', icon: Presentation, label: 'Презентация' },
     { path: '/journal', icon: FileText, label: 'Ежедневник' },
     { path: '/ai-chat', icon: MessageSquare, label: 'ИИ+ Чат' },
+    { path: '/interactive-demo', icon: FileText, label: 'Интерактивные элементы' },
   ];
 
   const handleLinkClick = () => {

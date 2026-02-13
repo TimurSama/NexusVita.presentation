@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { ChevronLeft, Activity, TrendingUp, Target, Zap, ClipboardList, CheckCircle2, Settings } from 'lucide-react';
+import { ChevronLeft, Activity, TrendingUp, Target, Zap, ClipboardList, CheckCircle2, Settings, Watch } from 'lucide-react';
+import { FeatureButton } from '@/components/FeatureButton';
 import { useLocation } from 'wouter';
 import { motion } from 'framer-motion';
 import SketchIcon from '@/components/SketchIcon';
