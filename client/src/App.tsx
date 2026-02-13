@@ -14,6 +14,7 @@ import Profile from "./pages/Profile";
 import Habits from "./pages/Habits";
 import Journal from "./pages/Journal";
 import AIChat from "./pages/AIChat";
+import InteractiveDemo from "./pages/InteractiveDemo";
 import Medicine from "./pages/Medicine";
 import Nutrition from "./pages/Nutrition";
 import Movement from "./pages/Movement";
