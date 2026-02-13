@@ -11,68 +11,58 @@ export default function InvestmentProposal() {
   const fundingRounds = [
     {
       round: 'Seed',
-      amount: '50M₽',
-      amountUsd: '$545K',
-      valuation: '200M₽',
-      valuationUsd: '$2.2M',
+      amount: '$545K',
+      valuation: '$2.2M',
       equity: '25%',
-      use: ['Разработка MVP (30M₽)', 'Маркетинг (10M₽)', 'Операционные расходы (10M₽)'],
+      use: ['Разработка MVP ($327K)', 'Маркетинг ($109K)', 'Операционные расходы ($109K)'],
       timeline: 'Q1 2025',
       icon: '🌱',
-      investors: ['Бизнес-ангелы (20M₽)', 'Венчурные фонды (30M₽)'],
-      metrics: { users: '10K', mrr: '1.5M₽', partners: '15' }
+      investors: ['Бизнес-ангелы ($218K)', 'Венчурные фонды ($327K)'],
+      metrics: { users: '10K', mrr: '$16.3K', partners: '15' }
     },
     {
       round: 'Series A',
-      amount: '300M₽',
-      amountUsd: '$3.3M',
-      valuation: '1.5B₽',
-      valuationUsd: '$16.4M',
+      amount: '$3.3M',
+      valuation: '$16.4M',
       equity: '20%',
-      use: ['Разработка (150M₽)', 'Маркетинг (100M₽)', 'Партнерства (50M₽)'],
+      use: ['Разработка ($1.63M)', 'Маркетинг ($1.09M)', 'Партнерства ($545K)'],
       timeline: 'Q4 2025 - Q1 2026',
       icon: '📈',
-      investors: ['Венчурные фонды (200M₽)', 'Стратегические инвесторы (100M₽)'],
-      metrics: { users: '200K', mrr: '30M₽', partners: '800' }
+      investors: ['Венчурные фонды ($2.18M)', 'Стратегические инвесторы ($1.09M)'],
+      metrics: { users: '200K', mrr: '$327K', partners: '800' }
     },
     {
       round: 'Series B',
-      amount: '1B₽',
-      amountUsd: '$10.9M',
-      valuation: '5B₽',
-      valuationUsd: '$54.5M',
+      amount: '$10.9M',
+      valuation: '$54.5M',
       equity: '20%',
-      use: ['Разработка (500M₽)', 'Маркетинг (300M₽)', 'Международное расширение (200M₽)'],
+      use: ['Разработка ($5.45M)', 'Маркетинг ($3.27M)', 'Международное расширение ($2.18M)'],
       timeline: 'Q4 2026 - Q1 2027',
       icon: '🚀',
-      investors: ['Крупные фонды (700M₽)', 'Корпоративные инвесторы (300M₽)'],
-      metrics: { users: '1M', arr: '1.8B₽', partners: '3.5K' }
+      investors: ['Крупные фонды ($7.63M)', 'Корпоративные инвесторы ($3.27M)'],
+      metrics: { users: '1M', arr: '$19.6M', partners: '3.5K' }
     },
     {
       round: 'Series C',
-      amount: '3B₽',
-      amountUsd: '$32.7M',
-      valuation: '15B₽',
-      valuationUsd: '$163.6M',
+      amount: '$32.7M',
+      valuation: '$163.6M',
       equity: '20%',
-      use: ['Глобальное расширение (1.5B₽)', 'R&D (1B₽)', 'Приобретения (500M₽)'],
+      use: ['Глобальное расширение ($16.35M)', 'R&D ($10.9M)', 'Приобретения ($5.45M)'],
       timeline: 'Q4 2027 - Q1 2028',
       icon: '🌟',
-      investors: ['Глобальные фонды (2B₽)', 'Стратегические партнеры (1B₽)'],
-      metrics: { users: '5M', arr: '9B₽', partners: '17.5K' }
+      investors: ['Глобальные фонды ($21.8M)', 'Стратегические партнеры ($10.9M)'],
+      metrics: { users: '5M', arr: '$98M', partners: '17.5K' }
     },
     {
       round: 'IPO',
-      amount: '10B₽',
-      amountUsd: '$109M',
-      valuation: '50B₽',
-      valuationUsd: '$545M',
+      amount: '$109M',
+      valuation: '$545M',
       equity: '20%',
       use: ['Глобальная экспансия', 'R&D', 'Приобретения', 'Резервы'],
       timeline: '2029',
       icon: '👑',
       investors: ['Публичный рынок'],
-      metrics: { users: '50M', arr: '90B₽', partners: '165K+' }
+      metrics: { users: '50M', arr: '$980M', partners: '165K+' }
     }
   ];
 
@@ -88,15 +78,15 @@ export default function InvestmentProposal() {
     {
       strategy: 'IPO',
       timeline: '2029',
-      valuation: '50B₽ ($545M)',
+      valuation: '$545M',
       probability: '85%',
       icon: '📊',
-      description: 'Выход на публичный рынок с валюацией 50B₽'
+      description: 'Выход на публичный рынок с валюацией $545M'
     },
     {
       strategy: 'Acquisition',
       timeline: '2028-2029',
-      valuation: '15-30B₽ ($163-327M)',
+      valuation: '$163-327M',
       probability: '60%',
       icon: '🤝',
       description: 'Приобретение крупной health-tech компанией'
@@ -104,7 +94,7 @@ export default function InvestmentProposal() {
     {
       strategy: 'Secondary Sale',
       timeline: '2027-2028',
-      valuation: '5-10B₽ ($54-109M)',
+      valuation: '$54-109M',
       probability: '40%',
       icon: '💰',
       description: 'Продажа доли существующим инвесторам'
@@ -158,12 +148,12 @@ export default function InvestmentProposal() {
               <div className="relative z-10">
                 <h2 className="text-4xl font-bold text-foreground mb-4">Инвестируйте в будущее здоровья</h2>
                 <p className="text-foreground/70 text-lg mb-8">
-                  Возможность войти в $9.3T рынок здоровья. Прогноз доходов: 603.55M₽ (год 1), 90B₽ (2030)
+                  Возможность войти в $9.3T рынок здоровья. Прогноз доходов: $6.6M (год 1), $980M (2030)
                 </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-                  <StatCounter value={4.4} label="Требуемых инвестиций" suffix="B₽" delay={0.1} />
-                  <StatCounter value={50} label="Валюация IPO" suffix="B₽" delay={0.2} />
+                  <StatCounter value={48} label="Требуемых инвестиций" suffix="M$" delay={0.1} />
+                  <StatCounter value={545} label="Валюация IPO" suffix="M$" delay={0.2} />
                   <StatCounter value={11.4} label="ROI множитель" suffix="x" delay={0.3} />
                   <StatCounter value={5} label="Раундов финансирования" delay={0.4} />
                   <StatCounter value={2029} label="Целевой год IPO" delay={0.5} />
@@ -202,13 +192,7 @@ export default function InvestmentProposal() {
                         </div>
                         <div className="text-right">
                           <p className="text-2xl font-bold text-primary">{round.amount}</p>
-                          {round.amountUsd && (
-                            <p className="text-xs text-foreground/60">({round.amountUsd})</p>
-                          )}
                           <p className="text-sm text-foreground/60 mt-1">Валюация: {round.valuation}</p>
-                          {round.valuationUsd && (
-                            <p className="text-xs text-foreground/50">({round.valuationUsd})</p>
-                          )}
                         </div>
                       </div>
                       <div className="mb-4">
@@ -278,10 +262,10 @@ export default function InvestmentProposal() {
                 <h3 className="text-xl font-bold text-foreground mb-6">Ключевые инвестиции</h3>
                 <div className="space-y-4">
                   {[
-                    { item: 'Разработка', amount: '47.12M₽' },
-                    { item: 'Маркетинг', amount: '50M₽' },
-                    { item: 'Операционные расходы', amount: '10.2M₽' },
-                    { item: 'Партнерства и сертификация', amount: '15M₽' },
+                    { item: 'Разработка', amount: '$512K' },
+                    { item: 'Маркетинг', amount: '$543K' },
+                    { item: 'Операционные расходы', amount: '$111K' },
+                    { item: 'Партнерства и сертификация', amount: '$163K' },
                   ].map((inv, idx) => (
                     <motion.div
                       key={idx}
