@@ -14,55 +14,55 @@ export default function EconomicModel() {
     {
       name: 'Подписки (SaaS)',
       value: 11,
-      amount: 64.55,
-      unit: 'M₽',
+      amount: 0.7,
+      unit: 'M$',
       color: 'from-blue-500 to-blue-600',
-      description: 'Базовый (990₽/мес), Премиум (2,990₽/мес), Корпоративный (99,000₽/мес)',
+      description: 'Базовый ($11/мес), Премиум ($33/мес), Корпоративный ($1,100/мес)',
       icon: '👤',
       details: {
-        basic: { price: 990, users: 2500, mrr: 2.475 },
-        premium: { price: 2990, users: 1000, mrr: 2.99 },
-        corporate: { price: 99000, companies: 10, mrr: 0.99 }
+        basic: { price: 11, users: 2500, mrr: 0.027 },
+        premium: { price: 33, users: 1000, mrr: 0.033 },
+        corporate: { price: 1100, companies: 10, mrr: 0.011 }
       }
     },
     {
       name: 'Комиссии с партнеров',
       value: 66,
-      amount: 399,
-      unit: 'M₽',
+      amount: 4.3,
+      unit: 'M$',
       color: 'from-green-500 to-green-600',
       description: 'Медицинские клиники (15%), Фитнес-центры (10%), Питание (5%)',
       icon: '🏢',
       details: {
-        clinics: { commission: 15, count: 50, revenue: 135 },
-        fitness: { commission: 10, count: 100, revenue: 84 },
-        nutrition: { commission: 5, count: 200, revenue: 180 }
+        clinics: { commission: 15, count: 50, revenue: 1.47 },
+        fitness: { commission: 10, count: 100, revenue: 0.91 },
+        nutrition: { commission: 5, count: 200, revenue: 1.96 }
       }
     },
     {
       name: 'Продажа данных',
       value: 7,
-      amount: 40,
-      unit: 'M₽',
+      amount: 0.43,
+      unit: 'M$',
       color: 'from-purple-500 to-purple-600',
       description: 'Анонимизированные данные для исследований и фармацевтики',
       icon: '📊',
       details: {
-        research: { price: 5, count: 4, revenue: 20 },
-        pharma: { price: 10, count: 2, revenue: 20 }
+        research: { price: 0.054, count: 4, revenue: 0.22 },
+        pharma: { price: 0.109, count: 2, revenue: 0.22 }
       }
     },
     {
       name: 'Реклама и спонсорство',
       value: 17,
-      amount: 100,
-      unit: 'M₽',
+      amount: 1.09,
+      unit: 'M$',
       color: 'from-orange-500 to-orange-600',
-      description: 'Реклама в приложении (CPM 500₽) и спонсорство контента',
+      description: 'Реклама в приложении (CPM $5.4) и спонсорство контента',
       icon: '📢',
       details: {
-        ads: { cpm: 500, impressions: 10, revenue: 60 },
-        sponsorship: { sponsors: 20, price: 2, revenue: 40 }
+        ads: { cpm: 5.4, impressions: 10, revenue: 0.65 },
+        sponsorship: { sponsors: 20, price: 0.022, revenue: 0.44 }
       }
     },
   ];
@@ -70,81 +70,75 @@ export default function EconomicModel() {
   const projections = [
     { 
       year: 2025, 
-      revenue: 603.55, 
-      revenueUsd: 6.6,
+      revenue: 6.6, 
       users: 0.2, 
-      expenses: 122.32,
-      profit: 481.23,
+      expenses: 1.33,
+      profit: 5.27,
       margin: 79.7,
-      subscriptions: 64.55,
-      commissions: 399,
-      data: 40,
-      ads: 100
+      subscriptions: 0.7,
+      commissions: 4.3,
+      data: 0.43,
+      ads: 1.09
     },
     { 
       year: 2026, 
-      revenue: 1800, 
-      revenueUsd: 19.6,
+      revenue: 19.6, 
       users: 1.0, 
-      expenses: 400,
-      profit: 1400,
+      expenses: 4.35,
+      profit: 15.25,
       margin: 77.8,
-      subscriptions: 200,
-      commissions: 1200,
-      data: 150,
-      ads: 250
+      subscriptions: 2.17,
+      commissions: 13.04,
+      data: 1.63,
+      ads: 2.72
     },
     { 
       year: 2027, 
-      revenue: 9000, 
-      revenueUsd: 98.0,
+      revenue: 98.0, 
       users: 5.0, 
-      expenses: 2000,
-      profit: 7000,
+      expenses: 21.74,
+      profit: 76.26,
       margin: 77.8,
-      subscriptions: 1000,
-      commissions: 6000,
-      data: 800,
-      ads: 1200
+      subscriptions: 10.87,
+      commissions: 65.22,
+      data: 8.15,
+      ads: 13.04
     },
     { 
       year: 2028, 
-      revenue: 25000, 
-      revenueUsd: 272.0,
+      revenue: 272.0, 
       users: 15.0, 
-      expenses: 6000,
-      profit: 19000,
+      expenses: 65.22,
+      profit: 206.78,
       margin: 76.0,
-      subscriptions: 3000,
-      commissions: 16000,
-      data: 2500,
-      ads: 3500
+      subscriptions: 32.61,
+      commissions: 173.91,
+      data: 27.17,
+      ads: 38.04
     },
     { 
       year: 2029, 
-      revenue: 60000, 
-      revenueUsd: 653.0,
+      revenue: 653.0, 
       users: 35.0, 
-      expenses: 15000,
-      profit: 45000,
+      expenses: 163.04,
+      profit: 489.96,
       margin: 75.0,
-      subscriptions: 8000,
-      commissions: 40000,
-      data: 6000,
-      ads: 6000
+      subscriptions: 86.96,
+      commissions: 434.78,
+      data: 65.22,
+      ads: 65.22
     },
     { 
       year: 2030, 
-      revenue: 90000, 
-      revenueUsd: 980.0,
+      revenue: 980.0, 
       users: 50.0, 
-      expenses: 20000,
-      profit: 70000,
+      expenses: 217.39,
+      profit: 762.61,
       margin: 77.8,
-      subscriptions: 12000,
-      commissions: 60000,
-      data: 9000,
-      ads: 9000
+      subscriptions: 130.43,
+      commissions: 652.17,
+      data: 97.83,
+      ads: 97.83
     },
   ];
 
@@ -191,12 +185,12 @@ export default function EconomicModel() {
               <div className="relative z-10">
                 <h2 className="text-4xl font-bold text-foreground mb-4">Устойчивая модель доходов</h2>
                 <p className="text-foreground/70 text-lg mb-8">
-                  Диверсифицированные источники дохода: 603.55M₽ в первый год, прогноз 90,000M₽ к 2030 году
+                  Диверсифицированные источники дохода: $6.6M в первый год, прогноз $980M к 2030 году
                 </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                  <StatCounter value={603.55} label="Доход год 1" suffix="M₽" delay={0.1} />
-                  <StatCounter value={481.23} label="Прибыль год 1" suffix="M₽" delay={0.2} />
+                  <StatCounter value={6.6} label="Доход год 1" suffix="M$" delay={0.1} />
+                  <StatCounter value={5.27} label="Прибыль год 1" suffix="M$" delay={0.2} />
                   <StatCounter value={79.7} label="Маржинальность" suffix="%" delay={0.3} />
                   <StatCounter value={4} label="Источников дохода" delay={0.4} />
                 </div>
@@ -235,13 +229,13 @@ export default function EconomicModel() {
                     {stream.details && (
                       <div className="mt-3 pt-3 border-t border-white/20 text-xs space-y-1">
                         {stream.details.clinics && (
-                          <div>Клиники: {stream.details.clinics.count} × {stream.details.clinics.commission}% = {stream.details.clinics.revenue}M₽</div>
+                          <div>Клиники: {stream.details.clinics.count} × {stream.details.clinics.commission}% = ${stream.details.clinics.revenue}M</div>
                         )}
                         {stream.details.fitness && (
-                          <div>Фитнес: {stream.details.fitness.count} × {stream.details.fitness.commission}% = {stream.details.fitness.revenue}M₽</div>
+                          <div>Фитнес: {stream.details.fitness.count} × {stream.details.fitness.commission}% = ${stream.details.fitness.revenue}M</div>
                         )}
                         {stream.details.basic && (
-                          <div>Базовый: {stream.details.basic.users} × {stream.details.basic.price}₽ = {stream.details.basic.mrr}M₽/мес</div>
+                          <div>Базовый: {stream.details.basic.users} × ${stream.details.basic.price} = ${stream.details.basic.mrr}M/мес</div>
                         )}
                       </div>
                     )}
@@ -298,8 +292,8 @@ export default function EconomicModel() {
                 <PremiumCard gradient="from-blue-500/10 to-blue-600/5">
                   <div className="text-center">
                     <p className="text-sm text-foreground/60 mb-2">Доход</p>
-                    <p className="text-3xl font-bold text-primary mb-1">{currentProjection.revenue}M₽</p>
-                    <p className="text-xs text-foreground/60">({currentProjection.revenueUsd}M$)</p>
+                    <p className="text-3xl font-bold text-primary mb-1">${currentProjection.revenue}M</p>
+                    <p className="text-xs text-foreground/60">В год {selectedYear}</p>
                   </div>
                 </PremiumCard>
 
@@ -314,7 +308,7 @@ export default function EconomicModel() {
                 <PremiumCard gradient="from-purple-500/10 to-purple-600/5">
                   <div className="text-center">
                     <p className="text-sm text-foreground/60 mb-2">Прибыль</p>
-                    <p className="text-3xl font-bold text-purple-500 mb-1">{currentProjection.profit}M₽</p>
+                    <p className="text-3xl font-bold text-purple-500 mb-1">${currentProjection.profit}M</p>
                     <p className="text-xs text-foreground/60">Маржа {currentProjection.margin}%</p>
                   </div>
                 </PremiumCard>
@@ -322,7 +316,7 @@ export default function EconomicModel() {
                 <PremiumCard gradient="from-orange-500/10 to-orange-600/5">
                   <div className="text-center">
                     <p className="text-sm text-foreground/60 mb-2">Расходы</p>
-                    <p className="text-3xl font-bold text-orange-500 mb-1">{currentProjection.expenses}M₽</p>
+                    <p className="text-3xl font-bold text-orange-500 mb-1">${currentProjection.expenses}M</p>
                     <p className="text-xs text-foreground/60">Операционные</p>
                   </div>
                 </PremiumCard>
@@ -337,7 +331,7 @@ export default function EconomicModel() {
                   <p className="text-sm font-semibold text-foreground mb-3">Доход (M$)</p>
                   <DataVisualization data={projections.map(p => ({
                     label: p.year.toString(),
-                    value: Math.min(100, (p.revenue / 320.5) * 100),
+                    value: Math.min(100, (p.revenue / 980) * 100),
                     color: 'from-blue-500 to-blue-600'
                   }))} />
                 </div>
@@ -345,7 +339,7 @@ export default function EconomicModel() {
                   <p className="text-sm font-semibold text-foreground mb-3">Пользователи (M)</p>
                   <DataVisualization data={projections.map(p => ({
                     label: p.year.toString(),
-                    value: Math.min(100, (p.users / 95.6) * 100),
+                    value: Math.min(100, (p.users / 50) * 100),
                     color: 'from-green-500 to-green-600'
                   }))} />
                 </div>
