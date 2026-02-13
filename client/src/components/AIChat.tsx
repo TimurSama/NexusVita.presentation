@@ -53,7 +53,17 @@ export function AIChat({ messages, onSendMessage, isLoading = false, showQuickQu
                   Задайте вопрос о вашем здоровье, получите персональные рекомендации и анализ данных
                 </p>
               </div>
-              <AIQuickQuestions questions={[]} onSelect={handleQuickQuestion} />
+              <AIQuickQuestions 
+                questions={[
+                  'Как мое общее состояние здоровья?',
+                  'Какие рекомендации по питанию?',
+                  'Как улучшить качество сна?',
+                  'Какие тренировки мне подходят?',
+                  'Оцените риски для здоровья',
+                  'Создайте план на неделю',
+                ]} 
+                onSelect={handleQuickQuestion} 
+              />
             </motion.div>
           )}
 
