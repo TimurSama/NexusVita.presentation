@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Plus, Calendar as CalendarIcon } from 'lucide-react';
+import { Plus, Download, FileText, FileSpreadsheet } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { JournalEditor } from '@/components/JournalEditor';
 import { JournalList } from '@/components/JournalList';
@@ -8,6 +8,14 @@ import { JournalFiltersComponent } from '@/components/JournalFilters';
 import { JournalStatsComponent } from '@/components/JournalStats';
 import { JournalEntry, JournalFilters, JournalStats } from '@/types/journal';
 import SketchIcon from '@/components/SketchIcon';
+import { exportToCSV, exportToPDF, exportStatsToText } from '@/utils/export';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from '@/components/ui/dropdown-menu';
 
 // Mock data - в будущем будет заменено на реальные данные из API
 const mockEntries: JournalEntry[] = [
@@ -187,7 +195,7 @@ export default function Journal() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-4 flex-wrap gap-4">
             <div>
               <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-2 flex items-center gap-3">
                 <SketchIcon icon="chart" size={32} className="text-primary" />
@@ -197,10 +205,49 @@ export default function Journal() {
                 Записывайте свои мысли, события и достижения
               </p>
             </div>
-            <Button onClick={handleNewEntry} size="lg" className="gap-2">
-              <Plus className="h-5 w-5" />
-              Новая запись
-            </Button>
+            <div className="flex items-center gap-2">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="lg" className="gap-2">
+                    <Download className="h-5 w-5" />
+                    Экспорт
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem
+                    onClick={() => {
+                      const filename = `journal-export-${new Date().toISOString().split('T')[0]}.csv`;
+                      exportToCSV(filteredEntries, filename);
+                    }}
+                  >
+                    <FileSpreadsheet className="h-4 w-4 mr-2" />
+                    Экспорт в CSV
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      exportToPDF(filteredEntries);
+                    }}
+                  >
+                    <FileText className="h-4 w-4 mr-2" />
+                    Экспорт в PDF
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={() => {
+                      const filename = `journal-stats-${new Date().toISOString().split('T')[0]}.txt`;
+                      exportStatsToText(stats, filename);
+                    }}
+                  >
+                    <FileText className="h-4 w-4 mr-2" />
+                    Экспорт статистики
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <Button onClick={handleNewEntry} size="lg" className="gap-2">
+                <Plus className="h-5 w-5" />
+                Новая запись
+              </Button>
+            </div>
           </div>
         </motion.div>
 
