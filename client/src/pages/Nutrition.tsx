@@ -242,9 +242,22 @@ export default function Nutrition() {
           </TabsContent>
 
           <TabsContent value="diary" className="space-y-6">
+            <div className="flex items-center justify-end gap-2 mb-4">
+              <FeatureButton
+                label="Сканер продуктов"
+                featureName="Сканер штрих-кодов"
+                description="Сканируйте штрих-коды продуктов для быстрого добавления в дневник питания. Система автоматически определит состав и калорийность."
+                icon={<Camera className="h-4 w-4" />}
+                size="sm"
+              />
+              <Button className="gap-2">
+                <Plus className="h-4 w-4" />
+                Добавить продукт
+              </Button>
+            </div>
             <div className="premium-card p-6">
               <h2 className="text-2xl font-bold text-foreground mb-4">Дневник питания</h2>
-              <p className="text-foreground/60">Раздел в разработке</p>
+              <p className="text-foreground/60">Используйте кнопки выше для добавления продуктов</p>
             </div>
           </TabsContent>
 
