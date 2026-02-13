@@ -223,9 +223,24 @@ export default function Psychology() {
           </TabsContent>
 
           <TabsContent value="tools" className="space-y-6">
+            <div className="flex items-center justify-end gap-2 mb-4 flex-wrap">
+              <FeatureButton
+                label="CBT инструменты"
+                featureName="Когнитивно-поведенческая терапия"
+                description="Интерактивные инструменты CBT для работы с негативными мыслями, когнитивными искажениями и поведенческими паттернами."
+                icon={<Brain className="h-4 w-4" />}
+                size="sm"
+              />
+              <FeatureButton
+                label="Дыхательные практики"
+                featureName="Breathwork модуль"
+                description="Управляемые дыхательные практики для снижения стресса, улучшения концентрации и расслабления. Включает различные техники дыхания."
+                size="sm"
+              />
+            </div>
             <div className="premium-card p-6">
               <h2 className="text-2xl font-bold text-foreground mb-4">Инструменты</h2>
-              <p className="text-foreground/60">Раздел в разработке</p>
+              <p className="text-foreground/60">Используйте кнопки выше для доступа к инструментам</p>
             </div>
           </TabsContent>
         </Tabs>
