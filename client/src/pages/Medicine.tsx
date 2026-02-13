@@ -12,6 +12,8 @@ import { SettingsPanel, Setting } from '@/components/SettingsPanel';
 import { medicalQuestionnaire } from '@/data/questionnaires/medicine';
 import { medicineSettings } from '@/data/settings/medicine';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { FeatureButton } from '@/components/FeatureButton';
+import { Upload } from 'lucide-react';
 
 export default function Medicine() {
   const [, setLocation] = useLocation();
