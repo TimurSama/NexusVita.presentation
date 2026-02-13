@@ -1,21 +1,33 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Calendar, FileText, Pill, Activity, AlertCircle, TrendingUp } from 'lucide-react';
+import { Calendar, FileText, Pill, Activity, AlertCircle, TrendingUp, Edit } from 'lucide-react';
 import SketchIcon from '@/components/SketchIcon';
 import { HealthMetricCard } from '@/components/HealthMetricCard';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { WheelPicker } from '@/components/interactive/WheelPicker';
+import { WeightSelector } from '@/components/interactive/WeightSelector';
+import { MayanCalendar } from '@/components/interactive/MayanCalendar';
+import { FeatureButton } from '@/components/FeatureButton';
+import { Button } from '@/components/ui/button';
 
 export default function Profile() {
   const [selectedTab, setSelectedTab] = useState('overview');
+  const [isEditingBiometrics, setIsEditingBiometrics] = useState(false);
+  const [height, setHeight] = useState(175);
+  const [weight, setWeight] = useState(72);
+  const [birthDate, setBirthDate] = useState(new Date(1993, 0, 1));
 
   const healthScore = 87;
   const riskLevel = 'low';
 
+  const age = Math.floor((new Date().getTime() - birthDate.getTime()) / (365.25 * 24 * 60 * 60 * 1000));
+  const bmi = (weight / ((height / 100) ** 2)).toFixed(1);
+
   const biometrics = [
-    { label: 'Возраст', value: '32 года' },
-    { label: 'Рост', value: '175 см' },
-    { label: 'Вес', value: '72 кг' },
-    { label: 'ИМТ', value: '23.5' },
+    { label: 'Возраст', value: `${age} лет` },
+    { label: 'Рост', value: `${height} см` },
+    { label: 'Вес', value: `${weight} кг` },
+    { label: 'ИМТ', value: bmi },
   ];
 
   const recentAnalyses = [
@@ -151,37 +163,81 @@ export default function Profile() {
 
           <TabsContent value="biometrics" className="space-y-6">
             <div className="premium-card p-6">
-              <h3 className="text-xl font-bold text-foreground mb-4">Биометрические данные</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {[
-                  { label: 'Возраст', value: '32', unit: 'лет' },
-                  { label: 'Рост', value: '175', unit: 'см' },
-                  { label: 'Вес', value: '72', unit: 'кг' },
-                  { label: 'ИМТ', value: '23.5', unit: '' },
-                ].map((item, idx) => (
-                  <div key={idx} className="p-4 rounded-xl bg-muted/30">
-                    <p className="text-sm text-foreground/60 mb-1">{item.label}</p>
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-3xl font-bold text-foreground">{item.value}</span>
-                      {item.unit && <span className="text-foreground/60">{item.unit}</span>}
-                    </div>
-                  </div>
-                ))}
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-bold text-foreground">Биометрические данные</h3>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setIsEditingBiometrics(!isEditingBiometrics)}
+                  className="gap-2"
+                >
+                  <Edit className="h-4 w-4" />
+                  {isEditingBiometrics ? 'Сохранить' : 'Редактировать'}
+                </Button>
               </div>
+              
+              {!isEditingBiometrics ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {biometrics.map((item, idx) => (
+                    <div key={idx} className="p-4 rounded-xl bg-muted/30">
+                      <p className="text-sm text-foreground/60 mb-1">{item.label}</p>
+                      <p className="text-3xl font-bold text-foreground">{item.value}</p>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  <WheelPicker
+                    value={height}
+                    onChange={setHeight}
+                    label="Рост"
+                    min={100}
+                    max={220}
+                    unit="см"
+                  />
+                  <WeightSelector
+                    value={weight}
+                    onChange={setWeight}
+                    label="Вес"
+                    min={30}
+                    max={200}
+                    unit="кг"
+                  />
+                  <MayanCalendar
+                    value={birthDate}
+                    onChange={setBirthDate}
+                    label="Дата рождения"
+                  />
+                </div>
+              )}
             </div>
           </TabsContent>
 
           <TabsContent value="medical" className="space-y-6">
             <div className="premium-card p-6">
-              <h3 className="text-xl font-bold text-foreground mb-4">Медицинская история</h3>
-              <p className="text-foreground/60">Раздел в разработке</p>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-bold text-foreground">Медицинская история</h3>
+                <FeatureButton
+                  label="Добавить запись"
+                  featureName="Медицинская история"
+                  description="Ведите полную историю ваших заболеваний, операций, травм и других медицинских событий. Система поможет отслеживать динамику и предоставит аналитику."
+                />
+              </div>
+              <p className="text-foreground/60">Используйте кнопку выше для добавления медицинских записей</p>
             </div>
           </TabsContent>
 
           <TabsContent value="documents" className="space-y-6">
             <div className="premium-card p-6">
-              <h3 className="text-xl font-bold text-foreground mb-4">Документы и анализы</h3>
-              <p className="text-foreground/60">Раздел в разработке</p>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-bold text-foreground">Документы и анализы</h3>
+                <FeatureButton
+                  label="Загрузить документ"
+                  featureName="Загрузка медицинских документов"
+                  description="Загружайте результаты анализов, выписки, рецепты и другие медицинские документы. Система автоматически распознает данные с помощью OCR технологии."
+                />
+              </div>
+              <p className="text-foreground/60">Используйте кнопку выше для загрузки документов</p>
             </div>
           </TabsContent>
         </Tabs>
