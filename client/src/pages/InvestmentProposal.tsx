@@ -11,43 +11,68 @@ export default function InvestmentProposal() {
   const fundingRounds = [
     {
       round: 'Seed',
-      amount: '$500K',
-      valuation: '$5M',
-      use: ['MVP разработка', 'Команда', 'Маркетинг'],
-      timeline: 'Q2 2025',
-      icon: '🌱'
+      amount: '50M₽',
+      amountUsd: '$545K',
+      valuation: '200M₽',
+      valuationUsd: '$2.2M',
+      equity: '25%',
+      use: ['Разработка MVP (30M₽)', 'Маркетинг (10M₽)', 'Операционные расходы (10M₽)'],
+      timeline: 'Q1 2025',
+      icon: '🌱',
+      investors: ['Бизнес-ангелы (20M₽)', 'Венчурные фонды (30M₽)'],
+      metrics: { users: '10K', mrr: '1.5M₽', partners: '15' }
     },
     {
       round: 'Series A',
-      amount: '$2M',
-      valuation: '$20M',
-      use: ['Масштабирование', 'Партнёрства', 'Продукт'],
-      timeline: 'Q4 2025',
-      icon: '📈'
+      amount: '300M₽',
+      amountUsd: '$3.3M',
+      valuation: '1.5B₽',
+      valuationUsd: '$16.4M',
+      equity: '20%',
+      use: ['Разработка (150M₽)', 'Маркетинг (100M₽)', 'Партнерства (50M₽)'],
+      timeline: 'Q4 2025 - Q1 2026',
+      icon: '📈',
+      investors: ['Венчурные фонды (200M₽)', 'Стратегические инвесторы (100M₽)'],
+      metrics: { users: '200K', mrr: '30M₽', partners: '800' }
     },
     {
       round: 'Series B',
-      amount: '$10M',
-      valuation: '$100M',
-      use: ['Глобализация', 'Команда', 'Маркетинг'],
-      timeline: 'H2 2026',
-      icon: '🚀'
+      amount: '1B₽',
+      amountUsd: '$10.9M',
+      valuation: '5B₽',
+      valuationUsd: '$54.5M',
+      equity: '20%',
+      use: ['Разработка (500M₽)', 'Маркетинг (300M₽)', 'Международное расширение (200M₽)'],
+      timeline: 'Q4 2026 - Q1 2027',
+      icon: '🚀',
+      investors: ['Крупные фонды (700M₽)', 'Корпоративные инвесторы (300M₽)'],
+      metrics: { users: '1M', arr: '1.8B₽', partners: '3.5K' }
     },
     {
       round: 'Series C',
-      amount: '$25M',
-      valuation: '$300M',
-      use: ['Расширение', 'Акquisitions', 'Инфраструктура'],
-      timeline: '2027',
-      icon: '🌟'
+      amount: '3B₽',
+      amountUsd: '$32.7M',
+      valuation: '15B₽',
+      valuationUsd: '$163.6M',
+      equity: '20%',
+      use: ['Глобальное расширение (1.5B₽)', 'R&D (1B₽)', 'Приобретения (500M₽)'],
+      timeline: 'Q4 2027 - Q1 2028',
+      icon: '🌟',
+      investors: ['Глобальные фонды (2B₽)', 'Стратегические партнеры (1B₽)'],
+      metrics: { users: '5M', arr: '9B₽', partners: '17.5K' }
     },
     {
-      round: 'Series D',
-      amount: '$35M',
-      valuation: '$800M',
-      use: ['IPO подготовка', 'Глобальная сеть', 'Инновации'],
-      timeline: '2028-2029',
-      icon: '👑'
+      round: 'IPO',
+      amount: '10B₽',
+      amountUsd: '$109M',
+      valuation: '50B₽',
+      valuationUsd: '$545M',
+      equity: '20%',
+      use: ['Глобальная экспансия', 'R&D', 'Приобретения', 'Резервы'],
+      timeline: '2029',
+      icon: '👑',
+      investors: ['Публичный рынок'],
+      metrics: { users: '50M', arr: '90B₽', partners: '165K+' }
     }
   ];
 
@@ -62,24 +87,27 @@ export default function InvestmentProposal() {
   const exitStrategies = [
     {
       strategy: 'IPO',
-      timeline: '2030',
-      valuation: '$3-5B',
+      timeline: '2029',
+      valuation: '50B₽ ($545M)',
       probability: '85%',
-      icon: '📊'
+      icon: '📊',
+      description: 'Выход на публичный рынок с валюацией 50B₽'
     },
     {
       strategy: 'Acquisition',
       timeline: '2028-2029',
-      valuation: '$1-2B',
+      valuation: '15-30B₽ ($163-327M)',
       probability: '60%',
-      icon: '🤝'
+      icon: '🤝',
+      description: 'Приобретение крупной health-tech компанией'
     },
     {
       strategy: 'Secondary Sale',
       timeline: '2027-2028',
-      valuation: '$500M-1B',
+      valuation: '5-10B₽ ($54-109M)',
       probability: '40%',
-      icon: '💰'
+      icon: '💰',
+      description: 'Продажа доли существующим инвесторам'
     }
   ];
 
@@ -130,15 +158,15 @@ export default function InvestmentProposal() {
               <div className="relative z-10">
                 <h2 className="text-4xl font-bold text-foreground mb-4">Инвестируйте в будущее здоровья</h2>
                 <p className="text-foreground/70 text-lg mb-8">
-                  Возможность войти в $9.3T рынок здоровья с революционной платформой
+                  Возможность войти в $9.3T рынок здоровья. Прогноз доходов: 603.55M₽ (год 1), 90B₽ (2030)
                 </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-                  <StatCounter value={71.5} label="Требуемых инвестиций" suffix="M$" delay={0.1} />
-                  <StatCounter value={3} label="Валюация IPO" suffix="B$" delay={0.2} />
-                  <StatCounter value={25} label="ROI множитель" suffix="x" delay={0.3} />
+                  <StatCounter value={4.4} label="Требуемых инвестиций" suffix="B₽" delay={0.1} />
+                  <StatCounter value={50} label="Валюация IPO" suffix="B₽" delay={0.2} />
+                  <StatCounter value={11.4} label="ROI множитель" suffix="x" delay={0.3} />
                   <StatCounter value={5} label="Раундов финансирования" delay={0.4} />
-                  <StatCounter value={2030} label="Целевой год IPO" delay={0.5} />
+                  <StatCounter value={2029} label="Целевой год IPO" delay={0.5} />
                 </div>
               </div>
             </div>
@@ -168,19 +196,58 @@ export default function InvestmentProposal() {
                         <div>
                           <h3 className="text-2xl font-bold text-foreground">{round.round}</h3>
                           <p className="text-sm text-foreground/60">{round.timeline}</p>
+                          {round.equity && (
+                            <p className="text-xs text-foreground/50 mt-1">Equity: {round.equity}</p>
+                          )}
                         </div>
                         <div className="text-right">
-                          <p className="text-3xl font-bold text-primary">{round.amount}</p>
-                          <p className="text-sm text-foreground/60">Валюация: {round.valuation}</p>
+                          <p className="text-2xl font-bold text-primary">{round.amount}</p>
+                          {round.amountUsd && (
+                            <p className="text-xs text-foreground/60">({round.amountUsd})</p>
+                          )}
+                          <p className="text-sm text-foreground/60 mt-1">Валюация: {round.valuation}</p>
+                          {round.valuationUsd && (
+                            <p className="text-xs text-foreground/50">({round.valuationUsd})</p>
+                          )}
                         </div>
                       </div>
-                      <div className="flex flex-wrap gap-2">
-                        {round.use.map((use, uidx) => (
-                          <span key={uidx} className="px-3 py-1 bg-primary/10 text-primary text-xs rounded-full font-semibold">
-                            {use}
-                          </span>
-                        ))}
+                      <div className="mb-4">
+                        <h4 className="text-xs font-semibold mb-2 text-foreground/70">Использование средств:</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {round.use.map((use, uidx) => (
+                            <span key={uidx} className="px-3 py-1 bg-primary/10 text-primary text-xs rounded-full font-semibold">
+                              {use}
+                            </span>
+                          ))}
+                        </div>
                       </div>
+                      
+                      {round.investors && (
+                        <div className="mb-4">
+                          <h4 className="text-xs font-semibold mb-2 text-foreground/70">Инвесторы:</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {round.investors.map((investor, iidx) => (
+                              <span key={iidx} className="px-3 py-1 bg-green-500/10 text-green-600 text-xs rounded-full">
+                                {investor}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      
+                      {round.metrics && (
+                        <div>
+                          <h4 className="text-xs font-semibold mb-2 text-foreground/70">Метрики:</h4>
+                          <div className="grid grid-cols-3 gap-2 text-xs">
+                            {Object.entries(round.metrics).map(([key, value], midx) => (
+                              <div key={midx} className="text-center p-2 bg-background/50 rounded">
+                                <p className="text-foreground/60 mb-1">{key}</p>
+                                <p className="font-bold text-primary">{value}</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </motion.div>
@@ -200,10 +267,10 @@ export default function InvestmentProposal() {
               <PremiumCard>
                 <h3 className="text-xl font-bold text-foreground mb-6">Распределение бюджета</h3>
                 <DataVisualization data={[
-                  { label: 'Разработка', value: 35, color: 'from-blue-500 to-blue-600' },
-                  { label: 'Маркетинг', value: 30, color: 'from-green-500 to-green-600' },
-                  { label: 'Команда', value: 20, color: 'from-purple-500 to-purple-600' },
-                  { label: 'Операции', value: 15, color: 'from-orange-500 to-orange-600' },
+                  { label: 'Разработка', value: 38, color: 'from-blue-500 to-blue-600' },
+                  { label: 'Маркетинг', value: 41, color: 'from-green-500 to-green-600' },
+                  { label: 'Операции', value: 8, color: 'from-purple-500 to-purple-600' },
+                  { label: 'Партнерства', value: 12, color: 'from-orange-500 to-orange-600' },
                 ]} />
               </PremiumCard>
 
@@ -211,10 +278,10 @@ export default function InvestmentProposal() {
                 <h3 className="text-xl font-bold text-foreground mb-6">Ключевые инвестиции</h3>
                 <div className="space-y-4">
                   {[
-                    { item: 'Команда разработки', amount: '$25M' },
-                    { item: 'Маркетинг и рост', amount: '$21.5M' },
-                    { item: 'Инфраструктура', amount: '$14M' },
-                    { item: 'Партнёрства', amount: '$11M' },
+                    { item: 'Разработка', amount: '47.12M₽' },
+                    { item: 'Маркетинг', amount: '50M₽' },
+                    { item: 'Операционные расходы', amount: '10.2M₽' },
+                    { item: 'Партнерства и сертификация', amount: '15M₽' },
                   ].map((inv, idx) => (
                     <motion.div
                       key={idx}
@@ -294,6 +361,11 @@ export default function InvestmentProposal() {
                       <p className="text-xs text-foreground/60 mb-1">Вероятность</p>
                       <p className="font-semibold text-green-500">{exit.probability}</p>
                     </div>
+                    {exit.description && (
+                      <div className="mt-3 pt-3 border-t border-border">
+                        <p className="text-xs text-foreground/60">{exit.description}</p>
+                      </div>
+                    )}
                   </div>
                 </motion.div>
               ))}
