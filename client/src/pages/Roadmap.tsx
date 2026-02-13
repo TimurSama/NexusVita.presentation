@@ -12,8 +12,7 @@ export default function Roadmap() {
       phase: 1,
       name: 'Q1 2025: Базовая разработка',
       period: 'Январь - Март 2025',
-      investment: '50M₽',
-      investmentUsd: '$545K',
+      investment: '$545K',
       goals: [
         '✅ Frontend мобильного приложения (базовая версия)',
         '✅ Backend API и база данных',
@@ -28,7 +27,7 @@ export default function Roadmap() {
       metrics: [
         { label: 'Пользователи', value: '10K' },
         { label: 'Платящие', value: '500' },
-        { label: 'MRR', value: '1.5M₽' }
+        { label: 'MRR', value: '$16.3K' }
       ],
       color: 'from-blue-500 to-blue-600',
       icon: '🚀',
@@ -40,8 +39,7 @@ export default function Roadmap() {
       phase: 2,
       name: 'Q2 2025: Расширение функционала',
       period: 'Апрель - Июнь 2025',
-      investment: '80M₽',
-      investmentUsd: '$872K',
+      investment: '$872K',
       goals: [
         'Все 7 модулей здоровья',
         'ИИ-чат и рекомендации',
@@ -56,7 +54,7 @@ export default function Roadmap() {
       metrics: [
         { label: 'Пользователи', value: '30K' },
         { label: 'Платящие', value: '2K' },
-        { label: 'MRR', value: '5M₽' }
+        { label: 'MRR', value: '$54.3K' }
       ],
       color: 'from-purple-500 to-purple-600',
       icon: '📈',
@@ -68,8 +66,7 @@ export default function Roadmap() {
       phase: 3,
       name: 'Q3 2025: Масштабирование',
       period: 'Июль - Сентябрь 2025',
-      investment: '120M₽',
-      investmentUsd: '$1.3M',
+      investment: '$1.3M',
       goals: [
         'Корпоративная версия',
         'Расширенная аналитика',
@@ -85,7 +82,7 @@ export default function Roadmap() {
       metrics: [
         { label: 'Пользователи', value: '100K' },
         { label: 'Платящие', value: '5K' },
-        { label: 'MRR', value: '15M₽' }
+        { label: 'MRR', value: '$163K' }
       ],
       color: 'from-green-500 to-green-600',
       icon: '🌍',
@@ -97,8 +94,7 @@ export default function Roadmap() {
       phase: 4,
       name: 'Q4 2025: Оптимизация и рост',
       period: 'Октябрь - Декабрь 2025',
-      investment: '150M₽',
-      investmentUsd: '$1.6M',
+      investment: '$1.6M',
       goals: [
         'Оптимизация производительности',
         'Новые функции на основе обратной связи',
@@ -113,7 +109,7 @@ export default function Roadmap() {
       metrics: [
         { label: 'Пользователи', value: '200K' },
         { label: 'Платящие', value: '10K' },
-        { label: 'MRR', value: '30M₽' }
+        { label: 'MRR', value: '$327K' }
       ],
       color: 'from-orange-500 to-orange-600',
       icon: '🗺️',
@@ -125,8 +121,7 @@ export default function Roadmap() {
       phase: 5,
       name: '2026: Рост и расширение',
       period: 'Январь - Декабрь 2026',
-      investment: '300M₽',
-      investmentUsd: '$3.3M',
+      investment: '$3.3M',
       goals: [
         'Международная версия (английский, китайский)',
         'Расширенный ИИ (GPT-4 интеграция)',
@@ -142,7 +137,7 @@ export default function Roadmap() {
       metrics: [
         { label: 'Пользователи', value: '1M' },
         { label: 'Платящие', value: '50K' },
-        { label: 'ARR', value: '1.8B₽' }
+        { label: 'ARR', value: '$19.6M' }
       ],
       color: 'from-green-500 to-green-600',
       icon: '🌍',
@@ -154,8 +149,7 @@ export default function Roadmap() {
       phase: 6,
       name: '2027: Доминирование рынка',
       period: 'Январь - Декабрь 2027',
-      investment: '1B₽',
-      investmentUsd: '$10.9M',
+      investment: '$10.9M',
       goals: [
         'ИИ-диагностика (FDA/Росздравнадзор сертификация)',
         'Генетический анализ',
@@ -171,7 +165,7 @@ export default function Roadmap() {
       metrics: [
         { label: 'Пользователи', value: '5M' },
         { label: 'Платящие', value: '250K' },
-        { label: 'ARR', value: '9B₽' }
+        { label: 'ARR', value: '$98M' }
       ],
       color: 'from-orange-500 to-orange-600',
       icon: '🗺️',
@@ -183,8 +177,7 @@ export default function Roadmap() {
       phase: 7,
       name: '2028-2029: Лидерство и IPO',
       period: 'Январь 2028 - Декабрь 2029',
-      investment: '3B₽',
-      investmentUsd: '$32.7M',
+      investment: '$32.7M',
       goals: [
         'Глобальная платформа',
         'Исследования и разработки',
@@ -200,7 +193,7 @@ export default function Roadmap() {
       metrics: [
         { label: 'Пользователи', value: '50M' },
         { label: 'Платящие', value: '2.5M' },
-        { label: 'ARR', value: '90B₽' }
+        { label: 'ARR', value: '$980M' }
       ],
       color: 'from-pink-500 to-pink-600',
       icon: '👑',
@@ -261,7 +254,7 @@ export default function Roadmap() {
                 </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-                  <StatCounter value={400} label="Инвестиции" suffix="M₽" delay={0.1} />
+                  <StatCounter value={4.4} label="Инвестиции год 1" suffix="M$" delay={0.1} />
                   <StatCounter value={200} label="Пользователей год 1" suffix="K" delay={0.2} />
                   <StatCounter value={7} label="Фаз развития" delay={0.3} />
                   <StatCounter value={800} label="Партнёров год 1" delay={0.4} />
@@ -317,9 +310,6 @@ export default function Roadmap() {
                             <div className="text-right">
                               <p className="text-xs text-white/70 mb-1">Инвестиции</p>
                               <p className="text-xl font-bold">{phase.investment}</p>
-                              {phase.investmentUsd && (
-                                <p className="text-xs text-white/60">({phase.investmentUsd})</p>
-                              )}
                             </div>
                           </div>
 
