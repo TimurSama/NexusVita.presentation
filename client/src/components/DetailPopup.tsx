@@ -46,7 +46,7 @@ export function DetailPopup({ isOpen, onClose, content }: DetailPopupProps) {
     };
   }, [isOpen]);
 
-  if (!content) return null;
+  if (!content || !isOpen) return null;
 
   return (
     <AnimatePresence>

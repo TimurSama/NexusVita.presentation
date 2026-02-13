@@ -434,7 +434,7 @@ export default function Presentation() {
       <DetailPopup
         isOpen={openPopup !== null}
         onClose={() => setOpenPopup(null)}
-        content={openPopup ? whitepaperContent[openPopup] || null : null}
+        content={openPopup && whitepaperContent[openPopup] ? whitepaperContent[openPopup] : null}
       />
     </div>
   );
