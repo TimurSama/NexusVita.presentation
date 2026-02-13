@@ -326,6 +326,51 @@ export default function Presentation() {
           </div>
         </motion.section>
 
+        {/* Interactive Data Collection */}
+        <motion.section
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={containerVariants}
+          className="mb-16"
+        >
+          <motion.h2
+            variants={itemVariants}
+            className="text-4xl font-bold text-foreground mb-10"
+          >
+            Интерактивный сбор данных
+          </motion.h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            {[
+              { title: 'Рулетка для роста', icon: 'chart' as const, description: 'Вертикальная рулетка с плавной прокруткой' },
+              { title: 'Грузики для веса', icon: 'scale' as const, description: 'Интерактивные грузики на весах' },
+              { title: 'Календарь Майя', icon: 'monitor' as const, description: 'Круглый календарь для выбора даты' },
+              { title: 'Эмодзи настроения', icon: 'psychology' as const, description: 'Слайдер с эмодзи для оценки настроения' },
+            ].map((item, idx) => (
+              <Link key={idx} href="/interactive-demo">
+                <motion.a
+                  variants={itemVariants}
+                  whileHover={{ y: -5 }}
+                  className="relative overflow-hidden rounded-2xl bg-card border border-border/50 p-6 cursor-pointer block h-full group hover:border-primary/30 transition-all"
+                >
+                  <div className="absolute top-0 right-0 opacity-5 group-hover:opacity-10 transition-opacity">
+                    <SketchIcon icon={item.icon} size={80} className="text-primary" />
+                  </div>
+                  
+                  <div className="relative z-10">
+                    <div className="p-3 bg-primary/10 rounded-xl w-fit mb-4">
+                      <SketchIcon icon={item.icon} size={24} className="text-primary" />
+                    </div>
+                    <h3 className="text-xl font-bold text-foreground mb-2">{item.title}</h3>
+                    <p className="text-foreground/70 text-sm">{item.description}</p>
+                  </div>
+                </motion.a>
+              </Link>
+            ))}
+          </div>
+        </motion.section>
+
         {/* Key Features */}
         <motion.section
           initial="hidden"
