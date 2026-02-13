@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronLeft, Settings } from 'lucide-react';
+import { ChevronLeft, Settings, ClipboardList } from 'lucide-react';
 import { useLocation } from 'wouter';
 import { motion } from 'framer-motion';
 import SketchIcon from '@/components/SketchIcon';
@@ -7,6 +7,9 @@ import { Button } from '@/components/ui/button';
 import { SettingsPanel } from '@/components/SettingsPanel';
 import { relationshipsSettings } from '@/data/settings/relationships';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { QuestionnaireComponent } from '@/components/Questionnaire';
+import { relationshipsQuestionnaire } from '@/data/questionnaires/relationships';
 
 export default function Relationships() {
   const [, setLocation] = useLocation();
@@ -59,27 +62,48 @@ export default function Relationships() {
           </div>
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="premium-card p-8"
-        >
-          <h2 className="text-3xl font-bold text-foreground mb-4">Модуль отношений</h2>
-          <p className="text-foreground/70 mb-6">
-            Социальные связи, общение и построение здоровых отношений.
-          </p>
-          <div className="space-y-4">
-            <div className="p-4 bg-background/50 rounded-lg">
-              <h3 className="font-bold text-foreground mb-2">Основные функции</h3>
-              <ul className="space-y-2 text-foreground/70">
-                <li>• Оценка качества отношений</li>
-                <li>• Рекомендации по улучшению коммуникации</li>
-                <li>• Поддержка социальных связей</li>
-                <li>• Интеграция с социальными сетями</li>
-              </ul>
-            </div>
-          </div>
-        </motion.div>
+        <Tabs defaultValue="overview" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="overview">Обзор</TabsTrigger>
+            <TabsTrigger value="questionnaire">
+              <ClipboardList className="w-4 h-4 mr-2" />
+              Анкета
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="overview" className="space-y-6">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="premium-card p-8"
+            >
+              <h2 className="text-3xl font-bold text-foreground mb-4">Модуль отношений</h2>
+              <p className="text-foreground/70 mb-6">
+                Социальные связи, общение и построение здоровых отношений.
+              </p>
+              <div className="space-y-4">
+                <div className="p-4 bg-background/50 rounded-lg">
+                  <h3 className="font-bold text-foreground mb-2">Основные функции</h3>
+                  <ul className="space-y-2 text-foreground/70">
+                    <li>• Оценка качества отношений</li>
+                    <li>• Рекомендации по улучшению коммуникации</li>
+                    <li>• Поддержка социальных связей</li>
+                    <li>• Интеграция с социальными сетями</li>
+                  </ul>
+                </div>
+              </div>
+            </motion.div>
+          </TabsContent>
+
+          <TabsContent value="questionnaire" className="space-y-6">
+            <QuestionnaireComponent
+              questions={relationshipsQuestionnaire}
+              onSubmit={(data) => {
+                console.log('Relationships questionnaire data:', data);
+              }}
+            />
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
