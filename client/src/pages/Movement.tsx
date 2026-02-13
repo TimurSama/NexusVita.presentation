@@ -201,6 +201,15 @@ export default function Movement() {
           </TabsContent>
 
           <TabsContent value="workouts" className="space-y-6">
+            <div className="flex items-center justify-end gap-2 mb-4">
+              <FeatureButton
+                label="Подключить устройство"
+                featureName="Интеграция с wearables"
+                description="Подключите Apple Watch, Garmin, Fitbit или другие устройства для автоматической синхронизации данных о тренировках, пульсе и активности."
+                icon={<Watch className="h-4 w-4" />}
+                size="sm"
+              />
+            </div>
             <div className="premium-card p-6">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-2xl font-bold text-foreground">История тренировок</h2>
