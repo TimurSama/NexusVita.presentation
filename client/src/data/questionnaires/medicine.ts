@@ -8,6 +8,33 @@ export const medicalQuestionnaire: Questionnaire = {
   submitButtonText: 'Сохранить анкету',
   questions: [
     {
+      id: 'height',
+      type: 'interactive-height',
+      label: 'Рост',
+      description: 'Выберите ваш рост с помощью интерактивной рулетки',
+      required: true,
+      min: 100,
+      max: 220,
+      step: 1,
+    },
+    {
+      id: 'weight',
+      type: 'interactive-weight',
+      label: 'Вес',
+      description: 'Выберите ваш вес с помощью интерактивных грузиков',
+      required: true,
+      min: 30,
+      max: 200,
+      step: 0.5,
+    },
+    {
+      id: 'birth-date',
+      type: 'interactive-date',
+      label: 'Дата рождения',
+      description: 'Выберите дату рождения с помощью календаря',
+      required: true,
+    },
+    {
       id: 'chronic-diseases',
       type: 'multiselect',
       label: 'Хронические заболевания',

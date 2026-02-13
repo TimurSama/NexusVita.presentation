@@ -11,6 +11,10 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Slider } from '@/components/ui/slider';
 import { Questionnaire, Question } from '@/types/questionnaire';
 import SketchIcon from './SketchIcon';
+import { WheelPicker } from './interactive/WheelPicker';
+import { WeightSelector } from './interactive/WeightSelector';
+import { MayanCalendar } from './interactive/MayanCalendar';
+import { EmojiMoodSlider } from './interactive/EmojiMoodSlider';
 
 interface QuestionnaireProps {
   questionnaire: Questionnaire;
@@ -375,6 +379,108 @@ export function QuestionnaireComponent({ questionnaire, onComplete, onCancel }: 
                 <span>{question.max || 100}</span>
               </div>
             </div>
+            {hasError && (
+              <p className="text-sm text-destructive flex items-center gap-1">
+                <AlertCircle className="h-3 w-3" />
+                {error}
+              </p>
+            )}
+          </div>
+        );
+
+      case 'interactive-height':
+        return (
+          <div key={question.id} className="space-y-4 flex flex-col items-center">
+            <Label className={question.required ? 'after:content-["*"] after:text-destructive' : ''}>
+              {question.label}
+            </Label>
+            {question.description && (
+              <p className="text-sm text-foreground/60 text-center">{question.description}</p>
+            )}
+            <WheelPicker
+              value={value || question.min || 170}
+              onChange={(val) => handleAnswerChange(question.id, val)}
+              min={question.min || 100}
+              max={question.max || 220}
+              step={question.step || 1}
+              unit="см"
+              label=""
+            />
+            {hasError && (
+              <p className="text-sm text-destructive flex items-center gap-1">
+                <AlertCircle className="h-3 w-3" />
+                {error}
+              </p>
+            )}
+          </div>
+        );
+
+      case 'interactive-weight':
+        return (
+          <div key={question.id} className="space-y-4 flex flex-col items-center">
+            <Label className={question.required ? 'after:content-["*"] after:text-destructive' : ''}>
+              {question.label}
+            </Label>
+            {question.description && (
+              <p className="text-sm text-foreground/60 text-center">{question.description}</p>
+            )}
+            <WeightSelector
+              value={value || question.min || 70}
+              onChange={(val) => handleAnswerChange(question.id, val)}
+              min={question.min || 30}
+              max={question.max || 200}
+              step={question.step || 0.5}
+              unit="кг"
+              label=""
+            />
+            {hasError && (
+              <p className="text-sm text-destructive flex items-center gap-1">
+                <AlertCircle className="h-3 w-3" />
+                {error}
+              </p>
+            )}
+          </div>
+        );
+
+      case 'interactive-date':
+        return (
+          <div key={question.id} className="space-y-4 flex flex-col items-center">
+            <Label className={question.required ? 'after:content-["*"] after:text-destructive' : ''}>
+              {question.label}
+            </Label>
+            {question.description && (
+              <p className="text-sm text-foreground/60 text-center">{question.description}</p>
+            )}
+            <MayanCalendar
+              value={value ? new Date(value) : new Date(1990, 0, 1)}
+              onChange={(date) => handleAnswerChange(question.id, date.toISOString())}
+              label=""
+            />
+            {hasError && (
+              <p className="text-sm text-destructive flex items-center gap-1">
+                <AlertCircle className="h-3 w-3" />
+                {error}
+              </p>
+            )}
+          </div>
+        );
+
+      case 'interactive-mood':
+        return (
+          <div key={question.id} className="space-y-4 flex flex-col items-center">
+            <Label className={question.required ? 'after:content-["*"] after:text-destructive' : ''}>
+              {question.label}
+            </Label>
+            {question.description && (
+              <p className="text-sm text-foreground/60 text-center">{question.description}</p>
+            )}
+            <EmojiMoodSlider
+              value={value || question.min || 5}
+              onChange={(val) => handleAnswerChange(question.id, val)}
+              min={question.min || 1}
+              max={question.max || 10}
+              label=""
+            />
             {hasError && (
               <p className="text-sm text-destructive flex items-center gap-1">
                 <AlertCircle className="h-3 w-3" />

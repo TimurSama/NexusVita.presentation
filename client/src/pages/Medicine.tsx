@@ -223,8 +223,13 @@ export default function Medicine() {
                   <p className="text-foreground/60">Загрузите результаты анализов для анализа</p>
                 </div>
                 <Button className="btn-premium">
-                  <Upload className="w-4 h-4 mr-2" />
-                  Загрузить анализ
+                  <FeatureButton
+                    label="Загрузить анализ"
+                    featureName="Загрузка анализов"
+                    description="Загружайте результаты анализов в формате PDF или изображений. Система автоматически распознает данные с помощью OCR технологии и добавит их в ваш профиль здоровья."
+                    icon={<Upload className="h-4 w-4" />}
+                    size="sm"
+                  />
                 </Button>
               </div>
               <div className="text-center py-12 text-foreground/60">

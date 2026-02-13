@@ -1,6 +1,6 @@
 // Типы для системы опросников
 
-export type QuestionType = 'text' | 'textarea' | 'number' | 'select' | 'multiselect' | 'radio' | 'checkbox' | 'date' | 'rating' | 'scale';
+export type QuestionType = 'text' | 'textarea' | 'number' | 'select' | 'multiselect' | 'radio' | 'checkbox' | 'date' | 'rating' | 'scale' | 'interactive-height' | 'interactive-weight' | 'interactive-date' | 'interactive-mood';
 
 export interface QuestionOption {
   label: string;
