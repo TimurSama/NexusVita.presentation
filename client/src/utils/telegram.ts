@@ -86,12 +86,32 @@ declare global {
 }
 
 export function isTelegramWebApp(): boolean {
-  return typeof window !== 'undefined' && !!window.Telegram?.WebApp;
+  if (typeof window === 'undefined') return false;
+  
+  // Check if Telegram Web App is available
+  const hasTelegram = !!window.Telegram;
+  const hasWebApp = !!window.Telegram?.WebApp;
+  
+  // Also check for Telegram-specific query parameters
+  const hasTelegramParams = window.location.search.includes('tgWebApp') || 
+                            window.location.hash.includes('tgWebApp');
+  
+  return hasTelegram && hasWebApp;
 }
 
 export function getTelegramUser() {
   if (!isTelegramWebApp()) return null;
-  return window.Telegram!.WebApp.initDataUnsafe.user || null;
+  
+  try {
+    const user = window.Telegram!.WebApp.initDataUnsafe?.user;
+    if (user && user.id) {
+      return user;
+    }
+  } catch (error) {
+    console.error('Error getting Telegram user:', error);
+  }
+  
+  return null;
 }
 
 export function getTelegramInitData() {

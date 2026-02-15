@@ -33,56 +33,101 @@ export function TelegramAuth() {
 
   useEffect(() => {
     const init = async () => {
-      // Initialize Telegram Web App
-      if (isTelegramWebApp()) {
-        initializeTelegramWebApp();
-      }
-
-      // Check if we're in Telegram Web App
-      if (!isTelegramWebApp()) {
-        setLoading(false);
-        setError('Это приложение работает только в Telegram');
-        return;
-      }
-
-      // Get Telegram user
-      const tgUser = getTelegramUser();
-      if (!tgUser) {
-        setLoading(false);
-        setError('Не удалось получить данные пользователя Telegram');
-        return;
-      }
-
-      // Authenticate with backend
-      try {
-        const authResult = await authenticateWithTelegram();
-        
-        if (authResult.success && authResult.user) {
-          setUser(authResult.user);
-          setAuthenticated(true);
-
-          // Fetch user profile
-          try {
-            const profileResponse = await fetch(`/api/users/${authResult.user.id}/profile`);
-            const profileData = await profileResponse.json();
-            if (profileData.profile) {
-              setProfile(profileData.profile);
+      // Wait for Telegram Web App to load
+      let attempts = 0;
+      const maxAttempts = 10;
+      
+      const waitForTelegram = () => {
+        return new Promise<void>((resolve, reject) => {
+          const checkTelegram = () => {
+            if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
+              resolve();
+            } else if (attempts < maxAttempts) {
+              attempts++;
+              setTimeout(checkTelegram, 100);
+            } else {
+              reject(new Error('Telegram Web App не загрузился'));
             }
-          } catch (err) {
-            console.error('Error fetching profile:', err);
-          }
+          };
+          checkTelegram();
+        });
+      };
 
-          // TODO: Fetch friends list
-          // For now, using mock data
-          setFriends([]);
-        } else {
-          setError(authResult.error || 'Ошибка аутентификации');
+      try {
+        // Wait for Telegram Web App to be available
+        await waitForTelegram();
+        
+        // Initialize Telegram Web App
+        if (isTelegramWebApp()) {
+          initializeTelegramWebApp();
+        }
+
+        // Check if we're in Telegram Web App
+        if (!isTelegramWebApp()) {
+          setLoading(false);
+          setError('Это приложение работает только в Telegram');
+          return;
+        }
+
+        // Wait a bit more for user data to be available
+        let tgUser = getTelegramUser();
+        if (!tgUser) {
+          // Try a few more times with delays
+          for (let i = 0; i < 5; i++) {
+            await new Promise(resolve => setTimeout(resolve, 200));
+            tgUser = getTelegramUser();
+            if (tgUser) break;
+          }
+        }
+
+        if (!tgUser) {
+          // Log debug info
+          console.error('Telegram Web App debug:', {
+            hasTelegram: !!window.Telegram,
+            hasWebApp: !!window.Telegram?.WebApp,
+            initDataUnsafe: window.Telegram?.WebApp?.initDataUnsafe,
+            initData: window.Telegram?.WebApp?.initData,
+          });
+          setLoading(false);
+          setError('Не удалось получить данные пользователя Telegram. Убедитесь, что вы открыли приложение через Telegram бота.');
+          return;
+        }
+
+        // Authenticate with backend
+        try {
+          const authResult = await authenticateWithTelegram();
+          
+          if (authResult.success && authResult.user) {
+            setUser(authResult.user);
+            setAuthenticated(true);
+
+            // Fetch user profile
+            try {
+              const profileResponse = await fetch(`/api/users/${authResult.user.id}/profile`);
+              const profileData = await profileResponse.json();
+              if (profileData.profile) {
+                setProfile(profileData.profile);
+              }
+            } catch (err) {
+              console.error('Error fetching profile:', err);
+            }
+
+            // TODO: Fetch friends list
+            // For now, using mock data
+            setFriends([]);
+          } else {
+            setError(authResult.error || 'Ошибка аутентификации');
+          }
+        } catch (err) {
+          console.error('Auth error:', err);
+          setError('Ошибка при подключении к серверу');
+        } finally {
+          setLoading(false);
         }
       } catch (err) {
-        console.error('Auth error:', err);
-        setError('Ошибка при подключении к серверу');
-      } finally {
+        console.error('Init error:', err);
         setLoading(false);
+        setError(err instanceof Error ? err.message : 'Ошибка инициализации');
       }
     };
 
