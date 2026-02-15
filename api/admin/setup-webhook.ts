@@ -2,9 +2,8 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { Telegraf } from 'telegraf';
 
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-const WEBHOOK_URL = process.env.VERCEL_URL 
-  ? `https://${process.env.VERCEL_URL}/api/telegram/webhook`
-  : 'https://etholife.vercel.app/api/telegram/webhook';
+// Always use production URL for webhook
+const WEBHOOK_URL = 'https://etholife.vercel.app/api/telegram/webhook';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Allow both GET and POST for convenience
