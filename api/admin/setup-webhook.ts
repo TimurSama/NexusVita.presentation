@@ -7,7 +7,8 @@ const WEBHOOK_URL = process.env.VERCEL_URL
   : 'https://etholife.vercel.app/api/telegram/webhook';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  if (req.method !== 'POST') {
+  // Allow both GET and POST for convenience
+  if (req.method !== 'POST' && req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
