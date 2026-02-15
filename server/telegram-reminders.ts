@@ -1,5 +1,11 @@
-import { bot } from './telegram-bot';
 import { userDb, telegramBotSettingsDb, dailyPlanDb } from './database';
+
+// Import bot after it's initialized
+let bot: any = null;
+
+export function setBot(telegramBot: any) {
+  bot = telegramBot;
+}
 
 // Different exercise descriptions for reminders
 const exerciseReminders = [
