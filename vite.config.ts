@@ -1,4 +1,4 @@
-import { jsxLocPlugin } from "@builder.io/vite-plugin-jsx-loc";
+// import { jsxLocPlugin } from "@builder.io/vite-plugin-jsx-loc"; // Removed for Vite 7 compatibility
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import fs from "node:fs";
