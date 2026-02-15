@@ -11,16 +11,26 @@ async function ensureDatabase() {
   }
 }
 
-const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '8261481826:AAH_M6WXWkRwoskYmCpbLupSi7o_bB8VsJQ';
+const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 
 if (!TELEGRAM_BOT_TOKEN) {
-  console.warn('TELEGRAM_BOT_TOKEN not set. Telegram bot will not work.');
+  console.error('❌ TELEGRAM_BOT_TOKEN not set! Bot will not work.');
+  console.error('Please add TELEGRAM_BOT_TOKEN to Vercel Environment Variables');
 }
 
 let bot: Telegraf | null = null;
 
 if (TELEGRAM_BOT_TOKEN) {
-  bot = new Telegraf(TELEGRAM_BOT_TOKEN);
+  console.log('✅ Initializing bot with token:', TELEGRAM_BOT_TOKEN.substring(0, 10) + '...');
+  try {
+    bot = new Telegraf(TELEGRAM_BOT_TOKEN);
+    console.log('✅ Bot initialized successfully');
+  } catch (error) {
+    console.error('❌ Failed to initialize bot:', error);
+  }
+} else {
+  console.error('❌ Cannot initialize bot - no token');
+}
 
   // Start command
   bot.start(async (ctx: Context) => {
