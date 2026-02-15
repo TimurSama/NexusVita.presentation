@@ -92,12 +92,12 @@ async function createMariaPlan(userId: number) {
           time: plan.time,
         });
         planCount++;
-      } catch (error: any) {
-        // Ignore duplicate key errors (UNIQUE constraint)
-        if (!error.message?.includes('duplicate key') && !error.code === '23505') {
-          console.error('Error creating plan:', error);
+        } catch (error: any) {
+          // Ignore duplicate key errors (UNIQUE constraint)
+          if (!error.message?.includes('duplicate key') && error.code !== '23505') {
+            console.error('Error creating plan:', error);
+          }
         }
-      }
     }
 
     currentDate.setDate(currentDate.getDate() + 1);
