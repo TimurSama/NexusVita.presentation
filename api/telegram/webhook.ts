@@ -284,12 +284,16 @@ if (TELEGRAM_BOT_TOKEN) {
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  console.log('=== WEBHOOK CALLED ===');
+  // Log immediately to see if webhook is called at all
+  console.log('=== WEBHOOK CALLED ===', new Date().toISOString());
   console.log('Method:', req.method);
-  console.log('Headers:', JSON.stringify(req.headers, null, 2));
-  console.log('Body:', JSON.stringify(req.body, null, 2));
   console.log('Bot initialized:', !!bot);
   console.log('Token set:', !!TELEGRAM_BOT_TOKEN);
+  console.log('Token length:', TELEGRAM_BOT_TOKEN?.length || 0);
+  
+  // Log body (but truncate for security)
+  const bodyStr = JSON.stringify(req.body);
+  console.log('Body preview:', bodyStr.substring(0, 200));
 
   // Initialize database
   try {
