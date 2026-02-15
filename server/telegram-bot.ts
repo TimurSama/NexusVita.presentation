@@ -1,4 +1,4 @@
-import { Telegraf, Context } from 'telegraf';
+import { Telegraf, Context, Markup } from 'telegraf';
 import { userDb, profileDb, dailyPlanDb, healthMetricsDb, goalsDb, telegramBotSettingsDb, telegramBotLogsDb } from './database-adapter';
 
 // Telegram Bot Token (can be overridden by env variable)
@@ -479,6 +479,619 @@ if (TELEGRAM_BOT_TOKEN) {
       console.error('Error in /goals command:', error);
       await ctx.reply('Произошла ошибка. Пожалуйста, попробуйте позже.');
     }
+  });
+
+  // Menu command with inline keyboard
+  bot.command('menu', async (ctx: Context) => {
+    const telegramId = ctx.from?.id.toString();
+    if (!telegramId) return;
+
+    try {
+      const user = await userDb.findByTelegramId(telegramId);
+      if (!user) {
+        await ctx.reply('Пожалуйста, сначала используйте /start');
+        return;
+      }
+
+      await ctx.reply(
+        `📋 Главное меню\n\n` +
+        `Выберите действие:`,
+        Markup.inlineKeyboard([
+          [
+            Markup.button.callback('📅 Расписание', 'menu_schedule'),
+            Markup.button.callback('🎯 Цели', 'menu_goals'),
+          ],
+          [
+            Markup.button.callback('📊 Метрики', 'menu_metrics'),
+            Markup.button.callback('📝 Заметки', 'menu_notes'),
+          ],
+          [
+            Markup.button.callback('⚙️ Настройки', 'menu_settings'),
+            Markup.button.callback('ℹ️ Помощь', 'menu_help'),
+          ],
+        ])
+      );
+    } catch (error) {
+      console.error('Error in /menu command:', error);
+      await ctx.reply('Произошла ошибка. Пожалуйста, попробуйте позже.');
+    }
+  });
+
+  // Schedule menu
+  bot.action('menu_schedule', async (ctx: Context) => {
+    const telegramId = ctx.from?.id.toString();
+    if (!telegramId) return;
+
+    try {
+      const user = await userDb.findByTelegramId(telegramId);
+      if (!user) {
+        await ctx.answerCbQuery('Пожалуйста, сначала используйте /start');
+        return;
+      }
+
+      const { Markup } = require('telegraf');
+      await ctx.editMessageText(
+        `📅 Расписание\n\n` +
+        `Выберите период:`,
+        Markup.inlineKeyboard([
+          [
+            Markup.button.callback('📆 Сегодня', 'schedule_today'),
+            Markup.button.callback('📅 Неделя', 'schedule_week'),
+          ],
+          [
+            Markup.button.callback('📆 Месяц', 'schedule_month'),
+            Markup.button.callback('➕ Добавить', 'schedule_add'),
+          ],
+          [
+            Markup.button.callback('◀️ Назад', 'menu_main'),
+          ],
+        ])
+      );
+      await ctx.answerCbQuery();
+    } catch (error) {
+      console.error('Error in schedule menu:', error);
+      await ctx.answerCbQuery('Произошла ошибка');
+    }
+  });
+
+  // Schedule today
+  bot.action('schedule_today', async (ctx: Context) => {
+    const telegramId = ctx.from?.id.toString();
+    if (!telegramId) return;
+
+    try {
+      const user = await userDb.findByTelegramId(telegramId);
+      if (!user) {
+        await ctx.answerCbQuery('Пожалуйста, сначала используйте /start');
+        return;
+      }
+
+      const today = new Date();
+      const plans = await dailyPlanDb.findByUserIdAndDate(user.id, today);
+
+      if (plans.length === 0) {
+        await ctx.editMessageText(
+          `📅 План на сегодня (${today.toLocaleDateString('ru-RU')}):\n\n` +
+          `На сегодня планов нет. Отдыхайте! 😊`,
+          require('telegraf').Markup.inlineKeyboard([
+            [require('telegraf').Markup.button.callback('➕ Добавить план', 'schedule_add')],
+            [require('telegraf').Markup.button.callback('◀️ Назад', 'menu_schedule')],
+          ])
+        );
+      } else {
+        let message = `📅 План на сегодня (${today.toLocaleDateString('ru-RU')}):\n\n`;
+        plans.forEach((plan, idx) => {
+          const status = plan.completed ? '✅' : '⏳';
+          const time = plan.time ? `${plan.time} - ` : '';
+          message += `${status} ${idx + 1}. ${time}${plan.title}\n`;
+          if (plan.description) {
+            message += `   ${plan.description}\n`;
+          }
+        });
+
+        const { Markup } = require('telegraf');
+        const buttons = [];
+        plans.forEach((plan, idx) => {
+          if (!plan.completed) {
+            buttons.push([
+              Markup.button.callback(`✅ Выполнить: ${plan.title.substring(0, 20)}`, `complete_${plan.id}`),
+            ]);
+          }
+        });
+        buttons.push([Markup.button.callback('◀️ Назад', 'menu_schedule')]);
+
+        await ctx.editMessageText(message, Markup.inlineKeyboard(buttons));
+      }
+      await ctx.answerCbQuery();
+    } catch (error) {
+      console.error('Error in schedule today:', error);
+      await ctx.answerCbQuery('Произошла ошибка');
+    }
+  });
+
+  // Schedule week
+  bot.action('schedule_week', async (ctx: Context) => {
+    const telegramId = ctx.from?.id.toString();
+    if (!telegramId) return;
+
+    try {
+      const user = await userDb.findByTelegramId(telegramId);
+      if (!user) {
+        await ctx.answerCbQuery('Пожалуйста, сначала используйте /start');
+        return;
+      }
+
+      const today = new Date();
+      const weekStart = new Date(today);
+      weekStart.setDate(today.getDate() - today.getDay()); // Start of week (Sunday)
+      const weekEnd = new Date(weekStart);
+      weekEnd.setDate(weekStart.getDate() + 6); // End of week (Saturday)
+
+      const plans = await dailyPlanDb.findByUserIdAndDateRange(user.id, weekStart, weekEnd);
+
+      if (plans.length === 0) {
+        await ctx.editMessageText(
+          `📅 План на неделю:\n\n` +
+          `На эту неделю планов нет.`,
+          require('telegraf').Markup.inlineKeyboard([
+            [require('telegraf').Markup.button.callback('➕ Добавить план', 'schedule_add')],
+            [require('telegraf').Markup.button.callback('◀️ Назад', 'menu_schedule')],
+          ])
+        );
+      } else {
+        // Group plans by date
+        const plansByDate: Record<string, any[]> = {};
+        plans.forEach(plan => {
+          const date = plan.date;
+          if (!plansByDate[date]) {
+            plansByDate[date] = [];
+          }
+          plansByDate[date].push(plan);
+        });
+
+        let message = `📅 План на неделю:\n\n`;
+        Object.keys(plansByDate).sort().forEach(date => {
+          const dateObj = new Date(date);
+          message += `\n📆 ${dateObj.toLocaleDateString('ru-RU', { weekday: 'long', day: 'numeric', month: 'long' })}:\n`;
+          plansByDate[date].forEach((plan, idx) => {
+            const status = plan.completed ? '✅' : '⏳';
+            const time = plan.time ? `${plan.time} - ` : '';
+            message += `${status} ${time}${plan.title}\n`;
+          });
+        });
+
+        const { Markup } = require('telegraf');
+        await ctx.editMessageText(
+          message,
+          Markup.inlineKeyboard([
+            [Markup.button.callback('◀️ Назад', 'menu_schedule')],
+          ])
+        );
+      }
+      await ctx.answerCbQuery();
+    } catch (error) {
+      console.error('Error in schedule week:', error);
+      await ctx.answerCbQuery('Произошла ошибка');
+    }
+  });
+
+  // Schedule month
+  bot.action('schedule_month', async (ctx: Context) => {
+    const telegramId = ctx.from?.id.toString();
+    if (!telegramId) return;
+
+    try {
+      const user = await userDb.findByTelegramId(telegramId);
+      if (!user) {
+        await ctx.answerCbQuery('Пожалуйста, сначала используйте /start');
+        return;
+      }
+
+      const today = new Date();
+      const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+      const monthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+      const plans = await dailyPlanDb.findByUserIdAndDateRange(user.id, monthStart, monthEnd);
+
+      if (plans.length === 0) {
+        await ctx.editMessageText(
+          `📅 План на месяц:\n\n` +
+          `На этот месяц планов нет.`,
+          require('telegraf').Markup.inlineKeyboard([
+            [require('telegraf').Markup.button.callback('➕ Добавить план', 'schedule_add')],
+            [require('telegraf').Markup.button.callback('◀️ Назад', 'menu_schedule')],
+          ])
+        );
+      } else {
+        // Count plans by date
+        const plansByDate: Record<string, number> = {};
+        plans.forEach(plan => {
+          const date = plan.date;
+          plansByDate[date] = (plansByDate[date] || 0) + 1;
+        });
+
+        let message = `📅 План на месяц (${today.toLocaleDateString('ru-RU', { month: 'long', year: 'numeric' })}):\n\n`;
+        message += `Всего планов: ${plans.length}\n`;
+        message += `Дней с планами: ${Object.keys(plansByDate).length}\n\n`;
+        message += `Используйте "Сегодня" или "Неделя" для детального просмотра.`;
+
+        const { Markup } = require('telegraf');
+        await ctx.editMessageText(
+          message,
+          Markup.inlineKeyboard([
+            [Markup.button.callback('📆 Сегодня', 'schedule_today')],
+            [Markup.button.callback('📅 Неделя', 'schedule_week')],
+            [Markup.button.callback('◀️ Назад', 'menu_schedule')],
+          ])
+        );
+      }
+      await ctx.answerCbQuery();
+    } catch (error) {
+      console.error('Error in schedule month:', error);
+      await ctx.answerCbQuery('Произошла ошибка');
+    }
+  });
+
+  // Goals menu
+  bot.action('menu_goals', async (ctx: Context) => {
+    const telegramId = ctx.from?.id.toString();
+    if (!telegramId) return;
+
+    try {
+      const user = await userDb.findByTelegramId(telegramId);
+      if (!user) {
+        await ctx.answerCbQuery('Пожалуйста, сначала используйте /start');
+        return;
+      }
+
+      const goals = await goalsDb.findByUserId(user.id);
+
+      if (goals.length === 0) {
+        await ctx.editMessageText(
+          `🎯 Ваши цели:\n\n` +
+          `У вас пока нет целей. Создайте их в приложении!`,
+          require('telegraf').Markup.inlineKeyboard([
+            [require('telegraf').Markup.button.callback('◀️ Назад', 'menu_main')],
+          ])
+        );
+      } else {
+        let message = `🎯 Ваши цели:\n\n`;
+        goals.forEach((goal, idx) => {
+          const status = goal.completed ? '✅' : '⏳';
+          message += `${status} ${idx + 1}. ${goal.title}\n`;
+          if (goal.target_value) {
+            const progress = goal.current_value / goal.target_value * 100;
+            message += `   Прогресс: ${goal.current_value}${goal.unit || ''} / ${goal.target_value}${goal.unit || ''} (${Math.round(progress)}%)\n`;
+          }
+          if (goal.deadline) {
+            message += `   Дедлайн: ${new Date(goal.deadline).toLocaleDateString('ru-RU')}\n`;
+          }
+          message += `\n`;
+        });
+
+        const { Markup } = require('telegraf');
+        await ctx.editMessageText(
+          message,
+          Markup.inlineKeyboard([
+            [Markup.button.callback('◀️ Назад', 'menu_main')],
+          ])
+        );
+      }
+      await ctx.answerCbQuery();
+    } catch (error) {
+      console.error('Error in goals menu:', error);
+      await ctx.answerCbQuery('Произошла ошибка');
+    }
+  });
+
+  // Metrics menu
+  bot.action('menu_metrics', async (ctx: Context) => {
+    const telegramId = ctx.from?.id.toString();
+    if (!telegramId) return;
+
+    try {
+      const user = await userDb.findByTelegramId(telegramId);
+      if (!user) {
+        await ctx.answerCbQuery('Пожалуйста, сначала используйте /start');
+        return;
+      }
+
+      const { Markup } = require('telegraf');
+      await ctx.editMessageText(
+        `📊 Метрики здоровья\n\n` +
+        `Выберите метрику для внесения:`,
+        Markup.inlineKeyboard([
+          [
+            Markup.button.callback('⚖️ Вес', 'metric_weight'),
+            Markup.button.callback('👣 Шаги', 'metric_steps'),
+          ],
+          [
+            Markup.button.callback('😴 Сон', 'metric_sleep'),
+            Markup.button.callback('😊 Настроение', 'metric_mood'),
+          ],
+          [
+            Markup.button.callback('🍎 Калории', 'metric_calories'),
+          ],
+          [
+            Markup.button.callback('◀️ Назад', 'menu_main'),
+          ],
+        ])
+      );
+      await ctx.answerCbQuery();
+    } catch (error) {
+      console.error('Error in metrics menu:', error);
+      await ctx.answerCbQuery('Произошла ошибка');
+    }
+  });
+
+  // Notes menu
+  bot.action('menu_notes', async (ctx: Context) => {
+    const telegramId = ctx.from?.id.toString();
+    if (!telegramId) return;
+
+    try {
+      const user = await userDb.findByTelegramId(telegramId);
+      if (!user) {
+        await ctx.answerCbQuery('Пожалуйста, сначала используйте /start');
+        return;
+      }
+
+      await ctx.editMessageText(
+        `📝 Заметки\n\n` +
+        `Для добавления заметки используйте команду:\n` +
+        `/note [текст заметки]\n\n` +
+        `Пример: /note Сегодня отличный день!`,
+        Markup.inlineKeyboard([
+          [Markup.button.callback('◀️ Назад', 'menu_main')],
+        ])
+      );
+      await ctx.answerCbQuery();
+    } catch (error) {
+      console.error('Error in notes menu:', error);
+      await ctx.answerCbQuery('Произошла ошибка');
+    }
+  });
+
+  // Settings menu
+  bot.action('menu_settings', async (ctx: Context) => {
+    const telegramId = ctx.from?.id.toString();
+    if (!telegramId) return;
+
+    try {
+      const user = await userDb.findByTelegramId(telegramId);
+      if (!user) {
+        await ctx.answerCbQuery('Пожалуйста, сначала используйте /start');
+        return;
+      }
+
+      const settings = await telegramBotSettingsDb.findByUserId(user.id);
+
+      await ctx.editMessageText(
+        `⚙️ Настройки уведомлений:\n\n` +
+        `Уведомления: ${settings?.notifications_enabled ? '✅ Включены' : '❌ Выключены'}\n` +
+        `Напоминания: ${settings?.reminders_enabled ? '✅ Включены' : '❌ Выключены'}\n` +
+        `Отслеживание метрик: ${settings?.metric_tracking_enabled ? '✅ Включено' : '❌ Выключено'}\n\n` +
+        `Время напоминаний: ${settings?.reminder_times?.join(', ') || '08:00, 12:00, 18:00'}\n\n` +
+        `Используйте команду /settings для изменения настроек.`,
+        Markup.inlineKeyboard([
+          [Markup.button.callback('◀️ Назад', 'menu_main')],
+        ])
+      );
+      await ctx.answerCbQuery();
+    } catch (error) {
+      console.error('Error in settings menu:', error);
+      await ctx.answerCbQuery('Произошла ошибка');
+    }
+  });
+
+  // Help menu
+  bot.action('menu_help', async (ctx: Context) => {
+    await ctx.editMessageText(
+      `📋 Доступные команды:\n\n` +
+      `• /start - Начать работу с ботом\n` +
+      `• /menu - Главное меню\n` +
+      `• /help - Показать справку\n` +
+      `• /settings - Настройки уведомлений\n` +
+      `• /today - План на сегодня\n` +
+      `• /metrics - Внести метрики\n` +
+      `• /goals - Мои цели\n` +
+      `• /complete <номер> - Отметить задачу выполненной\n` +
+      `• /note <текст> - Добавить заметку\n\n` +
+      `💡 Вы также можете использовать кнопки меню для быстрого доступа.`,
+      require('telegraf').Markup.inlineKeyboard([
+        [require('telegraf').Markup.button.callback('◀️ Назад', 'menu_main')],
+      ])
+    );
+    await ctx.answerCbQuery();
+  });
+
+  // Back to main menu
+  bot.action('menu_main', async (ctx: Context) => {
+    const telegramId = ctx.from?.id.toString();
+    if (!telegramId) return;
+
+    try {
+      const user = await userDb.findByTelegramId(telegramId);
+      if (!user) {
+        await ctx.answerCbQuery('Пожалуйста, сначала используйте /start');
+        return;
+      }
+
+      const { Markup } = require('telegraf');
+      await ctx.editMessageText(
+        `📋 Главное меню\n\n` +
+        `Выберите действие:`,
+        Markup.inlineKeyboard([
+          [
+            Markup.button.callback('📅 Расписание', 'menu_schedule'),
+            Markup.button.callback('🎯 Цели', 'menu_goals'),
+          ],
+          [
+            Markup.button.callback('📊 Метрики', 'menu_metrics'),
+            Markup.button.callback('📝 Заметки', 'menu_notes'),
+          ],
+          [
+            Markup.button.callback('⚙️ Настройки', 'menu_settings'),
+            Markup.button.callback('ℹ️ Помощь', 'menu_help'),
+          ],
+        ])
+      );
+      await ctx.answerCbQuery();
+    } catch (error) {
+      console.error('Error in main menu:', error);
+      await ctx.answerCbQuery('Произошла ошибка');
+    }
+  });
+
+  // Complete task from callback
+  bot.action(/^complete_(\d+)$/, async (ctx: Context) => {
+    const telegramId = ctx.from?.id.toString();
+    if (!telegramId) return;
+
+    try {
+      const user = await userDb.findByTelegramId(telegramId);
+      if (!user) {
+        await ctx.answerCbQuery('Пожалуйста, сначала используйте /start');
+        return;
+      }
+
+      const match = ctx.match;
+      if (!match || !match[1]) return;
+
+      const planId = parseInt(match[1]);
+      await dailyPlanDb.updateCompleted(planId, true);
+
+      const plan = await dailyPlanDb.findByUserIdAndDate(user.id, new Date());
+      const foundPlan = plan.find(p => p.id === planId);
+
+      await telegramBotLogsDb.create(user.id, {
+        action_type: 'goal_completed',
+        message: `Задача "${foundPlan?.title || 'неизвестная'}" отмечена как выполненная`,
+      });
+
+      await ctx.answerCbQuery('✅ Задача отмечена как выполненная!');
+      
+      // Refresh today's schedule by calling the handler directly
+      const today = new Date();
+      const plans = await dailyPlanDb.findByUserIdAndDate(user.id, today);
+
+      if (plans.length === 0) {
+        await ctx.editMessageText(
+          `📅 План на сегодня (${today.toLocaleDateString('ru-RU')}):\n\n` +
+          `На сегодня планов нет. Отдыхайте! 😊`,
+          Markup.inlineKeyboard([
+            [Markup.button.callback('➕ Добавить план', 'schedule_add')],
+            [Markup.button.callback('◀️ Назад', 'menu_schedule')],
+          ])
+        );
+      } else {
+        let message = `📅 План на сегодня (${today.toLocaleDateString('ru-RU')}):\n\n`;
+        plans.forEach((plan, idx) => {
+          const status = plan.completed ? '✅' : '⏳';
+          const time = plan.time ? `${plan.time} - ` : '';
+          message += `${status} ${idx + 1}. ${time}${plan.title}\n`;
+          if (plan.description) {
+            message += `   ${plan.description}\n`;
+          }
+        });
+
+        const buttons = [];
+        plans.forEach((plan) => {
+          if (!plan.completed) {
+            buttons.push([
+              Markup.button.callback(`✅ Выполнить: ${plan.title.substring(0, 20)}`, `complete_${plan.id}`),
+            ]);
+          }
+        });
+        buttons.push([Markup.button.callback('◀️ Назад', 'menu_schedule')]);
+
+        await ctx.editMessageText(message, Markup.inlineKeyboard(buttons));
+      }
+    } catch (error) {
+      console.error('Error completing task:', error);
+      await ctx.answerCbQuery('Произошла ошибка');
+    }
+  });
+
+  // Schedule add (placeholder - will need conversation handler)
+  bot.action('schedule_add', async (ctx: Context) => {
+    await ctx.editMessageText(
+      `➕ Добавить план\n\n` +
+      `Для добавления плана используйте команду:\n` +
+      `/addplan [дата] [время] [название]\n\n` +
+      `Пример: /addplan 2025-02-16 10:00 Утренняя зарядка\n\n` +
+      `Или создайте план в веб-приложении.`,
+      require('telegraf').Markup.inlineKeyboard([
+        [require('telegraf').Markup.button.callback('◀️ Назад', 'menu_schedule')],
+      ])
+    );
+    await ctx.answerCbQuery();
+  });
+
+  // Metric handlers (show input prompts)
+  bot.action('metric_weight', async (ctx: Context) => {
+    await ctx.editMessageText(
+      `⚖️ Записать вес\n\n` +
+      `Используйте команду:\n` +
+      `/weight [кг]\n\n` +
+      `Пример: /weight 57.5`,
+      require('telegraf').Markup.inlineKeyboard([
+        [require('telegraf').Markup.button.callback('◀️ Назад', 'menu_metrics')],
+      ])
+    );
+    await ctx.answerCbQuery();
+  });
+
+  bot.action('metric_steps', async (ctx: Context) => {
+    await ctx.editMessageText(
+      `👣 Записать шаги\n\n` +
+      `Используйте команду:\n` +
+      `/steps [количество]\n\n` +
+      `Пример: /steps 10000`,
+      require('telegraf').Markup.inlineKeyboard([
+        [require('telegraf').Markup.button.callback('◀️ Назад', 'menu_metrics')],
+      ])
+    );
+    await ctx.answerCbQuery();
+  });
+
+  bot.action('metric_sleep', async (ctx: Context) => {
+    await ctx.editMessageText(
+      `😴 Записать сон\n\n` +
+      `Используйте команду:\n` +
+      `/sleep [часы]\n\n` +
+      `Пример: /sleep 8.5`,
+      require('telegraf').Markup.inlineKeyboard([
+        [require('telegraf').Markup.button.callback('◀️ Назад', 'menu_metrics')],
+      ])
+    );
+    await ctx.answerCbQuery();
+  });
+
+  bot.action('metric_mood', async (ctx: Context) => {
+    await ctx.editMessageText(
+      `😊 Записать настроение\n\n` +
+      `Используйте команду:\n` +
+      `/mood [1-10]\n\n` +
+      `Пример: /mood 8`,
+      require('telegraf').Markup.inlineKeyboard([
+        [require('telegraf').Markup.button.callback('◀️ Назад', 'menu_metrics')],
+      ])
+    );
+    await ctx.answerCbQuery();
+  });
+
+  bot.action('metric_calories', async (ctx: Context) => {
+    await ctx.editMessageText(
+      `🍎 Записать калории\n\n` +
+      `Используйте команду:\n` +
+      `/calories [ккал]\n\n` +
+      `Пример: /calories 2000`,
+      require('telegraf').Markup.inlineKeyboard([
+        [require('telegraf').Markup.button.callback('◀️ Назад', 'menu_metrics')],
+      ])
+    );
+    await ctx.answerCbQuery();
   });
 
   // Note command
