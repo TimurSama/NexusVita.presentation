@@ -409,3 +409,41 @@ export const telegramBotLogsDb = {
     }
   },
 };
+
+// Document operations
+export const documentDb = {
+  create: async (userId: number, data: { title: string; content: string; file_path?: string; document_type?: string }) => {
+    const client = await getPool().connect();
+    try {
+      const result = await client.query(
+        `INSERT INTO documents (user_id, title, content, file_path, document_type)
+         VALUES ($1, $2, $3, $4, $5)
+         RETURNING *`,
+        [userId, data.title, data.content, data.file_path || null, data.document_type || 'medical']
+      );
+      return result.rows[0];
+    } finally {
+      client.release();
+    }
+  },
+
+  findByUserId: async (userId: number) => {
+    const client = await getPool().connect();
+    try {
+      const result = await client.query('SELECT * FROM documents WHERE user_id = $1 ORDER BY created_at DESC', [userId]);
+      return result.rows;
+    } finally {
+      client.release();
+    }
+  },
+
+  findById: async (id: number) => {
+    const client = await getPool().connect();
+    try {
+      const result = await client.query('SELECT * FROM documents WHERE id = $1', [id]);
+      return result.rows[0] || null;
+    } finally {
+      client.release();
+    }
+  },
+};
