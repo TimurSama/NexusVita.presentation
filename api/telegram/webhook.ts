@@ -464,8 +464,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         error.message.includes('ECONNRESET') ||
         error.message.includes('ETIMEDOUT') ||
         error.message.includes('socket hang up') ||
+        error.message.includes('write EPIPE') ||
+        error.message.includes('EPIPE') ||
         error.message.includes('Bot token') ||
-        error.message.includes('Unauthorized')
+        error.message.includes('Unauthorized') ||
+        (error as any).code === 'EPIPE' ||
+        (error as any).errno === 'EPIPE'
       )) {
         console.log(`[${requestId}] 🔄 Connection/auth error detected, re-initializing bot...`);
         bot = null; // Force re-initialization
