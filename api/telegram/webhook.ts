@@ -50,39 +50,60 @@ function setupBotHandlers(bot: Telegraf) {
   // Start command
   bot.start(async (ctx: Context) => {
     const telegramId = ctx.from?.id.toString();
+    const handlerStartTime = Date.now();
     console.log('🚀 /start command handler called for:', telegramId);
-    console.log('Context:', {
-      from: ctx.from,
-      chat: ctx.chat,
-      message: ctx.message?.text,
-    });
     
     if (!telegramId) {
       console.error('❌ No telegram ID in context');
-      await ctx.reply('Ошибка: не удалось определить ваш Telegram ID');
+      try {
+        await Promise.race([
+          ctx.reply('Ошибка: не удалось определить ваш Telegram ID'),
+          new Promise((_, reject) => setTimeout(() => reject(new Error('Reply timeout')), 5000))
+        ]);
+      } catch (error) {
+        console.error('Failed to send error reply:', error);
+      }
       return;
     }
 
     try {
       console.log('📝 Processing /start for user:', telegramId);
-      // Check if user exists
-      let user = await userDb.findByTelegramId(telegramId);
+      
+      // Add timeout for database operations
+      const dbTimeout = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Database operation timeout')), 10000)
+      );
+      
+      // Check if user exists (with timeout)
+      let user = await Promise.race([
+        userDb.findByTelegramId(telegramId),
+        dbTimeout
+      ]) as any;
       const isNewUser = !user;
 
       if (!user) {
-        // Create new user
-        const result = await userDb.create({
-          name: ctx.from.first_name + (ctx.from.last_name ? ` ${ctx.from.last_name}` : ''),
-          telegram_id: telegramId,
-          telegram_username: ctx.from.username || undefined,
-        });
-        user = await userDb.findById(Number(result.lastInsertRowid || result.id));
+        // Create new user (with timeout)
+        const createResult = await Promise.race([
+          userDb.create({
+            name: ctx.from.first_name + (ctx.from.last_name ? ` ${ctx.from.last_name}` : ''),
+            telegram_id: telegramId,
+            telegram_username: ctx.from.username || undefined,
+          }),
+          dbTimeout
+        ]) as any;
         
-        // Initialize bot settings
-        await telegramBotSettingsDb.createOrUpdate(Number(result.lastInsertRowid || result.id), {
+        user = await Promise.race([
+          userDb.findById(Number(createResult.lastInsertRowid || createResult.id)),
+          dbTimeout
+        ]) as any;
+        
+        // Initialize bot settings (async, don't wait)
+        telegramBotSettingsDb.createOrUpdate(Number(createResult.lastInsertRowid || createResult.id), {
           notifications_enabled: true,
           reminders_enabled: true,
           metric_tracking_enabled: true,
+        }).catch((error) => {
+          console.error('Error creating bot settings:', error);
         });
 
         // If this is Maria, try to initialize her full profile (async, non-blocking)
@@ -101,13 +122,19 @@ function setupBotHandlers(bot: Telegraf) {
         }
       }
 
-      console.log('👤 User found/created:', { userId: user.id, isNewUser, telegramId });
+      const dbTime = Date.now() - handlerStartTime;
+      console.log('👤 User found/created:', { userId: user.id, isNewUser, telegramId, dbTime: `${dbTime}ms` });
 
-      // Special greetings for specific users
+      // Special greetings for specific users (with timeout)
+      const replyTimeout = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Reply timeout')), 10000)
+      );
+      
       if (telegramId === '403161451' && isNewUser) {
         console.log('💚 Sending Maria first-time greeting');
         // Maria's first time greeting
-        await ctx.reply(
+        await Promise.race([
+          ctx.reply(
           `Привет Марьяша! 👋\n\n` +
           `Это твой личный центр здоровья и ежедневных привычек 💚\n\n` +
           `И, кстати, Тимур тебя очень сильно любит и поздравляет с 14 февраля! 💕\n` +
@@ -119,18 +146,24 @@ function setupBotHandlers(bot: Telegraf) {
           `• Следить за планом на день\n` +
           `• Получать персональные рекомендации\n\n` +
           `Используйте /menu для быстрого доступа к функциям.`
-        );
+          ),
+          replyTimeout
+        ]);
       } else if (telegramId === '403161451') {
         console.log('💚 Sending Maria returning greeting');
         // Maria's returning greeting
-        await ctx.reply(
+        await Promise.race([
+          ctx.reply(
           `С возвращением, Марьяша! 👋\n\n` +
           `Твой центр здоровья готов помочь тебе сегодня.\n\n` +
           `Используйте /menu для быстрого доступа.`
-        );
+          ),
+          replyTimeout
+        ]);
       } else if (telegramId === '8530599793' && isNewUser) {
         // Personal greeting for backup account
-        await ctx.reply(
+        await Promise.race([
+          ctx.reply(
           `Привет! 👋\n\n` +
           `Добро пожаловать в твой личный центр здоровья и ежедневных привычек 💚\n\n` +
           `Это твой персональный аккаунт для тестирования всех возможностей платформы!\n\n` +
@@ -142,17 +175,23 @@ function setupBotHandlers(bot: Telegraf) {
           `• Получать персональные рекомендации\n` +
           `• Тестировать все функции платформы\n\n` +
           `Используйте /menu для быстрого доступа к функциям.`
-        );
+          ),
+          replyTimeout
+        ]);
       } else if (telegramId === '8530599793') {
         // Backup account returning greeting
-        await ctx.reply(
+        await Promise.race([
+          ctx.reply(
           `С возвращением! 👋\n\n` +
           `Твой центр здоровья готов помочь тебе сегодня.\n\n` +
           `Используйте /menu для быстрого доступа.`
-        );
+          ),
+          replyTimeout
+        ]);
       } else if (telegramId === '7694835964' && isNewUser) {
         // Tixy's first time greeting
-        await ctx.reply(
+        await Promise.race([
+          ctx.reply(
           `Привет, Tixy! 👋\n\n` +
           `Добро пожаловать в EthosLife! 💚\n\n` +
           `Это твой персональный центр здоровья и ежедневных привычек.\n\n` +
@@ -162,16 +201,22 @@ function setupBotHandlers(bot: Telegraf) {
           `• Вносить метрики здоровья\n` +
           `• Получать рекомендации\n\n` +
           `Используйте /menu для быстрого доступа к функциям.`
-        );
+          ),
+          replyTimeout
+        ]);
       } else if (telegramId === '7694835964') {
         // Tixy's returning greeting
-        await ctx.reply(
+        await Promise.race([
+          ctx.reply(
           `С возвращением, Tixy! 👋\n\n` +
           `Твой центр здоровья готов помочь тебе сегодня.\n\n` +
           `Используйте /menu для быстрого доступа.`
-        );
+          ),
+          replyTimeout
+        ]);
       } else if (isNewUser) {
-        await ctx.reply(
+        await Promise.race([
+          ctx.reply(
           `Добро пожаловать в EthosLife, ${ctx.from.first_name}! 👋\n\n` +
           `Это твой центр здоровья, как экосистемной привычки и детальной аналитики 💚\n\n` +
           `Ваш аккаунт создан. Теперь вы можете:\n` +
@@ -180,13 +225,21 @@ function setupBotHandlers(bot: Telegraf) {
           `• Вносить метрики здоровья\n` +
           `• Получать рекомендации\n\n` +
           `Используйте /menu для быстрого доступа к функциям.`
-        );
+          ),
+          replyTimeout
+        ]);
       } else {
-        await ctx.reply(
+        await Promise.race([
+          ctx.reply(
           `С возвращением, ${ctx.from.first_name}! 👋\n\n` +
           `Используйте /menu для быстрого доступа.`
-        );
+          ),
+          replyTimeout
+        ]);
       }
+      
+      const totalTime = Date.now() - handlerStartTime;
+      console.log(`✅ /start handler completed in ${totalTime}ms`);
     } catch (error) {
       console.error('❌ Error in /start command:', error);
       console.error('Error details:', {
