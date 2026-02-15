@@ -4,6 +4,7 @@ import { ArrowRight, TrendingUp, Activity, Heart, Brain } from 'lucide-react';
 import SketchIcon from '@/components/SketchIcon';
 import { HealthMetricCard } from '@/components/HealthMetricCard';
 import { Button } from '@/components/ui/button';
+import { EcosystemPlatformSection } from '@/components/EcosystemPlatformSection';
 
 export default function Home() {
   const quickStats = [
@@ -96,6 +97,9 @@ export default function Home() {
             </div>
           </div>
         </motion.section>
+
+        {/* Ecosystem Platform Section */}
+        <EcosystemPlatformSection />
 
         {/* Quick Stats */}
         <motion.section

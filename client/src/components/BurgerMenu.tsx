@@ -83,6 +83,33 @@ export function BurgerMenu({ isOpen, onClose }: BurgerMenuProps) {
     onClose();
   };
 
+  // Close on click outside
+  useEffect(() => {
+    if (!isOpen) return;
+    
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('.burger-menu-container')) {
+        onClose();
+      }
+    };
+
+    const handleTouchOutside = (e: TouchEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('.burger-menu-container')) {
+        onClose();
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleTouchOutside);
+    
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleTouchOutside);
+    };
+  }, [isOpen, onClose]);
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -93,7 +120,8 @@ export function BurgerMenu({ isOpen, onClose }: BurgerMenuProps) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden"
+            onTouchStart={onClose}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
           />
 
           {/* Menu */}
@@ -102,22 +130,35 @@ export function BurgerMenu({ isOpen, onClose }: BurgerMenuProps) {
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed left-0 top-0 bottom-0 w-80 bg-card border-r border-border z-50 overflow-y-auto"
+            className="burger-menu-container fixed left-0 top-0 bottom-0 w-80 bg-card border-r border-border z-50 overflow-y-auto"
             onTouchStart={(e) => {
               // Swipe to close
               const touch = e.touches[0];
               const startX = touch.clientX;
+              const startTime = Date.now();
               
               const handleTouchMove = (e: TouchEvent) => {
+                if (e.touches.length === 0) return;
                 const currentX = e.touches[0].clientX;
-                if (currentX < startX - 100) {
+                const deltaX = currentX - startX;
+                
+                // Swipe left to close (more than 100px)
+                if (deltaX < -100) {
                   onClose();
                   document.removeEventListener('touchmove', handleTouchMove);
+                  document.removeEventListener('touchend', handleTouchEnd);
                 }
               };
               
-              document.addEventListener('touchmove', handleTouchMove);
+              const handleTouchEnd = () => {
+                document.removeEventListener('touchmove', handleTouchMove);
+                document.removeEventListener('touchend', handleTouchEnd);
+              };
+              
+              document.addEventListener('touchmove', handleTouchMove, { passive: true });
+              document.addEventListener('touchend', handleTouchEnd);
             }}
+            onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
             <div className="p-6 border-b border-border">

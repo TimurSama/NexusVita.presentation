@@ -8,6 +8,7 @@ import SketchIcon from '@/components/SketchIcon';
 import { DetailPopup } from '@/components/DetailPopup';
 import { InfoIndicator } from '@/components/InfoIndicator';
 import { whitepaperContent } from '@/data/whitepaperContent';
+import { ecosystemFeatures } from '@/data/ecosystemFeatures';
 import { Button } from '@/components/ui/button';
 import { WheelPicker } from '@/components/interactive/WheelPicker';
 import { WeightSelector } from '@/components/interactive/WeightSelector';
@@ -250,6 +251,9 @@ export default function Presentation() {
             </div>
           </div>
         </motion.section>
+
+        {/* Единая экосистемная платформа */}
+        <EcosystemPlatformSection />
 
         {/* Почему нужен комплексный подход */}
         <motion.section
