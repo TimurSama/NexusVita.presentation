@@ -17,6 +17,11 @@ import {
   FileText,
   MessageSquare,
   Presentation,
+  ShoppingBag,
+  Building2,
+  MapPin,
+  Search,
+  Heart,
 } from 'lucide-react';
 import SketchIcon from './SketchIcon';
 
@@ -59,15 +64,10 @@ export function BurgerMenu({ isOpen, onClose }: BurgerMenuProps) {
     { path: '/settings', icon: Settings, label: 'Настройки' },
   ];
 
-  const healthModules = [
-    { path: '/medicine', icon: 'medicine', label: 'Медицина' },
-    { path: '/movement', icon: 'movement', label: 'Движение' },
-    { path: '/nutrition', icon: 'nutrition', label: 'Питание' },
-    { path: '/psychology', icon: 'psychology', label: 'Психология' },
-    { path: '/sleep', icon: 'sleep', label: 'Сон' },
-    { path: '/relationships', icon: 'relationships', label: 'Отношения' },
-    { path: '/habits', icon: 'chart', label: 'Привычки' },
-    { path: '/environment', icon: 'monitor', label: 'Среда' },
+  const socialPages = [
+    { path: '/social/friends', icon: Users, label: 'Друзья' },
+    { path: '/social/messages', icon: MessageSquare, label: 'Сообщения' },
+    { path: '/social/specialists', icon: User, label: 'Специалисты' },
   ];
 
   const otherPages = [
@@ -161,13 +161,14 @@ export function BurgerMenu({ isOpen, onClose }: BurgerMenuProps) {
                 })}
               </div>
 
-              {/* Health Modules */}
+              {/* Social Network */}
               <div>
                 <h3 className="text-xs font-semibold text-foreground/60 uppercase tracking-wider mb-3 px-3">
-                  Модули здоровья
+                  Социальная сеть
                 </h3>
-                {healthModules.map((item) => {
+                {socialPages.map((item) => {
                   const isActive = location.startsWith(item.path);
+                  const Icon = item.icon;
 
                   return (
                     <Link key={item.path} href={item.path}>
@@ -181,12 +182,78 @@ export function BurgerMenu({ isOpen, onClose }: BurgerMenuProps) {
                             : 'text-foreground/70 hover:text-foreground hover:bg-muted/50'
                         }`}
                       >
-                        <SketchIcon icon={item.icon as any} size={20} className="flex-shrink-0" />
+                        <Icon className="w-5 h-5" />
                         <span className="font-medium">{item.label}</span>
                       </motion.div>
                     </Link>
                   );
                 })}
+              </div>
+
+              {/* Shop */}
+              <div>
+                <h3 className="text-xs font-semibold text-foreground/60 uppercase tracking-wider mb-3 px-3">
+                  Магазин
+                </h3>
+                <Link href="/shop">
+                  <motion.div
+                    whileHover={{ x: 4 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={handleLinkClick}
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all cursor-pointer mb-1 ${
+                      location.startsWith('/shop')
+                        ? 'bg-primary/10 text-primary'
+                        : 'text-foreground/70 hover:text-foreground hover:bg-muted/50'
+                    }`}
+                  >
+                    <ShoppingBag className="w-5 h-5" />
+                    <span className="font-medium">Магазин</span>
+                  </motion.div>
+                </Link>
+              </div>
+
+              {/* Centers */}
+              <div>
+                <h3 className="text-xs font-semibold text-foreground/60 uppercase tracking-wider mb-3 px-3">
+                  Центры
+                </h3>
+                <Link href="/centers">
+                  <motion.div
+                    whileHover={{ x: 4 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={handleLinkClick}
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all cursor-pointer mb-1 ${
+                      location.startsWith('/centers')
+                        ? 'bg-primary/10 text-primary'
+                        : 'text-foreground/70 hover:text-foreground hover:bg-muted/50'
+                    }`}
+                  >
+                    <Building2 className="w-5 h-5" />
+                    <span className="font-medium">Центры</span>
+                  </motion.div>
+                </Link>
+              </div>
+
+              {/* Map */}
+              <div>
+                <h3 className="text-xs font-semibold text-foreground/60 uppercase tracking-wider mb-3 px-3">
+                  Карта
+                </h3>
+                <Link href="/map">
+                  <motion.div
+                    whileHover={{ x: 4 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={handleLinkClick}
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all cursor-pointer mb-1 ${
+                      location.startsWith('/map')
+                        ? 'bg-primary/10 text-primary'
+                        : 'text-foreground/70 hover:text-foreground hover:bg-muted/50'
+                    }`}
+                  >
+                    <MapPin className="w-5 h-5" />
+                    <span className="font-medium">Карта</span>
+                  </motion.div>
+                </Link>
               </div>
 
               {/* Other Pages */}

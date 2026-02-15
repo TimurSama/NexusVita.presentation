@@ -1,13 +1,24 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { TrendingUp, Activity, Heart, Brain } from 'lucide-react';
+import { 
+  TrendingUp, Activity, Heart, Brain, Calendar, Clock, CheckCircle2, 
+  MessageSquare, Bot, User, Zap, ArrowRight, ChevronRight
+} from 'lucide-react';
 import SketchIcon from '@/components/SketchIcon';
 import { HealthMetricCard } from '@/components/HealthMetricCard';
 import { GoalTracker } from '@/components/GoalTracker';
 import { RecommendationCard } from '@/components/RecommendationCard';
-import { HealthPlanViewer } from '@/components/HealthPlanViewer';
 import { Link } from 'wouter';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Badge } from '@/components/ui/badge';
+import { LineChart, Line, AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
 export default function Dashboard() {
+  const [chatType, setChatType] = useState<'ai' | 'specialist' | 'ai-plus'>('ai');
+  const [chatOpen, setChatOpen] = useState(false);
+
   const todayMetrics = [
     {
       title: 'Шаги',
@@ -46,124 +57,132 @@ export default function Dashboard() {
     },
   ];
 
-  const goals = [
-    {
-      id: '1',
-      title: '10,000 шагов ежедневно',
-      description: 'Достичь цели по шагам 30 дней подряд',
-      category: 'fitness' as const,
-      target: 30,
-      current: 12,
-      unit: 'дней',
-      deadline: '2025-03-15',
-      completed: false,
-    },
-    {
-      id: '2',
-      title: 'Пить 2 литра воды',
-      description: 'Ежедневное потребление воды',
-      category: 'health' as const,
-      target: 30,
-      current: 18,
-      unit: 'дней',
-      deadline: '2025-03-15',
-      completed: false,
-    },
-    {
-      id: '3',
-      title: 'Медитация 10 минут',
-      description: 'Ежедневная практика медитации',
-      category: 'mental' as const,
-      target: 21,
-      current: 21,
-      unit: 'дней',
-      deadline: '2025-03-01',
-      completed: true,
-    },
+  const todaySchedule = [
+    { time: '07:00', title: 'Утренняя зарядка', category: 'movement', completed: true },
+    { time: '08:00', title: 'Завтрак', category: 'nutrition', completed: true },
+    { time: '12:00', title: 'Обед', category: 'nutrition', completed: false },
+    { time: '14:00', title: 'Медитация', category: 'psychology', completed: false },
+    { time: '18:00', title: 'Тренировка', category: 'movement', completed: false },
+    { time: '22:00', title: 'Подготовка ко сну', category: 'sleep', completed: false },
   ];
 
-  const recommendations = [
+  const weeklyActivity = [
+    { day: 'Пн', steps: 8500, calories: 2100, sleep: 7.5 },
+    { day: 'Вт', steps: 9200, calories: 2300, sleep: 8.0 },
+    { day: 'Ср', steps: 7800, calories: 1900, sleep: 7.0 },
+    { day: 'Чт', steps: 10000, calories: 2400, sleep: 8.5 },
+    { day: 'Пт', steps: 8800, calories: 2200, sleep: 7.5 },
+    { day: 'Сб', steps: 6500, calories: 1800, sleep: 9.0 },
+    { day: 'Вс', steps: 7200, calories: 2000, sleep: 8.0 },
+  ];
+
+  const healthModules = [
     {
-      id: '1',
-      title: 'Повысить активность',
-      description: 'Рекомендуется добавить 20 минут ходьбы для достижения цели по шагам',
-      category: 'exercise' as const,
-      priority: 'high' as const,
-      status: 'pending' as const,
-      actionItems: [
-        'Прогулка после обеда',
-        'Использовать лестницу вместо лифта',
+      id: 'medicine',
+      title: 'Медицина',
+      icon: 'medicine' as const,
+      path: '/medicine',
+      metrics: [
+        { label: 'Анализы', value: '12', trend: 'stable' },
+        { label: 'Риски', value: 'Низкие', trend: 'down' },
+      ],
+      chartData: [
+        { name: 'Янв', value: 85 },
+        { name: 'Фев', value: 88 },
+        { name: 'Мар', value: 90 },
       ],
     },
     {
-      id: '2',
-      title: 'Оптимизировать сон',
-      description: 'Ложиться спать на 30 минут раньше для достижения 8 часов сна',
-      category: 'sleep' as const,
-      priority: 'medium' as const,
-      status: 'in-progress' as const,
-      deadline: '2025-02-15',
+      id: 'movement',
+      title: 'Движение',
+      icon: 'movement' as const,
+      path: '/movement',
+      metrics: [
+        { label: 'Тренировки', value: '4/5', trend: 'up' },
+        { label: 'VO2 max', value: '45', trend: 'up' },
+      ],
+      chartData: [
+        { name: 'Янв', value: 40 },
+        { name: 'Фев', value: 42 },
+        { name: 'Мар', value: 45 },
+      ],
     },
     {
-      id: '3',
-      title: 'Добавить белок в рацион',
-      description: 'Увеличить потребление белка до 120г в день',
-      category: 'nutrition' as const,
-      priority: 'medium' as const,
-      status: 'pending' as const,
+      id: 'nutrition',
+      title: 'Питание',
+      icon: 'nutrition' as const,
+      path: '/nutrition',
+      metrics: [
+        { label: 'Белки', value: '120г', trend: 'stable' },
+        { label: 'Дефициты', value: '0', trend: 'down' },
+      ],
+      chartData: [
+        { name: 'Янв', value: 75 },
+        { name: 'Фев', value: 80 },
+        { name: 'Мар', value: 85 },
+      ],
+    },
+    {
+      id: 'sleep',
+      title: 'Сон',
+      icon: 'sleep' as const,
+      path: '/sleep',
+      metrics: [
+        { label: 'Качество', value: '8.2/10', trend: 'up' },
+        { label: 'Среднее', value: '7.8ч', trend: 'stable' },
+      ],
+      chartData: [
+        { name: 'Янв', value: 7.0 },
+        { name: 'Фев', value: 7.5 },
+        { name: 'Мар', value: 7.8 },
+      ],
+    },
+    {
+      id: 'psychology',
+      title: 'Психология',
+      icon: 'psychology' as const,
+      path: '/psychology',
+      metrics: [
+        { label: 'Настроение', value: '8/10', trend: 'up' },
+        { label: 'Стресс', value: 'Низкий', trend: 'down' },
+      ],
+      chartData: [
+        { name: 'Янв', value: 6.5 },
+        { name: 'Фев', value: 7.0 },
+        { name: 'Мар', value: 8.0 },
+      ],
+    },
+    {
+      id: 'relationships',
+      title: 'Отношения',
+      icon: 'relationships' as const,
+      path: '/relationships',
+      metrics: [
+        { label: 'Активность', value: 'Высокая', trend: 'up' },
+        { label: 'Встречи', value: '5', trend: 'stable' },
+      ],
+      chartData: [
+        { name: 'Янв', value: 70 },
+        { name: 'Фев', value: 75 },
+        { name: 'Мар', value: 80 },
+      ],
+    },
+    {
+      id: 'spirituality',
+      title: 'Привычки',
+      icon: 'spirituality' as const,
+      path: '/habits',
+      metrics: [
+        { label: 'Стрик', value: '21 день', trend: 'up' },
+        { label: 'Привычки', value: '5/7', trend: 'up' },
+      ],
+      chartData: [
+        { name: 'Янв', value: 60 },
+        { name: 'Фев', value: 70 },
+        { name: 'Мар', value: 85 },
+      ],
     },
   ];
-
-  const todayPlan = {
-    date: new Date().toISOString(),
-    items: [
-      {
-        id: '1',
-        time: '07:00',
-        title: 'Утренняя зарядка',
-        description: '15 минут растяжки и легкие упражнения',
-        category: 'exercise' as const,
-        completed: true,
-      },
-      {
-        id: '2',
-        time: '08:00',
-        title: 'Завтрак',
-        description: 'Овсянка с фруктами и орехами',
-        category: 'nutrition' as const,
-        completed: true,
-      },
-      {
-        id: '3',
-        time: '12:00',
-        title: 'Обед',
-        description: 'Салат с курицей и овощами',
-        category: 'nutrition' as const,
-        completed: false,
-      },
-      {
-        id: '4',
-        time: '18:00',
-        title: 'Тренировка',
-        description: 'Силовая тренировка 45 минут',
-        category: 'exercise' as const,
-        completed: false,
-      },
-      {
-        id: '5',
-        time: '22:00',
-        title: 'Подготовка ко сну',
-        description: 'Медитация и чтение',
-        category: 'mental' as const,
-        completed: false,
-      },
-    ],
-    dailyGoals: {
-      water: 2.0,
-      steps: 10000,
-      calories: 2200,
-    },
-  };
 
   return (
     <div className="min-h-screen bg-background pb-20 md:pb-0 pt-20">
@@ -172,7 +191,7 @@ export default function Dashboard() {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
+          className="mb-6"
         >
           <h1 className="text-4xl font-bold text-foreground mb-2">Дашборд</h1>
           <p className="text-foreground/60">
@@ -180,93 +199,241 @@ export default function Dashboard() {
           </p>
         </motion.div>
 
-        {/* Quick Stats */}
+        {/* Schedule Viewer - Top */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8"
+          className="mb-6"
         >
-          {todayMetrics.map((metric, idx) => (
-            <HealthMetricCard
-              key={idx}
-              {...metric}
-              delay={idx * 0.1}
-            />
-          ))}
+          <Card className="engraved-card">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <Calendar className="w-6 h-6 text-primary" />
+                  <CardTitle className="engraved-text">Расписание дня</CardTitle>
+                </div>
+                <Link href="/calendar">
+                  <Button variant="ghost" size="sm">
+                    Все расписание
+                    <ChevronRight className="w-4 h-4 ml-1" />
+                  </Button>
+                </Link>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {todaySchedule.map((item, idx) => (
+                  <motion.div
+                    key={idx}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.2 + idx * 0.05 }}
+                    className={`flex items-center gap-4 p-3 rounded-lg border ${
+                      item.completed ? 'bg-green-50/50 border-green-200' : 'bg-card border-border'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3 flex-1">
+                      <Clock className="w-5 h-5 text-foreground/60" />
+                      <span className="font-mono text-sm text-foreground/70">{item.time}</span>
+                      <span className="flex-1 font-medium">{item.title}</span>
+                      <SketchIcon icon={item.category as any} size={20} className="text-primary" />
+                    </div>
+                    {item.completed && (
+                      <CheckCircle2 className="w-5 h-5 text-green-500" />
+                    )}
+                  </motion.div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
         </motion.div>
 
-        {/* Goals and Recommendations */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          {/* Goals */}
+        {/* Metrics and Chat Row */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+          {/* Metrics */}
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="premium-card p-6"
+            className="lg:col-span-2"
           >
-            <GoalTracker goals={goals} />
+            <Card className="engraved-card h-full">
+              <CardHeader>
+                <CardTitle className="engraved-text">Метрики сегодня</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {todayMetrics.map((metric, idx) => (
+                    <HealthMetricCard
+                      key={idx}
+                      {...metric}
+                      delay={idx * 0.1}
+                    />
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
           </motion.div>
 
-          {/* Recommendations */}
+          {/* Chat */}
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="space-y-4"
           >
-            <div className="flex items-center gap-3 mb-4">
-              <SketchIcon icon="ai" size={24} className="text-primary" />
-              <h2 className="text-2xl font-bold text-foreground">Рекомендации</h2>
-            </div>
-            {recommendations.map((rec, idx) => (
-              <RecommendationCard
-                key={rec.id}
-                recommendation={rec}
-                delay={idx * 0.1}
-              />
-            ))}
+            <Card className="engraved-card h-full">
+              <CardHeader>
+                <CardTitle className="engraved-text">Чат</CardTitle>
+                <CardDescription>Получите помощь и рекомендации</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <Tabs value={chatType} onValueChange={(v) => setChatType(v as any)}>
+                  <TabsList className="grid w-full grid-cols-3">
+                    <TabsTrigger value="ai" className="text-xs">
+                      <Bot className="w-4 h-4 mr-1" />
+                      ИИ
+                    </TabsTrigger>
+                    <TabsTrigger value="specialist" className="text-xs">
+                      <User className="w-4 h-4 mr-1" />
+                      Специалист
+                    </TabsTrigger>
+                    <TabsTrigger value="ai-plus" className="text-xs">
+                      <Zap className="w-4 h-4 mr-1" />
+                      ИИ+
+                    </TabsTrigger>
+                  </TabsList>
+                  <TabsContent value="ai" className="mt-4">
+                    <div className="space-y-2">
+                      <p className="text-sm text-foreground/70 mb-3">
+                        Базовый AI-ассистент для общих вопросов о здоровье
+                      </p>
+                      <Link href="/ai-chat">
+                        <Button className="w-full engraved-button">
+                          <MessageSquare className="w-4 h-4 mr-2" />
+                          Открыть чат
+                        </Button>
+                      </Link>
+                    </div>
+                  </TabsContent>
+                  <TabsContent value="specialist" className="mt-4">
+                    <div className="space-y-2">
+                      <p className="text-sm text-foreground/70 mb-3">
+                        Консультация с врачом, тренером или другим специалистом
+                      </p>
+                      <Link href="/social/specialists">
+                        <Button variant="outline" className="w-full engraved-button-outline">
+                          <User className="w-4 h-4 mr-2" />
+                          Найти специалиста
+                        </Button>
+                      </Link>
+                    </div>
+                  </TabsContent>
+                  <TabsContent value="ai-plus" className="mt-4">
+                    <div className="space-y-2">
+                      <p className="text-sm text-foreground/70 mb-3">
+                        Продвинутый AI с персонализацией и расширенными возможностями
+                      </p>
+                      <Link href="/ai-chat">
+                        <Button className="w-full engraved-button">
+                          <Zap className="w-4 h-4 mr-2" />
+                          Подключить ИИ+
+                        </Button>
+                      </Link>
+                    </div>
+                  </TabsContent>
+                </Tabs>
+              </CardContent>
+            </Card>
           </motion.div>
         </div>
 
-        {/* Today's Plan */}
+        {/* Weekly Activity Chart */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="premium-card p-6"
+          className="mb-6"
         >
-          <HealthPlanViewer plan={todayPlan} />
+          <Card className="engraved-card">
+            <CardHeader>
+              <CardTitle className="engraved-text">Активность за неделю</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={300}>
+                <AreaChart data={weeklyActivity}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.05)" />
+                  <XAxis dataKey="day" />
+                  <YAxis />
+                  <Tooltip />
+                  <Area type="monotone" dataKey="steps" stackId="1" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.6} />
+                  <Area type="monotone" dataKey="calories" stackId="2" stroke="#10b981" fill="#10b981" fillOpacity={0.6} />
+                </AreaChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
         </motion.div>
 
-        {/* Quick Actions */}
+        {/* Health Modules Grid */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="mt-8"
         >
-          <h2 className="text-2xl font-bold text-foreground mb-4">Быстрые действия</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              { path: '/movement', label: 'Добавить тренировку', icon: 'movement' },
-              { path: '/nutrition', label: 'Записать прием пищи', icon: 'nutrition' },
-              { path: '/psychology', label: 'Отметить настроение', icon: 'psychology' },
-              { path: '/habits', label: 'Отметить привычку', icon: 'chart' },
-            ].map((action, idx) => (
-              <Link key={idx} href={action.path}>
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="w-full premium-card p-4 text-center hover:border-primary/50 transition-colors"
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-2xl font-bold text-foreground engraved-text">Модули здоровья</h2>
+            <Link href="/presentation">
+              <Button variant="ghost" size="sm">
+                Все модули
+                <ChevronRight className="w-4 h-4 ml-1" />
+              </Button>
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {healthModules.map((module, idx) => (
+              <Link key={module.id} href={module.path}>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.6 + idx * 0.1 }}
+                  className="engraved-card p-6 hover:scale-105 transition-transform cursor-pointer"
                 >
-                  <SketchIcon
-                    icon={action.icon as any}
-                    size={32}
-                    className="text-primary mx-auto mb-2"
-                  />
-                  <p className="text-sm font-medium text-foreground">{action.label}</p>
-                </motion.button>
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      <SketchIcon icon={module.icon} size={32} className="text-primary" />
+                      <h3 className="text-xl font-bold engraved-text">{module.title}</h3>
+                    </div>
+                    <ArrowRight className="w-5 h-5 text-foreground/40" />
+                  </div>
+                  
+                  <div className="space-y-3 mb-4">
+                    {module.metrics.map((metric, mIdx) => (
+                      <div key={mIdx} className="flex items-center justify-between text-sm">
+                        <span className="text-foreground/60">{metric.label}</span>
+                        <div className="flex items-center gap-2">
+                          <span className="font-semibold">{metric.value}</span>
+                          {metric.trend === 'up' && <TrendingUp className="w-4 h-4 text-green-500" />}
+                          {metric.trend === 'down' && <TrendingUp className="w-4 h-4 text-red-500 rotate-180" />}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="h-24">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={module.chartData}>
+                        <Line 
+                          type="monotone" 
+                          dataKey="value" 
+                          stroke="currentColor" 
+                          strokeWidth={2}
+                          dot={false}
+                          className="text-primary"
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
+                </motion.div>
               </Link>
             ))}
           </div>

@@ -30,6 +30,12 @@ import AiPlanner from "./pages/AiPlanner";
 import Tokenomics from "./pages/Tokenomics";
 import Whitepaper from "./pages/Whitepaper";
 import Landing from "./pages/Landing";
+import Shop from "./pages/Shop";
+import Centers from "./pages/Centers";
+import Map from "./pages/Map";
+import Friends from "./pages/social/Friends";
+import Messages from "./pages/social/Messages";
+import Specialists from "./pages/social/Specialists";
 
 function Router() {
   return (
@@ -39,6 +45,12 @@ function Router() {
       <Route path={"/presentation"} component={Presentation} />
       <Route path={"/whitepaper"} component={Whitepaper} />
       <Route path={"/dashboard"} component={Dashboard} />
+      <Route path={"/shop"} component={Shop} />
+      <Route path={"/centers"} component={Centers} />
+      <Route path={"/map"} component={Map} />
+      <Route path={"/social/friends"} component={Friends} />
+      <Route path={"/social/messages"} component={Messages} />
+      <Route path={"/social/specialists"} component={Specialists} />
       <Route path={"/medicine"} component={Medicine} />
       <Route path={"/nutrition"} component={Nutrition} />
       <Route path={"/movement"} component={Movement} />
