@@ -12,6 +12,10 @@ export default function Whitepaper() {
     { id: 'security', title: 'Безопасность', icon: Shield },
     { id: 'economics', title: 'Экономика', icon: Target },
     { id: 'roadmap', title: 'Дорожная карта', icon: Globe },
+    { id: 'team', title: 'Команда', icon: Users },
+    { id: 'risks', title: 'Риски', icon: Shield },
+    { id: 'investment', title: 'Инвестиции', icon: TrendingUp },
+    { id: 'conclusion', title: 'Заключение', icon: FileText },
   ];
 
   return (
@@ -576,6 +580,169 @@ export default function Whitepaper() {
                   </ul>
                 </PremiumCard>
               </div>
+            </motion.div>
+          </section>
+
+          {/* Team & Partnerships */}
+          <section id="team" className="scroll-mt-24">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              <h2 className="text-3xl font-bold text-foreground mb-6">8. Команда и партнёрства</h2>
+              
+              <div className="space-y-6">
+                <PremiumCard className="p-8">
+                  <h3 className="text-2xl font-bold text-foreground mb-4">8.1 Команда</h3>
+                  <div className="space-y-4">
+                    <div>
+                      <h4 className="font-bold text-foreground mb-2">Основатели</h4>
+                      <p className="text-foreground/80">Опыт в healthtech, blockchain, AI</p>
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-foreground mb-2">Консультанты</h4>
+                      <p className="text-foreground/80">Врачи, тренеры, нутрициологи, психологи</p>
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-foreground mb-2">Техническая команда</h4>
+                      <p className="text-foreground/80">Full-stack разработчики, AI/ML инженеры, DevOps специалисты</p>
+                    </div>
+                  </div>
+                </PremiumCard>
+
+                <PremiumCard className="p-8">
+                  <h3 className="text-2xl font-bold text-foreground mb-4">8.2 Партнёрства</h3>
+                  <ul className="space-y-2 list-disc list-inside ml-4 text-foreground/80">
+                    <li>Клиники и медицинские центры</li>
+                    <li>Фитнес-клубы и студии</li>
+                    <li>Производители БАДов и здорового питания</li>
+                    <li>Технологические партнеры (Oura, Garmin, Apple Health)</li>
+                    <li>Лаборатории и диагностические центры</li>
+                    <li>Страховые компании</li>
+                  </ul>
+                </PremiumCard>
+              </div>
+            </motion.div>
+          </section>
+
+          {/* Risks */}
+          <section id="risks" className="scroll-mt-24">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              <h2 className="text-3xl font-bold text-foreground mb-6">9. Риски и вызовы</h2>
+              
+              <div className="space-y-6">
+                <PremiumCard className="p-8">
+                  <h3 className="text-2xl font-bold text-foreground mb-4">9.1 Технические риски</h3>
+                  <ul className="space-y-2 list-disc list-inside ml-4 text-foreground/80">
+                    <li>Масштабирование инфраструктуры</li>
+                    <li>Интеграция с различными системами</li>
+                    <li>Безопасность данных</li>
+                    <li>Производительность AI-моделей</li>
+                  </ul>
+                </PremiumCard>
+
+                <PremiumCard className="p-8">
+                  <h3 className="text-2xl font-bold text-foreground mb-4">9.2 Регуляторные риски</h3>
+                  <ul className="space-y-2 list-disc list-inside ml-4 text-foreground/80">
+                    <li>Изменения в законодательстве</li>
+                    <li>Требования к медицинским данным</li>
+                    <li>Криптовалютное регулирование</li>
+                    <li>Сертификация медицинского ПО</li>
+                  </ul>
+                </PremiumCard>
+
+                <PremiumCard className="p-8">
+                  <h3 className="text-2xl font-bold text-foreground mb-4">9.3 Рыночные риски</h3>
+                  <ul className="space-y-2 list-disc list-inside ml-4 text-foreground/80">
+                    <li>Конкуренция с крупными игроками</li>
+                    <li>Принятие пользователями</li>
+                    <li>Волатильность криптовалют</li>
+                    <li>Изменение рыночных условий</li>
+                  </ul>
+                </PremiumCard>
+              </div>
+            </motion.div>
+          </section>
+
+          {/* Investment Rounds */}
+          <section id="investment" className="scroll-mt-24">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              <h2 className="text-3xl font-bold text-foreground mb-6">10. Раунды финансирования</h2>
+              
+              <div className="space-y-6">
+                <PremiumCard className="p-8">
+                  <h3 className="text-2xl font-bold text-foreground mb-4">Раунды финансирования</h3>
+                  <div className="space-y-4">
+                    {[
+                      { round: 'Seed', amount: '$500K', valuation: '$5M', period: 'Q2 2025', use: 'MVP разработка, команда, маркетинг' },
+                      { round: 'Series A', amount: '$2M', valuation: '$20M', period: 'Q4 2025', use: 'Масштабирование, партнёрства, продукт' },
+                      { round: 'Series B', amount: '$10M', valuation: '$100M', period: 'H2 2026', use: 'Глобализация, команда, маркетинг' },
+                      { round: 'Series C', amount: '$25M', valuation: '$300M', period: '2027', use: 'Расширение, аквизиции, инфраструктура' },
+                      { round: 'Series D', amount: '$35M', valuation: '$800M', period: '2028-2029', use: 'IPO подготовка, глобальная сеть' },
+                    ].map((round, idx) => (
+                      <div key={idx} className="border-b border-border/50 pb-4 last:border-0">
+                        <div className="flex justify-between items-start mb-2">
+                          <div>
+                            <h4 className="font-bold text-foreground">{round.round}</h4>
+                            <p className="text-sm text-foreground/60">{round.period}</p>
+                          </div>
+                          <div className="text-right">
+                            <p className="font-bold text-foreground">{round.amount}</p>
+                            <p className="text-sm text-foreground/60">@ {round.valuation}</p>
+                          </div>
+                        </div>
+                        <p className="text-sm text-foreground/80">{round.use}</p>
+                      </div>
+                    ))}
+                  </div>
+                </PremiumCard>
+
+                <PremiumCard className="p-8">
+                  <h3 className="text-2xl font-bold text-foreground mb-4">Стратегия выхода</h3>
+                  <div className="space-y-3">
+                    <div>
+                      <h4 className="font-bold text-foreground mb-1">IPO</h4>
+                      <p className="text-sm text-foreground/80">2030, оценка $3-5B, вероятность 85%</p>
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-foreground mb-1">Acquisition</h4>
+                      <p className="text-sm text-foreground/80">2028-2029, оценка $1-2B, вероятность 60%</p>
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-foreground mb-1">Secondary Sale</h4>
+                      <p className="text-sm text-foreground/80">2027-2028, оценка $500M-1B, вероятность 40%</p>
+                    </div>
+                  </div>
+                </PremiumCard>
+              </div>
+            </motion.div>
+          </section>
+
+          {/* Conclusion */}
+          <section id="conclusion" className="scroll-mt-24">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              <h2 className="text-3xl font-bold text-foreground mb-6">11. Заключение</h2>
+              <PremiumCard className="p-8">
+                <p className="text-lg text-foreground/80 leading-relaxed mb-4">
+                  EthosLife представляет собой инновационный подход к управлению здоровьем, объединяя традиционную медицину, современные технологии и децентрализованные системы. Платформа создает устойчивую экономику здоровья, где все участники получают выгоду от здорового образа жизни.
+                </p>
+                <p className="text-foreground/80 leading-relaxed">
+                  С единой платформой для всех аспектов здоровья, AI-анализом 2000+ показателей, персонализированными рекомендациями и комплексным мониторингом 24/7, EthosLife стремится стать глобальным лидером в health-tech индустрии, помогая миллионам людей вести более здоровую и долгую жизнь.
+                </p>
+              </PremiumCard>
             </motion.div>
           </section>
 
