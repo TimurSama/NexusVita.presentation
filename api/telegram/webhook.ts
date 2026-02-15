@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { Telegraf, Context } from 'telegraf';
-import { userDb, profileDb, dailyPlanDb, healthMetricsDb, goalsDb, telegramBotSettingsDb, telegramBotLogsDb, initDatabase } from '../lib/database';
+import { userDb, profileDb, dailyPlanDb, healthMetricsDb, goalsDb, telegramBotSettingsDb, telegramBotLogsDb, initDatabase } from '../lib/database.js';
 
 // Initialize database on first import
 let dbInitialized = false;

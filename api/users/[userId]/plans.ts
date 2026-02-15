@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { dailyPlanDb, initDatabase } from '../../lib/database';
+import { dailyPlanDb, initDatabase } from '../../lib/database.js';
 
 // Initialize database on first import
 let dbInitialized = false;

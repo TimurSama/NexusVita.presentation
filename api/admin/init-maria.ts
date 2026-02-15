@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { userDb, profileDb, dailyPlanDb, documentDb, telegramBotSettingsDb, initDatabase } from '../lib/database';
+import { userDb, profileDb, dailyPlanDb, documentDb, telegramBotSettingsDb, initDatabase } from '../lib/database.js';
 
 // Maria's document content (embedded)
 const MARIA_DOCUMENT_CONTENT = `Комплексное исследование проблемы и план терапии при боли в спине
