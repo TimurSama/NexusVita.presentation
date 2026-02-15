@@ -37,7 +37,7 @@ export function DesktopNavigation() {
           >
             <SketchIcon icon="dna" size={32} className="text-primary" />
             <div>
-              <h1 className="text-xl font-bold text-foreground">NexusVita</h1>
+              <h1 className="text-xl font-bold text-foreground">EthosLife</h1>
               <p className="text-xs text-foreground/60">Экосистема здоровья</p>
             </div>
           </motion.div>

@@ -43,7 +43,7 @@
 }
 
 :root {
-  /* NexusVita Premium Design System - Максимально премиальная палитра */
+  /* EthosLife Premium Design System - Максимально премиальная палитра */
   /* Основной: Глубокий синий с научной элегантностью */
   --primary: oklch(0.32 0.14 245); /* Premium Deep Blue */
   --primary-foreground: oklch(0.99 0.002 70);
@@ -331,13 +331,34 @@
   }
   
   .btn-premium:hover {
-    @apply bg-primary/90;
+    @apply bg-primary/90 text-white;
     box-shadow: 0 6px 16px oklch(0.32 0.14 245 / 0.35);
     transform: translateY(-1px);
   }
   
   .btn-premium:active {
     transform: translateY(0);
+  }
+  
+  /* Fix for buttons with dark hover - white text */
+  button:hover:not([disabled]),
+  [role="button"]:hover:not([aria-disabled="true"]),
+  .btn-premium:hover:not([disabled]),
+  .btn-sketch:hover:not([disabled]) {
+    color: white !important;
+  }
+  
+  /* Buttons with outline variant - ensure text is visible on hover */
+  button[class*="outline"]:hover:not([disabled]),
+  button[class*="ghost"]:hover:not([disabled]),
+  button[class*="btn-premium"]:hover:not([disabled]) {
+    color: white !important;
+  }
+  
+  /* Specific fix for FeatureButton and other buttons with dark backgrounds */
+  button[class*="bg-"]:hover:not([disabled]),
+  button[class*="hover:bg-"]:hover:not([disabled]) {
+    color: white !important;
   }
   
   /* Premium Inputs */

@@ -241,7 +241,7 @@ export default function Systematization() {
                   <p className="text-2xl font-bold text-primary">{complexes[selectedComplex].marketSize}</p>
                 </div>
                 <div className="p-4 bg-background/50 rounded-lg">
-                  <p className="text-xs text-foreground/60 mb-1">Доля NexusVita</p>
+                  <p className="text-xs text-foreground/60 mb-1">Доля EthosLife</p>
                   <p className="text-2xl font-bold text-primary">{complexes[selectedComplex].marketShare}%</p>
                 </div>
                 <div className="p-4 bg-background/50 rounded-lg">

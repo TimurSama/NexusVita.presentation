@@ -64,7 +64,7 @@ export default function SocialHealth() {
 
           {selectedTab === 'community' && (
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-foreground mb-8">Сообщество NexusVita</h2>
+              <h2 className="text-2xl font-bold text-foreground mb-8">Сообщество EthosLife</h2>
               {[
                 { title: 'Активные участники', count: '50,000+' },
                 { title: 'Группы по интересам', count: '500+' },

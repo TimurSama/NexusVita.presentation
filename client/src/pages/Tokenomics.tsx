@@ -45,9 +45,9 @@ export default function Tokenomics() {
           {selectedTab === 'overview' && (
             <div className="space-y-8">
               <div className="sketch-panel p-8 bg-gradient-to-br from-primary/5 to-primary/2">
-                <h2 className="text-3xl font-bold text-foreground mb-4">Токеномика NexusVita</h2>
+                <h2 className="text-3xl font-bold text-foreground mb-4">Токеномика EthosLife</h2>
                 <p className="text-foreground/70 mb-6">
-                  NVT (NexusVita Token) — это утилитарный токен, который управляет экосистемой и вознаграждает участников за вклад в развитие платформы.
+                  ELT (EthosLife Token) — это утилитарный токен, который управляет экосистемой и вознаграждает участников за вклад в развитие платформы.
                 </p>
                 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
@@ -75,8 +75,8 @@ export default function Tokenomics() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {[
                   { title: 'Стандарт', value: 'ERC-20 (Ethereum)' },
-                  { title: 'Максимальное предложение', value: '1,000,000,000 NVT' },
-                  { title: 'Начальное предложение', value: '500,000,000 NVT' },
+                  { title: 'Максимальное предложение', value: '1,000,000,000 ELT' },
+                  { title: 'Начальное предложение', value: '500,000,000 ELT' },
                   { title: 'Период эмиссии', value: '10 лет' },
                   { title: 'Механизм консенсуса', value: 'Proof of Stake' },
                   { title: 'Награда за стейкинг', value: '8-12% годовых' },
@@ -115,11 +115,11 @@ export default function Tokenomics() {
               
               <div className="space-y-4">
                 {[
-                  { category: 'Команда', percentage: '20%', amount: '200M NVT', vesting: '4 года' },
-                  { category: 'Инвесторы', percentage: '25%', amount: '250M NVT', vesting: '2 года' },
-                  { category: 'Сообщество', percentage: '30%', amount: '300M NVT', vesting: 'Текущее' },
-                  { category: 'Резерв', percentage: '15%', amount: '150M NVT', vesting: 'По мере необходимости' },
-                  { category: 'Партнёры', percentage: '10%', amount: '100M NVT', vesting: '1 год' },
+                  { category: 'Команда', percentage: '20%', amount: '200M ELT', vesting: '4 года' },
+                  { category: 'Инвесторы', percentage: '25%', amount: '250M ELT', vesting: '2 года' },
+                  { category: 'Сообщество', percentage: '30%', amount: '300M ELT', vesting: 'Текущее' },
+                  { category: 'Резерв', percentage: '15%', amount: '150M ELT', vesting: 'По мере необходимости' },
+                  { category: 'Партнёры', percentage: '10%', amount: '100M ELT', vesting: '1 год' },
                 ].map((item, idx) => (
                   <div key={idx} className="sketch-panel p-6">
                     <div className="flex items-center justify-between mb-4">
@@ -151,7 +151,7 @@ export default function Tokenomics() {
               <div className="sketch-panel p-8 bg-gradient-to-br from-primary/5 to-primary/2">
                 <h3 className="text-xl font-bold text-foreground mb-4">Структура DAO</h3>
                 <p className="text-foreground/70 mb-6">
-                  NexusVita DAO управляет развитием платформы через децентрализованное голосование. Держатели NVT получают право голоса пропорционально своим владениям.
+                  EthosLife DAO управляет развитием платформы через децентрализованное голосование. Держатели ELT получают право голоса пропорционально своим владениям.
                 </p>
               </div>
 
@@ -193,7 +193,7 @@ export default function Tokenomics() {
                 <h3 className="text-xl font-bold text-foreground mb-6">Процесс голосования</h3>
                 <div className="space-y-4">
                   {[
-                    { step: '1. Предложение', desc: 'Любой держатель NVT может создать предложение' },
+                    { step: '1. Предложение', desc: 'Любой держатель ELT может создать предложение' },
                     { step: '2. Обсуждение', desc: '7 дней для обсуждения в сообществе' },
                     { step: '3. Голосование', desc: '14 дней голосования с кворумом 50%' },
                     { step: '4. Реализация', desc: 'Одобренные предложения реализуются командой' },

@@ -54,13 +54,13 @@ export function Header() {
                 whileTap={{ scale: 0.95 }}
                 className="flex items-center gap-3 cursor-pointer"
               >
-                <SketchIcon icon="dna" size={32} className="text-primary" />
+                <SketchIcon icon="heart" size={32} className="text-primary" />
                 <div className="hidden sm:block">
                   <h1 className="text-xl md:text-2xl font-bold text-foreground tracking-tight">
-                    NexusVita
+                    EthosLife
                   </h1>
                   <p className="text-xs text-foreground/60 hidden md:block">
-                    Экосистема здоровья
+                    Здоровая жизнь - это привычка
                   </p>
                 </div>
               </motion.div>

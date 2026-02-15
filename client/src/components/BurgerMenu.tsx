@@ -122,7 +122,7 @@ export function BurgerMenu({ isOpen, onClose }: BurgerMenuProps) {
               <div className="flex items-center gap-3 mb-4">
                 <SketchIcon icon="dna" size={32} className="text-primary" />
                 <div>
-                  <h2 className="text-xl font-bold text-foreground">NexusVita</h2>
+                  <h2 className="text-xl font-bold text-foreground">EthosLife</h2>
                   <p className="text-xs text-foreground/60">Экосистема здоровья</p>
                 </div>
               </div>

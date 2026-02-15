@@ -63,7 +63,7 @@ export default function Home() {
               >
                 Добро пожаловать в
                 <br />
-                <span className="text-primary">NexusVita</span>
+                <span className="text-primary">EthosLife</span>
               </motion.h1>
               
               <motion.p
