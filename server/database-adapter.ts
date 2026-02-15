@@ -1,36 +1,18 @@
 // Database adapter that switches between SQLite (local) and Postgres (Vercel/Render)
-// Automatically detects environment and uses appropriate database
+// For esbuild compatibility, we always export from postgres
+// On Render/Vercel, DATABASE_URL will be set, so postgres will be used
+// For local development with SQLite, use database.ts directly
 
-const isPostgres = process.env.VERCEL === '1' || !!process.env.DATABASE_URL || !!process.env.POSTGRES_URL || process.env.RENDER === '1';
-
-if (isPostgres) {
-  // Use Postgres on Vercel/Render
-  console.log('Using Postgres database (production environment)');
-  // Re-export all from database-postgres
-  export {
-    initDatabase,
-    userDb,
-    profileDb,
-    documentDb,
-    dailyPlanDb,
-    healthMetricsDb,
-    goalsDb,
-    telegramBotSettingsDb,
-    telegramBotLogsDb,
-  } from './database-postgres';
-} else {
-  // Use SQLite locally
-  console.log('Using SQLite database (local environment)');
-  // Re-export all from database
-  export {
-    initDatabase,
-    userDb,
-    profileDb,
-    documentDb,
-    dailyPlanDb,
-    healthMetricsDb,
-    goalsDb,
-    telegramBotSettingsDb,
-    telegramBotLogsDb,
-  } from './database';
-}
+// Always export from postgres for production builds (Render/Vercel)
+// Local development can import from database.ts directly if needed
+export {
+  initDatabase,
+  userDb,
+  profileDb,
+  documentDb,
+  dailyPlanDb,
+  healthMetricsDb,
+  goalsDb,
+  telegramBotSettingsDb,
+  telegramBotLogsDb,
+} from './database-postgres';
