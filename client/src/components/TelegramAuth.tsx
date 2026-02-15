@@ -100,6 +100,9 @@ export function TelegramAuth() {
           if (authResult.success && authResult.user) {
             setUser(authResult.user);
             setAuthenticated(true);
+            
+            // Save userId to localStorage for use in other components
+            localStorage.setItem('userId', authResult.user.id.toString());
 
             // Fetch user profile
             try {

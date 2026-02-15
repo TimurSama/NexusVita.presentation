@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
   TrendingUp, Activity, Heart, Brain, Calendar, Clock, CheckCircle2, 
@@ -18,63 +18,101 @@ import { LineChart, Line, AreaChart, Area, BarChart, Bar, XAxis, YAxis, Cartesia
 export default function Dashboard() {
   const [chatType, setChatType] = useState<'ai' | 'specialist' | 'ai-plus'>('ai');
   const [chatOpen, setChatOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [todayMetrics, setTodayMetrics] = useState<any[]>([]);
+  const [todaySchedule, setTodaySchedule] = useState<any[]>([]);
+  const [weeklyActivity, setWeeklyActivity] = useState<any[]>([]);
 
-  const todayMetrics = [
-    {
-      title: 'Шаги',
-      value: 8420,
-      unit: '',
-      trend: 'up' as const,
-      target: 10000,
-      icon: 'movement' as const,
-      description: 'Цель: 10,000 шагов',
-    },
-    {
-      title: 'Калории',
-      value: 1840,
-      unit: 'ккал',
-      trend: 'stable' as const,
-      target: 2200,
-      icon: 'nutrition' as const,
-      description: 'Цель: 2,200 ккал',
-    },
-    {
-      title: 'Сон',
-      value: 7.5,
-      unit: 'ч',
-      trend: 'up' as const,
-      target: 8,
-      icon: 'sleep' as const,
-      description: 'Цель: 8 часов',
-    },
-    {
-      title: 'Настроение',
-      value: 8,
-      unit: '/10',
-      trend: 'up' as const,
-      icon: 'psychology' as const,
-      description: 'Отличное настроение',
-    },
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userId = localStorage.getItem('userId');
+        if (!userId) {
+          setLoading(false);
+          return;
+        }
 
-  const todaySchedule = [
-    { time: '07:00', title: 'Утренняя зарядка', category: 'movement', completed: true },
-    { time: '08:00', title: 'Завтрак', category: 'nutrition', completed: true },
-    { time: '12:00', title: 'Обед', category: 'nutrition', completed: false },
-    { time: '14:00', title: 'Медитация', category: 'psychology', completed: false },
-    { time: '18:00', title: 'Тренировка', category: 'movement', completed: false },
-    { time: '22:00', title: 'Подготовка ко сну', category: 'sleep', completed: false },
-  ];
+        // Fetch today's plans
+        const today = new Date().toISOString().split('T')[0];
+        const plansResponse = await fetch(`/api/users/${userId}/plans?date=${today}`);
+        if (plansResponse.ok) {
+          const plansData = await plansResponse.json();
+          const plans = plansData.plans || [];
+          setTodaySchedule(plans.map((p: any) => ({
+            time: p.time || '00:00',
+            title: p.title,
+            category: p.category || 'other',
+            completed: p.completed || false,
+          })));
+        }
 
-  const weeklyActivity = [
-    { day: 'Пн', steps: 8500, calories: 2100, sleep: 7.5 },
-    { day: 'Вт', steps: 9200, calories: 2300, sleep: 8.0 },
-    { day: 'Ср', steps: 7800, calories: 1900, sleep: 7.0 },
-    { day: 'Чт', steps: 10000, calories: 2400, sleep: 8.5 },
-    { day: 'Пт', steps: 8800, calories: 2200, sleep: 7.5 },
-    { day: 'Сб', steps: 6500, calories: 1800, sleep: 9.0 },
-    { day: 'Вс', steps: 7200, calories: 2000, sleep: 8.0 },
-  ];
+        // Fetch metrics
+        const metricsResponse = await fetch(`/api/users/${userId}/metrics?limit=10`);
+        if (metricsResponse.ok) {
+          const metricsData = await metricsResponse.json();
+          const metrics = metricsData.metrics || [];
+          
+          // Group metrics by type and get latest
+          const metricsByType: Record<string, any> = {};
+          metrics.forEach((m: any) => {
+            if (!metricsByType[m.metric_type] || new Date(m.created_at) > new Date(metricsByType[m.metric_type].created_at)) {
+              metricsByType[m.metric_type] = m;
+            }
+          });
+
+          // Map to dashboard format
+          const mappedMetrics = [
+            {
+              title: 'Шаги',
+              value: metricsByType['steps']?.value || 0,
+              unit: '',
+              trend: 'up' as const,
+              target: 10000,
+              icon: 'movement' as const,
+              description: metricsByType['steps'] ? `Цель: 10,000 шагов` : 'Добавьте данные о шагах',
+            },
+            {
+              title: 'Калории',
+              value: metricsByType['calories']?.value || 0,
+              unit: 'ккал',
+              trend: 'stable' as const,
+              target: 2200,
+              icon: 'nutrition' as const,
+              description: metricsByType['calories'] ? `Цель: 2,200 ккал` : 'Добавьте данные о калориях',
+            },
+            {
+              title: 'Сон',
+              value: metricsByType['sleep']?.value || 0,
+              unit: 'ч',
+              trend: 'up' as const,
+              target: 8,
+              icon: 'sleep' as const,
+              description: metricsByType['sleep'] ? `Цель: 8 часов` : 'Добавьте данные о сне',
+            },
+            {
+              title: 'Настроение',
+              value: metricsByType['mood']?.value || 0,
+              unit: '/10',
+              trend: 'up' as const,
+              icon: 'psychology' as const,
+              description: metricsByType['mood'] ? 'Отличное настроение' : 'Добавьте данные о настроении',
+            },
+          ];
+          setTodayMetrics(mappedMetrics);
+        }
+
+        // For weekly activity, we'll use empty data for now
+        // TODO: Fetch weekly metrics when API supports it
+        setWeeklyActivity([]);
+      } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const healthModules = [
     {

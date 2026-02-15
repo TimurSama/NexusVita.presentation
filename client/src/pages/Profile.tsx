@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Calendar, FileText, Pill, Activity, AlertCircle, TrendingUp, Edit } from 'lucide-react';
 import SketchIcon from '@/components/SketchIcon';
@@ -13,28 +13,58 @@ import { Button } from '@/components/ui/button';
 export default function Profile() {
   const [selectedTab, setSelectedTab] = useState('overview');
   const [isEditingBiometrics, setIsEditingBiometrics] = useState(false);
-  const [height, setHeight] = useState(175);
-  const [weight, setWeight] = useState(72);
-  const [birthDate, setBirthDate] = useState(new Date(1993, 0, 1));
+  const [loading, setLoading] = useState(true);
+  const [profile, setProfile] = useState<any>(null);
+  const [height, setHeight] = useState<number | null>(null);
+  const [weight, setWeight] = useState<number | null>(null);
+  const [birthDate, setBirthDate] = useState<Date | null>(null);
 
-  const healthScore = 87;
-  const riskLevel = 'low';
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const userId = localStorage.getItem('userId');
+        if (!userId) {
+          setLoading(false);
+          return;
+        }
 
-  const age = Math.floor((new Date().getTime() - birthDate.getTime()) / (365.25 * 24 * 60 * 60 * 1000));
-  const bmi = (weight / ((height / 100) ** 2)).toFixed(1);
+        const response = await fetch(`/api/users/${userId}/profile`);
+        if (response.ok) {
+          const data = await response.json();
+          setProfile(data.profile);
+          
+          if (data.profile) {
+            setHeight(data.profile.height || null);
+            setWeight(data.profile.weight || null);
+            if (data.profile.date_of_birth) {
+              setBirthDate(new Date(data.profile.date_of_birth));
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, []);
+
+  const healthScore = 87; // TODO: Calculate from metrics
+  const riskLevel = 'low'; // TODO: Calculate from metrics
+
+  const age = birthDate ? Math.floor((new Date().getTime() - birthDate.getTime()) / (365.25 * 24 * 60 * 60 * 1000)) : null;
+  const bmi = height && weight ? (weight / ((height / 100) ** 2)).toFixed(1) : null;
 
   const biometrics = [
-    { label: 'Возраст', value: `${age} лет` },
-    { label: 'Рост', value: `${height} см` },
-    { label: 'Вес', value: `${weight} кг` },
-    { label: 'ИМТ', value: bmi },
+    { label: 'Возраст', value: age ? `${age} лет` : 'Не указан', isEmpty: !age },
+    { label: 'Рост', value: height ? `${height} см` : 'Не указан', isEmpty: !height },
+    { label: 'Вес', value: weight ? `${weight} кг` : 'Не указан', isEmpty: !weight },
+    { label: 'ИМТ', value: bmi || 'Не рассчитан', isEmpty: !bmi },
   ];
 
-  const recentAnalyses = [
-    { date: '2025-02-10', type: 'Общий анализ крови', status: 'Норма' },
-    { date: '2025-01-15', type: 'Биохимия', status: 'Норма' },
-    { date: '2024-12-20', type: 'Гормоны', status: 'Требует внимания' },
-  ];
+  const recentAnalyses: any[] = []; // TODO: Fetch from documents API
 
   return (
     <div className="min-h-screen bg-background pb-20 md:pb-0 pt-20">
@@ -124,10 +154,16 @@ export default function Profile() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: idx * 0.1 }}
-                  className="premium-card p-4"
+                  className={`premium-card p-4 ${bio.isEmpty ? 'opacity-60' : ''}`}
                 >
                   <p className="text-sm text-foreground/60 mb-1">{bio.label}</p>
-                  <p className="text-2xl font-bold text-foreground">{bio.value}</p>
+                  <p className={`text-2xl font-bold ${bio.isEmpty ? 'text-foreground/40' : 'text-foreground'}`}>
+                    {bio.isEmpty ? (
+                      <span className="text-sm font-normal italic">Введите данные</span>
+                    ) : (
+                      bio.value
+                    )}
+                  </p>
                 </motion.div>
               ))}
             </div>
@@ -135,29 +171,36 @@ export default function Profile() {
             {/* Recent Activity */}
             <div className="premium-card p-6">
               <h3 className="text-xl font-bold text-foreground mb-4">Недавняя активность</h3>
-              <div className="space-y-3">
-                {recentAnalyses.map((item, idx) => (
-                  <div
-                    key={idx}
-                    className="flex items-center justify-between p-3 rounded-xl bg-muted/30"
-                  >
-                    <div className="flex items-center gap-3">
-                      <FileText className="w-5 h-5 text-primary" />
-                      <div>
-                        <p className="font-medium text-foreground">{item.type}</p>
-                        <p className="text-sm text-foreground/60">{item.date}</p>
+              {recentAnalyses.length === 0 ? (
+                <div className="text-center py-8">
+                  <p className="text-foreground/40 italic">Нет записей</p>
+                  <p className="text-sm text-foreground/30 mt-2">Добавьте документы и анализы в разделе "Документы"</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {recentAnalyses.map((item, idx) => (
+                    <div
+                      key={idx}
+                      className="flex items-center justify-between p-3 rounded-xl bg-muted/30"
+                    >
+                      <div className="flex items-center gap-3">
+                        <FileText className="w-5 h-5 text-primary" />
+                        <div>
+                          <p className="font-medium text-foreground">{item.type}</p>
+                          <p className="text-sm text-foreground/60">{item.date}</p>
+                        </div>
                       </div>
+                      <span className={`px-3 py-1 rounded-lg text-sm font-medium ${
+                        item.status === 'Норма'
+                          ? 'bg-primary/10 text-primary'
+                          : 'bg-accent/10 text-accent'
+                      }`}>
+                        {item.status}
+                      </span>
                     </div>
-                    <span className={`px-3 py-1 rounded-lg text-sm font-medium ${
-                      item.status === 'Норма'
-                        ? 'bg-primary/10 text-primary'
-                        : 'bg-accent/10 text-accent'
-                    }`}>
-                      {item.status}
-                    </span>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
           </TabsContent>
 
@@ -179,33 +222,35 @@ export default function Profile() {
               {!isEditingBiometrics ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {biometrics.map((item, idx) => (
-                    <div key={idx} className="p-4 rounded-xl bg-muted/30">
+                    <div key={idx} className={`p-4 rounded-xl bg-muted/30 ${item.isEmpty ? 'opacity-60' : ''}`}>
                       <p className="text-sm text-foreground/60 mb-1">{item.label}</p>
-                      <p className="text-3xl font-bold text-foreground">{item.value}</p>
+                      <p className={`text-3xl font-bold ${item.isEmpty ? 'text-foreground/40 italic text-lg' : 'text-foreground'}`}>
+                        {item.isEmpty ? 'Введите данные' : item.value}
+                      </p>
                     </div>
                   ))}
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                   <WheelPicker
-                    value={height}
-                    onChange={setHeight}
+                    value={height || 175}
+                    onChange={(v) => setHeight(v)}
                     label="Рост"
                     min={100}
                     max={220}
                     unit="см"
                   />
                   <WeightSelector
-                    value={weight}
-                    onChange={setWeight}
+                    value={weight || 70}
+                    onChange={(v) => setWeight(v)}
                     label="Вес"
                     min={30}
                     max={200}
                     unit="кг"
                   />
                   <MayanCalendar
-                    value={birthDate}
-                    onChange={setBirthDate}
+                    value={birthDate || new Date(1990, 0, 1)}
+                    onChange={(v) => setBirthDate(v)}
                     label="Дата рождения"
                   />
                 </div>
