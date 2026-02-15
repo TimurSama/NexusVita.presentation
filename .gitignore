@@ -29,6 +29,8 @@ lerna-debug.log*
 data/
 *.db
 *.db-journal
+# Exception: allow client/src/data/ (contains app data files)
+!client/src/data/
 
 # Python
 __pycache__/
