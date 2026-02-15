@@ -31,7 +31,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     
     res.json({
       success: true,
-      message: 'Webhook set successfully',
+      message: '✅ Webhook установлен успешно! Теперь отправьте /start боту для проверки.',
       webhookUrl: WEBHOOK_URL,
       webhookInfo: {
         url: webhookInfo.url,
@@ -48,6 +48,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         first_name: botInfo.first_name,
         username: botInfo.username,
       },
+      nextSteps: [
+        '1. Отправьте /start боту в Telegram',
+        '2. Проверьте логи в Vercel Dashboard → Functions → api/telegram/webhook → Logs',
+      ],
     });
   } catch (error) {
     console.error('Error setting webhook:', error);
