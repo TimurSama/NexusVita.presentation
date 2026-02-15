@@ -318,78 +318,298 @@ export const whitepaperContent: Record<string, PopupContent> = {
 
   'psychology-module': {
     id: 'psychology-module',
-    title: 'Модуль психологии',
-    subtitle: 'Психическое здоровье и управление стрессом',
-    description: `Модуль психологии помогает отслеживать ментальное здоровье, управлять стрессом и улучшать эмоциональное благополучие через различные инструменты и практики.`,
+    title: 'Психоэмоциональное здоровье',
+    subtitle: 'Комплексная система управления ментальным здоровьем и стрессом',
+    description: `Модуль психологии помогает отслеживать ментальное здоровье, управлять стрессом и улучшать эмоциональное благополучие через различные инструменты и практики. Модуль использует AI для анализа эмоциональных паттернов и предоставления персонализированных рекомендаций.`,
     sections: [
       {
-        title: 'Инструменты',
-        content: createListWithStrong([
-          { label: 'Mood tracking', value: 'Ежедневное отслеживание настроения и эмоций' },
-          { label: 'Стресс-индекс', value: 'Мониторинг уровня стресса и его источников' },
-          { label: 'Дневник мыслей', value: 'Рефлексия и анализ эмоциональных паттернов' },
-          { label: 'CBT-инструменты', value: 'Когнитивно-поведенческая терапия' },
-          { label: 'Breathwork модуль', value: 'Дыхательные практики для снижения стресса' },
-        ]),
+        title: 'Mood Tracking — Отслеживание настроения',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Ежедневное отслеживание настроения и эмоций с детальным анализом паттернов и триггеров.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Ежедневные записи:'), ' Быстрая оценка настроения по шкале и выбор эмоций'),
+            React.createElement('li', null, React.createElement('strong', null, 'Эмоциональный календарь:'), ' Визуализация настроения во времени'),
+            React.createElement('li', null, React.createElement('strong', null, 'Триггеры:'), ' Выявление факторов, влияющих на настроение'),
+            React.createElement('li', null, React.createElement('strong', null, 'Паттерны:'), ' Анализ циклов и закономерностей в эмоциональном состоянии'),
+            React.createElement('li', null, React.createElement('strong', null, 'Корреляции:'), ' Связь настроения с сном, активностью, питанием')
+          )
+        ),
       },
       {
-        title: 'AI-анализ',
-        content: `AI анализирует эмоциональные триггеры, коррелирует данные с сном и нагрузкой, предсказывает выгорание и предоставляет персонализированные рекомендации по улучшению ментального здоровья.`,
+        title: 'Стресс-индекс — Мониторинг стресса',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Комплексная система оценки и управления стрессом с выявлением источников и рекомендациями по снижению.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Оценка уровня:'), ' Ежедневная оценка уровня стресса по шкале'),
+            React.createElement('li', null, React.createElement('strong', null, 'Источники стресса:'), ' Идентификация основных триггеров и источников'),
+            React.createElement('li', null, React.createElement('strong', null, 'Физиологические показатели:'), ' Корреляция с HRV, пульсом, качеством сна'),
+            React.createElement('li', null, React.createElement('strong', null, 'Рекомендации:'), ' Персонализированные советы по управлению стрессом'),
+            React.createElement('li', null, React.createElement('strong', null, 'Предупреждение выгорания:'), ' Раннее выявление признаков выгорания')
+          )
+        ),
+      },
+      {
+        title: 'Дневник мыслей — Рефлексия и анализ',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Инструмент для рефлексии, анализа эмоциональных паттернов и работы с негативными мыслями.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Свободное ведение:'), ' Запись мыслей и переживаний в свободной форме'),
+            React.createElement('li', null, React.createElement('strong', null, 'Структурированные вопросы:'), ' Направляющие вопросы для глубокой рефлексии'),
+            React.createElement('li', null, React.createElement('strong', null, 'Анализ паттернов:'), ' AI-анализ записей для выявления повторяющихся тем'),
+            React.createElement('li', null, React.createElement('strong', null, 'Эмоциональные триггеры:'), ' Выявление ситуаций и мыслей, вызывающих негативные эмоции')
+          )
+        ),
+      },
+      {
+        title: 'CBT-инструменты — Когнитивно-поведенческая терапия',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Научно обоснованные инструменты когнитивно-поведенческой терапии для работы с негативными мыслями и поведением.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Когнитивная реструктуризация:'), ' Работа с иррациональными убеждениями и мыслями'),
+            React.createElement('li', null, React.createElement('strong', null, 'Поведенческие эксперименты:'), ' Проверка негативных убеждений через действия'),
+            React.createElement('li', null, React.createElement('strong', null, 'Дневник мыслей:'), ' Структурированный анализ ситуаций, мыслей, эмоций и поведения'),
+            React.createElement('li', null, React.createElement('strong', null, 'Техники релаксации:'), ' Прогрессивная мышечная релаксация, визуализация')
+          )
+        ),
+      },
+      {
+        title: 'Breathwork модуль — Дыхательные практики',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Гайдированные дыхательные практики для снижения стресса, улучшения концентрации и расслабления.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Техники дыхания:'), ' Боксовое дыхание, 4-7-8, диафрагмальное дыхание'),
+            React.createElement('li', null, React.createElement('strong', null, 'Аудио-гайды:'), ' Голосовые инструкции для правильного выполнения'),
+            React.createElement('li', null, React.createElement('strong', null, 'Таймеры:'), ' Настраиваемые таймеры для различных практик'),
+            React.createElement('li', null, React.createElement('strong', null, 'Эффективность:'), ' Отслеживание влияния практик на уровень стресса')
+          )
+        ),
+      },
+      {
+        title: 'AI-анализ и персонализация',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Искусственный интеллект анализирует все данные модуля для выявления паттернов и предоставления персонализированных рекомендаций.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Эмоциональные триггеры:'), ' Выявление ситуаций и факторов, влияющих на настроение'),
+            React.createElement('li', null, React.createElement('strong', null, 'Корреляции:'), ' Анализ связи между сном, активностью, питанием и ментальным здоровьем'),
+            React.createElement('li', null, React.createElement('strong', null, 'Предсказание выгорания:'), ' Раннее выявление признаков выгорания и депрессии'),
+            React.createElement('li', null, React.createElement('strong', null, 'Персонализированные рекомендации:'), ' Индивидуальные советы на основе ваших данных'),
+            React.createElement('li', null, React.createElement('strong', null, 'Оптимизация практик:'), ' Рекомендации по наиболее эффективным для вас техникам')
+          )
+        ),
       },
     ],
   },
 
   'sleep-module': {
     id: 'sleep-module',
-    title: 'Модуль сна',
-    subtitle: 'Качество сна и оптимизация циркадных ритмов',
-    description: `Модуль сна помогает отслеживать качество и продолжительность сна, анализировать циркадные ритмы и предоставляет рекомендации по оптимизации режима.`,
+    title: 'Сон',
+    subtitle: 'Комплексная система оптимизации качества сна и циркадных ритмов',
+    description: `Модуль сна помогает отслеживать качество и продолжительность сна, анализировать циркадные ритмы и предоставляет персонализированные рекомендации по оптимизации режима. Качественный сон — основа здоровья, и модуль помогает достичь оптимального восстановления.`,
     sections: [
       {
-        title: 'Функциональность',
-        content: createList([
-          'Трекинг длительности и качества сна',
-          'Анализ фаз сна (REM, Deep, Light)',
-          'Отслеживание циркадных ритмов',
-          'Рекомендации по оптимизации режима',
-          'Интеграция с трекерами сна',
-        ]),
+        title: 'Трекинг сна — Отслеживание качества и длительности',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Комплексное отслеживание всех аспектов сна с детальной аналитикой.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Длительность:'), ' Общее время сна, время в постели, эффективность сна'),
+            React.createElement('li', null, React.createElement('strong', null, 'Качество:'), ' Оценка качества сна на основе различных метрик'),
+            React.createElement('li', null, React.createElement('strong', null, 'Фазы сна:'), ' REM, Deep, Light сон с процентным соотношением'),
+            React.createElement('li', null, React.createElement('strong', null, 'Пробуждения:'), ' Количество и длительность ночных пробуждений'),
+            React.createElement('li', null, React.createElement('strong', null, 'Время засыпания:'), ' Время, необходимое для засыпания'),
+            React.createElement('li', null, React.createElement('strong', null, 'Время подъема:'), ' Оптимальное время пробуждения в фазе легкого сна')
+          )
+        ),
+      },
+      {
+        title: 'Анализ циркадных ритмов',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Отслеживание и оптимизация циркадных ритмов для синхронизации с естественными биологическими часами.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Хронотип:'), ' Определение вашего типа (жаворонок, сова, голубь)'),
+            React.createElement('li', null, React.createElement('strong', null, 'Циркадный профиль:'), ' Анализ ваших естественных ритмов бодрствования и сна'),
+            React.createElement('li', null, React.createElement('strong', null, 'Оптимальное время сна:'), ' Рекомендации по времени отхода ко сну и пробуждения'),
+            React.createElement('li', null, React.createElement('strong', null, 'Световая терапия:'), ' Рекомендации по воздействию света для синхронизации ритмов'),
+            React.createElement('li', null, React.createElement('strong', null, 'Джетлаг:'), ' Помощь в адаптации при смене часовых поясов')
+          )
+        ),
+      },
+      {
+        title: 'Гигиена сна — Рекомендации по оптимизации',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Персонализированные рекомендации по улучшению качества сна на основе ваших данных и образа жизни.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Режим:'), ' Рекомендации по установлению регулярного режима сна'),
+            React.createElement('li', null, React.createElement('strong', null, 'Окружение:'), ' Советы по оптимизации спальни (температура, свет, шум)'),
+            React.createElement('li', null, React.createElement('strong', null, 'Ритуалы:'), ' Персонализированные вечерние ритуалы для подготовки ко сну'),
+            React.createElement('li', null, React.createElement('strong', null, 'Питание:'), ' Рекомендации по времени и составу последнего приема пищи'),
+            React.createElement('li', null, React.createElement('strong', null, 'Активность:'), ' Оптимальное время тренировок для улучшения сна'),
+            React.createElement('li', null, React.createElement('strong', null, 'Экранное время:'), ' Рекомендации по ограничению синего света перед сном')
+          )
+        ),
+      },
+      {
+        title: 'Интеграция с трекерами сна',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Автоматическая синхронизация данных с различными трекерами сна для точного анализа.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Носимые устройства:'), ' Apple Watch, Oura Ring, Whoop, Fitbit'),
+            React.createElement('li', null, React.createElement('strong', null, 'Матрасы и подушки:'), ' Умные матрасы с датчиками движения и дыхания'),
+            React.createElement('li', null, React.createElement('strong', null, 'Приложения:'), ' Sleep Cycle, Pillow, AutoSleep'),
+            React.createElement('li', null, React.createElement('strong', null, 'Ручной ввод:'), ' Возможность добавления данных вручную')
+          )
+        ),
+      },
+      {
+        title: 'Корреляционный анализ',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Анализ влияния различных факторов на качество сна для выявления паттернов и оптимизации.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Активность:'), ' Влияние тренировок на качество сна'),
+            React.createElement('li', null, React.createElement('strong', null, 'Питание:'), ' Связь между рационом и сном'),
+            React.createElement('li', null, React.createElement('strong', null, 'Стресс:'), ' Корреляция между уровнем стресса и качеством сна'),
+            React.createElement('li', null, React.createElement('strong', null, 'Медицина:'), ' Влияние лекарств и медицинских показателей на сон')
+          )
+        ),
       },
     ],
   },
 
   'relationships-module': {
     id: 'relationships-module',
-    title: 'Модуль отношений',
-    subtitle: 'Социальные связи и здоровые отношения',
-    description: `Модуль отношений помогает отслеживать качество социальных связей, управлять отношениями и улучшать социальное благополучие.`,
+    title: 'Социальное здоровье и отношения',
+    subtitle: 'Комплексная система управления социальными связями и отношениями',
+    description: `Модуль отношений помогает отслеживать качество социальных связей, управлять отношениями и улучшать социальное благополучие. Крепкие социальные связи продлевают жизнь и улучшают психологическое благополучие, и модуль помогает их развивать и поддерживать.`,
     sections: [
       {
-        title: 'Функциональность',
-        content: createList([
-          'Оценка качества отношений',
-          'Социальная активность',
-          'Группы поддержки',
-          'Совместные челленджи',
-        ]),
+        title: 'Оценка качества отношений',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Система оценки и мониторинга качества различных типов отношений в вашей жизни.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Типы отношений:'), ' Семья, друзья, романтические, коллеги, сообщество'),
+            React.createElement('li', null, React.createElement('strong', null, 'Метрики качества:'), ' Уровень поддержки, близости, конфликтов, удовлетворенности'),
+            React.createElement('li', null, React.createElement('strong', null, 'Временная динамика:'), ' Отслеживание изменений в отношениях во времени'),
+            React.createElement('li', null, React.createElement('strong', null, 'Триггеры:'), ' Выявление факторов, влияющих на качество отношений')
+          )
+        ),
+      },
+      {
+        title: 'Социальная активность',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Отслеживание и мотивация к социальной активности для поддержания связей.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Встречи:'), ' Календарь встреч с друзьями и семьей'),
+            React.createElement('li', null, React.createElement('strong', null, 'Социальные события:'), ' Участие в мероприятиях и активностях'),
+            React.createElement('li', null, React.createElement('strong', null, 'Коммуникация:'), ' Отслеживание частоты и качества общения'),
+            React.createElement('li', null, React.createElement('strong', null, 'Напоминания:'), ' Уведомления о необходимости поддержать связь')
+          )
+        ),
+      },
+      {
+        title: 'Группы поддержки и сообщества',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Подключение к тематическим сообществам и группам поддержки для обмена опытом и мотивации.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Тематические сообщества:'), ' Группы по интересам, целям, заболеваниям'),
+            React.createElement('li', null, React.createElement('strong', null, 'Группы поддержки:'), ' Сообщества для взаимной поддержки и обмена опытом'),
+            React.createElement('li', null, React.createElement('strong', null, 'Модерация:'), ' Профессиональная модерация для безопасной среды'),
+            React.createElement('li', null, React.createElement('strong', null, 'Анонимность:'), ' Возможность участия анонимно при необходимости')
+          )
+        ),
+      },
+      {
+        title: 'Совместные челленджи',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Мотивация через совместные челленджи с друзьями и сообществом.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Групповые цели:'), ' Совместные цели с друзьями и семьей'),
+            React.createElement('li', null, React.createElement('strong', null, 'Соревнования:'), ' Дружеские соревнования для мотивации'),
+            React.createElement('li', null, React.createElement('strong', null, 'Поддержка:'), ' Взаимная поддержка и поощрение'),
+            React.createElement('li', null, React.createElement('strong', null, 'Награды:'), ' Совместные награды за достижение целей')
+          )
+        ),
+      },
+      {
+        title: 'Семейные и романтические отношения',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Специализированные инструменты для улучшения семейных и романтических отношений.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Тесты совместимости:'), ' Оценка совместимости в отношениях'),
+            React.createElement('li', null, React.createElement('strong', null, 'Упражнения на доверие:'), ' Практики для укрепления доверия'),
+            React.createElement('li', null, React.createElement('strong', null, 'Советы психолога:'), ' Рекомендации от специалистов по отношениям'),
+            React.createElement('li', null, React.createElement('strong', null, 'Календарь важных дат:'), ' Напоминания о важных событиях в отношениях')
+          )
+        ),
       },
     ],
   },
 
   'spirituality-module': {
     id: 'spirituality-module',
-    title: 'Модуль духовности',
-    subtitle: 'Личностный рост и смысл жизни',
-    description: `Модуль духовности поддерживает личностный рост, рефлексию и поиск смысла жизни через различные практики и инструменты.`,
+    title: 'Привычки, хобби и жизненная философия',
+    subtitle: 'Личностный рост, смысл жизни и формирование здоровых привычек',
+    description: `Модуль духовности поддерживает личностный рост, рефлексию и поиск смысла жизни через различные практики и инструменты. Наличие четких целей и увлечений замедляет старение мозга и продлевает жизнь.`,
     sections: [
       {
-        title: 'Функциональность',
-        content: createList([
-          'Медитация и осознанность',
-          'Дневник рефлексии',
-          'Практики благодарности',
-          'Поиск смысла и целей',
-        ]),
+        title: 'Медитация и осознанность',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Гайдированные практики медитации и осознанности для развития внимательности и внутреннего покоя.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Типы медитации:'), ' Mindfulness, трансцендентальная, любящей доброты, сканирование тела'),
+            React.createElement('li', null, React.createElement('strong', null, 'Аудио-гайды:'), ' Голосовые инструкции для различных практик'),
+            React.createElement('li', null, React.createElement('strong', null, 'Таймеры:'), ' Настраиваемые таймеры для сессий медитации'),
+            React.createElement('li', null, React.createElement('strong', null, 'Прогресс:'), ' Отслеживание регулярности и длительности практик'),
+            React.createElement('li', null, React.createElement('strong', null, 'Эффекты:'), ' Анализ влияния медитации на настроение и стресс')
+          )
+        ),
+      },
+      {
+        title: 'Дневник рефлексии',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Инструмент для глубокой рефлексии, самоанализа и личностного роста.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Ежедневная рефлексия:'), ' Вопросы для ежедневного самоанализа'),
+            React.createElement('li', null, React.createElement('strong', null, 'Недельные обзоры:'), ' Подведение итогов недели и планирование'),
+            React.createElement('li', null, React.createElement('strong', null, 'Годовые рефлексии:'), ' Глубокий анализ года и постановка целей'),
+            React.createElement('li', null, React.createElement('strong', null, 'Темы для размышлений:'), ' Направляющие вопросы о смысле, ценностях, целях')
+          )
+        ),
+      },
+      {
+        title: 'Практики благодарности',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Систематические практики благодарности для улучшения психологического благополучия.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Дневник благодарности:'), ' Ежедневная запись того, за что вы благодарны'),
+            React.createElement('li', null, React.createElement('strong', null, 'Напоминания:'), ' Уведомления для регулярной практики'),
+            React.createElement('li', null, React.createElement('strong', null, 'Темы:'), ' Направляющие темы для размышлений о благодарности'),
+            React.createElement('li', null, React.createElement('strong', null, 'Эффекты:'), ' Отслеживание влияния практики на настроение')
+          )
+        ),
+      },
+      {
+        title: 'Поиск смысла и целей',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Инструменты для определения жизненных ценностей, смысла и постановки долгосрочных целей.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Ценности:'), ' Определение и ранжирование личных ценностей'),
+            React.createElement('li', null, React.createElement('strong', null, 'Миссия:'), ' Формулирование личной миссии и видения'),
+            React.createElement('li', null, React.createElement('strong', null, 'Долгосрочные цели:'), ' Постановка и планирование жизненных целей'),
+            React.createElement('li', null, React.createElement('strong', null, 'Видение будущего:'), ' Визуализация желаемого будущего')
+          )
+        ),
+      },
+      {
+        title: 'Ежедневник привычек',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Система формирования и отслеживания здоровых привычек с наградами за соблюдение.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Трекинг привычек:'), ' Ежедневное отслеживание выполнения привычек'),
+            React.createElement('li', null, React.createElement('strong', null, 'Стрики:'), ' Отслеживание последовательных дней выполнения'),
+            React.createElement('li', null, React.createElement('strong', null, 'Награды:'), ' Система наград за соблюдение привычек'),
+            React.createElement('li', null, React.createElement('strong', null, 'Рекомендации:'), ' Персонализированные советы по формированию привычек'),
+            React.createElement('li', null, React.createElement('strong', null, 'Группы привычек:'), ' Объединение связанных привычек для комплексного подхода')
+          )
+        ),
       },
     ],
   },
@@ -749,6 +969,416 @@ export const whitepaperContent: Record<string, PopupContent> = {
             React.createElement('li', null, React.createElement('strong', null, 'Медицина:'), ' Планы профилактики, скрининги, управление хроническими заболеваниями'),
             React.createElement('li', null, React.createElement('strong', null, 'Психология:'), ' Практики для улучшения ментального здоровья и управления стрессом'),
             React.createElement('li', null, React.createElement('strong', null, 'Отношения:'), ' Рекомендации по улучшению социальных связей')
+          )
+        ),
+      },
+    ],
+  },
+
+  'goal-tracking': {
+    id: 'goal-tracking',
+    title: 'Отслеживание целей и прогресса',
+    subtitle: 'Система управления целями с метриками и критериями успеха',
+    description: `Платформа помогает ставить, отслеживать и достигать целей в области здоровья, разбивая большие цели на управляемые задачи с четкими метриками и критериями успеха. Система мотивирует и поддерживает на пути к достижению целей.`,
+    sections: [
+      {
+        title: 'Типы целей',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Платформа поддерживает различные типы целей во всех аспектах здоровья.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Физические цели:'), ' Похудение, набор массы, улучшение выносливости, сила'),
+            React.createElement('li', null, React.createElement('strong', null, 'Медицинские цели:'), ' Снижение давления, нормализация сахара, улучшение анализов'),
+            React.createElement('li', null, React.createElement('strong', null, 'Питание:'), ' Изменение рациона, восполнение дефицитов, соблюдение диеты'),
+            React.createElement('li', null, React.createElement('strong', null, 'Сон:'), ' Улучшение качества сна, нормализация режима'),
+            React.createElement('li', null, React.createElement('strong', null, 'Ментальное здоровье:'), ' Снижение стресса, улучшение настроения, управление тревогой'),
+            React.createElement('li', null, React.createElement('strong', null, 'Привычки:'), ' Формирование здоровых привычек, отказ от вредных')
+          )
+        ),
+      },
+      {
+        title: 'SMART-цели',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Система помогает формулировать цели по методологии SMART (Specific, Measurable, Achievable, Relevant, Time-bound).`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Конкретность:'), ' Четкое определение того, что вы хотите достичь'),
+            React.createElement('li', null, React.createElement('strong', null, 'Измеримость:'), ' Метрики для отслеживания прогресса'),
+            React.createElement('li', null, React.createElement('strong', null, 'Достижимость:'), ' Реалистичные цели с учетом ваших возможностей'),
+            React.createElement('li', null, React.createElement('strong', null, 'Релевантность:'), ' Цели, важные для вашего здоровья и благополучия'),
+            React.createElement('li', null, React.createElement('strong', null, 'Временные рамки:'), ' Четкие дедлайны для достижения целей')
+          )
+        ),
+      },
+      {
+        title: 'Разбиение на задачи',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Большие цели автоматически разбиваются на небольшие управляемые задачи с промежуточными вехами.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Микро-цели:'), ' Ежедневные и еженедельные задачи для достижения цели'),
+            React.createElement('li', null, React.createElement('strong', null, 'Вехи:'), ' Промежуточные этапы с наградами за достижение'),
+            React.createElement('li', null, React.createElement('strong', null, 'Чеклисты:'), ' Списки действий для выполнения задач'),
+            React.createElement('li', null, React.createElement('strong', null, 'Напоминания:'), ' Уведомления о необходимости выполнить задачи'),
+            React.createElement('li', null, React.createElement('strong', null, 'Прогресс-бары:'), ' Визуализация прогресса к цели')
+          )
+        ),
+      },
+      {
+        title: 'Мотивация и награды',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Система мотивирует через геймификацию и социальные элементы.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Бейджи и достижения:'), ' Награды за выполнение целей и задач'),
+            React.createElement('li', null, React.createElement('strong', null, 'Токены:'), ' Внутренняя валюта за достижения, которую можно потратить на услуги'),
+            React.createElement('li', null, React.createElement('strong', null, 'Стрики:'), ' Отслеживание последовательных дней выполнения'),
+            React.createElement('li', null, React.createElement('strong', null, 'Социальная поддержка:'), ' Возможность делиться достижениями и получать поддержку'),
+            React.createElement('li', null, React.createElement('strong', null, 'Лидерборды:'), ' Соревновательные элементы для мотивации')
+          )
+        ),
+      },
+    ],
+  },
+
+  'specialist-search': {
+    id: 'specialist-search',
+    title: 'Персональный поиск специалистов',
+    subtitle: 'Умная система поиска врачей, тренеров и специалистов',
+    description: `Умная система поиска врачей, тренеров, диетологов, психологов и других специалистов с фильтрами по методикам, специализации, рейтингам и отзывам. Система учитывает ваши потребности и предпочтения для подбора оптимального специалиста.`,
+    sections: [
+      {
+        title: 'Типы специалистов',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Платформа объединяет широкую сеть специалистов в различных областях здоровья.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Врачи:'), ' Терапевты, кардиологи, эндокринологи, неврологи и другие специалисты'),
+            React.createElement('li', null, React.createElement('strong', null, 'Психологи:'), ' Различные направления психологии (CBT, гештальт, психоанализ)'),
+            React.createElement('li', null, React.createElement('strong', null, 'Тренеры:'), ' Фитнес-тренеры, персональные тренеры, инструкторы'),
+            React.createElement('li', null, React.createElement('strong', null, 'Нутрициологи:'), ' Диетологи, нутрициологи, специалисты по питанию'),
+            React.createElement('li', null, React.createElement('strong', null, 'Wellness-специалисты:'), ' Массажисты, остеопаты, физиотерапевты')
+          )
+        ),
+      },
+      {
+        title: 'Умные фильтры',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Мощная система фильтрации для точного подбора специалиста под ваши потребности.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Специализация:'), ' Фильтр по области специализации и методикам'),
+            React.createElement('li', null, React.createElement('strong', null, 'Локация:'), ' Поиск по местоположению (онлайн/офлайн)'),
+            React.createElement('li', null, React.createElement('strong', null, 'Рейтинг:'), ' Фильтр по рейтингу и количеству отзывов'),
+            React.createElement('li', null, React.createElement('strong', null, 'Цена:'), ' Диапазон цен и форматы работы'),
+            React.createElement('li', null, React.createElement('strong', null, 'Доступность:'), ' Расписание и доступные слоты'),
+            React.createElement('li', null, React.createElement('strong', null, 'Языки:'), ' Языки общения специалиста')
+          )
+        ),
+      },
+      {
+        title: 'Профили специалистов',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Детальные профили специалистов с полной информацией для принятия решения.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Образование:'), ' Дипломы, сертификаты, дополнительное образование'),
+            React.createElement('li', null, React.createElement('strong', null, 'Опыт:'), ' Годы практики, количество клиентов, специализация'),
+            React.createElement('li', null, React.createElement('strong', null, 'Методики:'), ' Используемые подходы и техники'),
+            React.createElement('li', null, React.createElement('strong', null, 'Отзывы:'), ' Реальные отзывы от пациентов и клиентов'),
+            React.createElement('li', null, React.createElement('strong', null, 'Портфолио:'), ' Примеры работ и результатов')
+          )
+        ),
+      },
+      {
+        title: 'AI-рекомендации',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Искусственный интеллект анализирует ваши потребности и рекомендует наиболее подходящих специалистов.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Анализ потребностей:'), ' Определение ваших потребностей на основе данных профиля'),
+            React.createElement('li', null, React.createElement('strong', null, 'Персонализация:'), ' Учет ваших предпочтений и истории взаимодействий'),
+            React.createElement('li', null, React.createElement('strong', null, 'Совместимость:'), ' Оценка совместимости со специалистом'),
+            React.createElement('li', null, React.createElement('strong', null, 'Прогноз эффективности:'), ' Прогнозирование результатов работы со специалистом')
+          )
+        ),
+      },
+    ],
+  },
+
+  'subscription-services': {
+    id: 'subscription-services',
+    title: 'Система подписок на услуги',
+    subtitle: 'Персонализированные программы подписки на оздоровительные услуги',
+    description: `Персонализированные программы подписки на оздоровительные услуги: тренировки, массажи, физиопроцедуры, консультации. Система предлагает гибкие планы подписки с возможностью персонализации под ваши потребности и бюджет.`,
+    sections: [
+      {
+        title: 'Типы подписок',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Различные форматы подписок для различных потребностей и бюджетов.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Тренировки:'), ' Онлайн и офлайн тренировки, персональные программы'),
+            React.createElement('li', null, React.createElement('strong', null, 'Массажи:'), ' Различные виды массажа с гибким расписанием'),
+            React.createElement('li', null, React.createElement('strong', null, 'Физиопроцедуры:'), ' Физиотерапия, остеопатия, мануальная терапия'),
+            React.createElement('li', null, React.createElement('strong', null, 'Консультации:'), ' Регулярные консультации со специалистами'),
+            React.createElement('li', null, React.createElement('strong', null, 'Комплексные программы:'), ' Комбинации различных услуг')
+          )
+        ),
+      },
+      {
+        title: 'Персонализация',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Подписки адаптируются под ваши потребности, цели и прогресс.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'AI-подбор:'), ' Автоматический подбор оптимальных услуг на основе ваших данных'),
+            React.createElement('li', null, React.createElement('strong', null, 'Адаптация:'), ' Изменение программы подписки на основе прогресса'),
+            React.createElement('li', null, React.createElement('strong', null, 'Гибкость:'), ' Возможность изменения частоты и типа услуг'),
+            React.createElement('li', null, React.createElement('strong', null, 'Приоритизация:'), ' Фокус на наиболее важных для вас услугах')
+          )
+        ),
+      },
+      {
+        title: 'Управление подпиской',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Удобное управление подпиской с полным контролем над услугами и расписанием.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Календарь:'), ' Управление расписанием сессий и процедур'),
+            React.createElement('li', null, React.createElement('strong', null, 'Отмена и перенос:'), ' Гибкая система отмены и переноса'),
+            React.createElement('li', null, React.createElement('strong', null, 'История:'), ' Полная история использованных услуг'),
+            React.createElement('li', null, React.createElement('strong', null, 'Оплата:'), ' Прозрачная система оплаты с различными методами')
+          )
+        ),
+      },
+    ],
+  },
+
+  'partnerships': {
+    id: 'partnerships',
+    title: 'Коллаборации и партнёрства',
+    subtitle: 'Интеграция с сетью фитнес-клубов, клиник и wellness-центров',
+    description: `Интеграция с широкой сетью фитнес-клубов, клиник, wellness-центров и других партнёров. Пользователи получают эксклюзивные скидки, бонусы и привилегии, а партнёры получают доступ к целевой аудитории.`,
+    sections: [
+      {
+        title: 'Типы партнёрств',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Разнообразная сеть партнёров во всех сферах здоровья и wellness.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Фитнес-клубы:'), ' Скидки на абонементы, персональные тренировки'),
+            React.createElement('li', null, React.createElement('strong', null, 'Клиники:'), ' Приоритетная запись, скидки на услуги'),
+            React.createElement('li', null, React.createElement('strong', null, 'Wellness-центры:'), ' Спа, массажи, релаксация'),
+            React.createElement('li', null, React.createElement('strong', null, 'Лаборатории:'), ' Скидки на анализы, приоритетная обработка'),
+            React.createElement('li', null, React.createElement('strong', null, 'Аптеки:'), ' Скидки на лекарства и БАДы'),
+            React.createElement('li', null, React.createElement('strong', null, 'Магазины здорового питания:'), ' Скидки на продукты и добавки')
+          )
+        ),
+      },
+      {
+        title: 'Преимущества для пользователей',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Эксклюзивные преимущества и привилегии для пользователей платформы.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Скидки:'), ' Эксклюзивные скидки до 20-30% на услуги партнёров'),
+            React.createElement('li', null, React.createElement('strong', null, 'Бонусы:'), ' Дополнительные бонусы и привилегии'),
+            React.createElement('li', null, React.createElement('strong', null, 'Приоритет:'), ' Приоритетная запись и обслуживание'),
+            React.createElement('li', null, React.createElement('strong', null, 'Токены:'), ' Возможность оплаты токенами платформы'),
+            React.createElement('li', null, React.createElement('strong', null, 'Персонализация:'), ' Рекомендации партнёров на основе ваших потребностей')
+          )
+        ),
+      },
+      {
+        title: 'Преимущества для партнёров',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Партнёры получают доступ к целевой аудитории и инструментам для роста бизнеса.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Целевая аудитория:'), ' Доступ к пользователям с конкретными потребностями'),
+            React.createElement('li', null, React.createElement('strong', null, 'Маркетинг:'), ' Продвижение в приложении и рекомендации AI'),
+            React.createElement('li', null, React.createElement('strong', null, 'Аналитика:'), ' Данные о предпочтениях и поведении клиентов'),
+            React.createElement('li', null, React.createElement('strong', null, 'Управление:'), ' Инструменты для управления бронированиями и клиентами')
+          )
+        ),
+      },
+    ],
+  },
+
+  'device-integration': {
+    id: 'device-integration',
+    title: 'Интеграция с гаджетами',
+    subtitle: 'Синхронизация с умными устройствами для сбора объективных данных',
+    description: `Синхронизация с умными браслетами, часами, трекерами сна и медицинскими девайсами для автоматического сбора объективных данных о здоровье. Все данные автоматически интегрируются в единый биопрофиль.`,
+    sections: [
+      {
+        title: 'Поддерживаемые устройства',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Широкая поддержка всех основных типов устройств для отслеживания здоровья.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Умные часы:'), ' Apple Watch, Garmin, Samsung Galaxy Watch, Polar, Fitbit'),
+            React.createElement('li', null, React.createElement('strong', null, 'Фитнес-трекеры:'), ' Fitbit, Xiaomi Mi Band, Huawei Band, Honor Band'),
+            React.createElement('li', null, React.createElement('strong', null, 'Кольца:'), ' Oura Ring, Motiv Ring, Circular'),
+            React.createElement('li', null, React.createElement('strong', null, 'Трекеры сна:'), ' Sleep Cycle, Withings Sleep, Tempur'),
+            React.createElement('li', null, React.createElement('strong', null, 'Медицинские устройства:'), ' Глюкометры, тонометры, весы, термометры'),
+            React.createElement('li', null, React.createElement('strong', null, 'Специализированные:'), ' Whoop, Polar H10, Garmin HRM')
+          )
+        ),
+      },
+      {
+        title: 'Типы данных',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Автоматический сбор широкого спектра данных о здоровье.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Активность:'), ' Шаги, расстояние, калории, активные минуты'),
+            React.createElement('li', null, React.createElement('strong', null, 'Сердце:'), ' Пульс, HRV, пульсовые зоны, ЭКГ'),
+            React.createElement('li', null, React.createElement('strong', null, 'Сон:'), ' Длительность, фазы, качество, циркадные ритмы'),
+            React.createElement('li', null, React.createElement('strong', null, 'Дыхание:'), ' Частота дыхания, сатурация кислорода'),
+            React.createElement('li', null, React.createElement('strong', null, 'Температура:'), ' Температура тела, кожи'),
+            React.createElement('li', null, React.createElement('strong', null, 'Вес и состав тела:'), ' Вес, процент жира, мышечная масса')
+          )
+        ),
+      },
+      {
+        title: 'Автоматическая синхронизация',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Беспроблемная автоматическая синхронизация данных в реальном времени.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'OAuth интеграция:'), ' Безопасное подключение через OAuth 2.0'),
+            React.createElement('li', null, React.createElement('strong', null, 'Реальное время:'), ' Данные обновляются автоматически при появлении'),
+            React.createElement('li', null, React.createElement('strong', null, 'История:'), ' Полная история данных с возможностью экспорта'),
+            React.createElement('li', null, React.createElement('strong', null, 'Приватность:'), ' Полный контроль пользователя над данными')
+          )
+        ),
+      },
+    ],
+  },
+
+  'knowledge-library': {
+    id: 'knowledge-library',
+    title: 'Библиотека знаний',
+    subtitle: 'Обширная библиотека статей, исследований и рекомендаций экспертов',
+    description: `Обширный раздел с актуальной библиотекой статей, исследований, рекомендаций экспертов и образовательных материалов по всем аспектам здоровья. Контент регулярно обновляется и проверяется специалистами.`,
+    sections: [
+      {
+        title: 'Типы контента',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Разнообразный образовательный контент для всех уровней знаний.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Статьи:'), ' Научно-популярные статьи по различным темам здоровья'),
+            React.createElement('li', null, React.createElement('strong', null, 'Исследования:'), ' Обзоры актуальных научных исследований'),
+            React.createElement('li', null, React.createElement('strong', null, 'Рекомендации экспертов:'), ' Советы от ведущих специалистов'),
+            React.createElement('li', null, React.createElement('strong', null, 'Видео:'), ' Образовательные видео и вебинары'),
+            React.createElement('li', null, React.createElement('strong', null, 'Инфографика:'), ' Визуализация сложных концепций'),
+            React.createElement('li', null, React.createElement('strong', null, 'Курсы:'), ' Структурированные образовательные курсы')
+          )
+        ),
+      },
+      {
+        title: 'Темы и категории',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Контент охватывает все аспекты здоровья и wellness.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Медицина:'), ' Заболевания, профилактика, лечение, анализы'),
+            React.createElement('li', null, React.createElement('strong', null, 'Питание:'), ' Диеты, нутриенты, рецепты, пищевые добавки'),
+            React.createElement('li', null, React.createElement('strong', null, 'Фитнес:'), ' Тренировки, упражнения, восстановление'),
+            React.createElement('li', null, React.createElement('strong', null, 'Психология:'), ' Ментальное здоровье, стресс, отношения'),
+            React.createElement('li', null, React.createElement('strong', null, 'Сон:'), ' Гигиена сна, циркадные ритмы, расстройства сна'),
+            React.createElement('li', null, React.createElement('strong', null, 'Долголетие:'), ' Антиэйдж, биохак, оптимизация здоровья')
+          )
+        ),
+      },
+      {
+        title: 'Персонализация',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `AI рекомендует контент на основе ваших интересов, целей и текущих потребностей.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Рекомендации:'), ' Персонализированные рекомендации статей и материалов'),
+            React.createElement('li', null, React.createElement('strong', null, 'Актуальность:'), ' Контент, релевантный вашим текущим целям'),
+            React.createElement('li', null, React.createElement('strong', null, 'Уровень сложности:'), ' Материалы под ваш уровень знаний'),
+            React.createElement('li', null, React.createElement('strong', null, 'История:'), ' Отслеживание прочитанного и сохранение избранного')
+          )
+        ),
+      },
+    ],
+  },
+
+  'ai-personalization': {
+    id: 'ai-personalization',
+    title: 'ИИ-система и персонализация',
+    subtitle: 'Искусственный интеллект для глубокого анализа и персонализации',
+    description: `Искусственный интеллект анализирует медицинскую историю, генетические особенности, психологический профиль и все данные о здоровье для создания полностью персонализированного опыта. AI обеспечивает точность анализа на уровне 95% и постоянно обучается на новых данных.`,
+    sections: [
+      {
+        title: 'Анализ данных',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Глубокий анализ всех данных о здоровье для выявления паттернов и корреляций.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Медицинская история:'), ' Анализ всех медицинских данных, анализов, диагнозов'),
+            React.createElement('li', null, React.createElement('strong', null, 'Генетика:'), ' Учет генетических предрасположенностей и особенностей'),
+            React.createElement('li', null, React.createElement('strong', null, 'Образ жизни:'), ' Анализ активности, питания, сна, стресса'),
+            React.createElement('li', null, React.createElement('strong', null, 'Психологический профиль:'), ' Учет ментального здоровья и эмоциональных паттернов'),
+            React.createElement('li', null, React.createElement('strong', null, 'Корреляции:'), ' Выявление связей между различными факторами')
+          )
+        ),
+      },
+      {
+        title: 'Персонализация',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Полностью персонализированный опыт на основе ваших уникальных данных.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Планы:'), ' Индивидуальные планы питания, тренировок, восстановления'),
+            React.createElement('li', null, React.createElement('strong', null, 'Рекомендации:'), ' Персонализированные рекомендации по всем аспектам'),
+            React.createElement('li', null, React.createElement('strong', null, 'Контент:'), ' Подбор релевантного контента и материалов'),
+            React.createElement('li', null, React.createElement('strong', null, 'Специалисты:'), ' Рекомендации наиболее подходящих специалистов'),
+            React.createElement('li', null, React.createElement('strong', null, 'Адаптация:'), ' Постоянная адаптация на основе вашего прогресса')
+          )
+        ),
+      },
+      {
+        title: 'Предиктивная аналитика',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Прогнозирование рисков и трендов для раннего вмешательства.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Риски заболеваний:'), ' Прогнозирование вероятности развития заболеваний'),
+            React.createElement('li', null, React.createElement('strong', null, 'Выгорание:'), ' Предсказание выгорания и депрессии'),
+            React.createElement('li', null, React.createElement('strong', null, 'Травмы:'), ' Выявление рисков травм и перетренированности'),
+            React.createElement('li', null, React.createElement('strong', null, 'Тренды:'), ' Прогнозирование изменений в показателях здоровья')
+          )
+        ),
+      },
+    ],
+  },
+
+  'tokenomics': {
+    id: 'tokenomics',
+    title: 'Токеномика',
+    subtitle: 'Внутренняя виртуальная валюта для упрощения расчётов в экосистеме',
+    description: `Внутренняя виртуальная валюта — токены EthosLife (ETL), которые упрощают расчёты внутри экосистемы. Токены можно зарабатывать за активность и достижения, а также использовать для оплаты услуг партнёров и подписок.`,
+    sections: [
+      {
+        title: 'Заработок токенов',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Множество способов заработать токены за активность и достижения.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Ежедневная активность:'), ' Токены за ежедневное использование приложения'),
+            React.createElement('li', null, React.createElement('strong', null, 'Достижения:'), ' Награды за выполнение целей и задач'),
+            React.createElement('li', null, React.createElement('strong', null, 'Стрики:'), ' Бонусы за последовательные дни активности'),
+            React.createElement('li', null, React.createElement('strong', null, 'Социальная активность:'), ' Токены за участие в сообществах и челленджах'),
+            React.createElement('li', null, React.createElement('strong', null, 'Реферальная программа:'), ' Бонусы за приглашение друзей'),
+            React.createElement('li', null, React.createElement('strong', null, 'Контент:'), ' Токены за создание и оценку контента')
+          )
+        ),
+      },
+      {
+        title: 'Использование токенов',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Токены можно использовать для оплаты различных услуг в экосистеме.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Услуги партнёров:'), ' Оплата услуг фитнес-клубов, клиник, wellness-центров'),
+            React.createElement('li', null, React.createElement('strong', null, 'Подписки:'), ' Оплата подписок на услуги и контент'),
+            React.createElement('li', null, React.createElement('strong', null, 'Консультации:'), ' Оплата консультаций со специалистами'),
+            React.createElement('li', null, React.createElement('strong', null, 'Премиум функции:'), ' Доступ к расширенным функциям платформы'),
+            React.createElement('li', null, React.createElement('strong', null, 'Товары:'), ' Покупка товаров в партнёрских магазинах')
+          )
+        ),
+      },
+      {
+        title: 'Экономика токенов',
+        content: React.createElement('div', { className: 'space-y-3' },
+          React.createElement('p', null, `Сбалансированная экономика токенов для устойчивого развития экосистемы.`),
+          React.createElement('ul', { className: 'space-y-2 list-disc list-inside ml-4' },
+            React.createElement('li', null, React.createElement('strong', null, 'Ограниченная эмиссия:'), ' Контролируемая эмиссия для поддержания ценности'),
+            React.createElement('li', null, React.createElement('strong', null, 'Сжигание:'), ' Часть токенов сжигается при использовании'),
+            React.createElement('li', null, React.createElement('strong', null, 'Стейкинг:'), ' Возможность стейкинга для дополнительных наград'),
+            React.createElement('li', null, React.createElement('strong', null, 'Дефляционная модель:'), ' Модель, способствующая росту ценности токена')
           )
         ),
       },

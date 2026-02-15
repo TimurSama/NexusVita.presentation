@@ -89,52 +89,62 @@ export default function Presentation() {
     {
       title: 'Единый биопрофиль',
       description: 'В центре — единый биопрофиль пользователя с основными метриками (возраст, рост, вес, данные анализов, трекер шагов и т.д.)',
-      icon: 'chart' as const
+      icon: 'chart' as const,
+      popupId: 'unified-bio-profile'
     },
     {
       title: 'Гибкий анализ и планирование',
       description: 'Система генерирует оптимальный персональный план оздоровления на основе ваших данных, целей и ограничений.',
-      icon: 'brain' as const
+      icon: 'brain' as const,
+      popupId: 'flexible-analysis'
     },
     {
       title: 'Отслеживание целей и прогресса',
       description: 'Платформа помогает разбивать большие цели на небольшие задачи с метриками и критериями успеха.',
-      icon: 'trending' as const
+      icon: 'trending' as const,
+      popupId: 'goal-tracking'
     },
     {
       title: 'Персональный поиск специалистов',
       description: 'Умная система поиска врачей, тренеров, диетологов и психологов с фильтрами по методикам и типу психологии.',
-      icon: 'users' as const
+      icon: 'users' as const,
+      popupId: 'specialist-search'
     },
     {
       title: 'Система подписок на услуги',
       description: 'Персонализированные программы подписки на оздоровительные услуги: тренировки, массажи, физиопроцедуры, консультации.',
-      icon: 'heart' as const
+      icon: 'heart' as const,
+      popupId: 'subscription-services'
     },
     {
       title: 'Коллаборации и партнёрства',
       description: 'Интеграция с сетью фитнес-клубов, клиник и wellness-центров. Скидки и бонусы для пользователей.',
-      icon: 'network' as const
+      icon: 'network' as const,
+      popupId: 'partnerships'
     },
     {
       title: 'Интеграция с гаджетами',
       description: 'Синхронизация с умными браслетами, часами, трекерами сна и медицинскими девайсами для сбора объективных данных.',
-      icon: 'monitor' as const
+      icon: 'monitor' as const,
+      popupId: 'device-integration'
     },
     {
       title: 'Библиотека знаний',
       description: 'Обширный раздел с актуальной библиотекой статей, исследований и рекомендаций экспертов.',
-      icon: 'ai' as const
+      icon: 'ai' as const,
+      popupId: 'knowledge-library'
     },
     {
       title: 'ИИ-система и персонализация',
       description: 'Искусственный интеллект анализирует медицинскую историю, генетические особенности и психологический профиль.',
-      icon: 'brain' as const
+      icon: 'brain' as const,
+      popupId: 'ai-personalization'
     },
     {
       title: 'Токеномика',
       description: 'Внутренняя виртуальная валюта — токены, которые упрощают расчёты внутри экосистемы.',
-      icon: 'chart' as const
+      icon: 'chart' as const,
+      popupId: 'tokenomics'
     },
   ];
 
@@ -338,17 +348,18 @@ export default function Presentation() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {howItWorks.map((feature, idx) => (
-              <motion.div
+              <motion.button
                 key={idx}
                 variants={itemVariants}
-                className="premium-card p-6"
+                className="premium-card p-6 text-left hover:scale-105 transition-transform cursor-pointer"
+                onClick={() => feature.popupId && setOpenPopup(feature.popupId)}
               >
                 <div className="p-3 bg-primary/10 rounded-xl w-fit mb-4">
                   <SketchIcon icon={feature.icon} size={24} className="text-primary" />
                 </div>
                 <h3 className="text-lg font-bold text-foreground mb-2">{feature.title}</h3>
                 <p className="text-foreground/70 text-sm leading-relaxed">{feature.description}</p>
-              </motion.div>
+              </motion.button>
             ))}
           </div>
         </motion.section>
