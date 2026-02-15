@@ -14,28 +14,29 @@ export default function Documents() {
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
 
-  // For now, using mock data - will be replaced with API call
   useEffect(() => {
-    // TODO: Replace with actual API call
-    // const fetchDocuments = async () => {
-    //   const response = await fetch(`/api/users/${userId}/documents`);
-    //   const data = await response.json();
-    //   setDocuments(data.documents);
-    //   setLoading(false);
-    // };
-    // fetchDocuments();
+    const fetchDocuments = async () => {
+      try {
+        // Get user ID from auth context or localStorage
+        const userId = localStorage.getItem('userId') || '1';
+        const response = await fetch(`/api/users/${userId}/documents`);
+        
+        if (response.ok) {
+          const data = await response.json();
+          setDocuments(data.documents || []);
+        } else {
+          console.error('Failed to fetch documents');
+          setDocuments([]);
+        }
+      } catch (error) {
+        console.error('Error fetching documents:', error);
+        setDocuments([]);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    // Mock data for Maria
-    setDocuments([
-      {
-        id: 1,
-        title: 'Комплексное исследование проблемы и план терапии при боли в спине',
-        document_type: 'medical',
-        created_at: new Date().toISOString(),
-        content: 'Документ загружен...',
-      },
-    ]);
-    setLoading(false);
+    fetchDocuments();
   }, []);
 
   const filteredDocuments = documents.filter(doc =>

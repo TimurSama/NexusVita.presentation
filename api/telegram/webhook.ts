@@ -25,7 +25,12 @@ if (TELEGRAM_BOT_TOKEN) {
   // Start command
   bot.start(async (ctx: Context) => {
     const telegramId = ctx.from?.id.toString();
-    if (!telegramId) return;
+    console.log('Start command received from:', telegramId);
+    
+    if (!telegramId) {
+      console.error('No telegram ID in context');
+      return;
+    }
 
     try {
       // Check if user exists
@@ -181,8 +186,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    console.log('Processing update:', JSON.stringify(req.body, null, 2));
-    await bot.handleUpdate(req.body);
+    const update = req.body;
+    console.log('Processing update:', {
+      update_id: update?.update_id,
+      message: update?.message ? {
+        text: update.message.text,
+        from: update.message.from?.id,
+        chat: update.message.chat?.id,
+      } : null,
+    });
+    
+    await bot.handleUpdate(update);
     console.log('Update processed successfully');
     res.status(200).json({ ok: true });
   } catch (error) {

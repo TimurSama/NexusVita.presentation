@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { CalendarDays, Clock, CheckCircle2, Circle, Info, BookOpen, Heart } from 'lucide-react';
+import { CalendarDays, Clock, CheckCircle2, Circle, Info, BookOpen, Heart, FileText } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
@@ -8,40 +8,71 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { mariaExerciseDescriptions, mariaMassageTechniques, mariaRecommendations } from '@/data/maria-dashboard-content';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { useLocation } from 'wouter';
 
 export default function MariaDashboard() {
+  const [, setLocation] = useLocation();
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [plans, setPlans] = useState<any[]>([]);
   const [selectedExercise, setSelectedExercise] = useState<string | null>(null);
   const [selectedMassage, setSelectedMassage] = useState<string | null>(null);
+  const [selectedDocument, setSelectedDocument] = useState<any | null>(null);
+  const [documents, setDocuments] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch plans for selected date
-    const fetchPlans = async () => {
+    // Fetch plans and documents
+    const fetchData = async () => {
       try {
-        // TODO: Replace with actual API call
-        // const response = await fetch(`/api/users/1/plans?date=${selectedDate.toISOString().split('T')[0]}`);
-        // const data = await response.json();
-        // setPlans(data.plans);
+        // Get user ID from auth context or localStorage
+        const userId = localStorage.getItem('userId') || '1';
+        
+        // Fetch plans
+        const plansResponse = await fetch(`/api/users/${userId}/plans?date=${selectedDate.toISOString().split('T')[0]}`);
+        if (plansResponse.ok) {
+          const plansData = await plansResponse.json();
+          if (plansData.plans && plansData.plans.length > 0) {
+            setPlans(plansData.plans);
+          } else {
+            // Fallback to mock data if no plans
+            const today = new Date();
+            const dayOfWeek = today.getDay();
+            const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+            const dayName = dayNames[dayOfWeek];
+            const mockPlans = generatePlansForDay(dayName);
+            setPlans(mockPlans);
+          }
+        } else {
+          // Fallback to mock data
+          const today = new Date();
+          const dayOfWeek = today.getDay();
+          const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+          const dayName = dayNames[dayOfWeek];
+          const mockPlans = generatePlansForDay(dayName);
+          setPlans(mockPlans);
+        }
 
-        // Mock data for now
+        // Fetch documents
+        const docsResponse = await fetch(`/api/users/${userId}/documents`);
+        if (docsResponse.ok) {
+          const docsData = await docsResponse.json();
+          setDocuments(docsData.documents || []);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        // Fallback to mock data
         const today = new Date();
         const dayOfWeek = today.getDay();
         const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
         const dayName = dayNames[dayOfWeek];
-
-        // Generate plans based on day of week
         const mockPlans = generatePlansForDay(dayName);
         setPlans(mockPlans);
-      } catch (error) {
-        console.error('Error fetching plans:', error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchPlans();
+    fetchData();
   }, [selectedDate]);
 
   const generatePlansForDay = (dayName: string) => {
@@ -119,6 +150,36 @@ export default function MariaDashboard() {
             Персональный план восстановления и укрепления спины
           </p>
         </motion.div>
+
+        {/* Document Card */}
+        {documents.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-6"
+          >
+            <Card className="engraved-card border-primary/20 hover:border-primary/40 transition-colors">
+              <CardHeader>
+                <CardTitle className="engraved-text flex items-center gap-2">
+                  <FileText className="w-5 h-5 text-primary" />
+                  Документ исследования
+                </CardTitle>
+                <CardDescription>
+                  Комплексное исследование проблемы и план терапии при боли в спине
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Button
+                  className="w-full engraved-button"
+                  onClick={() => setSelectedDocument(documents[0])}
+                >
+                  <BookOpen className="w-4 h-4 mr-2" />
+                  Открыть документ
+                </Button>
+              </CardContent>
+            </Card>
+          </motion.div>
+        )}
 
         <Tabs defaultValue="plan" className="space-y-6">
           <TabsList className="engraved-tabs">
@@ -356,6 +417,37 @@ export default function MariaDashboard() {
                     </div>
                   </div>
                 </ScrollArea>
+              </>
+            )}
+          </DialogContent>
+        </Dialog>
+
+        {/* Document Viewer Dialog */}
+        <Dialog open={selectedDocument !== null} onOpenChange={(open) => !open && setSelectedDocument(null)}>
+          <DialogContent className="max-w-4xl max-h-[90vh]">
+            {selectedDocument && (
+              <>
+                <DialogHeader>
+                  <DialogTitle className="engraved-text">{selectedDocument.title}</DialogTitle>
+                  <DialogDescription>
+                    {selectedDocument.created_at && new Date(selectedDocument.created_at).toLocaleDateString('ru-RU')}
+                  </DialogDescription>
+                </DialogHeader>
+                <ScrollArea className="max-h-[70vh] pr-4">
+                  <div className="prose dark:prose-invert max-w-none">
+                    <pre className="whitespace-pre-wrap text-sm text-foreground/80 font-sans leading-relaxed">
+                      {selectedDocument.content}
+                    </pre>
+                  </div>
+                </ScrollArea>
+                <div className="flex justify-end gap-2 mt-4">
+                  <Button
+                    variant="outline"
+                    onClick={() => setSelectedDocument(null)}
+                  >
+                    Закрыть
+                  </Button>
+                </div>
               </>
             )}
           </DialogContent>
