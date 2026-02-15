@@ -1,14 +1,17 @@
 import { Telegraf, Context } from 'telegraf';
 import { userDb, profileDb, dailyPlanDb, healthMetricsDb, goalsDb, telegramBotSettingsDb, telegramBotLogsDb } from './database';
 
-if (!process.env.TELEGRAM_BOT_TOKEN) {
+// Telegram Bot Token (can be overridden by env variable)
+const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '8261481826:AAH_M6WXWkRwoskYmCpbLupSi7o_bB8VsJQ';
+
+if (!TELEGRAM_BOT_TOKEN) {
   console.warn('TELEGRAM_BOT_TOKEN not set. Telegram bot will not be initialized.');
 }
 
 let bot: Telegraf | null = null;
 
-if (process.env.TELEGRAM_BOT_TOKEN) {
-  bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
+if (TELEGRAM_BOT_TOKEN) {
+  bot = new Telegraf(TELEGRAM_BOT_TOKEN);
 
   // Start command
   bot.start(async (ctx: Context) => {
@@ -422,7 +425,7 @@ if (process.env.TELEGRAM_BOT_TOKEN) {
 }
 
 export function startTelegramBot() {
-  if (bot && process.env.TELEGRAM_BOT_TOKEN) {
+  if (bot && TELEGRAM_BOT_TOKEN) {
     bot.launch();
     console.log('Telegram bot started');
     

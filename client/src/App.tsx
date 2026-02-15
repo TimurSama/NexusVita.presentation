@@ -39,9 +39,14 @@ import Messages from "./pages/social/Messages";
 import Specialists from "./pages/social/Specialists";
 
 function Router() {
+  // Check if we're in Telegram Web App and show auth page
+  const isTelegram = typeof window !== 'undefined' && window.location.search.includes('tgWebAppStartParam') || 
+                     (typeof window !== 'undefined' && window.Telegram?.WebApp);
+  
   return (
     <Switch>
-      <Route path={"/"} component={Home} />
+      {isTelegram && <Route path={"/"} component={TelegramAuth} />}
+      {!isTelegram && <Route path={"/"} component={Home} />}
       <Route path={"/landing"} component={Landing} />
       <Route path={"/presentation"} component={Presentation} />
       <Route path={"/whitepaper"} component={Whitepaper} />
