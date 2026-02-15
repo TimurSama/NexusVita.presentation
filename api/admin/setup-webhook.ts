@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { Telegraf } from 'telegraf';
 
-const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '8261481826:AAH_M6WXWkRwoskYmCpbLupSi7o_bB8VsJQ';
+const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const WEBHOOK_URL = process.env.VERCEL_URL 
   ? `https://${process.env.VERCEL_URL}/api/telegram/webhook`
   : 'https://etholife.vercel.app/api/telegram/webhook';
