@@ -348,33 +348,37 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       } : null,
     });
     
-    // Handle update with timeout
-    const updatePromise = bot.handleUpdate(update);
-    const timeoutPromise = new Promise((_, reject) => 
-      setTimeout(() => reject(new Error('Update handling timeout')), 25000)
-    );
-    
-    await Promise.race([updatePromise, timeoutPromise]);
-    console.log('✅ Update processed successfully');
+    // CRITICAL: Telegram requires response within 200ms
+    // Send response immediately, then process update asynchronously
     res.status(200).json({ ok: true });
+    
+    // Process update asynchronously (don't await - Telegram already got response)
+    bot.handleUpdate(update).then(() => {
+      console.log('✅ Update processed successfully');
+    }).catch((error) => {
+      console.error('❌ Error processing update:', error);
+      console.error('Error details:', {
+        message: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+      });
+      
+      // Try to send error message to user
+      if (update?.message?.from?.id && bot) {
+        bot.telegram.sendMessage(
+          update.message.from.id,
+          'Произошла ошибка при обработке вашего сообщения. Пожалуйста, попробуйте позже.'
+        ).catch((sendError) => {
+          console.error('Failed to send error message to user:', sendError);
+        });
+      }
+    });
   } catch (error) {
     console.error('❌ Webhook error:', error);
     console.error('Error type:', error?.constructor?.name);
     console.error('Error message:', error instanceof Error ? error.message : String(error));
     console.error('Error stack:', error instanceof Error ? error.stack : 'No stack');
     
-    // Try to send error response to user if possible
-    try {
-      if (req.body?.message?.from?.id && bot) {
-        await bot.telegram.sendMessage(
-          req.body.message.from.id,
-          'Произошла ошибка при обработке вашего сообщения. Пожалуйста, попробуйте позже.'
-        );
-      }
-    } catch (sendError) {
-      console.error('Failed to send error message to user:', sendError);
-    }
-    
-    res.status(500).json({ error: 'Internal server error', details: String(error) });
+    // Always return 200 to Telegram to avoid retries
+    res.status(200).json({ ok: false, error: String(error) });
   }
 }
