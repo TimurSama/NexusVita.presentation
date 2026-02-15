@@ -176,17 +176,26 @@ if (TELEGRAM_BOT_TOKEN) {
     }
   });
 
-  // Log all messages for debugging
-  bot.on('message', async (ctx: Context) => {
-    console.log('📩 Message received:', {
-      text: ctx.message?.text,
+  // Handle unknown commands
+  bot.on('text', async (ctx: Context) => {
+    const text = ctx.message?.text;
+    if (!text) return;
+    
+    console.log('📩 Text message received:', {
+      text,
       from_id: ctx.from?.id,
       chat_id: ctx.chat?.id,
     });
     
     // Handle unknown commands (only if not handled by other handlers)
-    const text = ctx.message && 'text' in ctx.message ? ctx.message.text : null;
-    if (text && text.startsWith('/') && !text.startsWith('/start') && !text.startsWith('/menu') && !text.startsWith('/help') && !text.startsWith('/today')) {
+    if (text.startsWith('/') && 
+        !text.startsWith('/start') && 
+        !text.startsWith('/menu') && 
+        !text.startsWith('/help') && 
+        !text.startsWith('/today') &&
+        !text.startsWith('/settings') &&
+        !text.startsWith('/metrics') &&
+        !text.startsWith('/goals')) {
       console.log('❓ Unknown command:', text);
       await ctx.reply(
         `Неизвестная команда. Используйте /menu для просмотра доступных команд или /help для справки.`
