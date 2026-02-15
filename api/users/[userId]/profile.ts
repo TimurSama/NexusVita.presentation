@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { userDb, profileDb, initDatabase } from '../../../server/database-adapter';
+import { userDb, profileDb, initDatabase } from '../../lib/database';
 
 // Initialize database on first import
 let dbInitialized = false;
