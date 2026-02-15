@@ -318,7 +318,11 @@ function setupBotHandlers(bot: Telegraf) {
 
 // Initialize bot on module load
 if (TELEGRAM_BOT_TOKEN) {
+  console.log('🔧 Module loaded, initializing bot...');
   initializeBot();
+  console.log('✅ Module initialization complete, bot:', !!bot);
+} else {
+  console.warn('⚠️ Module loaded but TELEGRAM_BOT_TOKEN not set');
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
