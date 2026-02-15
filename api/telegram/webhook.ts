@@ -20,17 +20,31 @@ if (!TELEGRAM_BOT_TOKEN) {
 
 let bot: Telegraf | null = null;
 
-if (TELEGRAM_BOT_TOKEN) {
+// Function to initialize bot
+function initializeBot(): Telegraf | null {
+  if (!TELEGRAM_BOT_TOKEN) {
+    console.error('❌ Cannot initialize bot - no token');
+    return null;
+  }
+
+  if (bot) {
+    return bot; // Reuse existing bot instance
+  }
+
   console.log('✅ Initializing bot with token:', TELEGRAM_BOT_TOKEN.substring(0, 10) + '...');
   try {
     bot = new Telegraf(TELEGRAM_BOT_TOKEN);
     console.log('✅ Bot initialized successfully');
+    setupBotHandlers(bot);
+    return bot;
   } catch (error) {
     console.error('❌ Failed to initialize bot:', error);
+    return null;
   }
-} else {
-  console.error('❌ Cannot initialize bot - no token');
 }
+
+// Setup bot handlers (extracted to separate function for re-initialization)
+function setupBotHandlers(bot: Telegraf) {
 
   // Start command
   bot.start(async (ctx: Context) => {
@@ -289,13 +303,30 @@ if (TELEGRAM_BOT_TOKEN) {
   // Error handling
   bot.catch((err, ctx) => {
     console.error('Telegram bot error:', err);
-    ctx.reply('Произошла ошибка. Пожалуйста, попробуйте позже.');
+    console.error('Error context:', {
+      update_id: ctx.update?.update_id,
+      message_id: ctx.message?.message_id,
+      from_id: ctx.from?.id,
+    });
+    try {
+      ctx.reply('Произошла ошибка. Пожалуйста, попробуйте позже.').catch((replyError) => {
+        console.error('Failed to send error reply:', replyError);
+      });
+    } catch (replyError) {
+      console.error('Error in catch handler:', replyError);
+    }
   });
+}
+
+// Initialize bot on module load
+if (TELEGRAM_BOT_TOKEN) {
+  initializeBot();
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Log immediately to see if webhook is called at all
-  console.log('=== WEBHOOK CALLED ===', new Date().toISOString());
+  const requestId = Math.random().toString(36).substring(7);
+  console.log(`=== WEBHOOK CALLED [${requestId}] ===`, new Date().toISOString());
   console.log('Method:', req.method);
   console.log('Bot initialized:', !!bot);
   console.log('Token set:', !!TELEGRAM_BOT_TOKEN);
@@ -308,14 +339,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Initialize database
   try {
     await ensureDatabase();
-    console.log('Database initialized');
+    console.log(`[${requestId}] Database initialized`);
   } catch (error) {
-    console.error('Database initialization error:', error);
+    console.error(`[${requestId}] Database initialization error:`, error);
     return res.status(500).json({ error: 'Database initialization failed', details: String(error) });
   }
 
+  // Ensure bot is initialized (re-initialize if needed)
   if (!bot) {
-    console.error('❌ Bot not initialized!');
+    console.log(`[${requestId}] Bot not initialized, initializing now...`);
+    bot = initializeBot();
+  }
+
+  if (!bot) {
+    console.error(`[${requestId}] ❌ Bot not initialized after attempt!`);
     console.error('Token exists:', !!TELEGRAM_BOT_TOKEN);
     return res.status(500).json({ error: 'Bot not initialized' });
   }
@@ -333,7 +370,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(400).json({ error: 'No update in body' });
     }
 
-    console.log('📨 Processing update:', {
+    console.log(`[${requestId}] 📨 Processing update:`, {
       update_id: update?.update_id,
       message: update?.message ? {
         message_id: update.message.message_id,
@@ -352,15 +389,40 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Send response immediately, then process update asynchronously
     res.status(200).json({ ok: true });
     
+    // Ensure bot is still valid before processing
+    if (!bot) {
+      console.error(`[${requestId}] ❌ Bot became null, re-initializing...`);
+      bot = initializeBot();
+      if (!bot) {
+        console.error(`[${requestId}] ❌ Failed to re-initialize bot!`);
+        return; // Already sent response, just log error
+      }
+    }
+    
     // Process update asynchronously (don't await - Telegram already got response)
+    const processStartTime = Date.now();
     bot.handleUpdate(update).then(() => {
-      console.log('✅ Update processed successfully');
+      const processTime = Date.now() - processStartTime;
+      console.log(`[${requestId}] ✅ Update processed successfully in ${processTime}ms`);
     }).catch((error) => {
-      console.error('❌ Error processing update:', error);
-      console.error('Error details:', {
+      const processTime = Date.now() - processStartTime;
+      console.error(`[${requestId}] ❌ Error processing update after ${processTime}ms:`, error);
+      console.error(`[${requestId}] Error details:`, {
         message: error instanceof Error ? error.message : String(error),
         stack: error instanceof Error ? error.stack : undefined,
+        update_id: update?.update_id,
       });
+      
+      // Try to re-initialize bot if error suggests it's broken
+      if (error instanceof Error && (
+        error.message.includes('ECONNRESET') ||
+        error.message.includes('ETIMEDOUT') ||
+        error.message.includes('socket hang up')
+      )) {
+        console.log(`[${requestId}] 🔄 Connection error detected, re-initializing bot...`);
+        bot = null; // Force re-initialization
+        bot = initializeBot();
+      }
       
       // Try to send error message to user
       if (update?.message?.from?.id && bot) {
@@ -368,7 +430,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           update.message.from.id,
           'Произошла ошибка при обработке вашего сообщения. Пожалуйста, попробуйте позже.'
         ).catch((sendError) => {
-          console.error('Failed to send error message to user:', sendError);
+          console.error(`[${requestId}] Failed to send error message to user:`, sendError);
         });
       }
     });
