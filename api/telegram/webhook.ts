@@ -45,11 +45,12 @@ function initializeBot(): Telegraf | null {
 
 // Setup bot handlers (extracted to separate function for re-initialization)
 function setupBotHandlers(bot: Telegraf) {
+  console.log('🔧 Setting up bot handlers...');
 
   // Start command
   bot.start(async (ctx: Context) => {
     const telegramId = ctx.from?.id.toString();
-    console.log('🚀 /start command received from:', telegramId);
+    console.log('🚀 /start command handler called for:', telegramId);
     console.log('Context:', {
       from: ctx.from,
       chat: ctx.chat,
@@ -311,6 +312,8 @@ function setupBotHandlers(bot: Telegraf) {
       console.error('Error in catch handler:', replyError);
     }
   });
+  
+  console.log('✅ Bot handlers setup complete');
 }
 
 // Initialize bot on module load
@@ -397,11 +400,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Process update asynchronously (don't await - Telegram already got response)
     const processStartTime = Date.now();
     console.log(`[${requestId}] 🚀 Starting async update processing...`);
+    console.log(`[${requestId}] Bot instance:`, {
+      has_handleUpdate: typeof bot.handleUpdate === 'function',
+      bot_constructor: bot.constructor.name,
+    });
     
-    bot.handleUpdate(update).then(() => {
-      const processTime = Date.now() - processStartTime;
-      console.log(`[${requestId}] ✅ Update processed successfully in ${processTime}ms`);
-    }).catch((error) => {
+    // Wrap in try-catch to catch any synchronous errors
+    try {
+      const handlePromise = bot.handleUpdate(update);
+      console.log(`[${requestId}] handleUpdate called, promise created`);
+      
+      handlePromise.then(() => {
+        const processTime = Date.now() - processStartTime;
+        console.log(`[${requestId}] ✅ Update processed successfully in ${processTime}ms`);
+      }).catch((error) => {
       const processTime = Date.now() - processStartTime;
       console.error(`[${requestId}] ❌ Error processing update after ${processTime}ms:`, error);
       console.error(`[${requestId}] Error details:`, {
