@@ -28,12 +28,14 @@ import Roadmap from "./pages/Roadmap";
 import InvestmentProposal from "./pages/InvestmentProposal";
 import AiPlanner from "./pages/AiPlanner";
 import Tokenomics from "./pages/Tokenomics";
+import Whitepaper from "./pages/Whitepaper";
 
 function Router() {
   return (
     <Switch>
       <Route path={"/"} component={Home} />
       <Route path={"/presentation"} component={Presentation} />
+      <Route path={"/whitepaper"} component={Whitepaper} />
       <Route path={"/dashboard"} component={Dashboard} />
       <Route path={"/medicine"} component={Medicine} />
       <Route path={"/nutrition"} component={Nutrition} />
