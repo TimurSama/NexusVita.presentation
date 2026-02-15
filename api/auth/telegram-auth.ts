@@ -12,8 +12,19 @@ async function ensureDatabase() {
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  console.log('Telegram auth called:', {
+    method: req.method,
+    body: req.body,
+  });
+
   // Initialize database
-  await ensureDatabase();
+  try {
+    await ensureDatabase();
+    console.log('Database initialized for auth');
+  } catch (error) {
+    console.error('Database initialization error:', error);
+    return res.status(500).json({ error: 'Database initialization failed', details: String(error) });
+  }
 
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -21,6 +32,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     const { telegram_id, telegram_username, first_name, last_name } = req.body;
+    console.log('Auth request:', { telegram_id, telegram_username, first_name, last_name });
 
     if (!telegram_id) {
       return res.status(400).json({ error: 'Telegram ID is required' });
@@ -45,6 +57,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       }
     }
 
+    console.log('Auth successful:', { userId: user.id, name: user.name });
     res.json({
       success: true,
       user: {
@@ -56,6 +69,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     });
   } catch (error) {
     console.error('Telegram auth error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error('Error stack:', error instanceof Error ? error.stack : 'No stack');
+    res.status(500).json({ 
+      error: 'Internal server error',
+      details: String(error),
+    });
   }
 }

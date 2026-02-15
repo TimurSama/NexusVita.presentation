@@ -141,10 +141,23 @@ if (TELEGRAM_BOT_TOKEN) {
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  console.log('Webhook called:', {
+    method: req.method,
+    hasBody: !!req.body,
+    bodyType: typeof req.body,
+  });
+
   // Initialize database
-  await ensureDatabase();
+  try {
+    await ensureDatabase();
+    console.log('Database initialized');
+  } catch (error) {
+    console.error('Database initialization error:', error);
+    return res.status(500).json({ error: 'Database initialization failed', details: String(error) });
+  }
 
   if (!bot) {
+    console.error('Bot not initialized, token:', TELEGRAM_BOT_TOKEN ? 'SET' : 'NOT SET');
     return res.status(500).json({ error: 'Bot not initialized' });
   }
 
@@ -153,10 +166,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
+    console.log('Processing update:', JSON.stringify(req.body, null, 2));
     await bot.handleUpdate(req.body);
+    console.log('Update processed successfully');
     res.status(200).json({ ok: true });
   } catch (error) {
     console.error('Webhook error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error('Error stack:', error instanceof Error ? error.stack : 'No stack');
+    res.status(500).json({ error: 'Internal server error', details: String(error) });
   }
 }
