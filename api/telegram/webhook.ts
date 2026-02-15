@@ -125,6 +125,26 @@ if (TELEGRAM_BOT_TOKEN) {
           `Твой центр здоровья готов помочь тебе сегодня.\n\n` +
           `Используйте /menu для быстрого доступа.`
         );
+      } else if (telegramId === '7694835964' && isNewUser) {
+        // Tixy's first time greeting
+        await ctx.reply(
+          `Привет, Tixy! 👋\n\n` +
+          `Добро пожаловать в EthosLife! 💚\n\n` +
+          `Это твой персональный центр здоровья и ежедневных привычек.\n\n` +
+          `Здесь ты сможешь:\n` +
+          `• Получать напоминания о планах\n` +
+          `• Отмечать выполненные задачи\n` +
+          `• Вносить метрики здоровья\n` +
+          `• Получать рекомендации\n\n` +
+          `Используйте /menu для быстрого доступа к функциям.`
+        );
+      } else if (telegramId === '7694835964') {
+        // Tixy's returning greeting
+        await ctx.reply(
+          `С возвращением, Tixy! 👋\n\n` +
+          `Твой центр здоровья готов помочь тебе сегодня.\n\n` +
+          `Используйте /menu для быстрого доступа.`
+        );
       } else if (isNewUser) {
         await ctx.reply(
           `Добро пожаловать в EthosLife, ${ctx.from.first_name}! 👋\n\n` +
@@ -163,6 +183,33 @@ if (TELEGRAM_BOT_TOKEN) {
       from_id: ctx.from?.id,
       chat_id: ctx.chat?.id,
     });
+    
+    // Handle unknown commands
+    if (ctx.message?.text && ctx.message.text.startsWith('/') && !ctx.message.text.startsWith('/start')) {
+      console.log('❓ Unknown command:', ctx.message.text);
+      await ctx.reply(
+        `Неизвестная команда. Используйте /menu для просмотра доступных команд или /help для справки.`
+      );
+    }
+  });
+
+  // Menu command
+  bot.command('menu', async (ctx: Context) => {
+    try {
+      await ctx.reply(
+        `📋 Меню быстрого доступа:\n\n` +
+        `• /start - Начать работу\n` +
+        `• /today - План на сегодня\n` +
+        `• /metrics - Внести метрики\n` +
+        `• /goals - Мои цели\n` +
+        `• /settings - Настройки\n` +
+        `• /help - Справка\n\n` +
+        `💡 Используйте команды для быстрого доступа к функциям.`
+      );
+    } catch (error) {
+      console.error('Error in /menu command:', error);
+      await ctx.reply('Произошла ошибка. Пожалуйста, попробуйте позже.');
+    }
   });
 
   // Help command
@@ -170,6 +217,7 @@ if (TELEGRAM_BOT_TOKEN) {
     await ctx.reply(
       `📋 Доступные команды:\n\n` +
       `• /start - Начать работу с ботом\n` +
+      `• /menu - Меню быстрого доступа\n` +
       `• /help - Показать эту справку\n` +
       `• /settings - Настройки уведомлений\n` +
       `• /today - План на сегодня\n` +
@@ -179,6 +227,43 @@ if (TELEGRAM_BOT_TOKEN) {
       `• /note <текст> - Добавить заметку\n\n` +
       `💡 Вы также можете использовать кнопки меню для быстрого доступа.`
     );
+  });
+
+  // Today command
+  bot.command('today', async (ctx: Context) => {
+    try {
+      const telegramId = ctx.from?.id.toString();
+      if (!telegramId) return;
+
+      const user = await userDb.findByTelegramId(telegramId);
+      if (!user) {
+        await ctx.reply('Сначала используйте /start для создания аккаунта.');
+        return;
+      }
+
+      const today = new Date();
+      const plans = await dailyPlanDb.findByUserIdAndDate(user.id, today);
+
+      if (plans.length === 0) {
+        await ctx.reply('На сегодня планов нет. Используйте /start для начала работы.');
+        return;
+      }
+
+      let message = `📅 План на сегодня (${today.toLocaleDateString('ru-RU')}):\n\n`;
+      plans.forEach((plan, index) => {
+        const status = plan.completed ? '✅' : '⏳';
+        message += `${status} ${plan.time || ''} - ${plan.title}\n`;
+        if (plan.description) {
+          message += `   ${plan.description}\n`;
+        }
+        message += '\n';
+      });
+
+      await ctx.reply(message);
+    } catch (error) {
+      console.error('Error in /today command:', error);
+      await ctx.reply('Произошла ошибка при получении плана. Пожалуйста, попробуйте позже.');
+    }
   });
 
   // Error handling
