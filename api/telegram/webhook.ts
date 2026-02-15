@@ -53,6 +53,13 @@ function setupBotHandlers(bot: Telegraf) {
     const telegramId = ctx.from?.id.toString();
     const handlerStartTime = Date.now();
     console.log('🚀 /start command handler called for:', telegramId);
+    console.log('🚀 /start handler - full context:', {
+      update_id: ctx.update?.update_id,
+      message_id: ctx.message?.message_id,
+      text: ctx.message?.text,
+      from_id: ctx.from?.id,
+      chat_id: ctx.chat?.id,
+    });
     
     if (!telegramId) {
       console.error('❌ No telegram ID in context');
