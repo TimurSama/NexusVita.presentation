@@ -211,7 +211,33 @@ export default function Profile() {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => setIsEditingBiometrics(!isEditingBiometrics)}
+                  onClick={async () => {
+                    if (isEditingBiometrics) {
+                      // Save profile
+                      try {
+                        const userId = localStorage.getItem('userId');
+                        if (!userId) return;
+                        
+                        const response = await fetch(`/api/users/${userId}/profile`, {
+                          method: 'PUT',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({
+                            height,
+                            weight,
+                            date_of_birth: birthDate?.toISOString(),
+                          }),
+                        });
+                        
+                        if (response.ok) {
+                          const data = await response.json();
+                          setProfile(data.profile);
+                        }
+                      } catch (error) {
+                        console.error('Error saving profile:', error);
+                      }
+                    }
+                    setIsEditingBiometrics(!isEditingBiometrics);
+                  }}
                   className="gap-2"
                 >
                   <Edit className="h-4 w-4" />
