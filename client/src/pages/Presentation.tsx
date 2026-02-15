@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'wouter';
+import { Link, useLocation } from 'wouter';
 import { motion } from 'framer-motion';
 import { ChevronRight, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { PremiumCard } from '@/components/PremiumCard';
@@ -15,6 +15,7 @@ import { MayanCalendar } from '@/components/interactive/MayanCalendar';
 import type { PopupContent } from '@/components/DetailPopup';
 
 export default function Presentation() {
+  const [, setLocation] = useLocation();
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
   const [openPopup, setOpenPopup] = useState<string | null>(null);
   const [showRegistration, setShowRegistration] = useState(false);
@@ -499,7 +500,7 @@ export default function Presentation() {
             <Button
               size="lg"
               variant="outline"
-              onClick={() => setOpenPopup('platform-overview')}
+              onClick={() => setLocation('/whitepaper')}
             >
               Открыть Whitepaper
               <ChevronRight className="ml-2 w-5 h-5" />
