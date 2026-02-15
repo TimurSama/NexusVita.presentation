@@ -70,14 +70,15 @@ export function BurgerMenu({ isOpen, onClose }: BurgerMenuProps) {
     { path: '/social/specialists', icon: User, label: 'Специалисты' },
   ];
 
-  const otherPages = [
-    { path: '/landing', icon: Presentation, label: 'Лендинг' },
-    { path: '/presentation', icon: Presentation, label: 'Презентация' },
-    { path: '/whitepaper', icon: FileText, label: 'Whitepaper' },
-    { path: '/journal', icon: FileText, label: 'Ежедневник' },
-    { path: '/ai-chat', icon: MessageSquare, label: 'ИИ+ Чат' },
-    { path: '/interactive-demo', icon: FileText, label: 'Интерактивные элементы' },
-  ];
+      const otherPages = [
+        { path: '/landing', icon: Presentation, label: 'Лендинг' },
+        { path: '/presentation', icon: Presentation, label: 'Презентация' },
+        { path: '/whitepaper', icon: FileText, label: 'Whitepaper' },
+        { path: '/documents', icon: FileText, label: 'Документы' },
+        { path: '/journal', icon: FileText, label: 'Ежедневник' },
+        { path: '/ai-chat', icon: MessageSquare, label: 'ИИ+ Чат' },
+        { path: '/interactive-demo', icon: FileText, label: 'Интерактивные элементы' },
+      ];
 
   const handleLinkClick = () => {
     onClose();

@@ -1,0 +1,435 @@
+import { Telegraf, Context } from 'telegraf';
+import { userDb, profileDb, dailyPlanDb, healthMetricsDb, goalsDb, telegramBotSettingsDb, telegramBotLogsDb } from './database';
+
+if (!process.env.TELEGRAM_BOT_TOKEN) {
+  console.warn('TELEGRAM_BOT_TOKEN not set. Telegram bot will not be initialized.');
+}
+
+let bot: Telegraf | null = null;
+
+if (process.env.TELEGRAM_BOT_TOKEN) {
+  bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
+
+  // Start command
+  bot.start(async (ctx: Context) => {
+    const telegramId = ctx.from?.id.toString();
+    if (!telegramId) return;
+
+    // Check if user exists
+    let user = userDb.findByTelegramId(telegramId);
+
+    if (!user) {
+      // Create new user
+      const result = userDb.create({
+        name: ctx.from.first_name + (ctx.from.last_name ? ` ${ctx.from.last_name}` : ''),
+        telegram_id: telegramId,
+        telegram_username: ctx.from.username || undefined,
+      });
+      user = userDb.findById(Number(result.lastInsertRowid));
+      
+      // Initialize bot settings
+      telegramBotSettingsDb.createOrUpdate(Number(result.lastInsertRowid), {
+        notifications_enabled: true,
+        reminders_enabled: true,
+        metric_tracking_enabled: true,
+      });
+
+      await ctx.reply(
+        `Добро пожаловать в EthosLife, ${ctx.from.first_name}! 👋\n\n` +
+        `Ваш аккаунт создан. Теперь вы можете:\n` +
+        `• Получать напоминания о планах\n` +
+        `• Отмечать выполненные задачи\n` +
+        `• Вносить метрики здоровья\n` +
+        `• Получать рекомендации\n\n` +
+        `Используйте /help для списка команд.`
+      );
+    } else {
+      await ctx.reply(
+        `С возвращением, ${ctx.from.first_name}! 👋\n\n` +
+        `Используйте /help для списка команд.`
+      );
+    }
+  });
+
+  // Help command
+  bot.help(async (ctx: Context) => {
+    await ctx.reply(
+      `📋 Доступные команды:\n\n` +
+      `• /start - Начать работу с ботом\n` +
+      `• /help - Показать эту справку\n` +
+      `• /settings - Настройки уведомлений\n` +
+      `• /today - План на сегодня\n` +
+      `• /metrics - Внести метрики\n` +
+      `• /goals - Мои цели\n` +
+      `• /complete <номер> - Отметить задачу выполненной\n` +
+      `• /note <текст> - Добавить заметку\n\n` +
+      `💡 Вы также можете использовать кнопки меню для быстрого доступа.`
+    );
+  });
+
+  // Settings command
+  bot.command('settings', async (ctx: Context) => {
+    const telegramId = ctx.from?.id.toString();
+    if (!telegramId) return;
+
+    const user = userDb.findByTelegramId(telegramId);
+    if (!user) {
+      await ctx.reply('Пожалуйста, сначала используйте /start');
+      return;
+    }
+
+    const settings = telegramBotSettingsDb.findByUserId(user.id);
+    
+    await ctx.reply(
+      `⚙️ Настройки уведомлений:\n\n` +
+      `Уведомления: ${settings?.notifications_enabled ? '✅ Включены' : '❌ Выключены'}\n` +
+      `Напоминания: ${settings?.reminders_enabled ? '✅ Включены' : '❌ Выключены'}\n` +
+      `Отслеживание метрик: ${settings?.metric_tracking_enabled ? '✅ Включено' : '❌ Выключено'}\n\n` +
+      `Время напоминаний: ${settings?.reminder_times?.join(', ') || '08:00, 12:00, 18:00'}\n\n` +
+      `Используйте кнопки для изменения настроек.`
+    );
+  });
+
+  // Today's plan command
+  bot.command('today', async (ctx: Context) => {
+    const telegramId = ctx.from?.id.toString();
+    if (!telegramId) return;
+
+    const user = userDb.findByTelegramId(telegramId);
+    if (!user) {
+      await ctx.reply('Пожалуйста, сначала используйте /start');
+      return;
+    }
+
+    const today = new Date();
+    const plans = dailyPlanDb.findByUserIdAndDate(user.id, today);
+
+    if (plans.length === 0) {
+      await ctx.reply('📅 На сегодня планов нет. Отдыхайте! 😊');
+      return;
+    }
+
+    let message = `📅 План на сегодня (${today.toLocaleDateString('ru-RU')}):\n\n`;
+    plans.forEach((plan, idx) => {
+      const status = plan.completed ? '✅' : '⏳';
+      const time = plan.time ? `${plan.time} - ` : '';
+      message += `${status} ${idx + 1}. ${time}${plan.title}\n`;
+      if (plan.description) {
+        message += `   ${plan.description}\n`;
+      }
+    });
+
+    message += `\nИспользуйте /complete <номер> чтобы отметить задачу выполненной.`;
+
+    await ctx.reply(message);
+  });
+
+  // Complete task command
+  bot.command('complete', async (ctx: Context) => {
+    const telegramId = ctx.from?.id.toString();
+    if (!telegramId) return;
+
+    const user = userDb.findByTelegramId(telegramId);
+    if (!user) {
+      await ctx.reply('Пожалуйста, сначала используйте /start');
+      return;
+    }
+
+    const args = ctx.message && 'text' in ctx.message ? ctx.message.text.split(' ') : [];
+    const taskNumber = parseInt(args[1]);
+
+    if (isNaN(taskNumber)) {
+      await ctx.reply('Пожалуйста, укажите номер задачи: /complete 1');
+      return;
+    }
+
+    const today = new Date();
+    const plans = dailyPlanDb.findByUserIdAndDate(user.id, today);
+
+    if (taskNumber < 1 || taskNumber > plans.length) {
+      await ctx.reply(`Задача с номером ${taskNumber} не найдена.`);
+      return;
+    }
+
+    const plan = plans[taskNumber - 1];
+    dailyPlanDb.updateCompleted(plan.id, true);
+
+    telegramBotLogsDb.create(user.id, {
+      action_type: 'goal_completed',
+      message: `Задача "${plan.title}" отмечена как выполненная`,
+    });
+
+    await ctx.reply(`✅ Задача "${plan.title}" отмечена как выполненная! 🎉`);
+  });
+
+  // Metrics command
+  bot.command('metrics', async (ctx: Context) => {
+    await ctx.reply(
+      `📊 Внесение метрик:\n\n` +
+      `Используйте следующие команды:\n` +
+      `• /weight <кг> - Записать вес\n` +
+      `• /steps <количество> - Записать шаги\n` +
+      `• /sleep <часы> - Записать сон\n` +
+      `• /mood <1-10> - Записать настроение\n` +
+      `• /calories <ккал> - Записать калории\n\n` +
+      `Пример: /weight 57.5`
+    );
+  });
+
+  // Weight command
+  bot.command('weight', async (ctx: Context) => {
+    const telegramId = ctx.from?.id.toString();
+    if (!telegramId) return;
+
+    const user = userDb.findByTelegramId(telegramId);
+    if (!user) {
+      await ctx.reply('Пожалуйста, сначала используйте /start');
+      return;
+    }
+
+    const args = ctx.message && 'text' in ctx.message ? ctx.message.text.split(' ') : [];
+    const weight = parseFloat(args[1]);
+
+    if (isNaN(weight)) {
+      await ctx.reply('Пожалуйста, укажите вес: /weight 57.5');
+      return;
+    }
+
+    healthMetricsDb.create(user.id, {
+      metric_type: 'weight',
+      value: weight,
+      unit: 'kg',
+    });
+
+    // Update profile
+    profileDb.createOrUpdate(user.id, { weight });
+
+    telegramBotLogsDb.create(user.id, {
+      action_type: 'metric_entry',
+      message: `Вес: ${weight} кг`,
+    });
+
+    await ctx.reply(`✅ Вес ${weight} кг записан! 📊`);
+  });
+
+  // Steps command
+  bot.command('steps', async (ctx: Context) => {
+    const telegramId = ctx.from?.id.toString();
+    if (!telegramId) return;
+
+    const user = userDb.findByTelegramId(telegramId);
+    if (!user) {
+      await ctx.reply('Пожалуйста, сначала используйте /start');
+      return;
+    }
+
+    const args = ctx.message && 'text' in ctx.message ? ctx.message.text.split(' ') : [];
+    const steps = parseInt(args[1]);
+
+    if (isNaN(steps)) {
+      await ctx.reply('Пожалуйста, укажите количество шагов: /steps 10000');
+      return;
+    }
+
+    healthMetricsDb.create(user.id, {
+      metric_type: 'steps',
+      value: steps,
+      unit: 'steps',
+    });
+
+    telegramBotLogsDb.create(user.id, {
+      action_type: 'metric_entry',
+      message: `Шаги: ${steps}`,
+    });
+
+    await ctx.reply(`✅ ${steps} шагов записано! 🚶`);
+  });
+
+  // Sleep command
+  bot.command('sleep', async (ctx: Context) => {
+    const telegramId = ctx.from?.id.toString();
+    if (!telegramId) return;
+
+    const user = userDb.findByTelegramId(telegramId);
+    if (!user) {
+      await ctx.reply('Пожалуйста, сначала используйте /start');
+      return;
+    }
+
+    const args = ctx.message && 'text' in ctx.message ? ctx.message.text.split(' ') : [];
+    const hours = parseFloat(args[1]);
+
+    if (isNaN(hours)) {
+      await ctx.reply('Пожалуйста, укажите часы сна: /sleep 8.5');
+      return;
+    }
+
+    healthMetricsDb.create(user.id, {
+      metric_type: 'sleep',
+      value: hours,
+      unit: 'hours',
+    });
+
+    telegramBotLogsDb.create(user.id, {
+      action_type: 'metric_entry',
+      message: `Сон: ${hours} часов`,
+    });
+
+    await ctx.reply(`✅ Сон ${hours} часов записан! 😴`);
+  });
+
+  // Mood command
+  bot.command('mood', async (ctx: Context) => {
+    const telegramId = ctx.from?.id.toString();
+    if (!telegramId) return;
+
+    const user = userDb.findByTelegramId(telegramId);
+    if (!user) {
+      await ctx.reply('Пожалуйста, сначала используйте /start');
+      return;
+    }
+
+    const args = ctx.message && 'text' in ctx.message ? ctx.message.text.split(' ') : [];
+    const mood = parseInt(args[1]);
+
+    if (isNaN(mood) || mood < 1 || mood > 10) {
+      await ctx.reply('Пожалуйста, укажите настроение от 1 до 10: /mood 8');
+      return;
+    }
+
+    healthMetricsDb.create(user.id, {
+      metric_type: 'mood',
+      value: mood,
+      unit: '/10',
+    });
+
+    telegramBotLogsDb.create(user.id, {
+      action_type: 'metric_entry',
+      message: `Настроение: ${mood}/10`,
+    });
+
+    const emoji = mood >= 8 ? '😊' : mood >= 5 ? '😐' : '😔';
+    await ctx.reply(`✅ Настроение ${mood}/10 записано! ${emoji}`);
+  });
+
+  // Calories command
+  bot.command('calories', async (ctx: Context) => {
+    const telegramId = ctx.from?.id.toString();
+    if (!telegramId) return;
+
+    const user = userDb.findByTelegramId(telegramId);
+    if (!user) {
+      await ctx.reply('Пожалуйста, сначала используйте /start');
+      return;
+    }
+
+    const args = ctx.message && 'text' in ctx.message ? ctx.message.text.split(' ') : [];
+    const calories = parseInt(args[1]);
+
+    if (isNaN(calories)) {
+      await ctx.reply('Пожалуйста, укажите калории: /calories 2000');
+      return;
+    }
+
+    healthMetricsDb.create(user.id, {
+      metric_type: 'calories',
+      value: calories,
+      unit: 'kcal',
+    });
+
+    telegramBotLogsDb.create(user.id, {
+      action_type: 'metric_entry',
+      message: `Калории: ${calories} ккал`,
+    });
+
+    await ctx.reply(`✅ ${calories} ккал записано! 🍎`);
+  });
+
+  // Goals command
+  bot.command('goals', async (ctx: Context) => {
+    const telegramId = ctx.from?.id.toString();
+    if (!telegramId) return;
+
+    const user = userDb.findByTelegramId(telegramId);
+    if (!user) {
+      await ctx.reply('Пожалуйста, сначала используйте /start');
+      return;
+    }
+
+    const goals = goalsDb.findByUserId(user.id);
+
+    if (goals.length === 0) {
+      await ctx.reply('🎯 У вас пока нет целей. Создайте их в приложении!');
+      return;
+    }
+
+    let message = `🎯 Ваши цели:\n\n`;
+    goals.forEach((goal, idx) => {
+      const status = goal.completed ? '✅' : '⏳';
+      message += `${status} ${idx + 1}. ${goal.title}\n`;
+      if (goal.target_value) {
+        const progress = goal.current_value / goal.target_value * 100;
+        message += `   Прогресс: ${goal.current_value}${goal.unit || ''} / ${goal.target_value}${goal.unit || ''} (${Math.round(progress)}%)\n`;
+      }
+      if (goal.deadline) {
+        message += `   Дедлайн: ${new Date(goal.deadline).toLocaleDateString('ru-RU')}\n`;
+      }
+    });
+
+    await ctx.reply(message);
+  });
+
+  // Note command
+  bot.command('note', async (ctx: Context) => {
+    const telegramId = ctx.from?.id.toString();
+    if (!telegramId) return;
+
+    const user = userDb.findByTelegramId(telegramId);
+    if (!user) {
+      await ctx.reply('Пожалуйста, сначала используйте /start');
+      return;
+    }
+
+    const args = ctx.message && 'text' in ctx.message ? ctx.message.text.split(' ') : [];
+    const note = args.slice(1).join(' ');
+
+    if (!note) {
+      await ctx.reply('Пожалуйста, укажите текст заметки: /note Сегодня отличный день!');
+      return;
+    }
+
+    healthMetricsDb.create(user.id, {
+      metric_type: 'note',
+      value: 0,
+      notes: note,
+    });
+
+    telegramBotLogsDb.create(user.id, {
+      action_type: 'note_added',
+      message: note,
+    });
+
+    await ctx.reply(`✅ Заметка добавлена! 📝\n\n"${note}"`);
+  });
+
+  // Error handling
+  bot.catch((err, ctx) => {
+    console.error('Telegram bot error:', err);
+    ctx.reply('Произошла ошибка. Пожалуйста, попробуйте позже.');
+  });
+
+  console.log('Telegram bot initialized');
+}
+
+export function startTelegramBot() {
+  if (bot && process.env.TELEGRAM_BOT_TOKEN) {
+    bot.launch();
+    console.log('Telegram bot started');
+    
+    // Graceful stop
+    process.once('SIGINT', () => bot?.stop('SIGINT'));
+    process.once('SIGTERM', () => bot?.stop('SIGTERM'));
+  }
+}
+
+export { bot };

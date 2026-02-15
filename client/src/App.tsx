@@ -31,6 +31,7 @@ import Tokenomics from "./pages/Tokenomics";
 import Whitepaper from "./pages/Whitepaper";
 import Landing from "./pages/Landing";
 import Shop from "./pages/Shop";
+import Documents from "./pages/Documents";
 import Centers from "./pages/Centers";
 import Map from "./pages/Map";
 import Friends from "./pages/social/Friends";
@@ -45,6 +46,7 @@ function Router() {
       <Route path={"/presentation"} component={Presentation} />
       <Route path={"/whitepaper"} component={Whitepaper} />
       <Route path={"/dashboard"} component={Dashboard} />
+      <Route path={"/documents"} component={Documents} />
       <Route path={"/shop"} component={Shop} />
       <Route path={"/centers"} component={Centers} />
       <Route path={"/map"} component={Map} />
