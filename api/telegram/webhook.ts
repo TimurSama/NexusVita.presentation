@@ -48,21 +48,19 @@ if (TELEGRAM_BOT_TOKEN) {
           metric_tracking_enabled: true,
         });
 
-        // If this is Maria, initialize her full profile
+        // If this is Maria, try to initialize her full profile (async, non-blocking)
         if (telegramId === '403161451') {
-          try {
-            // Import and call Maria initialization
-            const { default: initMaria } = await import('../admin/init-maria');
+          // Initialize Maria profile in background (don't wait)
+          import('../admin/init-maria').then(({ default: initMaria }) => {
             const initReq = { method: 'POST', body: {} } as any;
             const initRes = {
               json: (data: any) => console.log('Maria init result:', data),
               status: (code: number) => ({ json: (data: any) => console.log('Maria init status:', code, data) }),
             } as any;
-            await initMaria(initReq, initRes);
-          } catch (error) {
+            return initMaria(initReq, initRes);
+          }).catch((error) => {
             console.error('Error initializing Maria profile:', error);
-            // Continue anyway - profile will be created on next call
-          }
+          });
         }
       }
 
