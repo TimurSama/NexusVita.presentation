@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import bcrypt from 'bcryptjs';
-import { userDb, profileDb } from './database';
+import { userDb, profileDb } from '../database-adapter';
 
 const router = Router();
 
@@ -14,7 +14,7 @@ router.post('/register', async (req, res) => {
     }
 
     // Check if user exists
-    const existing = userDb.findByEmail(email);
+    const existing = await userDb.findByEmail(email);
     if (existing) {
       return res.status(400).json({ error: 'User with this email already exists' });
     }
@@ -23,13 +23,13 @@ router.post('/register', async (req, res) => {
     const password_hash = await bcrypt.hash(password, 10);
 
     // Create user
-    const result = userDb.create({
+    const result = await userDb.create({
       email,
       password_hash,
       name,
     });
 
-    const user = userDb.findById(Number(result.lastInsertRowid));
+    const user = await userDb.findById(Number(result.lastInsertRowid || result.id));
 
     res.status(201).json({
       success: true,
@@ -55,7 +55,7 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ error: 'Email and password are required' });
     }
 
-    const user = userDb.findByEmail(email);
+    const user = await userDb.findByEmail(email);
     if (!user) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
@@ -94,21 +94,21 @@ router.post('/telegram-auth', async (req, res) => {
     }
 
     // Check if user exists
-    let user = userDb.findByTelegramId(telegram_id.toString());
+    let user = await userDb.findByTelegramId(telegram_id.toString());
 
     if (!user) {
       // Create new user
-      const result = userDb.create({
+      const result = await userDb.create({
         name: `${first_name}${last_name ? ` ${last_name}` : ''}`,
         telegram_id: telegram_id.toString(),
         telegram_username: telegram_username || undefined,
       });
-      user = userDb.findById(Number(result.lastInsertRowid));
+      user = await userDb.findById(Number(result.lastInsertRowid || result.id));
     } else {
       // Update Telegram connection if needed
       if (!user.telegram_id) {
-        userDb.connectTelegram(user.id, telegram_id.toString(), telegram_username);
-        user = userDb.findById(user.id);
+        await userDb.connectTelegram(user.id, telegram_id.toString(), telegram_username);
+        user = await userDb.findById(user.id);
       }
     }
 
@@ -137,12 +137,12 @@ router.post('/connect-telegram', async (req, res) => {
     }
 
     // Check if Telegram ID is already used
-    const existing = userDb.findByTelegramId(telegram_id.toString());
+    const existing = await userDb.findByTelegramId(telegram_id.toString());
     if (existing && existing.id !== user_id) {
       return res.status(400).json({ error: 'This Telegram account is already connected to another user' });
     }
 
-    userDb.connectTelegram(user_id, telegram_id.toString(), telegram_username);
+    await userDb.connectTelegram(user_id, telegram_id.toString(), telegram_username);
 
     res.json({ success: true });
   } catch (error) {

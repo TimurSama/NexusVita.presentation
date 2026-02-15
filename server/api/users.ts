@@ -1,19 +1,19 @@
 import { Router } from 'express';
-import { userDb, profileDb, documentDb, dailyPlanDb, healthMetricsDb, goalsDb } from '../database';
+import { userDb, profileDb, documentDb, dailyPlanDb, healthMetricsDb, goalsDb } from '../database-adapter';
 
 const router = Router();
 
 // Get user profile
-router.get('/:userId/profile', (req, res) => {
+router.get('/:userId/profile', async (req, res) => {
   try {
     const userId = parseInt(req.params.userId);
-    const user = userDb.findById(userId);
+    const user = await userDb.findById(userId);
     
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    const profile = profileDb.findByUserId(userId);
+    const profile = await profileDb.findByUserId(userId);
 
     res.json({
       user: {
@@ -32,12 +32,12 @@ router.get('/:userId/profile', (req, res) => {
 });
 
 // Update user profile
-router.put('/:userId/profile', (req, res) => {
+router.put('/:userId/profile', async (req, res) => {
   try {
     const userId = parseInt(req.params.userId);
     const { date_of_birth, height, weight, gender, blood_type } = req.body;
 
-    profileDb.createOrUpdate(userId, {
+    await profileDb.createOrUpdate(userId, {
       date_of_birth: date_of_birth ? new Date(date_of_birth) : undefined,
       height,
       weight,
@@ -45,7 +45,7 @@ router.put('/:userId/profile', (req, res) => {
       blood_type,
     });
 
-    const profile = profileDb.findByUserId(userId);
+    const profile = await profileDb.findByUserId(userId);
 
     res.json({ success: true, profile });
   } catch (error) {
@@ -55,10 +55,10 @@ router.put('/:userId/profile', (req, res) => {
 });
 
 // Get user documents
-router.get('/:userId/documents', (req, res) => {
+router.get('/:userId/documents', async (req, res) => {
   try {
     const userId = parseInt(req.params.userId);
-    const documents = documentDb.findByUserId(userId);
+    const documents = await documentDb.findByUserId(userId);
 
     res.json({ documents });
   } catch (error) {
@@ -68,10 +68,10 @@ router.get('/:userId/documents', (req, res) => {
 });
 
 // Get document by ID
-router.get('/:userId/documents/:documentId', (req, res) => {
+router.get('/:userId/documents/:documentId', async (req, res) => {
   try {
     const documentId = parseInt(req.params.documentId);
-    const document = documentDb.findById(documentId);
+    const document = await documentDb.findById(documentId);
 
     if (!document) {
       return res.status(404).json({ error: 'Document not found' });
@@ -85,23 +85,23 @@ router.get('/:userId/documents/:documentId', (req, res) => {
 });
 
 // Get daily plans
-router.get('/:userId/plans', (req, res) => {
+router.get('/:userId/plans', async (req, res) => {
   try {
     const userId = parseInt(req.params.userId);
     const { date, startDate, endDate } = req.query;
 
     let plans;
     if (date) {
-      plans = dailyPlanDb.findByUserIdAndDate(userId, new Date(date as string));
+      plans = await dailyPlanDb.findByUserIdAndDate(userId, new Date(date as string));
     } else if (startDate && endDate) {
-      plans = dailyPlanDb.findByUserIdAndDateRange(
+      plans = await dailyPlanDb.findByUserIdAndDateRange(
         userId,
         new Date(startDate as string),
         new Date(endDate as string)
       );
     } else {
       const today = new Date();
-      plans = dailyPlanDb.findByUserIdAndDate(userId, today);
+      plans = await dailyPlanDb.findByUserIdAndDate(userId, today);
     }
 
     res.json({ plans });
@@ -112,12 +112,12 @@ router.get('/:userId/plans', (req, res) => {
 });
 
 // Create daily plan
-router.post('/:userId/plans', (req, res) => {
+router.post('/:userId/plans', async (req, res) => {
   try {
     const userId = parseInt(req.params.userId);
     const { date, title, description, category, time } = req.body;
 
-    const result = dailyPlanDb.create(userId, {
+    const result = await dailyPlanDb.create(userId, {
       date: new Date(date),
       title,
       description,
@@ -125,7 +125,7 @@ router.post('/:userId/plans', (req, res) => {
       time,
     });
 
-    res.status(201).json({ success: true, id: Number(result.lastInsertRowid) });
+    res.status(201).json({ success: true, id: Number(result.lastInsertRowid || result.id) });
   } catch (error) {
     console.error('Create plan error:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -133,12 +133,12 @@ router.post('/:userId/plans', (req, res) => {
 });
 
 // Update plan completion
-router.patch('/:userId/plans/:planId', (req, res) => {
+router.patch('/:userId/plans/:planId', async (req, res) => {
   try {
     const planId = parseInt(req.params.planId);
     const { completed } = req.body;
 
-    dailyPlanDb.updateCompleted(planId, completed);
+    await dailyPlanDb.updateCompleted(planId, completed);
 
     res.json({ success: true });
   } catch (error) {
@@ -148,12 +148,12 @@ router.patch('/:userId/plans/:planId', (req, res) => {
 });
 
 // Get health metrics
-router.get('/:userId/metrics', (req, res) => {
+router.get('/:userId/metrics', async (req, res) => {
   try {
     const userId = parseInt(req.params.userId);
     const { type, limit } = req.query;
 
-    const metrics = healthMetricsDb.findByUserId(
+    const metrics = await healthMetricsDb.findByUserId(
       userId,
       type as string,
       limit ? parseInt(limit as string) : undefined
@@ -167,19 +167,19 @@ router.get('/:userId/metrics', (req, res) => {
 });
 
 // Create health metric
-router.post('/:userId/metrics', (req, res) => {
+router.post('/:userId/metrics', async (req, res) => {
   try {
     const userId = parseInt(req.params.userId);
     const { metric_type, value, unit, notes } = req.body;
 
-    const result = healthMetricsDb.create(userId, {
+    const result = await healthMetricsDb.create(userId, {
       metric_type,
       value,
       unit,
       notes,
     });
 
-    res.status(201).json({ success: true, id: Number(result.lastInsertRowid) });
+    res.status(201).json({ success: true, id: Number(result.lastInsertRowid || result.id) });
   } catch (error) {
     console.error('Create metric error:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -187,10 +187,10 @@ router.post('/:userId/metrics', (req, res) => {
 });
 
 // Get goals
-router.get('/:userId/goals', (req, res) => {
+router.get('/:userId/goals', async (req, res) => {
   try {
     const userId = parseInt(req.params.userId);
-    const goals = goalsDb.findByUserId(userId);
+    const goals = await goalsDb.findByUserId(userId);
 
     res.json({ goals });
   } catch (error) {
@@ -200,12 +200,12 @@ router.get('/:userId/goals', (req, res) => {
 });
 
 // Create goal
-router.post('/:userId/goals', (req, res) => {
+router.post('/:userId/goals', async (req, res) => {
   try {
     const userId = parseInt(req.params.userId);
     const { title, description, category, target_value, unit, deadline } = req.body;
 
-    const result = goalsDb.create(userId, {
+    const result = await goalsDb.create(userId, {
       title,
       description,
       category,
@@ -214,7 +214,7 @@ router.post('/:userId/goals', (req, res) => {
       deadline: deadline ? new Date(deadline) : undefined,
     });
 
-    res.status(201).json({ success: true, id: Number(result.lastInsertRowid) });
+    res.status(201).json({ success: true, id: Number(result.lastInsertRowid || result.id) });
   } catch (error) {
     console.error('Create goal error:', error);
     res.status(500).json({ error: 'Internal server error' });

@@ -6,9 +6,9 @@ const isVercel = process.env.VERCEL === '1' || !!process.env.DATABASE_URL || !!p
 if (isVercel) {
   // Use Postgres on Vercel
   console.log('Using Postgres database (Vercel environment)');
-  module.exports = require('./database-postgres');
+  export * from './database-postgres';
 } else {
   // Use SQLite locally
   console.log('Using SQLite database (local environment)');
-  module.exports = require('./database');
+  export * from './database';
 }

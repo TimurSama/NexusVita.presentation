@@ -1,13 +1,13 @@
-import { dailyPlanDb, documentDb, userDb, profileDb, telegramBotSettingsDb } from '../database';
+import { dailyPlanDb, documentDb, userDb, profileDb, telegramBotSettingsDb } from './database-adapter';
 import fs from 'fs';
 
 // Parse Maria's document and create monthly plan
-export function createMariaPlan(userId: number) {
+export async function createMariaPlan(userId: number) {
   // Read document content
   const documentContent = fs.readFileSync('maria_content.txt', 'utf-8');
 
   // Save document to database
-  documentDb.create(userId, {
+  await documentDb.create(userId, {
     title: 'Комплексное исследование проблемы и план терапии при боли в спине',
     content: documentContent,
     file_path: 'Мария.docx',
@@ -82,7 +82,7 @@ export function createMariaPlan(userId: number) {
     const dayPlans = weeklyPlan[dayName as keyof typeof weeklyPlan];
 
     for (const plan of dayPlans) {
-      dailyPlanDb.create(userId, {
+      await dailyPlanDb.create(userId, {
         date: new Date(currentDate),
         title: plan.title,
         description: plan.description,
@@ -100,23 +100,23 @@ export function createMariaPlan(userId: number) {
 }
 
 // Create Maria's profile
-export function createMariaProfile() {
+export async function createMariaProfile() {
   // Check if Maria already exists
-  let maria = userDb.findByTelegramId('403161451');
+  let maria = await userDb.findByTelegramId('403161451');
 
   if (!maria) {
     // Create Maria user
-    const result = userDb.create({
+    const result = await userDb.create({
       name: 'Мария',
       telegram_id: '403161451',
     });
-    maria = userDb.findById(Number(result.lastInsertRowid));
+    maria = await userDb.findById(Number(result.lastInsertRowid || result.id));
   }
 
   const userId = maria.id;
 
   // Create/update profile
-  profileDb.createOrUpdate(userId, {
+  await profileDb.createOrUpdate(userId, {
     date_of_birth: new Date('1997-10-23'),
     height: 172,
     weight: 57,
@@ -124,7 +124,7 @@ export function createMariaProfile() {
   });
 
   // Initialize Telegram bot settings
-  telegramBotSettingsDb.createOrUpdate(userId, {
+  await telegramBotSettingsDb.createOrUpdate(userId, {
     notifications_enabled: true,
     reminders_enabled: true,
     metric_tracking_enabled: true,
@@ -132,7 +132,7 @@ export function createMariaProfile() {
   });
 
   // Create monthly plan
-  createMariaPlan(userId);
+  await createMariaPlan(userId);
 
   console.log(`Maria's profile created/updated with ID: ${userId}`);
   return userId;

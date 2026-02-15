@@ -19,7 +19,7 @@ const db = new Database(dbPath);
 db.pragma('foreign_keys = ON');
 
 // Initialize database schema
-export function initDatabase() {
+export async function initDatabase() {
   // Users table
   db.exec(`
     CREATE TABLE IF NOT EXISTS users (
@@ -150,12 +150,12 @@ export function initDatabase() {
 
 // User operations
 export const userDb = {
-  create: (data: { email?: string; password_hash?: string; name: string; telegram_id?: string; telegram_username?: string }) => {
+  create: async (data: { email?: string; password_hash?: string; name: string; telegram_id?: string; telegram_username?: string }) => {
     const stmt = db.prepare(`
       INSERT INTO users (email, password_hash, name, telegram_id, telegram_username, telegram_connected_at)
       VALUES (?, ?, ?, ?, ?, ?)
     `);
-    return stmt.run(
+    const result = stmt.run(
       data.email || null,
       data.password_hash || null,
       data.name,
@@ -163,24 +163,25 @@ export const userDb = {
       data.telegram_username || null,
       data.telegram_id ? new Date().toISOString() : null
     );
+    return { lastInsertRowid: result.lastInsertRowid, id: result.lastInsertRowid };
   },
 
-  findByEmail: (email: string) => {
+  findByEmail: async (email: string) => {
     const stmt = db.prepare('SELECT * FROM users WHERE email = ?');
     return stmt.get(email) as any;
   },
 
-  findByTelegramId: (telegramId: string) => {
+  findByTelegramId: async (telegramId: string) => {
     const stmt = db.prepare('SELECT * FROM users WHERE telegram_id = ?');
     return stmt.get(telegramId) as any;
   },
 
-  findById: (id: number) => {
+  findById: async (id: number) => {
     const stmt = db.prepare('SELECT * FROM users WHERE id = ?');
     return stmt.get(id) as any;
   },
 
-  connectTelegram: (userId: number, telegramId: string, telegramUsername?: string) => {
+  connectTelegram: async (userId: number, telegramId: string, telegramUsername?: string) => {
     const stmt = db.prepare(`
       UPDATE users 
       SET telegram_id = ?, telegram_username = ?, telegram_connected_at = ?, updated_at = CURRENT_TIMESTAMP
@@ -192,7 +193,7 @@ export const userDb = {
 
 // Profile operations
 export const profileDb = {
-  createOrUpdate: (userId: number, data: { date_of_birth?: Date; height?: number; weight?: number; gender?: string; blood_type?: string }) => {
+  createOrUpdate: async (userId: number, data: { date_of_birth?: Date; height?: number; weight?: number; gender?: string; blood_type?: string }) => {
     const existing = db.prepare('SELECT id FROM user_profiles WHERE user_id = ?').get(userId) as any;
     
     if (existing) {
@@ -225,7 +226,7 @@ export const profileDb = {
     }
   },
 
-  findByUserId: (userId: number) => {
+  findByUserId: async (userId: number) => {
     const stmt = db.prepare('SELECT * FROM user_profiles WHERE user_id = ?');
     return stmt.get(userId) as any;
   },
@@ -233,20 +234,21 @@ export const profileDb = {
 
 // Document operations
 export const documentDb = {
-  create: (userId: number, data: { title: string; content: string; file_path?: string; document_type?: string }) => {
+  create: async (userId: number, data: { title: string; content: string; file_path?: string; document_type?: string }) => {
     const stmt = db.prepare(`
       INSERT INTO documents (user_id, title, content, file_path, document_type)
       VALUES (?, ?, ?, ?, ?)
     `);
-    return stmt.run(userId, data.title, data.content, data.file_path || null, data.document_type || 'medical');
+    const result = stmt.run(userId, data.title, data.content, data.file_path || null, data.document_type || 'medical');
+    return { lastInsertRowid: result.lastInsertRowid, id: result.lastInsertRowid };
   },
 
-  findByUserId: (userId: number) => {
+  findByUserId: async (userId: number) => {
     const stmt = db.prepare('SELECT * FROM documents WHERE user_id = ? ORDER BY created_at DESC');
     return stmt.all(userId) as any[];
   },
 
-  findById: (id: number) => {
+  findById: async (id: number) => {
     const stmt = db.prepare('SELECT * FROM documents WHERE id = ?');
     return stmt.get(id) as any;
   },
@@ -254,12 +256,12 @@ export const documentDb = {
 
 // Daily plan operations
 export const dailyPlanDb = {
-  create: (userId: number, data: { date: Date; title: string; description?: string; category?: string; time?: string }) => {
+  create: async (userId: number, data: { date: Date; title: string; description?: string; category?: string; time?: string }) => {
     const stmt = db.prepare(`
       INSERT INTO daily_plans (user_id, date, title, description, category, time)
       VALUES (?, ?, ?, ?, ?, ?)
     `);
-    return stmt.run(
+    const result = stmt.run(
       userId,
       data.date.toISOString().split('T')[0],
       data.title,
@@ -267,14 +269,15 @@ export const dailyPlanDb = {
       data.category || null,
       data.time || null
     );
+    return { lastInsertRowid: result.lastInsertRowid, id: result.lastInsertRowid };
   },
 
-  findByUserIdAndDate: (userId: number, date: Date) => {
+  findByUserIdAndDate: async (userId: number, date: Date) => {
     const stmt = db.prepare('SELECT * FROM daily_plans WHERE user_id = ? AND date = ? ORDER BY time ASC');
     return stmt.all(userId, date.toISOString().split('T')[0]) as any[];
   },
 
-  findByUserIdAndDateRange: (userId: number, startDate: Date, endDate: Date) => {
+  findByUserIdAndDateRange: async (userId: number, startDate: Date, endDate: Date) => {
     const stmt = db.prepare('SELECT * FROM daily_plans WHERE user_id = ? AND date >= ? AND date <= ? ORDER BY date ASC, time ASC');
     return stmt.all(
       userId,
@@ -283,7 +286,7 @@ export const dailyPlanDb = {
     ) as any[];
   },
 
-  updateCompleted: (id: number, completed: boolean) => {
+  updateCompleted: async (id: number, completed: boolean) => {
     const stmt = db.prepare('UPDATE daily_plans SET completed = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?');
     return stmt.run(completed ? 1 : 0, id);
   },
@@ -291,15 +294,16 @@ export const dailyPlanDb = {
 
 // Health metrics operations
 export const healthMetricsDb = {
-  create: (userId: number, data: { metric_type: string; value: number; unit?: string; notes?: string }) => {
+  create: async (userId: number, data: { metric_type: string; value: number; unit?: string; notes?: string }) => {
     const stmt = db.prepare(`
       INSERT INTO health_metrics (user_id, metric_type, value, unit, notes)
       VALUES (?, ?, ?, ?, ?)
     `);
-    return stmt.run(userId, data.metric_type, data.value, data.unit || null, data.notes || null);
+    const result = stmt.run(userId, data.metric_type, data.value, data.unit || null, data.notes || null);
+    return { lastInsertRowid: result.lastInsertRowid, id: result.lastInsertRowid };
   },
 
-  findByUserId: (userId: number, metricType?: string, limit?: number) => {
+  findByUserId: async (userId: number, metricType?: string, limit?: number) => {
     if (metricType) {
       const stmt = db.prepare('SELECT * FROM health_metrics WHERE user_id = ? AND metric_type = ? ORDER BY recorded_at DESC LIMIT ?');
       return stmt.all(userId, metricType, limit || 100) as any[];
@@ -312,12 +316,12 @@ export const healthMetricsDb = {
 
 // Goals operations
 export const goalsDb = {
-  create: (userId: number, data: { title: string; description?: string; category?: string; target_value?: number; unit?: string; deadline?: Date }) => {
+  create: async (userId: number, data: { title: string; description?: string; category?: string; target_value?: number; unit?: string; deadline?: Date }) => {
     const stmt = db.prepare(`
       INSERT INTO goals (user_id, title, description, category, target_value, unit, deadline)
       VALUES (?, ?, ?, ?, ?, ?, ?)
     `);
-    return stmt.run(
+    const result = stmt.run(
       userId,
       data.title,
       data.description || null,
@@ -326,9 +330,10 @@ export const goalsDb = {
       data.unit || null,
       data.deadline?.toISOString().split('T')[0] || null
     );
+    return { lastInsertRowid: result.lastInsertRowid, id: result.lastInsertRowid };
   },
 
-  findByUserId: (userId: number) => {
+  findByUserId: async (userId: number) => {
     const stmt = db.prepare('SELECT * FROM goals WHERE user_id = ? ORDER BY created_at DESC');
     return stmt.all(userId) as any[];
   },
@@ -336,7 +341,7 @@ export const goalsDb = {
 
 // Telegram bot settings operations
 export const telegramBotSettingsDb = {
-  createOrUpdate: (userId: number, data: { notifications_enabled?: boolean; reminders_enabled?: boolean; metric_tracking_enabled?: boolean; reminder_times?: string[] }) => {
+  createOrUpdate: async (userId: number, data: { notifications_enabled?: boolean; reminders_enabled?: boolean; metric_tracking_enabled?: boolean; reminder_times?: string[] }) => {
     const existing = db.prepare('SELECT id FROM telegram_bot_settings WHERE user_id = ?').get(userId) as any;
     
     if (existing) {
@@ -368,7 +373,7 @@ export const telegramBotSettingsDb = {
     }
   },
 
-  findByUserId: (userId: number) => {
+  findByUserId: async (userId: number) => {
     const stmt = db.prepare('SELECT * FROM telegram_bot_settings WHERE user_id = ?');
     const result = stmt.get(userId) as any;
     if (result && result.reminder_times) {
@@ -380,15 +385,16 @@ export const telegramBotSettingsDb = {
 
 // Telegram bot logs operations
 export const telegramBotLogsDb = {
-  create: (userId: number, data: { action_type: string; message?: string }) => {
+  create: async (userId: number, data: { action_type: string; message?: string }) => {
     const stmt = db.prepare(`
       INSERT INTO telegram_bot_logs (user_id, action_type, message)
       VALUES (?, ?, ?)
     `);
-    return stmt.run(userId, data.action_type, data.message || null);
+    const result = stmt.run(userId, data.action_type, data.message || null);
+    return { lastInsertRowid: result.lastInsertRowid, id: result.lastInsertRowid };
   },
 
-  findByUserId: (userId: number, limit: number = 50) => {
+  findByUserId: async (userId: number, limit: number = 50) => {
     const stmt = db.prepare('SELECT * FROM telegram_bot_logs WHERE user_id = ? ORDER BY created_at DESC LIMIT ?');
     return stmt.all(userId, limit) as any[];
   },

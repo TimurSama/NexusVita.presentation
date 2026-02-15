@@ -2,7 +2,7 @@ import express from "express";
 import { createServer } from "http";
 import path from "path";
 import { fileURLToPath } from "url";
-import { initDatabase } from "./database";
+import { initDatabase } from "./database-adapter";
 import { startTelegramBot } from "./telegram-bot";
 import { createMariaProfile } from "./maria-plan-generator";
 
@@ -11,11 +11,11 @@ const __dirname = path.dirname(__filename);
 
 async function startServer() {
   // Initialize database
-  initDatabase();
+  await initDatabase();
   
   // Create Maria's profile and plan
   try {
-    createMariaProfile();
+    await createMariaProfile();
   } catch (error) {
     console.error('Error creating Maria profile:', error);
   }
