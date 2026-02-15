@@ -1,4 +1,4 @@
-import { userDb, telegramBotSettingsDb, dailyPlanDb } from './database';
+import { userDb, telegramBotSettingsDb, dailyPlanDb } from './database-adapter';
 
 // Import bot after it's initialized
 let bot: any = null;

@@ -1,10 +1,29 @@
 import { dailyPlanDb, documentDb, userDb, profileDb, telegramBotSettingsDb } from './database-adapter';
-import fs from 'fs';
+
+// Maria's document content (embedded to avoid file system dependency)
+const MARIA_DOCUMENT_CONTENT = `Комплексное исследование проблемы и план терапии при боли в спине
+
+ПРОБЛЕМАТИКА:
+Мария испытывает хронические боли в поясничном отделе позвоночника, которые усиливаются при длительном сидении и физических нагрузках. Боли носят ноющий характер и могут иррадиировать в область таза и бедер.
+
+ПЛАН ТЕРАПИИ:
+1. Ежедневные упражнения на укрепление мышц спины и корпуса
+2. Регулярные растяжки для улучшения гибкости
+3. Самомассаж для снятия напряжения
+4. Контроль осанки во время работы
+5. Периодические перерывы при длительном сидении
+
+РЕКОМЕНДАЦИИ:
+- Избегать резких движений
+- Поддерживать правильную осанку
+- Использовать ортопедические подушки при сидении
+- Регулярно выполнять комплекс упражнений
+- При усилении болей - обратиться к специалисту`;
 
 // Parse Maria's document and create monthly plan
 export async function createMariaPlan(userId: number) {
-  // Read document content
-  const documentContent = fs.readFileSync('maria_content.txt', 'utf-8');
+  // Use embedded document content
+  const documentContent = MARIA_DOCUMENT_CONTENT;
 
   // Save document to database
   await documentDb.create(userId, {
