@@ -454,6 +454,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         }
       }
     });
+    } catch (syncError) {
+      // Catch any synchronous errors in handleUpdate call
+      console.error(`[${requestId}] ❌ Synchronous error calling handleUpdate:`, syncError);
+      console.error(`[${requestId}] Error details:`, {
+        message: syncError instanceof Error ? syncError.message : String(syncError),
+        stack: syncError instanceof Error ? syncError.stack : undefined,
+      });
+    }
   } catch (error) {
     console.error('❌ Webhook error:', error);
     console.error('Error type:', error?.constructor?.name);
