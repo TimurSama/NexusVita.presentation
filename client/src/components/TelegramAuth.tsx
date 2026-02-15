@@ -6,6 +6,7 @@ import { isTelegramWebApp, initializeTelegramWebApp, authenticateWithTelegram, g
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { useUser } from '@/contexts/UserContext';
 
 interface User {
   id: number;
@@ -24,10 +25,9 @@ interface Profile {
 
 export function TelegramAuth() {
   const [, setLocation] = useLocation();
+  const { user, profile, refreshUser } = useUser();
   const [loading, setLoading] = useState(true);
   const [authenticated, setAuthenticated] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
-  const [profile, setProfile] = useState<Profile | null>(null);
   const [friends, setFriends] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
 
@@ -98,22 +98,13 @@ export function TelegramAuth() {
           const authResult = await authenticateWithTelegram();
           
           if (authResult.success && authResult.user) {
-            setUser(authResult.user);
             setAuthenticated(true);
             
             // Save userId to localStorage for use in other components
             localStorage.setItem('userId', authResult.user.id.toString());
 
-            // Fetch user profile
-            try {
-              const profileResponse = await fetch(`/api/users/${authResult.user.id}/profile`);
-              const profileData = await profileResponse.json();
-              if (profileData.profile) {
-                setProfile(profileData.profile);
-              }
-            } catch (err) {
-              console.error('Error fetching profile:', err);
-            }
+            // Refresh user data in context (will load user and profile)
+            await refreshUser();
 
             // TODO: Fetch friends list
             // For now, using mock data

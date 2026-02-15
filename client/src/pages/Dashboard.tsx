@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useUser } from '@/contexts/UserContext';
 import { 
   TrendingUp, Activity, Heart, Brain, Calendar, Clock, CheckCircle2, 
   MessageSquare, Bot, User, Zap, ArrowRight, ChevronRight
@@ -23,14 +24,17 @@ export default function Dashboard() {
   const [todaySchedule, setTodaySchedule] = useState<any[]>([]);
   const [weeklyActivity, setWeeklyActivity] = useState<any[]>([]);
 
+  const { user } = useUser();
+
   useEffect(() => {
     const fetchData = async () => {
+      if (!user?.id) {
+        setLoading(false);
+        return;
+      }
+
       try {
-        const userId = localStorage.getItem('userId');
-        if (!userId) {
-          setLoading(false);
-          return;
-        }
+        const userId = user.id.toString();
 
         // Fetch today's plans
         const today = new Date().toISOString().split('T')[0];

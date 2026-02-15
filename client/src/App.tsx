@@ -4,6 +4,7 @@ import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import { UserProvider } from "./contexts/UserContext";
 import { MobileNavigation } from "./components/MobileNavigation";
 import { Header } from "./components/Header";
 import { TelegramAuth } from "./components/TelegramAuth";
@@ -96,12 +97,14 @@ function App() {
   return (
     <ErrorBoundary>
       <ThemeProvider defaultTheme="light">
-        <TooltipProvider>
-          <Toaster />
-          <Header />
-          <Router />
-          <MobileNavigation />
-        </TooltipProvider>
+        <UserProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Header />
+            <Router />
+            <MobileNavigation />
+          </TooltipProvider>
+        </UserProvider>
       </ThemeProvider>
     </ErrorBoundary>
   );

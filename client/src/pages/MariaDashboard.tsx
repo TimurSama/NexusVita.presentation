@@ -9,8 +9,10 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { mariaExerciseDescriptions, mariaMassageTechniques, mariaRecommendations } from '@/data/maria-dashboard-content';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useLocation } from 'wouter';
+import { useUser } from '@/contexts/UserContext';
 
 export default function MariaDashboard() {
+  const { user } = useUser();
   const [, setLocation] = useLocation();
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [plans, setPlans] = useState<any[]>([]);
@@ -23,9 +25,13 @@ export default function MariaDashboard() {
   useEffect(() => {
     // Fetch plans and documents
     const fetchData = async () => {
+      if (!user?.id) {
+        setLoading(false);
+        return;
+      }
+
       try {
-        // Get user ID from auth context or localStorage
-        const userId = localStorage.getItem('userId') || '1';
+        const userId = user.id.toString();
         
         // Fetch plans
         const plansResponse = await fetch(`/api/users/${userId}/plans?date=${selectedDate.toISOString().split('T')[0]}`);

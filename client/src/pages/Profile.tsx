@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useUser } from '@/contexts/UserContext';
 import { Calendar, FileText, Pill, Activity, AlertCircle, TrendingUp, Edit } from 'lucide-react';
 import SketchIcon from '@/components/SketchIcon';
 import { HealthMetricCard } from '@/components/HealthMetricCard';
@@ -20,36 +21,15 @@ export default function Profile() {
   const [birthDate, setBirthDate] = useState<Date | null>(null);
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const userId = localStorage.getItem('userId');
-        if (!userId) {
-          setLoading(false);
-          return;
-        }
-
-        const response = await fetch(`/api/users/${userId}/profile`);
-        if (response.ok) {
-          const data = await response.json();
-          setProfile(data.profile);
-          
-          if (data.profile) {
-            setHeight(data.profile.height || null);
-            setWeight(data.profile.weight || null);
-            if (data.profile.date_of_birth) {
-              setBirthDate(new Date(data.profile.date_of_birth));
-            }
-          }
-        }
-      } catch (error) {
-        console.error('Error fetching profile:', error);
-      } finally {
-        setLoading(false);
+    if (userProfile) {
+      setHeight(userProfile.height || null);
+      setWeight(userProfile.weight || null);
+      if (userProfile.date_of_birth) {
+        setBirthDate(new Date(userProfile.date_of_birth));
       }
-    };
-
-    fetchProfile();
-  }, []);
+    }
+    setLoading(false);
+  }, [userProfile]);
 
   const healthScore = 87; // TODO: Calculate from metrics
   const riskLevel = 'low'; // TODO: Calculate from metrics
@@ -215,10 +195,9 @@ export default function Profile() {
                     if (isEditingBiometrics) {
                       // Save profile
                       try {
-                        const userId = localStorage.getItem('userId');
-                        if (!userId) return;
+                        if (!user?.id) return;
                         
-                        const response = await fetch(`/api/users/${userId}/profile`, {
+                        const response = await fetch(`/api/users/${user.id}/profile`, {
                           method: 'PUT',
                           headers: { 'Content-Type': 'application/json' },
                           body: JSON.stringify({
@@ -229,8 +208,7 @@ export default function Profile() {
                         });
                         
                         if (response.ok) {
-                          const data = await response.json();
-                          setProfile(data.profile);
+                          await refreshProfile();
                         }
                       } catch (error) {
                         console.error('Error saving profile:', error);

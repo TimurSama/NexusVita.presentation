@@ -7,8 +7,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { useUser } from '@/contexts/UserContext';
 
 export default function Documents() {
+  const { user } = useUser();
   const [documents, setDocuments] = useState<any[]>([]);
   const [selectedDocument, setSelectedDocument] = useState<any | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -16,10 +18,13 @@ export default function Documents() {
 
   useEffect(() => {
     const fetchDocuments = async () => {
+      if (!user?.id) {
+        setLoading(false);
+        return;
+      }
+
       try {
-        // Get user ID from auth context or localStorage
-        const userId = localStorage.getItem('userId') || '1';
-        const response = await fetch(`/api/users/${userId}/documents`);
+        const response = await fetch(`/api/users/${user.id}/documents`);
         
         if (response.ok) {
           const data = await response.json();
