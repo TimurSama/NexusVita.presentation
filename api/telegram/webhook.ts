@@ -130,7 +130,7 @@ function setupBotHandlers(bot: Telegraf) {
       if (telegramId === '403161451' && isNewUser) {
         console.log('💚 Sending Maria first-time greeting');
         // Maria's first time greeting
-        await sendReply(
+        await sendReply(ctx,
           `Привет Марьяша! 👋\n\n` +
           `Это твой личный центр здоровья и ежедневных привычек 💚\n\n` +
           `И, кстати, Тимур тебя очень сильно любит и поздравляет с 14 февраля! 💕\n` +
@@ -146,14 +146,14 @@ function setupBotHandlers(bot: Telegraf) {
       } else if (telegramId === '403161451') {
         console.log('💚 Sending Maria returning greeting');
         // Maria's returning greeting
-        await sendReply(
+        await sendReply(ctx,
           `С возвращением, Марьяша! 👋\n\n` +
           `Твой центр здоровья готов помочь тебе сегодня.\n\n` +
           `Используйте /menu для быстрого доступа.`
         );
       } else if (telegramId === '8530599793' && isNewUser) {
         // Personal greeting for backup account
-        await sendReply(
+        await sendReply(ctx,
           `Привет! 👋\n\n` +
           `Добро пожаловать в твой личный центр здоровья и ежедневных привычек 💚\n\n` +
           `Это твой персональный аккаунт для тестирования всех возможностей платформы!\n\n` +
@@ -168,14 +168,14 @@ function setupBotHandlers(bot: Telegraf) {
         );
       } else if (telegramId === '8530599793') {
         // Backup account returning greeting
-        await sendReply(
+        await sendReply(ctx,
           `С возвращением! 👋\n\n` +
           `Твой центр здоровья готов помочь тебе сегодня.\n\n` +
           `Используйте /menu для быстрого доступа.`
         );
       } else if (telegramId === '7694835964' && isNewUser) {
         // Tixy's first time greeting
-        await sendReply(
+        await sendReply(ctx,
           `Привет, Tixy! 👋\n\n` +
           `Добро пожаловать в EthosLife! 💚\n\n` +
           `Это твой персональный центр здоровья и ежедневных привычек.\n\n` +
@@ -188,13 +188,13 @@ function setupBotHandlers(bot: Telegraf) {
         );
       } else if (telegramId === '7694835964') {
         // Tixy's returning greeting
-        await sendReply(
+        await sendReply(ctx,
           `С возвращением, Tixy! 👋\n\n` +
           `Твой центр здоровья готов помочь тебе сегодня.\n\n` +
           `Используйте /menu для быстрого доступа.`
         );
       } else if (isNewUser) {
-        await sendReply(
+        await sendReply(ctx,
           `Добро пожаловать в EthosLife, ${ctx.from.first_name}! 👋\n\n` +
           `Это твой центр здоровья, как экосистемной привычки и детальной аналитики 💚\n\n` +
           `Ваш аккаунт создан. Теперь вы можете:\n` +
@@ -205,7 +205,7 @@ function setupBotHandlers(bot: Telegraf) {
           `Используйте /menu для быстрого доступа к функциям.`
         );
       } else {
-        await sendReply(
+        await sendReply(ctx,
           `С возвращением, ${ctx.from.first_name}! 👋\n\n` +
           `Используйте /menu для быстрого доступа.`
         );
