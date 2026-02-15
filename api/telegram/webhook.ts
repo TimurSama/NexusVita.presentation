@@ -25,14 +25,21 @@ if (TELEGRAM_BOT_TOKEN) {
   // Start command
   bot.start(async (ctx: Context) => {
     const telegramId = ctx.from?.id.toString();
-    console.log('Start command received from:', telegramId);
+    console.log('🚀 /start command received from:', telegramId);
+    console.log('Context:', {
+      from: ctx.from,
+      chat: ctx.chat,
+      message: ctx.message?.text,
+    });
     
     if (!telegramId) {
-      console.error('No telegram ID in context');
+      console.error('❌ No telegram ID in context');
+      await ctx.reply('Ошибка: не удалось определить ваш Telegram ID');
       return;
     }
 
     try {
+      console.log('📝 Processing /start for user:', telegramId);
       // Check if user exists
       let user = await userDb.findByTelegramId(telegramId);
       const isNewUser = !user;
@@ -69,8 +76,11 @@ if (TELEGRAM_BOT_TOKEN) {
         }
       }
 
+      console.log('👤 User found/created:', { userId: user.id, isNewUser, telegramId });
+
       // Special greetings for specific users
       if (telegramId === '403161451' && isNewUser) {
+        console.log('💚 Sending Maria first-time greeting');
         // Maria's first time greeting
         await ctx.reply(
           `Привет Марьяша! 👋\n\n` +
@@ -86,6 +96,7 @@ if (TELEGRAM_BOT_TOKEN) {
           `Используйте /menu для быстрого доступа к функциям.`
         );
       } else if (telegramId === '403161451') {
+        console.log('💚 Sending Maria returning greeting');
         // Maria's returning greeting
         await ctx.reply(
           `С возвращением, Марьяша! 👋\n\n` +
@@ -132,9 +143,26 @@ if (TELEGRAM_BOT_TOKEN) {
         );
       }
     } catch (error) {
-      console.error('Error in /start command:', error);
-      await ctx.reply('Произошла ошибка при обработке команды. Пожалуйста, попробуйте позже.');
+      console.error('❌ Error in /start command:', error);
+      console.error('Error details:', {
+        message: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+      });
+      try {
+        await ctx.reply('Произошла ошибка при обработке команды. Пожалуйста, попробуйте позже.');
+      } catch (replyError) {
+        console.error('Failed to send error reply:', replyError);
+      }
     }
+  });
+
+  // Log all messages for debugging
+  bot.on('message', async (ctx) => {
+    console.log('📩 Message received:', {
+      text: ctx.message?.text,
+      from_id: ctx.from?.id,
+      chat_id: ctx.chat?.id,
+    });
   });
 
   // Help command
@@ -161,11 +189,12 @@ if (TELEGRAM_BOT_TOKEN) {
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  console.log('Webhook called:', {
-    method: req.method,
-    hasBody: !!req.body,
-    bodyType: typeof req.body,
-  });
+  console.log('=== WEBHOOK CALLED ===');
+  console.log('Method:', req.method);
+  console.log('Headers:', JSON.stringify(req.headers, null, 2));
+  console.log('Body:', JSON.stringify(req.body, null, 2));
+  console.log('Bot initialized:', !!bot);
+  console.log('Token set:', !!TELEGRAM_BOT_TOKEN);
 
   // Initialize database
   try {
@@ -177,31 +206,66 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   if (!bot) {
-    console.error('Bot not initialized, token:', TELEGRAM_BOT_TOKEN ? 'SET' : 'NOT SET');
+    console.error('❌ Bot not initialized!');
+    console.error('Token exists:', !!TELEGRAM_BOT_TOKEN);
     return res.status(500).json({ error: 'Bot not initialized' });
   }
 
   if (req.method !== 'POST') {
+    console.log('❌ Method not allowed:', req.method);
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
     const update = req.body;
-    console.log('Processing update:', {
+    
+    if (!update) {
+      console.error('❌ No update in body');
+      return res.status(400).json({ error: 'No update in body' });
+    }
+
+    console.log('📨 Processing update:', {
       update_id: update?.update_id,
       message: update?.message ? {
+        message_id: update.message.message_id,
         text: update.message.text,
-        from: update.message.from?.id,
-        chat: update.message.chat?.id,
+        from_id: update.message.from?.id,
+        from_username: update.message.from?.username,
+        chat_id: update.message.chat?.id,
+      } : null,
+      callback_query: update?.callback_query ? {
+        data: update.callback_query.data,
+        from_id: update.callback_query.from?.id,
       } : null,
     });
     
-    await bot.handleUpdate(update);
-    console.log('Update processed successfully');
+    // Handle update with timeout
+    const updatePromise = bot.handleUpdate(update);
+    const timeoutPromise = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error('Update handling timeout')), 25000)
+    );
+    
+    await Promise.race([updatePromise, timeoutPromise]);
+    console.log('✅ Update processed successfully');
     res.status(200).json({ ok: true });
   } catch (error) {
-    console.error('Webhook error:', error);
+    console.error('❌ Webhook error:', error);
+    console.error('Error type:', error?.constructor?.name);
+    console.error('Error message:', error instanceof Error ? error.message : String(error));
     console.error('Error stack:', error instanceof Error ? error.stack : 'No stack');
+    
+    // Try to send error response to user if possible
+    try {
+      if (req.body?.message?.from?.id && bot) {
+        await bot.telegram.sendMessage(
+          req.body.message.from.id,
+          'Произошла ошибка при обработке вашего сообщения. Пожалуйста, попробуйте позже.'
+        );
+      }
+    } catch (sendError) {
+      console.error('Failed to send error message to user:', sendError);
+    }
+    
     res.status(500).json({ error: 'Internal server error', details: String(error) });
   }
 }
