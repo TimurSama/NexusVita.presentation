@@ -9,6 +9,7 @@ import { DetailPopup } from '@/components/DetailPopup';
 import { InfoIndicator } from '@/components/InfoIndicator';
 import { whitepaperContent } from '@/data/whitepaperContent';
 import { ecosystemFeatures } from '@/data/ecosystemFeatures';
+import { EcosystemPlatformSection } from '@/components/EcosystemPlatformSection';
 import { Button } from '@/components/ui/button';
 import { WheelPicker } from '@/components/interactive/WheelPicker';
 import { WeightSelector } from '@/components/interactive/WeightSelector';
