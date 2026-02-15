@@ -4,21 +4,41 @@
 
 Бот **НЕ БУДЕТ РАБОТАТЬ** без правильно настроенного webhook!
 
-## Шаг 1: Проверьте webhook в BotFather
+## Шаг 1: Установите webhook
 
-1. Откройте [@BotFather](https://t.me/BotFather) в Telegram
-2. Отправьте команду: `/getwebhookinfo`
-3. Должен быть показан URL: `https://etholife.vercel.app/api/telegram/webhook`
+### Способ 1: Через Telegram Bot API (рекомендуется)
 
-### Если webhook не настроен или неправильный:
-
+Откройте в браузере (замените `YOUR_BOT_TOKEN` на ваш токен из BotFather):
 ```
-/deletewebhook
-/setwebhook
-https://etholife.vercel.app/api/telegram/webhook
+https://api.telegram.org/botYOUR_BOT_TOKEN/setWebhook?url=https://etholife.vercel.app/api/telegram/webhook
 ```
 
-**Важно:** После `/setwebhook` BotFather должен ответить, что webhook установлен.
+Должен вернуться JSON: `{"ok":true,"result":true,"description":"Webhook was set"}`
+
+### Способ 2: Через автоматический endpoint
+
+После деплоя откройте:
+```
+https://etholife.vercel.app/api/admin/setup-webhook
+```
+(Нужно отправить POST запрос, можно использовать Postman или curl)
+
+### Способ 3: Через BotFather
+
+1. Откройте [@BotFather](https://t.me/BotFather)
+2. Отправьте: `/mybots`
+3. Выберите вашего бота
+4. Найдите раздел "Bot Settings" или "Webhook"
+5. Установите webhook URL: `https://etholife.vercel.app/api/telegram/webhook`
+
+### Проверка webhook:
+
+Откройте в браузере (замените `YOUR_BOT_TOKEN`):
+```
+https://api.telegram.org/botYOUR_BOT_TOKEN/getWebhookInfo
+```
+
+Должен показать URL: `https://etholife.vercel.app/api/telegram/webhook`
 
 ## Шаг 2: Проверьте endpoint webhook-info
 
