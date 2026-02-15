@@ -2,6 +2,11 @@ import { initDatabase } from "./database-adapter";
 import { startTelegramBot } from "./telegram-bot";
 import { createMariaProfile } from "./maria-plan-generator";
 import express from "express";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 async function startBotServer() {
   console.log('🤖 Starting Telegram Bot Server...');
