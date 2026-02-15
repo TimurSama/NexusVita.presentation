@@ -592,3 +592,320 @@ h3 {
     font-size: 1.875rem;
   }
 }
+
+/* Landing Page - 3D Glass with Bubbles and Engraving */
+.landing-page {
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* 3D Glass Card with Bubbles */
+.engraved-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 24px;
+  
+  /* 3D Volume Effect */
+  box-shadow: 
+    /* Outer glow */
+    0 0 0 1px rgba(255, 255, 255, 0.5),
+    /* Deep shadows for volume */
+    inset 0 2px 4px rgba(255, 255, 255, 0.6),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.1),
+    inset 0 0 20px rgba(255, 255, 255, 0.3),
+    /* Outer shadows */
+    0 8px 32px rgba(0, 0, 0, 0.12),
+    0 4px 16px rgba(0, 0, 0, 0.08),
+    0 2px 8px rgba(0, 0, 0, 0.06),
+    /* Depth */
+    0 16px 48px rgba(0, 0, 0, 0.1);
+  
+  /* Texture overlay */
+  background-image: 
+    /* Grain texture */
+    radial-gradient(circle at 1px 1px, rgba(0, 0, 0, 0.05) 1px, transparent 0),
+    radial-gradient(circle at 2px 2px, rgba(0, 0, 0, 0.03) 1px, transparent 0),
+    /* Frosted glass effect */
+    linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  background-size: 20px 20px, 10px 10px, 100% 100%;
+  background-position: 0 0, 5px 5px, 0 0;
+}
+
+/* Glass Bubbles Effect */
+.engraved-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: 
+    /* Bubbles - various sizes */
+    radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.4) 2px, transparent 2px),
+    radial-gradient(circle at 60% 70%, rgba(255, 255, 255, 0.3) 1.5px, transparent 1.5px),
+    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.35) 1px, transparent 1px),
+    radial-gradient(circle at 40% 80%, rgba(255, 255, 255, 0.25) 2.5px, transparent 2.5px),
+    radial-gradient(circle at 10% 60%, rgba(255, 255, 255, 0.3) 1.2px, transparent 1.2px),
+    radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 0.28) 1.8px, transparent 1.8px),
+    radial-gradient(circle at 30% 10%, rgba(255, 255, 255, 0.32) 1.3px, transparent 1.3px),
+    radial-gradient(circle at 70% 90%, rgba(255, 255, 255, 0.27) 2.2px, transparent 2.2px);
+  background-size: 
+    150px 150px,
+    200px 200px,
+    180px 180px,
+    160px 160px,
+    220px 220px,
+    190px 190px,
+    170px 170px,
+    210px 210px;
+  background-position:
+    20% 30%,
+    60% 70%,
+    80% 20%,
+    40% 80%,
+    10% 60%,
+    90% 50%,
+    30% 10%,
+    70% 90%;
+  pointer-events: none;
+  opacity: 0.6;
+  mix-blend-mode: overlay;
+  animation: bubble-float 20s ease-in-out infinite;
+}
+
+@keyframes bubble-float {
+  0%, 100% {
+    transform: translate(0, 0);
+    opacity: 0.6;
+  }
+  25% {
+    transform: translate(5px, -5px);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translate(-3px, 3px);
+    opacity: 0.5;
+  }
+  75% {
+    transform: translate(4px, 2px);
+    opacity: 0.65;
+  }
+}
+
+/* Engraved Text Effect */
+.engraved-text {
+  position: relative;
+  color: oklch(0.20 0.02 245);
+  text-shadow: 
+    /* Deep engraving - multiple layers */
+    0 1px 0 rgba(255, 255, 255, 0.9),
+    0 -1px 0 rgba(0, 0, 0, 0.2),
+    0 2px 0 rgba(255, 255, 255, 0.7),
+    0 -2px 0 rgba(0, 0, 0, 0.15),
+    0 3px 2px rgba(0, 0, 0, 0.1),
+    0 -3px 1px rgba(0, 0, 0, 0.08),
+    /* Depth */
+    1px 1px 0 rgba(0, 0, 0, 0.1),
+    -1px -1px 0 rgba(255, 255, 255, 0.8),
+    2px 2px 2px rgba(0, 0, 0, 0.05);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* Engraved Button */
+.engraved-button {
+  position: relative;
+  background: linear-gradient(135deg, oklch(0.32 0.14 245) 0%, oklch(0.28 0.12 245) 100%);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 16px 32px;
+  font-weight: 600;
+  font-size: 18px;
+  
+  /* 3D Engraved Effect */
+  box-shadow: 
+    /* Outer glow */
+    0 0 0 1px rgba(255, 255, 255, 0.3),
+    /* Engraved edges */
+    inset 0 2px 4px rgba(255, 255, 255, 0.4),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    /* Outer shadows */
+    0 4px 12px rgba(0, 0, 0, 0.2),
+    0 2px 6px rgba(0, 0, 0, 0.15),
+    /* Depth */
+    0 8px 24px rgba(0, 0, 0, 0.25);
+  
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.engraved-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 0 0 1px rgba(255, 255, 255, 0.4),
+    inset 0 2px 4px rgba(255, 255, 255, 0.5),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    0 6px 16px rgba(0, 0, 0, 0.25),
+    0 4px 8px rgba(0, 0, 0, 0.2),
+    0 12px 32px rgba(0, 0, 0, 0.3);
+  color: white !important;
+}
+
+.engraved-button:active {
+  transform: translateY(0);
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.3),
+    inset 0 -1px 2px rgba(255, 255, 255, 0.2),
+    0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.engraved-button-outline {
+  position: relative;
+  background: rgba(255, 255, 255, 0.9);
+  color: oklch(0.32 0.14 245);
+  border: 2px solid oklch(0.32 0.14 245);
+  border-radius: 16px;
+  padding: 16px 32px;
+  font-weight: 600;
+  font-size: 18px;
+  
+  /* Engraved outline effect */
+  box-shadow: 
+    inset 0 2px 4px rgba(255, 255, 255, 0.6),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    0 4px 12px rgba(0, 0, 0, 0.1),
+    0 2px 6px rgba(0, 0, 0, 0.08);
+  
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.engraved-button-outline:hover {
+  background: oklch(0.32 0.14 245);
+  color: white !important;
+  transform: translateY(-2px);
+  box-shadow: 
+    inset 0 2px 4px rgba(255, 255, 255, 0.3),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.2),
+    0 6px 16px rgba(0, 0, 0, 0.2),
+    0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Engraved Input */
+.engraved-input {
+  position: relative;
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  padding: 12px 16px;
+  
+  /* Engraved effect */
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.08),
+    inset 0 -1px 2px rgba(255, 255, 255, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    0 1px 2px rgba(0, 0, 0, 0.05);
+  
+  transition: all 0.2s ease;
+}
+
+.engraved-input:focus {
+  outline: none;
+  border-color: oklch(0.32 0.14 245);
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.08),
+    inset 0 -1px 2px rgba(255, 255, 255, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    0 0 0 3px rgba(0, 0, 0, 0.1),
+    0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Engraved Badge */
+.engraved-badge {
+  position: relative;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  padding: 6px 12px;
+  font-weight: 600;
+  font-size: 12px;
+  
+  /* Engraved effect */
+  box-shadow: 
+    inset 0 1px 2px rgba(255, 255, 255, 0.8),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.1),
+    0 2px 4px rgba(0, 0, 0, 0.08);
+  
+  text-shadow: 
+    0 1px 0 rgba(255, 255, 255, 0.9),
+    0 -1px 0 rgba(0, 0, 0, 0.15);
+}
+
+/* Glass Bubbles Background */
+.glass-bubbles {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    /* Large bubbles */
+    radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.06) 0%, transparent 50%),
+    /* Medium bubbles */
+    radial-gradient(circle at 30% 70%, rgba(255, 255, 255, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 70% 30%, rgba(255, 255, 255, 0.07) 0%, transparent 40%),
+    /* Small bubbles */
+    radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.04) 0%, transparent 30%),
+    radial-gradient(circle at 90% 10%, rgba(255, 255, 255, 0.05) 0%, transparent 30%);
+  background-size: 
+    400px 400px,
+    350px 350px,
+    300px 300px,
+    250px 250px,
+    200px 200px,
+    150px 150px,
+    180px 180px;
+  background-position:
+    10% 20%,
+    80% 80%,
+    50% 50%,
+    30% 70%,
+    70% 30%,
+    20% 50%,
+    90% 10%;
+  animation: bubble-drift 30s ease-in-out infinite;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+@keyframes bubble-drift {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.6;
+  }
+  33% {
+    transform: translate(20px, -30px) scale(1.05);
+    opacity: 0.7;
+  }
+  66% {
+    transform: translate(-15px, 20px) scale(0.95);
+    opacity: 0.5;
+  }
+}
+
+/* Additional depth for cards on hover */
+.engraved-card:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 
+    0 0 0 1px rgba(255, 255, 255, 0.6),
+    inset 0 2px 4px rgba(255, 255, 255, 0.7),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.08),
+    inset 0 0 20px rgba(255, 255, 255, 0.4),
+    0 12px 40px rgba(0, 0, 0, 0.15),
+    0 6px 20px rgba(0, 0, 0, 0.1),
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    0 20px 60px rgba(0, 0, 0, 0.12);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}

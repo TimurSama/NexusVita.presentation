@@ -29,11 +29,13 @@ import InvestmentProposal from "./pages/InvestmentProposal";
 import AiPlanner from "./pages/AiPlanner";
 import Tokenomics from "./pages/Tokenomics";
 import Whitepaper from "./pages/Whitepaper";
+import Landing from "./pages/Landing";
 
 function Router() {
   return (
     <Switch>
       <Route path={"/"} component={Home} />
+      <Route path={"/landing"} component={Landing} />
       <Route path={"/presentation"} component={Presentation} />
       <Route path={"/whitepaper"} component={Whitepaper} />
       <Route path={"/dashboard"} component={Dashboard} />

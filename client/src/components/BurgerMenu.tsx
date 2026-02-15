@@ -71,6 +71,7 @@ export function BurgerMenu({ isOpen, onClose }: BurgerMenuProps) {
   ];
 
   const otherPages = [
+    { path: '/landing', icon: Presentation, label: 'Лендинг' },
     { path: '/presentation', icon: Presentation, label: 'Презентация' },
     { path: '/whitepaper', icon: FileText, label: 'Whitepaper' },
     { path: '/journal', icon: FileText, label: 'Ежедневник' },
