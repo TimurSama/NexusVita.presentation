@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: ethoslife-telegram-bot
+    env: node
+    buildCommand: pnpm install && pnpm run build:bot
+    startCommand: pnpm run start:bot
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: POSTGRES_URL
+        sync: false
+    healthCheckPath: /health
