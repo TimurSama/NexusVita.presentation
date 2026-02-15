@@ -2,7 +2,7 @@ services:
   - type: web
     name: ethoslife-telegram-bot
     env: node
-    buildCommand: pnpm install && pnpm run build:bot
+    buildCommand: pnpm install --frozen-lockfile && pnpm run build:bot
     startCommand: pnpm run start:bot
     envVars:
       - key: NODE_ENV
