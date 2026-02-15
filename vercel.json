@@ -2,7 +2,7 @@
   "buildCommand": "npm run build:vercel",
   "outputDirectory": "dist/public",
   "devCommand": "npm run dev",
-  "installCommand": "pnpm install --no-strict-peer-dependencies",
+  "installCommand": "pnpm install",
   "framework": "vite",
   "rewrites": [
     {
