@@ -444,8 +444,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     
     // Wrap in try-catch to catch any synchronous errors
     try {
+      console.log(`[${requestId}] About to call bot.handleUpdate with update:`, {
+        update_id: update?.update_id,
+        message_text: update?.message?.text,
+        message_id: update?.message?.message_id,
+      });
+      
       const handlePromise = bot.handleUpdate(update);
       console.log(`[${requestId}] handleUpdate called, promise created`);
+      
+      // Add timeout to detect hanging handlers
+      const handlerTimeout = setTimeout(() => {
+        console.error(`[${requestId}] ⚠️ Handler timeout after 25 seconds - update may be hanging`);
+      }, 25000);
       
       handlePromise.then(() => {
         const processTime = Date.now() - processStartTime;
