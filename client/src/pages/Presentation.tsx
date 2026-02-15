@@ -176,42 +176,6 @@ export default function Presentation() {
                 >
                   Платформа нового поколения, объединяющая передовую AI-диагностику, персонализированные планы и комплексный мониторинг для достижения оптимального физического, ментального и социального благополучия.
                 </motion.p>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
-                  className="grid grid-cols-1 md:grid-cols-4 gap-4"
-                >
-                  <div className="text-center">
-                    <div className="text-4xl md:text-5xl font-bold text-primary mb-2">
-                      <SketchIcon icon="dna" size={48} className="inline-block mr-2" />
-                      Системный
-                    </div>
-                    <div className="text-sm text-foreground/60">Подход к здоровью</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-4xl md:text-5xl font-bold text-primary mb-2">
-                      <SketchIcon icon="brain" size={48} className="inline-block mr-2" />
-                      AI-Driven
-                    </div>
-                    <div className="text-sm text-foreground/60">Персонализация</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-4xl md:text-5xl font-bold text-primary mb-2">
-                      <SketchIcon icon="network" size={48} className="inline-block mr-2" />
-                      Интеграции
-                    </div>
-                    <div className="text-sm text-foreground/60">Специалисты и устройства</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-4xl md:text-5xl font-bold text-primary mb-2">
-                      <SketchIcon icon="monitor" size={48} className="inline-block mr-2" />
-                      24/7
-                    </div>
-                    <div className="text-sm text-foreground/60">Мониторинг</div>
-                  </div>
-                </motion.div>
               </motion.div>
             </div>
           </div>
@@ -234,45 +198,45 @@ export default function Presentation() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {healthModules.map((module, idx) => (
-              <Link key={idx} href={module.path}>
-                <motion.a
-                  variants={itemVariants}
-                  onMouseEnter={() => setHoveredCard(idx)}
-                  onMouseLeave={() => setHoveredCard(null)}
-                  whileHover={{ y: -8 }}
-                  className="relative overflow-hidden rounded-2xl bg-card border border-border/50 p-6 cursor-pointer block h-full group hover:border-primary/30 transition-all"
-                >
-                  <div className="absolute top-0 right-0 opacity-5 group-hover:opacity-10 transition-opacity">
-                    <SketchIcon icon={module.icon} size={80} className="text-primary" />
+              <motion.button
+                key={idx}
+                variants={itemVariants}
+                onMouseEnter={() => setHoveredCard(idx)}
+                onMouseLeave={() => setHoveredCard(null)}
+                whileHover={{ y: -8 }}
+                onClick={() => setOpenPopup(module.popupId)}
+                className="relative overflow-hidden rounded-2xl bg-card border border-border/50 p-6 cursor-pointer block h-full group hover:border-primary/30 transition-all text-left"
+              >
+                <div className="absolute top-0 right-0 opacity-5 group-hover:opacity-10 transition-opacity">
+                  <SketchIcon icon={module.icon} size={80} className="text-primary" />
+                </div>
+                
+                <div className="relative z-10">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="p-3 bg-primary/10 rounded-xl">
+                      <SketchIcon icon={module.icon} size={24} className="text-primary" />
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <InfoIndicator 
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setOpenPopup(module.popupId);
+                        }} 
+                      />
+                      <motion.div
+                        animate={{ x: hoveredCard === idx ? 5 : 0 }}
+                        className="text-foreground/40"
+                      >
+                        <ChevronRight className="w-5 h-5" />
+                      </motion.div>
+                    </div>
                   </div>
                   
-                  <div className="relative z-10">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="p-3 bg-primary/10 rounded-xl">
-                        <SketchIcon icon={module.icon} size={24} className="text-primary" />
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <InfoIndicator 
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            setOpenPopup(module.popupId);
-                          }} 
-                        />
-                        <motion.div
-                          animate={{ x: hoveredCard === idx ? 5 : 0 }}
-                          className="text-foreground/40"
-                        >
-                          <ChevronRight className="w-5 h-5" />
-                        </motion.div>
-                      </div>
-                    </div>
-                    
-                    <h3 className="text-2xl font-bold mb-2 text-foreground">{module.title}</h3>
-                    <p className="text-foreground/70 text-sm leading-relaxed">{module.description}</p>
-                  </div>
-                </motion.a>
-              </Link>
+                  <h3 className="text-2xl font-bold mb-2 text-foreground">{module.title}</h3>
+                  <p className="text-foreground/70 text-sm leading-relaxed">{module.description}</p>
+                </div>
+              </motion.button>
             ))}
           </div>
         </motion.section>
@@ -294,34 +258,34 @@ export default function Presentation() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {ecosystemSections.map((section, idx) => (
-              <Link key={idx} href={section.path}>
-                <motion.a
-                  variants={itemVariants}
-                  whileHover={{ y: -5 }}
-                  className="relative overflow-hidden rounded-2xl bg-card border border-border/50 p-8 cursor-pointer block group hover:border-primary/30 transition-all"
-                >
-                  <div className="absolute top-0 right-0 opacity-5 group-hover:opacity-10 transition-opacity">
-                    <SketchIcon icon={section.icon} size={100} className="text-primary" />
-                  </div>
-                  
-                  <div className="relative z-10">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="inline-block p-3 bg-primary/10 rounded-xl">
-                        <SketchIcon icon={section.icon} size={32} className="text-primary" />
-                      </div>
-                      <InfoIndicator 
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setOpenPopup(section.popupId);
-                        }} 
-                      />
+              <motion.button
+                key={idx}
+                variants={itemVariants}
+                whileHover={{ y: -5 }}
+                onClick={() => setOpenPopup(section.popupId)}
+                className="relative overflow-hidden rounded-2xl bg-card border border-border/50 p-8 cursor-pointer block group hover:border-primary/30 transition-all text-left"
+              >
+                <div className="absolute top-0 right-0 opacity-5 group-hover:opacity-10 transition-opacity">
+                  <SketchIcon icon={section.icon} size={100} className="text-primary" />
+                </div>
+                
+                <div className="relative z-10">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="inline-block p-3 bg-primary/10 rounded-xl">
+                      <SketchIcon icon={section.icon} size={32} className="text-primary" />
                     </div>
-                    <h3 className="text-2xl font-bold mb-2 text-foreground">{section.title}</h3>
-                    <p className="text-foreground/70">{section.description}</p>
+                    <InfoIndicator 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setOpenPopup(section.popupId);
+                      }} 
+                    />
                   </div>
-                </motion.a>
-              </Link>
+                  <h3 className="text-2xl font-bold mb-2 text-foreground">{section.title}</h3>
+                  <p className="text-foreground/70">{section.description}</p>
+                </div>
+              </motion.button>
             ))}
           </div>
         </motion.section>

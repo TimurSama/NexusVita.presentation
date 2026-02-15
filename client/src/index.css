@@ -162,17 +162,131 @@
   animation: sketch-draw 0.6s ease-in-out;
 }
 
-/* Premium Typography */
+/* Frosted Glass Texture - Матовое шершавое зернистое стекло */
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+  
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    /* Текстура фона - матовое зернистое стекло */
+    background-image: 
+      radial-gradient(circle at 1px 1px, rgba(0,0,0,0.03) 1px, transparent 0),
+      radial-gradient(circle at 2px 2px, rgba(0,0,0,0.02) 1px, transparent 0);
+    background-size: 40px 40px, 20px 20px;
+    background-position: 0 0, 10px 10px;
+  }
+  
+  /* Текстура для всех элементов */
+  .premium-card,
+  .card,
+  [class*="bg-card"],
+  [class*="bg-background"],
+  button,
+  input,
+  textarea,
+  select {
+    position: relative;
+    backdrop-filter: blur(10px) saturate(180%);
+    -webkit-backdrop-filter: blur(10px) saturate(180%);
+  }
+  
+  .premium-card::before,
+  .card::before,
+  [class*="bg-card"]::before,
+  [class*="bg-background"]::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background-image: 
+      radial-gradient(circle at 1px 1px, rgba(0,0,0,0.04) 1px, transparent 0),
+      radial-gradient(circle at 2px 2px, rgba(0,0,0,0.02) 1px, transparent 0);
+    background-size: 30px 30px, 15px 15px;
+    background-position: 0 0, 8px 8px;
+    pointer-events: none;
+    opacity: 0.6;
+    mix-blend-mode: overlay;
+  }
+  
+  /* Гравировка для текстов */
+  h1, h2, h3, h4, h5, h6,
+  p, span, div, label,
+  button, a {
+    text-shadow: 
+      0 1px 0 rgba(255, 255, 255, 0.8),
+      0 -1px 0 rgba(0, 0, 0, 0.1),
+      0 2px 2px rgba(0, 0, 0, 0.05);
+    position: relative;
+  }
+  
+  /* Гравировка для иконок */
+  svg, .sketch-icon {
+    filter: 
+      drop-shadow(0 1px 0 rgba(255, 255, 255, 0.6))
+      drop-shadow(0 -1px 0 rgba(0, 0, 0, 0.15))
+      drop-shadow(0 2px 2px rgba(0, 0, 0, 0.1));
+  }
+  
+  /* Гравировка для окон и карточек */
+  .premium-card,
+  .card,
+  [class*="rounded"],
+  dialog,
+  [role="dialog"] {
+    box-shadow: 
+      inset 0 1px 0 rgba(255, 255, 255, 0.4),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.1),
+      0 2px 4px rgba(0, 0, 0, 0.08),
+      0 4px 8px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+  }
+  
+  /* Гравировка для кнопок */
+  button,
+  [role="button"],
+  .btn-premium,
+  .btn-sketch {
+    box-shadow: 
+      inset 0 1px 0 rgba(255, 255, 255, 0.5),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.15),
+      0 2px 4px rgba(0, 0, 0, 0.1),
+      0 1px 0 rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  
+  button:active,
+  [role="button"]:active {
+    box-shadow: 
+      inset 0 2px 4px rgba(0, 0, 0, 0.2),
+      inset 0 1px 0 rgba(0, 0, 0, 0.1),
+      0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Гравировка для инпутов */
+  input,
+  textarea,
+  select {
+    box-shadow: 
+      inset 0 1px 2px rgba(0, 0, 0, 0.08),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.3),
+      0 1px 0 rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(0, 0, 0, 0.12);
+  }
+  
+  input:focus,
+  textarea:focus,
+  select:focus {
+    box-shadow: 
+      inset 0 1px 2px rgba(0, 0, 0, 0.08),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.3),
+      0 0 0 2px rgba(var(--primary), 0.2),
+      0 1px 0 rgba(255, 255, 255, 0.4);
   }
   
   /* Premium Headings */

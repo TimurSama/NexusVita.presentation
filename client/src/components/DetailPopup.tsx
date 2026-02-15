@@ -61,16 +61,16 @@ export function DetailPopup({ isOpen, onClose, content }: DetailPopupProps) {
             className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
           />
 
-          {/* Popup */}
+          {/* Popup - Fullscreen */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="fixed inset-4 md:inset-auto md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-full md:max-w-3xl md:max-h-[90vh] z-50 bg-card rounded-2xl border border-border/50 shadow-xl overflow-hidden flex flex-col"
+            className="fixed inset-0 z-50 bg-card overflow-hidden flex flex-col"
           >
             {/* Header */}
-            <div className="flex items-start justify-between p-6 border-b border-border/50 bg-gradient-to-r from-primary/5 to-transparent">
+            <div className="flex items-start justify-between p-6 md:p-12 border-b border-border/50 bg-gradient-to-r from-primary/5 to-transparent">
               <div className="flex-1 pr-4">
                 <h2 className="text-3xl font-bold text-foreground mb-2">{content.title}</h2>
                 {content.subtitle && (
@@ -88,7 +88,7 @@ export function DetailPopup({ isOpen, onClose, content }: DetailPopupProps) {
             </div>
 
             {/* Content - Scrollable */}
-            <div className="flex-1 overflow-y-auto p-6">
+            <div className="flex-1 overflow-y-auto p-6 md:p-12">
               {/* Main Description */}
               <div className="prose prose-lg max-w-none mb-6">
                 <p className="text-foreground/80 leading-relaxed text-base md:text-lg">
