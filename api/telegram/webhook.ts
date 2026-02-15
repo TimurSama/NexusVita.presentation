@@ -200,31 +200,26 @@ function setupBotHandlers(bot: Telegraf) {
     }
   });
 
-  // Handle unknown commands
-  bot.on('text', async (ctx: Context) => {
+  // Handle unknown commands - use hears for text messages
+  bot.hears(/^\//, async (ctx: Context) => {
     const text = ctx.message?.text;
     if (!text) return;
     
-    console.log('📩 Text message received:', {
-      text,
-      from_id: ctx.from?.id,
-      chat_id: ctx.chat?.id,
-    });
-    
-    // Handle unknown commands (only if not handled by other handlers)
-    if (text.startsWith('/') && 
-        !text.startsWith('/start') && 
-        !text.startsWith('/menu') && 
-        !text.startsWith('/help') && 
-        !text.startsWith('/today') &&
-        !text.startsWith('/settings') &&
-        !text.startsWith('/metrics') &&
-        !text.startsWith('/goals')) {
-      console.log('❓ Unknown command:', text);
-      await ctx.reply(
-        `Неизвестная команда. Используйте /menu для просмотра доступных команд или /help для справки.`
-      );
+    // Skip if it's a known command (they're handled by bot.command handlers)
+    if (text.startsWith('/start') || 
+        text.startsWith('/menu') || 
+        text.startsWith('/help') || 
+        text.startsWith('/today') ||
+        text.startsWith('/settings') ||
+        text.startsWith('/metrics') ||
+        text.startsWith('/goals')) {
+      return; // Let command handlers process it
     }
+    
+    console.log('❓ Unknown command:', text);
+    await ctx.reply(
+      `Неизвестная команда. Используйте /menu для просмотра доступных команд или /help для справки.`
+    );
   });
 
   // Menu command
