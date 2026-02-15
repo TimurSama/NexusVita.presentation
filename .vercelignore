@@ -1,0 +1,9 @@
+# Ignore files for Vercel deployment
+server/
+dist/index.js
+*.log
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+node_modules/.cache
