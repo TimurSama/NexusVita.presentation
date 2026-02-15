@@ -33,14 +33,8 @@ function initializeBot(): Telegraf | null {
 
   console.log('✅ Initializing bot with token:', TELEGRAM_BOT_TOKEN.substring(0, 10) + '...');
   try {
-    // Create bot with options to prevent automatic API calls
-    bot = new Telegraf(TELEGRAM_BOT_TOKEN, {
-      // Disable automatic getMe call on initialization
-      telegram: {
-        // Add retry logic for failed requests
-        retryAfter: 1,
-      }
-    });
+    // Create bot instance
+    bot = new Telegraf(TELEGRAM_BOT_TOKEN);
     console.log('✅ Bot initialized successfully');
     setupBotHandlers(bot);
     return bot;
