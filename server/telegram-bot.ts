@@ -454,6 +454,11 @@ export function startTelegramBot() {
     bot.launch();
     console.log('Telegram bot started');
     
+    // Start hourly reminders
+    const { startHourlyReminders, setBot } = require('./telegram-reminders');
+    setBot(bot);
+    startHourlyReminders();
+    
     // Graceful stop
     process.once('SIGINT', () => bot?.stop('SIGINT'));
     process.once('SIGTERM', () => bot?.stop('SIGTERM'));
