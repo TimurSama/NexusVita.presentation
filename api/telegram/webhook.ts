@@ -396,6 +396,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     
     // Process update asynchronously (don't await - Telegram already got response)
     const processStartTime = Date.now();
+    console.log(`[${requestId}] 🚀 Starting async update processing...`);
+    
     bot.handleUpdate(update).then(() => {
       const processTime = Date.now() - processStartTime;
       console.log(`[${requestId}] ✅ Update processed successfully in ${processTime}ms`);
@@ -406,27 +408,38 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         message: error instanceof Error ? error.message : String(error),
         stack: error instanceof Error ? error.stack : undefined,
         update_id: update?.update_id,
+        error_name: error?.constructor?.name,
       });
       
       // Try to re-initialize bot if error suggests it's broken
       if (error instanceof Error && (
         error.message.includes('ECONNRESET') ||
         error.message.includes('ETIMEDOUT') ||
-        error.message.includes('socket hang up')
+        error.message.includes('socket hang up') ||
+        error.message.includes('Bot token') ||
+        error.message.includes('Unauthorized')
       )) {
-        console.log(`[${requestId}] 🔄 Connection error detected, re-initializing bot...`);
+        console.log(`[${requestId}] 🔄 Connection/auth error detected, re-initializing bot...`);
         bot = null; // Force re-initialization
         bot = initializeBot();
       }
       
       // Try to send error message to user
-      if (update?.message?.from?.id && bot) {
-        bot.telegram.sendMessage(
-          update.message.from.id,
-          'Произошла ошибка при обработке вашего сообщения. Пожалуйста, попробуйте позже.'
-        ).catch((sendError) => {
-          console.error(`[${requestId}] Failed to send error message to user:`, sendError);
-        });
+      if (update?.message?.from?.id) {
+        const userId = update.message.from.id;
+        console.log(`[${requestId}] 📤 Attempting to send error message to user ${userId}...`);
+        if (bot) {
+          bot.telegram.sendMessage(
+            userId,
+            'Произошла ошибка при обработке вашего сообщения. Пожалуйста, попробуйте позже.'
+          ).then(() => {
+            console.log(`[${requestId}] ✅ Error message sent to user ${userId}`);
+          }).catch((sendError) => {
+            console.error(`[${requestId}] ❌ Failed to send error message to user ${userId}:`, sendError);
+          });
+        } else {
+          console.error(`[${requestId}] ❌ Cannot send error message - bot is null`);
+        }
       }
     });
   } catch (error) {
