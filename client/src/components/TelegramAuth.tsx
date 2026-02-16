@@ -34,6 +34,14 @@ export function TelegramAuth() {
   const [checkingOnboarding, setCheckingOnboarding] = useState(true);
   const [isFirstTime, setIsFirstTime] = useState(false);
 
+  // Redirect to dashboard for returning users
+  useEffect(() => {
+    if (authenticated && user && !isFirstTime && !checkingOnboarding) {
+      setLocation('/dashboard');
+    }
+  }, [authenticated, user, isFirstTime, checkingOnboarding, setLocation]);
+
+  // Main initialization effect
   useEffect(() => {
     const init = async () => {
       // Wait for Telegram Web App to load
@@ -178,13 +186,7 @@ export function TelegramAuth() {
     return <Onboarding />;
   }
 
-  // Redirect to dashboard for returning users
-  useEffect(() => {
-    if (authenticated && user && !isFirstTime && !checkingOnboarding) {
-      setLocation('/dashboard');
-    }
-  }, [authenticated, user, isFirstTime, checkingOnboarding, setLocation]);
-
+  // Redirect to dashboard for returning users (loading state)
   if (authenticated && user && !isFirstTime && !checkingOnboarding) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
