@@ -337,6 +337,31 @@ export const healthMetricsDb = {
       client.release();
     }
   },
+
+  findByUserId: async (userId: number, type?: string, limit?: number) => {
+    const client = await getPool().connect();
+    try {
+      let query = 'SELECT * FROM health_metrics WHERE user_id = $1';
+      const params: any[] = [userId];
+      
+      if (type) {
+        query += ' AND metric_type = $2';
+        params.push(type);
+      }
+      
+      query += ' ORDER BY recorded_at DESC';
+      
+      if (limit) {
+        query += ` LIMIT $${params.length + 1}`;
+        params.push(limit);
+      }
+      
+      const result = await client.query(query, params);
+      return result.rows;
+    } finally {
+      client.release();
+    }
+  },
 };
 
 // Goals operations
@@ -346,6 +371,29 @@ export const goalsDb = {
     try {
       const result = await client.query('SELECT * FROM goals WHERE user_id = $1 ORDER BY created_at DESC', [userId]);
       return result.rows;
+    } finally {
+      client.release();
+    }
+  },
+
+  create: async (userId: number, data: { title: string; description?: string; category?: string; target_value?: number; unit?: string; deadline?: Date }) => {
+    const client = await getPool().connect();
+    try {
+      const result = await client.query(
+        `INSERT INTO goals (user_id, title, description, category, target_value, unit, deadline)
+         VALUES ($1, $2, $3, $4, $5, $6, $7)
+         RETURNING *`,
+        [
+          userId,
+          data.title,
+          data.description || null,
+          data.category || null,
+          data.target_value || null,
+          data.unit || null,
+          data.deadline ? data.deadline.toISOString().split('T')[0] : null,
+        ]
+      );
+      return { lastInsertRowid: result.rows[0].id, id: result.rows[0].id, ...result.rows[0] };
     } finally {
       client.release();
     }
