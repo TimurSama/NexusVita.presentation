@@ -21,7 +21,7 @@ if (!TELEGRAM_BOT_TOKEN) {
 let bot: Telegraf | null = null;
 
 // Function to initialize bot
-function initializeBot(): Telegraf | null {
+export function initializeBot(): Telegraf | null {
   if (!TELEGRAM_BOT_TOKEN) {
     console.error('❌ Cannot initialize bot - no token');
     return null;
@@ -45,7 +45,7 @@ function initializeBot(): Telegraf | null {
 }
 
 // Setup bot handlers (extracted to separate function for re-initialization)
-function setupBotHandlers(bot: Telegraf) {
+export function setupBotHandlers(bot: Telegraf) {
   console.log('🔧 Setting up bot handlers...');
 
   // Start command

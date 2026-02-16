@@ -1,9 +1,9 @@
 services:
   - type: web
-    name: ethoslife-telegram-bot
+    name: ethoslife-unified-server
     env: node
-    buildCommand: pnpm install --frozen-lockfile && pnpm run build:bot
-    startCommand: pnpm run start:bot
+    buildCommand: pnpm install --frozen-lockfile && pnpm run build:render
+    startCommand: pnpm run start:render
     envVars:
       - key: NODE_ENV
         value: production
@@ -13,4 +13,6 @@ services:
         sync: false
       - key: POSTGRES_URL
         sync: false
+      - key: RENDER
+        value: "true"
     healthCheckPath: /health
