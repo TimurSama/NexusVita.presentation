@@ -10,32 +10,37 @@ const __dirname = dirname(__filename);
 
 async function startBotServer() {
   console.log('🤖 Starting Telegram Bot Server...');
+  const startTime = Date.now();
   
   // Initialize database
   try {
+    console.log('📦 Initializing database...');
     await initDatabase();
-    console.log('✅ Database initialized');
+    console.log(`✅ Database initialized (${Date.now() - startTime}ms)`);
   } catch (error) {
     console.error('❌ Database initialization error:', error);
     process.exit(1);
   }
-  
-  // Create Maria's profile and plan
-  try {
-    await createMariaProfile();
-    console.log('✅ Maria profile initialized');
-  } catch (error) {
-    console.error('⚠️ Error creating Maria profile (may already exist):', error);
-  }
 
-  // Start Telegram bot
+  // Start Telegram bot IMMEDIATELY (don't wait for Maria profile)
   try {
+    console.log('🚀 Starting Telegram bot...');
     startTelegramBot();
-    console.log('✅ Telegram bot started');
+    console.log(`✅ Telegram bot started (${Date.now() - startTime}ms)`);
   } catch (error) {
     console.error('❌ Failed to start Telegram bot:', error);
     process.exit(1);
   }
+  
+  // Create Maria's profile and plan ASYNCHRONOUSLY (don't block bot startup)
+  // This runs in background and won't delay bot responses
+  createMariaProfile()
+    .then(() => {
+      console.log('✅ Maria profile initialized (background)');
+    })
+    .catch((error) => {
+      console.error('⚠️ Error creating Maria profile (may already exist):', error);
+    });
 
   // Create simple Express server for health checks and webhook
   const app = express();

@@ -18,10 +18,14 @@ if (TELEGRAM_BOT_TOKEN) {
     const telegramId = ctx.from?.id.toString();
     if (!telegramId) return;
 
+    const startTime = Date.now();
+    console.log(`📨 /start command received from ${telegramId} at ${new Date().toISOString()}`);
+
     try {
       // Check if user exists
       let user = await userDb.findByTelegramId(telegramId);
       const isNewUser = !user;
+      console.log(`👤 User lookup: ${isNewUser ? 'new' : 'existing'} (${Date.now() - startTime}ms)`);
 
       if (!user) {
         // Create new user
@@ -1134,11 +1138,25 @@ if (TELEGRAM_BOT_TOKEN) {
 
   // Error handling
   bot.catch((err, ctx) => {
-    console.error('Telegram bot error:', err);
-    ctx.reply('Произошла ошибка. Пожалуйста, попробуйте позже.');
+    console.error('❌ Telegram bot error:', err);
+    try {
+      ctx.reply('Произошла ошибка. Пожалуйста, попробуйте позже.');
+    } catch (replyError) {
+      console.error('Failed to send error message:', replyError);
+    }
   });
 
-  console.log('Telegram bot initialized');
+  // Log all incoming messages for debugging
+  bot.use(async (ctx, next) => {
+    const messageTime = Date.now();
+    if (ctx.message && 'text' in ctx.message) {
+      console.log(`📥 Message: ${ctx.message.text?.substring(0, 50)} from ${ctx.from?.id}`);
+    }
+    await next();
+    console.log(`✅ Message processed in ${Date.now() - messageTime}ms`);
+  });
+
+  console.log('✅ Telegram bot handlers initialized');
 }
 
 export function startTelegramBot() {
