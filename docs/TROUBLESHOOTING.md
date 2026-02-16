@@ -72,7 +72,7 @@ https://your-project.vercel.app/api/telegram/test
 
 ### Шаг 1: Проверьте тестовый endpoint
 ```
-https://your-project.vercel.app/api/telegram/test
+https://your-project.vercel.app/api/telegram/debug?test=true
 ```
 
 ### Шаг 2: Проверьте webhook

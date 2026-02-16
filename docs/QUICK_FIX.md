@@ -50,10 +50,16 @@ https://api.telegram.org/botYOUR_BOT_TOKEN/getWebhookInfo
 https://etholife.vercel.app/api/telegram/debug
 ```
 
+Для теста подключения к базе данных:
+```
+https://etholife.vercel.app/api/telegram/debug?test=true
+```
+
 Покажет:
 - Установлен ли токен
 - Настроена ли база данных
 - Все endpoints
+- Статус подключения к БД (если test=true)
 
 ## Если все еще не работает:
 
