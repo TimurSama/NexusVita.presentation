@@ -16,10 +16,10 @@ export default function Onboarding() {
 
     setLoading(true);
     try {
-      const response = await fetch(`/api/users/${user.id}/onboarding`, {
+      const response = await fetch(`/api/users/${user.id}/account`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ completed: true, skip }),
+        body: JSON.stringify({ action: 'onboarding', completed: true, skip }),
       });
 
       if (response.ok) {

@@ -111,7 +111,7 @@ export function TelegramAuth() {
 
             // Check if this is first time (onboarding not completed)
             try {
-              const onboardingResponse = await fetch(`/api/users/${authResult.user.id}/onboarding`);
+              const onboardingResponse = await fetch(`/api/users/${authResult.user.id}/account?action=onboarding`);
               if (onboardingResponse.ok) {
                 const onboardingData = await onboardingResponse.json();
                 setIsFirstTime(!onboardingData.onboarding_completed);

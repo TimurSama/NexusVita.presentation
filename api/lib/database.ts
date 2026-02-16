@@ -517,3 +517,60 @@ export const documentDb = {
     }
   },
 };
+
+// User tokens operations (off-chain tokens)
+export const userTokensDb = {
+  // Get user's total token balance
+  getBalance: async (userId: number) => {
+    const client = await getPool().connect();
+    try {
+      const result = await client.query(
+        `SELECT COALESCE(SUM(
+          CASE 
+            WHEN transaction_type = 'credit' THEN amount
+            WHEN transaction_type = 'debit' THEN -amount
+            ELSE 0
+          END
+        ), 0) as balance
+        FROM user_tokens WHERE user_id = $1`,
+        [userId]
+      );
+      return parseFloat(result.rows[0]?.balance || '0');
+    } finally {
+      client.release();
+    }
+  },
+
+  // Add tokens to user
+  addTokens: async (userId: number, amount: number, source: string, description?: string) => {
+    const client = await getPool().connect();
+    try {
+      const result = await client.query(
+        `INSERT INTO user_tokens (user_id, amount, source, description, transaction_type)
+         VALUES ($1, $2, $3, $4, 'credit')
+         RETURNING *`,
+        [userId, amount, source, description || null]
+      );
+      return result.rows[0];
+    } finally {
+      client.release();
+    }
+  },
+
+  // Get transaction history
+  getHistory: async (userId: number, limit: number = 50) => {
+    const client = await getPool().connect();
+    try {
+      const result = await client.query(
+        `SELECT * FROM user_tokens 
+         WHERE user_id = $1 
+         ORDER BY created_at DESC 
+         LIMIT $2`,
+        [userId, limit]
+      );
+      return result.rows;
+    } finally {
+      client.release();
+    }
+  },
+};
