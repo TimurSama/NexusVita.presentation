@@ -42,6 +42,7 @@ import Messages from "./pages/social/Messages";
 import Specialists from "./pages/social/Specialists";
 import Onboarding from "./pages/Onboarding";
 import Account from "./pages/Account";
+import News from "./pages/News";
 
 function Router() {
   // Check if we're in Telegram Web App

@@ -9,7 +9,7 @@ import SketchIcon from '@/components/SketchIcon';
 import { HealthMetricCard } from '@/components/HealthMetricCard';
 import { GoalTracker } from '@/components/GoalTracker';
 import { RecommendationCard } from '@/components/RecommendationCard';
-import { Link } from 'wouter';
+import { Link, useLocation } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
