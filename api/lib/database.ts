@@ -145,6 +145,26 @@ export async function initDatabase() {
       )
     `);
 
+    // User tokens table (off-chain tokens)
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS user_tokens (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        amount DECIMAL(18, 8) NOT NULL DEFAULT 0,
+        source TEXT,
+        description TEXT,
+        transaction_type TEXT DEFAULT 'credit',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    // Add onboarding_completed to user_profiles if not exists
+    await client.query(`
+      ALTER TABLE user_profiles 
+      ADD COLUMN IF NOT EXISTS onboarding_completed BOOLEAN DEFAULT FALSE
+    `);
+
     console.log('Postgres database initialized successfully');
   } finally {
     client.release();
@@ -222,7 +242,7 @@ export const userDb = {
 
 // Profile operations
 export const profileDb = {
-  createOrUpdate: async (userId: number, data: { date_of_birth?: Date; height?: number; weight?: number; gender?: string; blood_type?: string }) => {
+  createOrUpdate: async (userId: number, data: { date_of_birth?: Date; height?: number; weight?: number; gender?: string; blood_type?: string; onboarding_completed?: boolean }) => {
     const client = await getPool().connect();
     try {
       const existing = await client.query('SELECT id FROM user_profiles WHERE user_id = $1', [userId]);
@@ -230,21 +250,22 @@ export const profileDb = {
       if (existing.rows.length > 0) {
         await client.query(
           `UPDATE user_profiles 
-           SET date_of_birth = $1, height = $2, weight = $3, gender = $4, blood_type = $5, updated_at = CURRENT_TIMESTAMP
-           WHERE user_id = $6`,
+           SET date_of_birth = $1, height = $2, weight = $3, gender = $4, blood_type = $5, onboarding_completed = COALESCE($6, onboarding_completed), updated_at = CURRENT_TIMESTAMP
+           WHERE user_id = $7`,
           [
             data.date_of_birth?.toISOString().split('T')[0] || null,
             data.height || null,
             data.weight || null,
             data.gender || null,
             data.blood_type || null,
+            data.onboarding_completed !== undefined ? data.onboarding_completed : null,
             userId,
           ]
         );
       } else {
         await client.query(
-          `INSERT INTO user_profiles (user_id, date_of_birth, height, weight, gender, blood_type)
-           VALUES ($1, $2, $3, $4, $5, $6)`,
+          `INSERT INTO user_profiles (user_id, date_of_birth, height, weight, gender, blood_type, onboarding_completed)
+           VALUES ($1, $2, $3, $4, $5, $6, $7)`,
           [
             userId,
             data.date_of_birth?.toISOString().split('T')[0] || null,
@@ -252,6 +273,7 @@ export const profileDb = {
             data.weight || null,
             data.gender || null,
             data.blood_type || null,
+            data.onboarding_completed || false,
           ]
         );
       }

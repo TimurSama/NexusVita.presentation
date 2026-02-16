@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useUser } from '@/contexts/UserContext';
+import Onboarding from '@/pages/Onboarding';
 
 interface User {
   id: number;
@@ -30,6 +31,8 @@ export function TelegramAuth() {
   const [authenticated, setAuthenticated] = useState(false);
   const [friends, setFriends] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [checkingOnboarding, setCheckingOnboarding] = useState(true);
+  const [isFirstTime, setIsFirstTime] = useState(false);
 
   useEffect(() => {
     const init = async () => {
@@ -106,6 +109,19 @@ export function TelegramAuth() {
             // Refresh user data in context (will load user and profile)
             await refreshUser();
 
+            // Check if this is first time (onboarding not completed)
+            try {
+              const onboardingResponse = await fetch(`/api/users/${authResult.user.id}/onboarding`);
+              if (onboardingResponse.ok) {
+                const onboardingData = await onboardingResponse.json();
+                setIsFirstTime(!onboardingData.onboarding_completed);
+              }
+            } catch (err) {
+              console.error('Error checking onboarding:', err);
+              // Assume first time if check fails
+              setIsFirstTime(true);
+            }
+
             // TODO: Fetch friends list
             // For now, using mock data
             setFriends([]);
@@ -117,6 +133,7 @@ export function TelegramAuth() {
           setError('Ошибка при подключении к серверу');
         } finally {
           setLoading(false);
+          setCheckingOnboarding(false);
         }
       } catch (err) {
         console.error('Init error:', err);
@@ -156,7 +173,48 @@ export function TelegramAuth() {
     );
   }
 
-  if (!authenticated || !user) {
+  // Show onboarding for first-time users
+  if (authenticated && user && isFirstTime && !checkingOnboarding) {
+    return <Onboarding />;
+  }
+
+  // Redirect to dashboard for returning users
+  useEffect(() => {
+    if (authenticated && user && !isFirstTime && !checkingOnboarding) {
+      setLocation('/dashboard');
+    }
+  }, [authenticated, user, isFirstTime, checkingOnboarding, setLocation]);
+
+  if (authenticated && user && !isFirstTime && !checkingOnboarding) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="text-center"
+        >
+          <Loader2 className="w-12 h-12 text-primary animate-spin mx-auto mb-4" />
+          <p className="text-foreground/60">Переход в дашборд...</p>
+        </motion.div>
+      </div>
+    );
+  }
+
+  if (!authenticated || !user || checkingOnboarding) {
+    if (loading || checkingOnboarding) {
+      return (
+        <div className="min-h-screen bg-background flex items-center justify-center">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="text-center"
+          >
+            <Loader2 className="w-12 h-12 text-primary animate-spin mx-auto mb-4" />
+            <p className="text-foreground/60">Подключение к Telegram...</p>
+          </motion.div>
+        </div>
+      );
+    }
     return null;
   }
 

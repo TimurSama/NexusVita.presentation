@@ -40,6 +40,7 @@ import Map from "./pages/Map";
 import Friends from "./pages/social/Friends";
 import Messages from "./pages/social/Messages";
 import Specialists from "./pages/social/Specialists";
+import Onboarding from "./pages/Onboarding";
 
 function Router() {
   // Check if we're in Telegram Web App
@@ -58,6 +59,7 @@ function Router() {
       <Route path={"/landing"} component={Landing} />
       <Route path={"/presentation"} component={Presentation} />
       <Route path={"/whitepaper"} component={Whitepaper} />
+      <Route path={"/onboarding"} component={Onboarding} />
       <Route path={"/dashboard"} component={Dashboard} />
       <Route path={"/dashboard/maria"} component={MariaDashboard} />
       <Route path={"/documents"} component={Documents} />

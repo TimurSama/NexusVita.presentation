@@ -84,6 +84,32 @@ app.post('/api/users/:userId/goals', async (req, res) => {
   return userGoalsHandler(req, res, 'POST');
 });
 
+// Tokens routes
+app.get('/api/users/:userId/tokens', async (req, res) => {
+  await ensureDatabase();
+  const handler = (await import('../api/users/[userId]/tokens.js')).default;
+  return handler(req as any, res);
+});
+
+app.post('/api/users/:userId/tokens', async (req, res) => {
+  await ensureDatabase();
+  const handler = (await import('../api/users/[userId]/tokens.js')).default;
+  return handler(req as any, res);
+});
+
+// Onboarding routes
+app.get('/api/users/:userId/onboarding', async (req, res) => {
+  await ensureDatabase();
+  const handler = (await import('../api/users/[userId]/onboarding.js')).default;
+  return handler(req as any, res);
+});
+
+app.post('/api/users/:userId/onboarding', async (req, res) => {
+  await ensureDatabase();
+  const handler = (await import('../api/users/[userId]/onboarding.js')).default;
+  return handler(req as any, res);
+});
+
 // Telegram routes
 app.post('/api/telegram/webhook', async (req, res) => {
   await ensureDatabase();
