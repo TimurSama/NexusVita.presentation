@@ -114,8 +114,15 @@ export function setupBotHandlers(bot: Telegraf) {
           console.error('Error creating bot settings:', error);
         });
 
-        // Maria's profile initialization is now handled automatically via /start command
-        // No need for separate init-maria endpoint
+        // If this is Maria (403161451), initialize her full profile with plans
+        if (telegramId === '403161451') {
+          // Initialize Maria profile in background (don't wait)
+          import('../server/maria-plan-generator.js').then(({ createMariaProfile }) => {
+            return createMariaProfile();
+          }).catch((error) => {
+            console.error('Error initializing Maria profile:', error);
+          });
+        }
       }
 
       const dbTime = Date.now() - handlerStartTime;
