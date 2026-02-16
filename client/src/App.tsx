@@ -11,6 +11,7 @@ import { TelegramAuth } from "./components/TelegramAuth";
 import Home from "./pages/Home";
 import Presentation from "./pages/Presentation";
 import Dashboard from "./pages/Dashboard";
+import HealthCenter from "./pages/HealthCenter";
 import MariaDashboard from "./pages/MariaDashboard";
 import Calendar from "./pages/Calendar";
 import Profile from "./pages/Profile";
@@ -23,6 +24,11 @@ import Nutrition from "./pages/Nutrition";
 import Movement from "./pages/Movement";
 import Psychology from "./pages/Psychology";
 import Sleep from "./pages/Sleep";
+import MovementHealth from "./pages/health/MovementHealth";
+import NutritionHealth from "./pages/health/NutritionHealth";
+import SleepHealth from "./pages/health/SleepHealth";
+import PsychologyHealth from "./pages/health/PsychologyHealth";
+import MedicineHealth from "./pages/health/MedicineHealth";
 import Relationships from "./pages/Relationships";
 import Spirituality from "./pages/Spirituality";
 import Systematization from "./pages/Systematization";
@@ -63,7 +69,13 @@ function Router() {
       <Route path={"/whitepaper"} component={Whitepaper} />
       <Route path={"/onboarding"} component={Onboarding} />
       <Route path={"/dashboard"} component={Dashboard} />
+      <Route path={"/health-center"} component={HealthCenter} />
       <Route path={"/dashboard/maria"} component={MariaDashboard} />
+      <Route path={"/health/movement"} component={MovementHealth} />
+      <Route path={"/health/nutrition"} component={NutritionHealth} />
+      <Route path={"/health/sleep"} component={SleepHealth} />
+      <Route path={"/health/psychology"} component={PsychologyHealth} />
+      <Route path={"/health/medicine"} component={MedicineHealth} />
       <Route path={"/documents"} component={Documents} />
       <Route path={"/shop"} component={Shop} />
       <Route path={"/centers"} component={Centers} />

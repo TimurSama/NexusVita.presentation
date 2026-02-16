@@ -1,5 +1,11 @@
 import { userDb, telegramBotSettingsDb, dailyPlanDb } from './database-adapter';
 
+// Note: This system is optimized for Render free tier:
+// - Checks every 30 minutes instead of every minute
+// - Sends reminders to all users with Telegram connected
+// - Works better on serverless/limited resources
+// Render free tier allows long-running processes, unlike Vercel
+
 // Import bot after it's initialized
 let bot: any = null;
 
@@ -100,7 +106,7 @@ function getRandomExerciseReminder() {
 // Send reminder to user
 export async function sendWorkReminder(userId: number, telegramId: string) {
   try {
-    const settings = telegramBotSettingsDb.findByUserId(userId);
+    const settings = await telegramBotSettingsDb.findByUserId(userId);
     
     // Check if reminders are enabled
     if (!settings || !settings.reminders_enabled) {
@@ -122,35 +128,116 @@ export async function sendWorkReminder(userId: number, telegramId: string) {
   }
 }
 
-// Start hourly reminders for working hours (9:00 - 18:00)
+// Send plan reminder to user
+export async function sendPlanReminder(userId: number, telegramId: string, plan: any) {
+  try {
+    const settings = await telegramBotSettingsDb.findByUserId(userId);
+    
+    // Check if reminders are enabled
+    if (!settings || !settings.reminders_enabled) {
+      return;
+    }
+
+    const timeStr = plan.time ? ` в ${plan.time}` : '';
+    const message = `⏰ Напоминание о плане\n\n` +
+      `📅 ${plan.title}${timeStr}\n\n` +
+      `${plan.description || 'Не забудьте выполнить это задание!'}\n\n` +
+      `💡 Используйте /today чтобы увидеть все планы на сегодня.`;
+
+    if (bot) {
+      await bot.telegram.sendMessage(telegramId, message);
+    }
+  } catch (error) {
+    console.error(`Error sending plan reminder to user ${userId}:`, error);
+  }
+}
+
+// Start reminders system - optimized for Render (checks every 30 minutes)
 export function startHourlyReminders() {
-  if (!bot) return;
+  if (!bot) {
+    console.warn('Bot not initialized, reminders will not start');
+    return;
+  }
 
-  // Check every minute if it's time to send reminder
-  setInterval(() => {
-    const now = new Date();
-    const hour = now.getHours();
-    const minute = now.getMinutes();
+  console.log('🔄 Starting reminder system (checks every 30 minutes)...');
 
-    // Working hours: 9:00 - 18:00
-    // Send reminder at the start of each hour (minute 0)
-    if (hour >= 9 && hour < 18 && minute === 0) {
-      // Get all users with Telegram connected and reminders enabled
-      // For now, we'll send to Maria (ID: 403161451)
-      const maria = userDb.findByTelegramId('403161451');
-      if (maria && maria.telegram_id) {
-        sendWorkReminder(maria.id, maria.telegram_id);
+  // Check every 30 minutes (1800000 ms) - optimized for Render free tier
+  // This reduces database load and works better on serverless/limited resources
+  setInterval(async () => {
+    try {
+      const now = new Date();
+      const hour = now.getHours();
+      const minute = now.getMinutes();
+
+      // Only check at :00 and :30 minutes
+      if (minute !== 0 && minute !== 30) {
+        return;
       }
 
-      // TODO: In the future, iterate through all users with enabled reminders
-      // const users = getAllUsersWithTelegram();
-      // users.forEach(user => {
-      //   if (user.telegram_id) {
-      //     sendWorkReminder(user.id, user.telegram_id);
-      //   }
-      // });
-    }
-  }, 60000); // Check every minute
+      console.log(`⏰ Checking reminders at ${hour}:${minute.toString().padStart(2, '0')}`);
 
-  console.log('Hourly reminders started');
+      // Get all users with Telegram connected
+      const allUsers = await userDb.findAllWithTelegram();
+      console.log(`👥 Found ${allUsers.length} users with Telegram connected`);
+
+      // Working hours: 9:00 - 18:00
+      // Send work reminders at :00 of each hour
+      if (hour >= 9 && hour < 18 && minute === 0) {
+        console.log(`💪 Sending work reminders to all users...`);
+        
+        for (const user of allUsers) {
+          if (user.telegram_id) {
+            try {
+              await sendWorkReminder(user.id, user.telegram_id);
+            } catch (error) {
+              console.error(`Error sending work reminder to user ${user.id}:`, error);
+            }
+          }
+        }
+      }
+
+      // Check for plan reminders (15 minutes before scheduled time)
+      // We check at :00 and :30, so we need to look for plans at :15 and :45
+      const reminderMinutes = minute === 0 ? 15 : 45;
+      const reminderHour = minute === 0 ? hour : (minute === 30 ? hour : hour + 1);
+      
+      console.log(`📅 Checking plan reminders for ${reminderHour}:${reminderMinutes.toString().padStart(2, '0')}...`);
+
+      for (const user of allUsers) {
+        if (!user.telegram_id) continue;
+
+        try {
+          const settings = await telegramBotSettingsDb.findByUserId(user.id);
+          if (!settings || !settings.reminders_enabled) {
+            continue;
+          }
+
+          // Get today's plans
+          const today = new Date();
+          const plans = await dailyPlanDb.findByUserIdAndDate(user.id, today);
+          
+          // Find plans scheduled for the reminder time
+          const reminderTimeStr = `${String(reminderHour).padStart(2, '0')}:${String(reminderMinutes).padStart(2, '0')}`;
+          
+          const upcomingPlans = plans.filter(p => 
+            !p.completed && 
+            p.time && 
+            p.time === reminderTimeStr
+          );
+          
+          for (const plan of upcomingPlans) {
+            await sendPlanReminder(user.id, user.telegram_id, plan);
+          }
+        } catch (error) {
+          console.error(`Error processing reminders for user ${user.id}:`, error);
+        }
+      }
+
+      console.log(`✅ Reminder check completed`);
+    } catch (error) {
+      console.error('❌ Error in reminder interval:', error);
+    }
+  }, 30 * 60 * 1000); // Check every 30 minutes (optimized for Render)
+
+  console.log('✅ Reminder system started (30-minute intervals)');
 }

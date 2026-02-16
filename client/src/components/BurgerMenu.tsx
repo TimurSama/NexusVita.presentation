@@ -58,6 +58,7 @@ export function BurgerMenu({ isOpen, onClose }: BurgerMenuProps) {
 
   const mainNavItems = [
     { path: '/', icon: Home, label: 'Главная' },
+    { path: '/health-center', icon: LayoutDashboard, label: 'Единый центр' },
     { path: '/dashboard', icon: LayoutDashboard, label: 'Дашборд' },
     { path: '/calendar', icon: Calendar, label: 'Календарь' },
     { path: '/profile', icon: User, label: 'Профиль' },

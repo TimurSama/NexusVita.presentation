@@ -8,16 +8,17 @@ import SketchIcon from './SketchIcon';
 
 const mainNavItems = [
   { path: '/', icon: Home, label: 'Главная' },
+  { path: '/health-center', icon: LayoutDashboard, label: 'Единый центр' },
   { path: '/dashboard', icon: LayoutDashboard, label: 'Дашборд' },
   { path: '/calendar', icon: Calendar, label: 'Календарь' },
 ];
 
 const healthModules = [
-  { path: '/medicine', icon: 'medicine', label: 'Медицина' },
-  { path: '/movement', icon: 'movement', label: 'Движение' },
-  { path: '/nutrition', icon: 'nutrition', label: 'Питание' },
-  { path: '/psychology', icon: 'psychology', label: 'Психология' },
-  { path: '/sleep', icon: 'sleep', label: 'Сон' },
+  { path: '/health/medicine', icon: 'medicine', label: 'Медицина' },
+  { path: '/health/movement', icon: 'movement', label: 'Движение' },
+  { path: '/health/nutrition', icon: 'nutrition', label: 'Питание' },
+  { path: '/health/psychology', icon: 'psychology', label: 'Психология' },
+  { path: '/health/sleep', icon: 'sleep', label: 'Сон' },
   { path: '/relationships', icon: 'relationships', label: 'Отношения' },
   { path: '/habits', icon: 'chart', label: 'Привычки' },
   { path: '/environment', icon: 'monitor', label: 'Среда' },

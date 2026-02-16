@@ -165,6 +165,109 @@ export async function initDatabase() {
       ADD COLUMN IF NOT EXISTS onboarding_completed BOOLEAN DEFAULT FALSE
     `);
 
+    // Health directions table
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS health_directions (
+        id SERIAL PRIMARY KEY,
+        name TEXT NOT NULL UNIQUE,
+        display_name TEXT NOT NULL,
+        description TEXT,
+        icon TEXT,
+        color TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    // Insert default health directions
+    await client.query(`
+      INSERT INTO health_directions (name, display_name, description, icon, color)
+      VALUES 
+        ('movement', 'Движение', 'Физическая активность, тренировки, спорт', '🏃', '#3B82F6'),
+        ('nutrition', 'Питание', 'Рацион, калории, макронутриенты', '🍎', '#10B981'),
+        ('sleep', 'Сон', 'Качество и продолжительность сна', '😴', '#8B5CF6'),
+        ('psychology', 'Психология', 'Ментальное здоровье, настроение, стресс', '🧠', '#F59E0B'),
+        ('medicine', 'Медицина', 'Медицинские показатели, анализы, лечение', '💊', '#EF4444')
+      ON CONFLICT (name) DO NOTHING
+    `);
+
+    // Health direction plans table
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS health_direction_plans (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        direction_id INTEGER NOT NULL REFERENCES health_directions(id) ON DELETE CASCADE,
+        title TEXT NOT NULL,
+        description TEXT,
+        start_date DATE NOT NULL,
+        end_date DATE,
+        status TEXT DEFAULT 'active',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    // Health direction tasks table
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS health_direction_tasks (
+        id SERIAL PRIMARY KEY,
+        plan_id INTEGER NOT NULL REFERENCES health_direction_plans(id) ON DELETE CASCADE,
+        title TEXT NOT NULL,
+        description TEXT,
+        task_type TEXT,
+        frequency TEXT,
+        scheduled_time TEXT,
+        completed BOOLEAN DEFAULT FALSE,
+        completed_at TIMESTAMP,
+        due_date DATE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    // Health direction metrics table
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS health_direction_metrics (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        direction_id INTEGER NOT NULL REFERENCES health_directions(id) ON DELETE CASCADE,
+        metric_name TEXT NOT NULL,
+        value REAL NOT NULL,
+        unit TEXT,
+        recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        notes TEXT,
+        metadata JSONB
+      )
+    `);
+
+    // Health direction reports table
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS health_direction_reports (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        direction_id INTEGER NOT NULL REFERENCES health_directions(id) ON DELETE CASCADE,
+        report_type TEXT NOT NULL,
+        period_start DATE NOT NULL,
+        period_end DATE NOT NULL,
+        summary JSONB,
+        insights TEXT,
+        recommendations TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    // Dashboard settings table (for customizable dashboard)
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS dashboard_settings (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE UNIQUE,
+        layout JSONB DEFAULT '{}',
+        widgets JSONB DEFAULT '[]',
+        theme TEXT DEFAULT 'default',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
     console.log('Postgres database initialized successfully');
   } finally {
     client.release();
@@ -234,6 +337,19 @@ export const userDb = {
          WHERE id = $4`,
         [telegramId, telegramUsername || null, new Date().toISOString(), userId]
       );
+    } finally {
+      client.release();
+    }
+  },
+
+  // Get all users with Telegram connected
+  findAllWithTelegram: async () => {
+    const client = await getPool().connect();
+    try {
+      const result = await client.query(
+        'SELECT * FROM users WHERE telegram_id IS NOT NULL AND telegram_id != \'\''
+      );
+      return result.rows;
     } finally {
       client.release();
     }
@@ -323,6 +439,23 @@ export const dailyPlanDb = {
       const result = await client.query(
         'SELECT * FROM daily_plans WHERE user_id = $1 AND date = $2 ORDER BY time ASC',
         [userId, date.toISOString().split('T')[0]]
+      );
+      return result.rows;
+    } finally {
+      client.release();
+    }
+  },
+
+  findByUserIdAndDateRange: async (userId: number, startDate: Date, endDate: Date) => {
+    const client = await getPool().connect();
+    try {
+      const result = await client.query(
+        'SELECT * FROM daily_plans WHERE user_id = $1 AND date >= $2 AND date <= $3 ORDER BY date ASC, time ASC',
+        [
+          userId,
+          startDate.toISOString().split('T')[0],
+          endDate.toISOString().split('T')[0],
+        ]
       );
       return result.rows;
     } finally {
@@ -569,6 +702,231 @@ export const userTokensDb = {
         [userId, limit]
       );
       return result.rows;
+    } finally {
+      client.release();
+    }
+  },
+};
+
+// Health directions operations
+export const healthDirectionsDb = {
+  findAll: async () => {
+    const client = await getPool().connect();
+    try {
+      const result = await client.query('SELECT * FROM health_directions ORDER BY id');
+      return result.rows;
+    } finally {
+      client.release();
+    }
+  },
+
+  findByName: async (name: string) => {
+    const client = await getPool().connect();
+    try {
+      const result = await client.query('SELECT * FROM health_directions WHERE name = $1', [name]);
+      return result.rows[0] || null;
+    } finally {
+      client.release();
+    }
+  },
+};
+
+// Health direction plans operations
+export const healthDirectionPlansDb = {
+  create: async (userId: number, directionId: number, data: {
+    title: string;
+    description?: string;
+    startDate: Date;
+    endDate?: Date;
+  }) => {
+    const client = await getPool().connect();
+    try {
+      const result = await client.query(
+        `INSERT INTO health_direction_plans (user_id, direction_id, title, description, start_date, end_date)
+         VALUES ($1, $2, $3, $4, $5, $6)
+         RETURNING *`,
+        [
+          userId,
+          directionId,
+          data.title,
+          data.description || null,
+          data.startDate.toISOString().split('T')[0],
+          data.endDate ? data.endDate.toISOString().split('T')[0] : null,
+        ]
+      );
+      return result.rows[0];
+    } finally {
+      client.release();
+    }
+  },
+
+  findByUserIdAndDirection: async (userId: number, directionId: number) => {
+    const client = await getPool().connect();
+    try {
+      const result = await client.query(
+        'SELECT * FROM health_direction_plans WHERE user_id = $1 AND direction_id = $2 AND status = $3 ORDER BY created_at DESC',
+        [userId, directionId, 'active']
+      );
+      return result.rows;
+    } finally {
+      client.release();
+    }
+  },
+
+  findByUserId: async (userId: number) => {
+    const client = await getPool().connect();
+    try {
+      const result = await client.query(
+        'SELECT hdp.*, hd.name as direction_name, hd.display_name, hd.icon, hd.color FROM health_direction_plans hdp JOIN health_directions hd ON hdp.direction_id = hd.id WHERE hdp.user_id = $1 ORDER BY hdp.created_at DESC',
+        [userId]
+      );
+      return result.rows;
+    } finally {
+      client.release();
+    }
+  },
+};
+
+// Health direction metrics operations
+export const healthDirectionMetricsDb = {
+  create: async (userId: number, directionId: number, data: {
+    metricName: string;
+    value: number;
+    unit?: string;
+    notes?: string;
+    metadata?: object;
+  }) => {
+    const client = await getPool().connect();
+    try {
+      const result = await client.query(
+        `INSERT INTO health_direction_metrics (user_id, direction_id, metric_name, value, unit, notes, metadata)
+         VALUES ($1, $2, $3, $4, $5, $6, $7)
+         RETURNING *`,
+        [
+          userId,
+          directionId,
+          data.metricName,
+          data.value,
+          data.unit || null,
+          data.notes || null,
+          data.metadata ? JSON.stringify(data.metadata) : null,
+        ]
+      );
+      return result.rows[0];
+    } finally {
+      client.release();
+    }
+  },
+
+  findByUserAndDirectionAndPeriod: async (
+    userId: number,
+    directionId: number,
+    startDate: Date,
+    endDate: Date,
+    metricName?: string
+  ) => {
+    const client = await getPool().connect();
+    try {
+      let query = `
+        SELECT * FROM health_direction_metrics 
+        WHERE user_id = $1 AND direction_id = $2 
+        AND recorded_at >= $3 AND recorded_at <= $4
+      `;
+      const params: any[] = [
+        userId,
+        directionId,
+        startDate.toISOString(),
+        endDate.toISOString(),
+      ];
+
+      if (metricName) {
+        query += ' AND metric_name = $5';
+        params.push(metricName);
+      }
+
+      query += ' ORDER BY recorded_at DESC';
+
+      const result = await client.query(query, params);
+      return result.rows;
+    } finally {
+      client.release();
+    }
+  },
+};
+
+// Dashboard settings operations
+export const dashboardSettingsDb = {
+  getOrCreate: async (userId: number) => {
+    const client = await getPool().connect();
+    try {
+      const existing = await client.query('SELECT * FROM dashboard_settings WHERE user_id = $1', [userId]);
+      
+      if (existing.rows.length > 0) {
+        const row = existing.rows[0];
+        return {
+          ...row,
+          layout: typeof row.layout === 'string' ? JSON.parse(row.layout) : row.layout,
+          widgets: typeof row.widgets === 'string' ? JSON.parse(row.widgets) : row.widgets,
+        };
+      }
+
+      // Create default settings
+      const defaultSettings = {
+        layout: { columns: 2 },
+        widgets: [
+          { id: 'overview', type: 'overview', position: { x: 0, y: 0 } },
+          { id: 'plans', type: 'plans', position: { x: 1, y: 0 } },
+          { id: 'metrics', type: 'metrics', position: { x: 0, y: 1 } },
+          { id: 'goals', type: 'goals', position: { x: 1, y: 1 } },
+        ],
+        theme: 'default',
+      };
+
+      const result = await client.query(
+        `INSERT INTO dashboard_settings (user_id, layout, widgets, theme)
+         VALUES ($1, $2, $3, $4)
+         RETURNING *`,
+        [userId, JSON.stringify(defaultSettings.layout), JSON.stringify(defaultSettings.widgets), defaultSettings.theme]
+      );
+      const row = result.rows[0];
+      return {
+        ...row,
+        layout: typeof row.layout === 'string' ? JSON.parse(row.layout) : row.layout,
+        widgets: typeof row.widgets === 'string' ? JSON.parse(row.widgets) : row.widgets,
+      };
+    } finally {
+      client.release();
+    }
+  },
+
+  update: async (userId: number, data: {
+    layout?: object;
+    widgets?: any[];
+    theme?: string;
+  }) => {
+    const client = await getPool().connect();
+    try {
+      const existing = await client.query('SELECT * FROM dashboard_settings WHERE user_id = $1', [userId]);
+      
+      if (existing.rows.length > 0) {
+        const current = existing.rows[0];
+        const currentLayout = typeof current.layout === 'string' ? JSON.parse(current.layout) : current.layout;
+        const currentWidgets = typeof current.widgets === 'string' ? JSON.parse(current.widgets) : current.widgets;
+        
+        const updatedLayout = data.layout ? JSON.stringify(data.layout) : JSON.stringify(currentLayout);
+        const updatedWidgets = data.widgets ? JSON.stringify(data.widgets) : JSON.stringify(currentWidgets);
+        const updatedTheme = data.theme || current.theme;
+
+        await client.query(
+          `UPDATE dashboard_settings 
+           SET layout = $1, widgets = $2, theme = $3, updated_at = CURRENT_TIMESTAMP
+           WHERE user_id = $4`,
+          [updatedLayout, updatedWidgets, updatedTheme, userId]
+        );
+      } else {
+        await dashboardSettingsDb.getOrCreate(userId);
+        await dashboardSettingsDb.update(userId, data);
+      }
     } finally {
       client.release();
     }

@@ -1,8 +1,8 @@
 import { Telegraf, Context, Markup } from 'telegraf';
 import { userDb, profileDb, dailyPlanDb, healthMetricsDb, goalsDb, telegramBotSettingsDb, telegramBotLogsDb } from './database-adapter';
 
-// Telegram Bot Token (can be overridden by env variable)
-const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '8261481826:AAH_M6WXWkRwoskYmCpbLupSi7o_bB8VsJQ';
+// Telegram Bot Token (must be set via environment variable)
+const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 
 if (!TELEGRAM_BOT_TOKEN) {
   console.warn('TELEGRAM_BOT_TOKEN not set. Telegram bot will not be initialized.');
@@ -159,6 +159,52 @@ if (TELEGRAM_BOT_TOKEN) {
     );
     } catch (error) {
       console.error('Error in /settings command:', error);
+      await ctx.reply('Произошла ошибка. Пожалуйста, попробуйте позже.');
+    }
+  });
+
+  // Dashboard command - shows overview of all health directions
+  bot.command('dashboard', async (ctx: Context) => {
+    const telegramId = ctx.from?.id.toString();
+    if (!telegramId) return;
+
+    try {
+      const user = await userDb.findByTelegramId(telegramId);
+      if (!user) {
+        await ctx.reply('Пожалуйста, сначала используйте /start');
+        return;
+      }
+
+      const today = new Date();
+      const plans = await dailyPlanDb.findByUserIdAndDate(user.id, today);
+      const goals = await goalsDb.findByUserId(user.id);
+      const activeGoals = goals.filter(g => !g.completed);
+
+      const completedPlans = plans.filter(p => p.completed).length;
+      const totalPlans = plans.length;
+      const progressPercent = totalPlans > 0 ? Math.round((completedPlans / totalPlans) * 100) : 0;
+
+      let message = `📊 Дашборд здоровья\n\n`;
+      message += `📅 Сегодня (${today.toLocaleDateString('ru-RU')}):\n`;
+      message += `   Выполнено: ${completedPlans}/${totalPlans} задач (${progressPercent}%)\n\n`;
+      
+      if (activeGoals.length > 0) {
+        message += `🎯 Активные цели: ${activeGoals.length}\n`;
+        activeGoals.slice(0, 3).forEach((goal, idx) => {
+          const progress = goal.target_value ? Math.round((goal.current_value / goal.target_value) * 100) : 0;
+          message += `   ${idx + 1}. ${goal.title} - ${progress}%\n`;
+        });
+        if (activeGoals.length > 3) {
+          message += `   ... и еще ${activeGoals.length - 3}\n`;
+        }
+        message += `\n`;
+      }
+
+      message += `💡 Используйте /menu для быстрого доступа к функциям.`;
+
+      await ctx.reply(message);
+    } catch (error) {
+      console.error('Error in /dashboard command:', error);
       await ctx.reply('Произошла ошибка. Пожалуйста, попробуйте позже.');
     }
   });
@@ -504,17 +550,32 @@ if (TELEGRAM_BOT_TOKEN) {
         return;
       }
 
+      // Get today's plans count for quick info
+      const today = new Date();
+      const todayPlans = await dailyPlanDb.findByUserIdAndDate(user.id, today);
+      const completedCount = todayPlans.filter(p => p.completed).length;
+      const totalCount = todayPlans.length;
+
       await ctx.reply(
         `📋 Главное меню\n\n` +
+        `📅 Сегодня: ${completedCount}/${totalCount} задач выполнено\n\n` +
         `Выберите действие:`,
         Markup.inlineKeyboard([
           [
-            Markup.button.callback('📅 Расписание', 'menu_schedule'),
-            Markup.button.callback('🎯 Цели', 'menu_goals'),
+            Markup.button.callback('📅 Сегодня', 'quick_today'),
+            Markup.button.callback('📊 Метрики', 'quick_metrics'),
           ],
           [
-            Markup.button.callback('📊 Метрики', 'menu_metrics'),
-            Markup.button.callback('📝 Заметки', 'menu_notes'),
+            Markup.button.callback('🎯 Цели', 'quick_goals'),
+            Markup.button.callback('📋 Расписание', 'menu_schedule'),
+          ],
+          [
+            Markup.button.callback('🏃 Движение', 'direction_movement'),
+            Markup.button.callback('🍎 Питание', 'direction_nutrition'),
+          ],
+          [
+            Markup.button.callback('😴 Сон', 'direction_sleep'),
+            Markup.button.callback('🧠 Психология', 'direction_psychology'),
           ],
           [
             Markup.button.callback('⚙️ Настройки', 'menu_settings'),
@@ -911,6 +972,191 @@ if (TELEGRAM_BOT_TOKEN) {
       `💡 Вы также можете использовать кнопки меню для быстрого доступа.`,
       require('telegraf').Markup.inlineKeyboard([
         [require('telegraf').Markup.button.callback('◀️ Назад', 'menu_main')],
+      ])
+    );
+    await ctx.answerCbQuery();
+  });
+
+  // Quick actions
+  bot.action('quick_today', async (ctx: Context) => {
+    const telegramId = ctx.from?.id.toString();
+    if (!telegramId) return;
+
+    try {
+      const user = await userDb.findByTelegramId(telegramId);
+      if (!user) {
+        await ctx.answerCbQuery('Пожалуйста, сначала используйте /start');
+        return;
+      }
+
+      const today = new Date();
+      const plans = await dailyPlanDb.findByUserIdAndDate(user.id, today);
+
+      if (plans.length === 0) {
+        await ctx.editMessageText(
+          `📅 План на сегодня (${today.toLocaleDateString('ru-RU')}):\n\n` +
+          `На сегодня планов нет. Отдыхайте! 😊`,
+          Markup.inlineKeyboard([
+            [Markup.button.callback('◀️ Назад', 'menu_main')],
+          ])
+        );
+      } else {
+        let message = `📅 План на сегодня (${today.toLocaleDateString('ru-RU')}):\n\n`;
+        plans.forEach((plan, idx) => {
+          const status = plan.completed ? '✅' : '⏳';
+          const time = plan.time ? `${plan.time} - ` : '';
+          message += `${status} ${idx + 1}. ${time}${plan.title}\n`;
+          if (plan.description) {
+            message += `   ${plan.description}\n`;
+          }
+        });
+
+        const buttons = [];
+        plans.forEach((plan) => {
+          if (!plan.completed) {
+            buttons.push([
+              Markup.button.callback(`✅ Выполнить: ${plan.title.substring(0, 20)}`, `complete_${plan.id}`),
+            ]);
+          }
+        });
+        buttons.push([Markup.button.callback('◀️ Назад', 'menu_main')]);
+
+        await ctx.editMessageText(message, Markup.inlineKeyboard(buttons));
+      }
+      await ctx.answerCbQuery();
+    } catch (error) {
+      console.error('Error in quick_today:', error);
+      await ctx.answerCbQuery('Произошла ошибка');
+    }
+  });
+
+  bot.action('quick_metrics', async (ctx: Context) => {
+    await ctx.editMessageText(
+      `📊 Метрики здоровья\n\n` +
+      `Выберите метрику для внесения:`,
+      Markup.inlineKeyboard([
+        [
+          Markup.button.callback('⚖️ Вес', 'metric_weight'),
+          Markup.button.callback('👣 Шаги', 'metric_steps'),
+        ],
+        [
+          Markup.button.callback('😴 Сон', 'metric_sleep'),
+          Markup.button.callback('😊 Настроение', 'metric_mood'),
+        ],
+        [
+          Markup.button.callback('🍎 Калории', 'metric_calories'),
+        ],
+        [
+          Markup.button.callback('◀️ Назад', 'menu_main'),
+        ],
+      ])
+    );
+    await ctx.answerCbQuery();
+  });
+
+  bot.action('quick_goals', async (ctx: Context) => {
+    const telegramId = ctx.from?.id.toString();
+    if (!telegramId) return;
+
+    try {
+      const user = await userDb.findByTelegramId(telegramId);
+      if (!user) {
+        await ctx.answerCbQuery('Пожалуйста, сначала используйте /start');
+        return;
+      }
+
+      const goals = await goalsDb.findByUserId(user.id);
+
+      if (goals.length === 0) {
+        await ctx.editMessageText(
+          `🎯 Ваши цели:\n\n` +
+          `У вас пока нет целей. Создайте их в приложении!`,
+          Markup.inlineKeyboard([
+            [Markup.button.callback('◀️ Назад', 'menu_main')],
+          ])
+        );
+      } else {
+        let message = `🎯 Ваши цели:\n\n`;
+        goals.forEach((goal, idx) => {
+          const status = goal.completed ? '✅' : '⏳';
+          message += `${status} ${idx + 1}. ${goal.title}\n`;
+          if (goal.target_value) {
+            const progress = goal.current_value / goal.target_value * 100;
+            message += `   Прогресс: ${goal.current_value}${goal.unit || ''} / ${goal.target_value}${goal.unit || ''} (${Math.round(progress)}%)\n`;
+          }
+          if (goal.deadline) {
+            message += `   Дедлайн: ${new Date(goal.deadline).toLocaleDateString('ru-RU')}\n`;
+          }
+          message += `\n`;
+        });
+
+        await ctx.editMessageText(
+          message,
+          Markup.inlineKeyboard([
+            [Markup.button.callback('◀️ Назад', 'menu_main')],
+          ])
+        );
+      }
+      await ctx.answerCbQuery();
+    } catch (error) {
+      console.error('Error in quick_goals:', error);
+      await ctx.answerCbQuery('Произошла ошибка');
+    }
+  });
+
+  // Health direction actions (placeholders for now)
+  bot.action('direction_movement', async (ctx: Context) => {
+    await ctx.editMessageText(
+      `🏃 Движение\n\n` +
+      `Этот раздел находится в разработке.\n` +
+      `Пока используйте команды:\n` +
+      `• /today - план на сегодня\n` +
+      `• /metrics - внести метрики\n\n` +
+      `Скоро здесь будет полный функционал для отслеживания активности!`,
+      Markup.inlineKeyboard([
+        [Markup.button.callback('◀️ Назад', 'menu_main')],
+      ])
+    );
+    await ctx.answerCbQuery();
+  });
+
+  bot.action('direction_nutrition', async (ctx: Context) => {
+    await ctx.editMessageText(
+      `🍎 Питание\n\n` +
+      `Этот раздел находится в разработке.\n` +
+      `Пока используйте команды:\n` +
+      `• /metrics - внести метрики (калории)\n\n` +
+      `Скоро здесь будет полный функционал для отслеживания питания!`,
+      Markup.inlineKeyboard([
+        [Markup.button.callback('◀️ Назад', 'menu_main')],
+      ])
+    );
+    await ctx.answerCbQuery();
+  });
+
+  bot.action('direction_sleep', async (ctx: Context) => {
+    await ctx.editMessageText(
+      `😴 Сон\n\n` +
+      `Этот раздел находится в разработке.\n` +
+      `Пока используйте команды:\n` +
+      `• /metrics - внести метрики (сон)\n\n` +
+      `Скоро здесь будет полный функционал для отслеживания сна!`,
+      Markup.inlineKeyboard([
+        [Markup.button.callback('◀️ Назад', 'menu_main')],
+      ])
+    );
+    await ctx.answerCbQuery();
+  });
+
+  bot.action('direction_psychology', async (ctx: Context) => {
+    await ctx.editMessageText(
+      `🧠 Психология\n\n` +
+      `Этот раздел находится в разработке.\n` +
+      `Пока используйте команды:\n` +
+      `• /metrics - внести метрики (настроение)\n\n` +
+      `Скоро здесь будет полный функционал для отслеживания психологического состояния!`,
+      Markup.inlineKeyboard([
+        [Markup.button.callback('◀️ Назад', 'menu_main')],
       ])
     );
     await ctx.answerCbQuery();

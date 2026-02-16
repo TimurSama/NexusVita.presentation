@@ -1,5 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { userDb, initDatabase } from '../lib/database.js';
+import { verifyTelegramInitData } from '../lib/telegram-verification.js';
 
 // Initialize database on first import
 let dbInitialized = false;
@@ -30,8 +31,29 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const { telegram_id, telegram_username, first_name, last_name } = req.body;
+    const { telegram_id, telegram_username, first_name, last_name, init_data } = req.body;
     console.log('Auth request:', { telegram_id, telegram_username, first_name, last_name });
+
+    // Верификация init_data (если предоставлен)
+    if (init_data) {
+      const botToken = process.env.TELEGRAM_BOT_TOKEN;
+      if (!botToken) {
+        console.warn('TELEGRAM_BOT_TOKEN not set, skipping verification');
+      } else {
+        const verification = verifyTelegramInitData(init_data, botToken);
+        if (!verification.valid) {
+          console.error('Telegram verification failed:', verification.error);
+          return res.status(401).json({ 
+            error: 'Telegram verification failed', 
+            details: verification.error 
+          });
+        }
+        // Используем проверенные данные пользователя
+        if (verification.user) {
+          console.log('Verified user:', verification.user);
+        }
+      }
+    }
 
     if (!telegram_id) {
       return res.status(400).json({ error: 'Telegram ID is required' });

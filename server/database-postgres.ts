@@ -218,6 +218,19 @@ export const userDb = {
       client.release();
     }
   },
+
+  // Get all users with Telegram connected
+  findAllWithTelegram: async () => {
+    const client = await getPool().connect();
+    try {
+      const result = await client.query(
+        'SELECT * FROM users WHERE telegram_id IS NOT NULL AND telegram_id != \'\''
+      );
+      return result.rows;
+    } finally {
+      client.release();
+    }
+  },
 };
 
 // Profile operations

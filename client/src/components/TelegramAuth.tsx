@@ -34,12 +34,12 @@ export function TelegramAuth() {
   const [checkingOnboarding, setCheckingOnboarding] = useState(true);
   const [isFirstTime, setIsFirstTime] = useState(false);
 
-  // Redirect to dashboard for returning users
+  // Redirect to health center for returning users
   useEffect(() => {
     if (authenticated && user && !isFirstTime && !checkingOnboarding && !loading) {
       // Small delay to ensure state is stable
       const timer = setTimeout(() => {
-        setLocation('/dashboard');
+        setLocation('/health-center');
       }, 100);
       return () => clearTimeout(timer);
     }
@@ -130,10 +130,10 @@ export function TelegramAuth() {
                 setIsFirstTime(isFirstTimeUser);
                 setCheckingOnboarding(false);
                 
-                // If first time, show onboarding; otherwise redirect to dashboard
+                // If first time, show onboarding; otherwise redirect to health center
                 if (!isFirstTimeUser) {
                   setTimeout(() => {
-                    setLocation('/dashboard');
+                    setLocation('/health-center');
                   }, 300);
                 }
               } else {
@@ -408,9 +408,9 @@ export function TelegramAuth() {
           <Button
             variant="outline"
             className="engraved-button-outline"
-            onClick={() => setLocation('/dashboard')}
+            onClick={() => setLocation('/health-center')}
           >
-            Дашборд
+            Единый центр
           </Button>
           <Button
             variant="outline"

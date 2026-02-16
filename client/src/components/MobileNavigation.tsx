@@ -4,7 +4,7 @@ import { Newspaper, LayoutDashboard, User } from 'lucide-react';
 
 const navItems = [
   { path: '/', icon: Newspaper, label: 'Новости' },
-  { path: '/dashboard', icon: LayoutDashboard, label: 'Дашборд' },
+  { path: '/health-center', icon: LayoutDashboard, label: 'Центр' },
   { path: '/account', icon: User, label: 'Аккаунт' },
 ];
 
