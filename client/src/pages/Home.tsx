@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'wouter';
 import { motion } from 'framer-motion';
 import { ArrowRight, TrendingUp, Activity, Heart, Brain } from 'lucide-react';
@@ -5,36 +6,93 @@ import SketchIcon from '@/components/SketchIcon';
 import { HealthMetricCard } from '@/components/HealthMetricCard';
 import { Button } from '@/components/ui/button';
 import { EcosystemPlatformSection } from '@/components/EcosystemPlatformSection';
+import { useUser } from '@/contexts/UserContext';
 
 export default function Home() {
-  const quickStats = [
+  const { user, profile } = useUser();
+  const [quickStats, setQuickStats] = useState([
     {
       title: 'Шаги',
-      value: 8420,
+      value: 0,
       unit: '',
       trend: 'up' as const,
       target: 10000,
       icon: 'movement' as const,
-      description: 'Цель: 10,000 шагов',
+      description: 'Добавьте данные о шагах',
     },
     {
       title: 'Сон',
-      value: 7.5,
+      value: 0,
       unit: 'ч',
       trend: 'up' as const,
       target: 8,
       icon: 'sleep' as const,
-      description: 'Цель: 8 часов',
+      description: 'Добавьте данные о сне',
     },
     {
       title: 'Настроение',
-      value: 8,
+      value: 0,
       unit: '/10',
       trend: 'up' as const,
       icon: 'psychology' as const,
-      description: 'Отличное настроение',
+      description: 'Добавьте данные о настроении',
     },
-  ];
+  ]);
+
+  useEffect(() => {
+    const fetchMetrics = async () => {
+      if (!user?.id) return;
+
+      try {
+        const response = await fetch(`/api/users/${user.id}/metrics?limit=10`);
+        if (response.ok) {
+          const data = await response.json();
+          const metrics = data.metrics || [];
+          
+          // Get latest metrics by type
+          const metricsByType: Record<string, any> = {};
+          metrics.forEach((m: any) => {
+            if (!metricsByType[m.metric_type] || new Date(m.created_at) > new Date(metricsByType[m.metric_type].created_at)) {
+              metricsByType[m.metric_type] = m;
+            }
+          });
+
+          setQuickStats([
+            {
+              title: 'Шаги',
+              value: metricsByType['steps']?.value || 0,
+              unit: '',
+              trend: 'up' as const,
+              target: 10000,
+              icon: 'movement' as const,
+              description: metricsByType['steps'] ? `Цель: 10,000 шагов` : 'Добавьте данные о шагах',
+            },
+            {
+              title: 'Сон',
+              value: metricsByType['sleep']?.value || 0,
+              unit: 'ч',
+              trend: 'up' as const,
+              target: 8,
+              icon: 'sleep' as const,
+              description: metricsByType['sleep'] ? `Цель: 8 часов` : 'Добавьте данные о сне',
+            },
+            {
+              title: 'Настроение',
+              value: metricsByType['mood']?.value || 0,
+              unit: '/10',
+              trend: 'up' as const,
+              icon: 'psychology' as const,
+              description: metricsByType['mood'] ? 'Отличное настроение' : 'Добавьте данные о настроении',
+            },
+          ]);
+        }
+      } catch (error) {
+        console.error('Error fetching metrics:', error);
+      }
+    };
+
+    fetchMetrics();
+  }, [user?.id]);
 
   const quickActions = [
     { path: '/dashboard', label: 'Дашборд', icon: 'chart', description: 'Обзор здоровья' },
@@ -62,7 +120,7 @@ export default function Home() {
                 transition={{ delay: 0.1 }}
                 className="text-4xl md:text-6xl font-bold text-foreground mb-6 leading-tight"
               >
-                Добро пожаловать в
+                {user ? `Добро пожаловать, ${user.name}!` : 'Добро пожаловать в'}
                 <br />
                 <span className="text-primary">EthosLife</span>
               </motion.h1>

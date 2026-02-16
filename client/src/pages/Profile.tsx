@@ -12,10 +12,10 @@ import { FeatureButton } from '@/components/FeatureButton';
 import { Button } from '@/components/ui/button';
 
 export default function Profile() {
+  const { user, profile: userProfile, refreshProfile } = useUser();
   const [selectedTab, setSelectedTab] = useState('overview');
   const [isEditingBiometrics, setIsEditingBiometrics] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [profile, setProfile] = useState<any>(null);
   const [height, setHeight] = useState<number | null>(null);
   const [weight, setWeight] = useState<number | null>(null);
   const [birthDate, setBirthDate] = useState<Date | null>(null);

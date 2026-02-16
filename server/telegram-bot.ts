@@ -36,8 +36,15 @@ if (TELEGRAM_BOT_TOKEN) {
         });
         user = await userDb.findById(Number(result.lastInsertRowid || result.id));
         
+        // Create empty profile for new user
+        if (user) {
+          await profileDb.createOrUpdate(user.id, {
+            // Profile will be empty initially, user can fill it later
+          });
+        }
+        
         // Initialize bot settings
-        await telegramBotSettingsDb.createOrUpdate(Number(result.lastInsertRowid || result.id), {
+        await telegramBotSettingsDb.createOrUpdate(user.id, {
           notifications_enabled: true,
           reminders_enabled: true,
           metric_tracking_enabled: true,

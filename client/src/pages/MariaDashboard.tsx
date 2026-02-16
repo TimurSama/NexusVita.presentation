@@ -37,25 +37,9 @@ export default function MariaDashboard() {
         const plansResponse = await fetch(`/api/users/${userId}/plans?date=${selectedDate.toISOString().split('T')[0]}`);
         if (plansResponse.ok) {
           const plansData = await plansResponse.json();
-          if (plansData.plans && plansData.plans.length > 0) {
-            setPlans(plansData.plans);
-          } else {
-            // Fallback to mock data if no plans
-            const today = new Date();
-            const dayOfWeek = today.getDay();
-            const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-            const dayName = dayNames[dayOfWeek];
-            const mockPlans = generatePlansForDay(dayName);
-            setPlans(mockPlans);
-          }
+          setPlans(plansData.plans || []);
         } else {
-          // Fallback to mock data
-          const today = new Date();
-          const dayOfWeek = today.getDay();
-          const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-          const dayName = dayNames[dayOfWeek];
-          const mockPlans = generatePlansForDay(dayName);
-          setPlans(mockPlans);
+          setPlans([]);
         }
 
         // Fetch documents
@@ -66,13 +50,8 @@ export default function MariaDashboard() {
         }
       } catch (error) {
         console.error('Error fetching data:', error);
-        // Fallback to mock data
-        const today = new Date();
-        const dayOfWeek = today.getDay();
-        const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-        const dayName = dayNames[dayOfWeek];
-        const mockPlans = generatePlansForDay(dayName);
-        setPlans(mockPlans);
+        setPlans([]);
+        setDocuments([]);
       } finally {
         setLoading(false);
       }
