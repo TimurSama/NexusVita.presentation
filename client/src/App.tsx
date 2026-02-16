@@ -41,6 +41,7 @@ import Friends from "./pages/social/Friends";
 import Messages from "./pages/social/Messages";
 import Specialists from "./pages/social/Specialists";
 import Onboarding from "./pages/Onboarding";
+import Account from "./pages/Account";
 
 function Router() {
   // Check if we're in Telegram Web App
@@ -84,7 +85,8 @@ function Router() {
       <Route path={"/tokenomics"} component={Tokenomics} />
       <Route path={"/calendar"} component={Calendar} />
       <Route path={"/profile"} component={Profile} />
-      <Route path={"/settings"} component={() => <div className="p-8">Настройки (в разработке)</div>} />
+      <Route path={"/account"} component={Account} />
+      <Route path={"/settings"} component={Account} />
       <Route path={"/habits"} component={Habits} />
       <Route path={"/journal"} component={Journal} />
       <Route path={"/ai-chat"} component={AIChat} />

@@ -36,10 +36,14 @@ export function TelegramAuth() {
 
   // Redirect to dashboard for returning users
   useEffect(() => {
-    if (authenticated && user && !isFirstTime && !checkingOnboarding) {
-      setLocation('/dashboard');
+    if (authenticated && user && !isFirstTime && !checkingOnboarding && !loading) {
+      // Small delay to ensure state is stable
+      const timer = setTimeout(() => {
+        setLocation('/dashboard');
+      }, 100);
+      return () => clearTimeout(timer);
     }
-  }, [authenticated, user, isFirstTime, checkingOnboarding, setLocation]);
+  }, [authenticated, user, isFirstTime, checkingOnboarding, loading, setLocation]);
 
   // Main initialization effect
   useEffect(() => {
@@ -186,7 +190,25 @@ export function TelegramAuth() {
     return <Onboarding />;
   }
 
-  // Redirect to dashboard for returning users (loading state)
+  // Show loading or redirect state
+  if (!authenticated || !user || checkingOnboarding || loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="text-center"
+        >
+          <Loader2 className="w-12 h-12 text-primary animate-spin mx-auto mb-4" />
+          <p className="text-foreground/60">
+            {checkingOnboarding ? 'Проверка данных...' : 'Подключение к Telegram...'}
+          </p>
+        </motion.div>
+      </div>
+    );
+  }
+
+  // Redirect to dashboard for returning users (show loading during redirect)
   if (authenticated && user && !isFirstTime && !checkingOnboarding) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -200,24 +222,6 @@ export function TelegramAuth() {
         </motion.div>
       </div>
     );
-  }
-
-  if (!authenticated || !user || checkingOnboarding) {
-    if (loading || checkingOnboarding) {
-      return (
-        <div className="min-h-screen bg-background flex items-center justify-center">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="text-center"
-          >
-            <Loader2 className="w-12 h-12 text-primary animate-spin mx-auto mb-4" />
-            <p className="text-foreground/60">Подключение к Telegram...</p>
-          </motion.div>
-        </div>
-      );
-    }
-    return null;
   }
 
   const tgUser = getTelegramUser();

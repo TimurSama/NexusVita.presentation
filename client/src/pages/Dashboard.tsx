@@ -118,113 +118,214 @@ export default function Dashboard() {
     fetchData();
   }, []);
 
-  const healthModules = [
-    {
-      id: 'medicine',
-      title: 'Медицина',
-      icon: 'medicine' as const,
-      path: '/medicine',
-      metrics: [
-        { label: 'Анализы', value: '12', trend: 'stable' },
-        { label: 'Риски', value: 'Низкие', trend: 'down' },
-      ],
-      chartData: [
-        { name: 'Янв', value: 85 },
-        { name: 'Фев', value: 88 },
-        { name: 'Мар', value: 90 },
-      ],
-    },
-    {
-      id: 'movement',
-      title: 'Движение',
-      icon: 'movement' as const,
-      path: '/movement',
-      metrics: [
-        { label: 'Тренировки', value: '4/5', trend: 'up' },
-        { label: 'VO2 max', value: '45', trend: 'up' },
-      ],
-      chartData: [
-        { name: 'Янв', value: 40 },
-        { name: 'Фев', value: 42 },
-        { name: 'Мар', value: 45 },
-      ],
-    },
-    {
-      id: 'nutrition',
-      title: 'Питание',
-      icon: 'nutrition' as const,
-      path: '/nutrition',
-      metrics: [
-        { label: 'Белки', value: '120г', trend: 'stable' },
-        { label: 'Дефициты', value: '0', trend: 'down' },
-      ],
-      chartData: [
-        { name: 'Янв', value: 75 },
-        { name: 'Фев', value: 80 },
-        { name: 'Мар', value: 85 },
-      ],
-    },
-    {
-      id: 'sleep',
-      title: 'Сон',
-      icon: 'sleep' as const,
-      path: '/sleep',
-      metrics: [
-        { label: 'Качество', value: '8.2/10', trend: 'up' },
-        { label: 'Среднее', value: '7.8ч', trend: 'stable' },
-      ],
-      chartData: [
-        { name: 'Янв', value: 7.0 },
-        { name: 'Фев', value: 7.5 },
-        { name: 'Мар', value: 7.8 },
-      ],
-    },
-    {
-      id: 'psychology',
-      title: 'Психология',
-      icon: 'psychology' as const,
-      path: '/psychology',
-      metrics: [
-        { label: 'Настроение', value: '8/10', trend: 'up' },
-        { label: 'Стресс', value: 'Низкий', trend: 'down' },
-      ],
-      chartData: [
-        { name: 'Янв', value: 6.5 },
-        { name: 'Фев', value: 7.0 },
-        { name: 'Мар', value: 8.0 },
-      ],
-    },
-    {
-      id: 'relationships',
-      title: 'Отношения',
-      icon: 'relationships' as const,
-      path: '/relationships',
-      metrics: [
-        { label: 'Активность', value: 'Высокая', trend: 'up' },
-        { label: 'Встречи', value: '5', trend: 'stable' },
-      ],
-      chartData: [
-        { name: 'Янв', value: 70 },
-        { name: 'Фев', value: 75 },
-        { name: 'Мар', value: 80 },
-      ],
-    },
-    {
-      id: 'spirituality',
-      title: 'Привычки',
-      icon: 'spirituality' as const,
-      path: '/habits',
-      metrics: [
-        { label: 'Стрик', value: '21 день', trend: 'up' },
-        { label: 'Привычки', value: '5/7', trend: 'up' },
-      ],
-      chartData: [
-        { name: 'Янв', value: 60 },
-        { name: 'Фев', value: 70 },
-        { name: 'Мар', value: 85 },
-      ],
-    },
-  ];
+  const [healthModules, setHealthModules] = useState<any[]>([]);
+
+  // Fetch health modules data from real metrics
+  useEffect(() => {
+    const fetchModulesData = async () => {
+      if (!user?.id) return;
+
+      try {
+        const userId = user.id.toString();
+        
+        // Fetch goals for each module
+        const goalsResponse = await fetch(`/api/users/${userId}/goals`);
+        const goalsData = goalsResponse.ok ? await goalsResponse.json() : { goals: [] };
+        const goals = goalsData.goals || [];
+
+        // Fetch documents count
+        const docsResponse = await fetch(`/api/users/${userId}/documents`);
+        const docsData = docsResponse.ok ? await docsResponse.json() : { documents: [] };
+        const documents = docsData.documents || [];
+
+        // Fetch metrics for last 3 months for charts
+        const metricsResponse = await fetch(`/api/users/${userId}/metrics?limit=100`);
+        const metricsData = metricsResponse.ok ? await metricsResponse.json() : { metrics: [] };
+        const metrics = metricsData.metrics || [];
+
+        // Calculate module data from real metrics
+        const modules = [
+          {
+            id: 'medicine',
+            title: 'Медицина',
+            icon: 'medicine' as const,
+            path: '/medicine',
+            metrics: [
+              { 
+                label: 'Анализы', 
+                value: documents.filter((d: any) => d.document_type === 'medical').length.toString(),
+                trend: 'stable' as const
+              },
+              { 
+                label: 'Документы', 
+                value: documents.length.toString(),
+                trend: 'stable' as const
+              },
+            ],
+            chartData: calculateChartData(metrics, 'medical', 3),
+          },
+          {
+            id: 'movement',
+            title: 'Движение',
+            icon: 'movement' as const,
+            path: '/movement',
+            metrics: [
+              { 
+                label: 'Тренировки', 
+                value: `${goals.filter((g: any) => g.category === 'movement' && g.completed).length}/${goals.filter((g: any) => g.category === 'movement').length}`,
+                trend: 'up' as const
+              },
+              { 
+                label: 'Активность', 
+                value: metrics.filter((m: any) => m.metric_type === 'steps').length > 0 ? 'Есть' : 'Нет',
+                trend: 'up' as const
+              },
+            ],
+            chartData: calculateChartData(metrics, 'steps', 3),
+          },
+          {
+            id: 'nutrition',
+            title: 'Питание',
+            icon: 'nutrition' as const,
+            path: '/nutrition',
+            metrics: [
+              { 
+                label: 'Записи', 
+                value: metrics.filter((m: any) => m.metric_type === 'calories' || m.metric_type === 'nutrition').length.toString(),
+                trend: 'stable' as const
+              },
+              { 
+                label: 'Цели', 
+                value: goals.filter((g: any) => g.category === 'nutrition').length.toString(),
+                trend: 'stable' as const
+              },
+            ],
+            chartData: calculateChartData(metrics, 'calories', 3),
+          },
+          {
+            id: 'sleep',
+            title: 'Сон',
+            icon: 'sleep' as const,
+            path: '/sleep',
+            metrics: [
+              { 
+                label: 'Записи', 
+                value: metrics.filter((m: any) => m.metric_type === 'sleep').length.toString(),
+                trend: 'up' as const
+              },
+              { 
+                label: 'Среднее', 
+                value: calculateAverage(metrics, 'sleep') || 'Нет данных',
+                trend: 'stable' as const
+              },
+            ],
+            chartData: calculateChartData(metrics, 'sleep', 3),
+          },
+          {
+            id: 'psychology',
+            title: 'Психология',
+            icon: 'psychology' as const,
+            path: '/psychology',
+            metrics: [
+              { 
+                label: 'Настроение', 
+                value: calculateAverage(metrics, 'mood') ? `${calculateAverage(metrics, 'mood')}/10` : 'Нет данных',
+                trend: 'up' as const
+              },
+              { 
+                label: 'Записи', 
+                value: metrics.filter((m: any) => m.metric_type === 'mood').length.toString(),
+                trend: 'stable' as const
+              },
+            ],
+            chartData: calculateChartData(metrics, 'mood', 3),
+          },
+          {
+            id: 'relationships',
+            title: 'Отношения',
+            icon: 'relationships' as const,
+            path: '/relationships',
+            metrics: [
+              { 
+                label: 'Активность', 
+                value: goals.filter((g: any) => g.category === 'relationships').length > 0 ? 'Есть' : 'Нет',
+                trend: 'up' as const
+              },
+              { 
+                label: 'Цели', 
+                value: goals.filter((g: any) => g.category === 'relationships').length.toString(),
+                trend: 'stable' as const
+              },
+            ],
+            chartData: calculateChartData(metrics, 'relationships', 3),
+          },
+          {
+            id: 'spirituality',
+            title: 'Привычки',
+            icon: 'spirituality' as const,
+            path: '/habits',
+            metrics: [
+              { 
+                label: 'Привычки', 
+                value: `${goals.filter((g: any) => g.category === 'habits' && g.completed).length}/${goals.filter((g: any) => g.category === 'habits').length}`,
+                trend: 'up' as const
+              },
+              { 
+                label: 'Активные', 
+                value: goals.filter((g: any) => g.category === 'habits' && !g.completed).length.toString(),
+                trend: 'up' as const
+              },
+            ],
+            chartData: calculateChartData(metrics, 'habits', 3),
+          },
+        ];
+
+        setHealthModules(modules);
+      } catch (error) {
+        console.error('Error fetching modules data:', error);
+        // Set empty modules if error
+        setHealthModules([]);
+      }
+    };
+
+    fetchModulesData();
+  }, [user?.id]);
+
+  // Helper functions
+  function calculateChartData(metrics: any[], type: string, months: number) {
+    const now = new Date();
+    const data: any[] = [];
+    
+    for (let i = months - 1; i >= 0; i--) {
+      const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      const monthMetrics = metrics.filter((m: any) => {
+        const mDate = new Date(m.recorded_at || m.created_at);
+        return m.metric_type === type && 
+               mDate.getMonth() === date.getMonth() && 
+               mDate.getFullYear() === date.getFullYear();
+      });
+      
+      const avg = monthMetrics.length > 0
+        ? monthMetrics.reduce((sum: number, m: any) => sum + (m.value || 0), 0) / monthMetrics.length
+        : 0;
+      
+      data.push({
+        name: date.toLocaleDateString('ru-RU', { month: 'short' }),
+        value: Math.round(avg * 10) / 10,
+      });
+    }
+    
+    return data.length > 0 ? data : [
+      { name: 'Нет данных', value: 0 },
+    ];
+  }
+
+  function calculateAverage(metrics: any[], type: string): number | null {
+    const typeMetrics = metrics.filter((m: any) => m.metric_type === type);
+    if (typeMetrics.length === 0) return null;
+    const sum = typeMetrics.reduce((acc: number, m: any) => acc + (m.value || 0), 0);
+    return Math.round((sum / typeMetrics.length) * 10) / 10;
+  }
 
   return (
     <div className="min-h-screen bg-background pb-20 md:pb-0 pt-20">
@@ -391,30 +492,32 @@ export default function Dashboard() {
         </div>
 
         {/* Weekly Activity Chart */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="mb-6"
-        >
-          <Card className="engraved-card">
-            <CardHeader>
-              <CardTitle className="engraved-text">Активность за неделю</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
-                <AreaChart data={weeklyActivity}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.05)" />
-                  <XAxis dataKey="day" />
-                  <YAxis />
-                  <Tooltip />
-                  <Area type="monotone" dataKey="steps" stackId="1" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.6} />
-                  <Area type="monotone" dataKey="calories" stackId="2" stroke="#10b981" fill="#10b981" fillOpacity={0.6} />
-                </AreaChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
-        </motion.div>
+        {weeklyActivity.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            className="mb-6"
+          >
+            <Card className="engraved-card">
+              <CardHeader>
+                <CardTitle className="engraved-text">Активность за неделю</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={300}>
+                  <AreaChart data={weeklyActivity}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.05)" />
+                    <XAxis dataKey="day" />
+                    <YAxis />
+                    <Tooltip />
+                    <Area type="monotone" dataKey="steps" stackId="1" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.6} />
+                    <Area type="monotone" dataKey="calories" stackId="2" stroke="#10b981" fill="#10b981" fillOpacity={0.6} />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+          </motion.div>
+        )}
 
         {/* Health Modules Grid */}
         <motion.div
@@ -431,8 +534,18 @@ export default function Dashboard() {
               </Button>
             </Link>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {healthModules.map((module, idx) => (
+          {healthModules.length === 0 ? (
+            <Card className="engraved-card">
+              <CardContent className="py-12 text-center">
+                <p className="text-foreground/60 mb-2">Нет данных для отображения</p>
+                <p className="text-sm text-foreground/40">
+                  Добавьте метрики и цели, чтобы увидеть статистику по модулям
+                </p>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {healthModules.map((module, idx) => (
               <Link key={module.id} href={module.path}>
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -478,7 +591,8 @@ export default function Dashboard() {
                 </motion.div>
               </Link>
             ))}
-          </div>
+            </div>
+          )}
         </motion.div>
       </div>
     </div>

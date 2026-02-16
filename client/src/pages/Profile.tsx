@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
+import { useLocation } from 'wouter';
 import { motion } from 'framer-motion';
 import { useUser } from '@/contexts/UserContext';
-import { Calendar, FileText, Pill, Activity, AlertCircle, TrendingUp, Edit } from 'lucide-react';
+import { Calendar, FileText, Pill, Activity, AlertCircle, TrendingUp, Edit, Wallet, Settings } from 'lucide-react';
 import SketchIcon from '@/components/SketchIcon';
 import { HealthMetricCard } from '@/components/HealthMetricCard';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -10,8 +11,10 @@ import { WeightSelector } from '@/components/interactive/WeightSelector';
 import { MayanCalendar } from '@/components/interactive/MayanCalendar';
 import { FeatureButton } from '@/components/FeatureButton';
 import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
 
 export default function Profile() {
+  const [, setLocation] = useLocation();
   const { user, profile: userProfile, refreshProfile } = useUser();
   const [selectedTab, setSelectedTab] = useState('overview');
   const [isEditingBiometrics, setIsEditingBiometrics] = useState(false);
@@ -19,20 +22,103 @@ export default function Profile() {
   const [height, setHeight] = useState<number | null>(null);
   const [weight, setWeight] = useState<number | null>(null);
   const [birthDate, setBirthDate] = useState<Date | null>(null);
+  const [gender, setGender] = useState<string>('');
+  const [bloodType, setBloodType] = useState<string>('');
+  const [tokenBalance, setTokenBalance] = useState(0);
+  const [recentDocuments, setRecentDocuments] = useState<any[]>([]);
 
   useEffect(() => {
-    if (userProfile) {
-      setHeight(userProfile.height || null);
-      setWeight(userProfile.weight || null);
-      if (userProfile.date_of_birth) {
-        setBirthDate(new Date(userProfile.date_of_birth));
+    const loadData = async () => {
+      if (!user?.id) {
+        setLoading(false);
+        return;
       }
-    }
-    setLoading(false);
-  }, [userProfile]);
 
-  const healthScore = 87; // TODO: Calculate from metrics
-  const riskLevel = 'low'; // TODO: Calculate from metrics
+      if (userProfile) {
+        setHeight(userProfile.height || null);
+        setWeight(userProfile.weight || null);
+        setGender(userProfile.gender || '');
+        setBloodType(userProfile.blood_type || '');
+        if (userProfile.date_of_birth) {
+          setBirthDate(new Date(userProfile.date_of_birth));
+        }
+      }
+
+      // Load tokens
+      try {
+        const tokensResponse = await fetch(`/api/users/${user.id}/account?action=tokens`);
+        if (tokensResponse.ok) {
+          const tokensData = await tokensResponse.json();
+          setTokenBalance(tokensData.balance || 0);
+        }
+      } catch (error) {
+        console.error('Error loading tokens:', error);
+      }
+
+      // Load documents
+      try {
+        const docsResponse = await fetch(`/api/users/${user.id}/documents`);
+        if (docsResponse.ok) {
+          const docsData = await docsResponse.json();
+          setRecentDocuments(docsData.documents?.slice(0, 5) || []);
+        }
+      } catch (error) {
+        console.error('Error loading documents:', error);
+      }
+
+      setLoading(false);
+    };
+
+    loadData();
+  }, [userProfile, user?.id]);
+
+  // Calculate health score from metrics
+  const [healthScore, setHealthScore] = useState(0);
+  const [riskLevel, setRiskLevel] = useState<'low' | 'medium' | 'high'>('low');
+
+  useEffect(() => {
+    const calculateHealthScore = async () => {
+      if (!user?.id) return;
+
+      try {
+        const metricsResponse = await fetch(`/api/users/${user.id}/metrics?limit=50`);
+        if (metricsResponse.ok) {
+          const metricsData = await metricsResponse.json();
+          const metrics = metricsData.metrics || [];
+          
+          // Simple health score calculation based on metrics
+          let score = 50; // Base score
+          
+          // Check for various health indicators
+          const hasRecentMetrics = metrics.length > 0;
+          const hasMultipleTypes = new Set(metrics.map((m: any) => m.metric_type)).size > 2;
+          const recentDate = metrics.length > 0 ? new Date(metrics[0].recorded_at || metrics[0].created_at) : null;
+          const isRecent = recentDate && (Date.now() - recentDate.getTime()) < 7 * 24 * 60 * 60 * 1000;
+          
+          if (hasRecentMetrics) score += 20;
+          if (hasMultipleTypes) score += 15;
+          if (isRecent) score += 15;
+          
+          // Check profile completeness
+          if (userProfile?.height && userProfile?.weight && userProfile?.date_of_birth) {
+            score += 10;
+          }
+          
+          score = Math.min(100, Math.max(0, score));
+          setHealthScore(score);
+          
+          // Determine risk level
+          if (score >= 80) setRiskLevel('low');
+          else if (score >= 50) setRiskLevel('medium');
+          else setRiskLevel('high');
+        }
+      } catch (error) {
+        console.error('Error calculating health score:', error);
+      }
+    };
+
+    calculateHealthScore();
+  }, [user?.id, userProfile]);
 
   const age = birthDate ? Math.floor((new Date().getTime() - birthDate.getTime()) / (365.25 * 24 * 60 * 60 * 1000)) : null;
   const bmi = height && weight ? (weight / ((height / 100) ** 2)).toFixed(1) : null;
@@ -44,7 +130,11 @@ export default function Profile() {
     { label: 'ИМТ', value: bmi || 'Не рассчитан', isEmpty: !bmi },
   ];
 
-  const recentAnalyses: any[] = []; // TODO: Fetch from documents API
+  const recentAnalyses = recentDocuments.map((doc: any) => ({
+    type: doc.title,
+    date: new Date(doc.created_at).toLocaleDateString('ru-RU'),
+    status: 'Загружено',
+  }));
 
   return (
     <div className="min-h-screen bg-background pb-20 md:pb-0 pt-20">
@@ -55,10 +145,32 @@ export default function Profile() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
-          <h1 className="text-4xl font-bold text-foreground mb-2">Профиль здоровья</h1>
-          <p className="text-foreground/60">
-            Единая цифровая карта вашего здоровья
-          </p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-4xl font-bold text-foreground mb-2">Профиль здоровья</h1>
+              <p className="text-foreground/60">
+                Единая цифровая карта вашего здоровья
+              </p>
+            </div>
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                onClick={() => setLocation('/account')}
+                className="engraved-button-outline"
+              >
+                <Wallet className="w-4 h-4 mr-2" />
+                Кошелек ({tokenBalance.toFixed(0)} ETL)
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => setLocation('/account')}
+                className="engraved-button-outline"
+              >
+                <Settings className="w-4 h-4 mr-2" />
+                Настройки
+              </Button>
+            </div>
+          </div>
         </motion.div>
 
         {/* Health Score Card */}
@@ -103,16 +215,24 @@ export default function Profile() {
               </div>
             </div>
           </div>
-          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4">
             <div className={`px-4 py-2 rounded-xl ${
-              riskLevel === 'low' ? 'bg-primary/10 text-primary' : 'bg-accent/10 text-accent'
+              riskLevel === 'low' ? 'bg-primary/10 text-primary' : 
+              riskLevel === 'medium' ? 'bg-yellow-500/10 text-yellow-600' :
+              'bg-red-500/10 text-red-600'
             }`}>
               <span className="text-sm font-semibold">
-                Риск: {riskLevel === 'low' ? 'Низкий' : 'Средний'}
+                Риск: {riskLevel === 'low' ? 'Низкий' : riskLevel === 'medium' ? 'Средний' : 'Высокий'}
               </span>
             </div>
-            <TrendingUp className="w-5 h-5 text-primary" />
-            <span className="text-sm text-foreground/60">+3% за месяц</span>
+            {healthScore > 0 && (
+              <>
+                <TrendingUp className="w-5 h-5 text-primary" />
+                <span className="text-sm text-foreground/60">
+                  {healthScore >= 80 ? 'Отличное состояние' : healthScore >= 50 ? 'Хорошее состояние' : 'Требует внимания'}
+                </span>
+              </>
+            )}
           </div>
         </motion.div>
 
@@ -204,14 +324,20 @@ export default function Profile() {
                             height,
                             weight,
                             date_of_birth: birthDate?.toISOString(),
+                            gender: gender || undefined,
+                            blood_type: bloodType || undefined,
                           }),
                         });
                         
                         if (response.ok) {
                           await refreshProfile();
+                          toast.success('Профиль сохранен');
+                        } else {
+                          toast.error('Ошибка при сохранении профиля');
                         }
                       } catch (error) {
                         console.error('Error saving profile:', error);
+                        toast.error('Ошибка при сохранении профиля');
                       }
                     }
                     setIsEditingBiometrics(!isEditingBiometrics);
@@ -235,28 +361,64 @@ export default function Profile() {
                   ))}
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                  <WheelPicker
-                    value={height || 175}
-                    onChange={(v) => setHeight(v)}
-                    label="Рост"
-                    min={100}
-                    max={220}
-                    unit="см"
-                  />
-                  <WeightSelector
-                    value={weight || 70}
-                    onChange={(v) => setWeight(v)}
-                    label="Вес"
-                    min={30}
-                    max={200}
-                    unit="кг"
-                  />
-                  <MayanCalendar
-                    value={birthDate || new Date(1990, 0, 1)}
-                    onChange={(v) => setBirthDate(v)}
-                    label="Дата рождения"
-                  />
+                <div className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <WheelPicker
+                      value={height || 175}
+                      onChange={(v) => setHeight(v)}
+                      label="Рост"
+                      min={100}
+                      max={220}
+                      unit="см"
+                    />
+                    <WeightSelector
+                      value={weight || 70}
+                      onChange={(v) => setWeight(v)}
+                      label="Вес"
+                      min={30}
+                      max={200}
+                      unit="кг"
+                    />
+                    <MayanCalendar
+                      value={birthDate || new Date(1990, 0, 1)}
+                      onChange={(v) => setBirthDate(v)}
+                      label="Дата рождения"
+                    />
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">Пол</label>
+                      <select
+                        value={gender}
+                        onChange={(e) => setGender(e.target.value)}
+                        className="w-full px-3 py-2 rounded-md border border-border bg-background"
+                      >
+                        <option value="">Не указан</option>
+                        <option value="male">Мужской</option>
+                        <option value="female">Женский</option>
+                        <option value="other">Другое</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">Группа крови</label>
+                      <select
+                        value={bloodType}
+                        onChange={(e) => setBloodType(e.target.value)}
+                        className="w-full px-3 py-2 rounded-md border border-border bg-background"
+                      >
+                        <option value="">Не указана</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                      </select>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
