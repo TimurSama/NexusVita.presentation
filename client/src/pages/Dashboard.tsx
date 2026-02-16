@@ -594,6 +594,18 @@ export default function Dashboard() {
             </div>
           )}
         </motion.div>
+
+        {/* AI Assistant Floating Button */}
+        <motion.button
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.6 }}
+          onClick={() => setLocation('/ai-chat')}
+          className="fixed bottom-20 left-4 z-40 md:hidden w-14 h-14 bg-primary text-primary-foreground rounded-full shadow-lg flex items-center justify-center hover:scale-110 transition-transform"
+          aria-label="ИИ-консультант"
+        >
+          <Sparkles className="w-6 h-6" />
+        </motion.button>
       </div>
     </div>
   );
