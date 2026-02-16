@@ -1161,17 +1161,42 @@ if (TELEGRAM_BOT_TOKEN) {
 
 export function startTelegramBot() {
   if (bot && TELEGRAM_BOT_TOKEN) {
-    bot.launch();
-    console.log('Telegram bot started');
+    console.log('🚀 Launching bot with polling...');
+    bot.launch({
+      polling: {
+        timeout: 10,
+        limit: 100,
+        allowedUpdates: ['message', 'callback_query'],
+      },
+    });
+    console.log('✅ Telegram bot launched and ready to receive messages');
     
-    // Start hourly reminders
-    const { startHourlyReminders, setBot } = require('./telegram-reminders');
-    setBot(bot);
-    startHourlyReminders();
+    // Start hourly reminders (async, don't block)
+    setTimeout(() => {
+      try {
+        const { startHourlyReminders, setBot } = require('./telegram-reminders');
+        setBot(bot);
+        startHourlyReminders();
+        console.log('✅ Hourly reminders started');
+      } catch (error) {
+        console.error('⚠️ Failed to start reminders:', error);
+      // Don't exit, bot can work without reminders
+      }
+    }, 2000); // Start after 2 seconds
     
     // Graceful stop
-    process.once('SIGINT', () => bot?.stop('SIGINT'));
-    process.once('SIGTERM', () => bot?.stop('SIGTERM'));
+    process.once('SIGINT', () => {
+      console.log('🛑 Received SIGINT, stopping bot...');
+      bot?.stop('SIGINT');
+    });
+    process.once('SIGTERM', () => {
+      console.log('🛑 Received SIGTERM, stopping bot...');
+      bot?.stop('SIGTERM');
+    });
+  } else {
+    console.error('❌ Cannot start bot: bot or token missing');
+    console.error('Bot exists:', !!bot);
+    console.error('Token exists:', !!TELEGRAM_BOT_TOKEN);
   }
 }
 
