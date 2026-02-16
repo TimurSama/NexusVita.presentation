@@ -155,19 +155,20 @@ export default function Profile() {
             <div className="flex gap-2">
               <Button
                 variant="outline"
+                size="sm"
                 onClick={() => setLocation('/account')}
-                className="engraved-button-outline"
+                className="engraved-button-outline text-xs"
               >
-                <Wallet className="w-4 h-4 mr-2" />
-                Кошелек ({tokenBalance.toFixed(0)} ETL)
+                <Wallet className="w-3 h-3 mr-1" />
+                {tokenBalance.toFixed(0)} ETL
               </Button>
               <Button
                 variant="outline"
+                size="sm"
                 onClick={() => setLocation('/account')}
-                className="engraved-button-outline"
+                className="engraved-button-outline text-xs"
               >
-                <Settings className="w-4 h-4 mr-2" />
-                Настройки
+                <Settings className="w-3 h-3" />
               </Button>
             </div>
           </div>

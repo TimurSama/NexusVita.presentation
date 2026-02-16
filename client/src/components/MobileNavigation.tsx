@@ -1,14 +1,11 @@
 import { Link, useLocation } from 'wouter';
 import { motion } from 'framer-motion';
-import { Home, LayoutDashboard, Calendar, User, Settings } from 'lucide-react';
-import SketchIcon from './SketchIcon';
+import { Newspaper, LayoutDashboard, User } from 'lucide-react';
 
 const navItems = [
-  { path: '/', icon: Home, label: 'Главная' },
+  { path: '/', icon: Newspaper, label: 'Новости' },
   { path: '/dashboard', icon: LayoutDashboard, label: 'Дашборд' },
-  { path: '/calendar', icon: Calendar, label: 'Календарь' },
-  { path: '/profile', icon: User, label: 'Профиль' },
-  { path: '/settings', icon: Settings, label: 'Настройки' },
+  { path: '/account', icon: User, label: 'Аккаунт' },
 ];
 
 export function MobileNavigation() {

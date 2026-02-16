@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { useUser } from '@/contexts/UserContext';
 import { 
   TrendingUp, Activity, Heart, Brain, Calendar, Clock, CheckCircle2, 
-  MessageSquare, Bot, User, Zap, ArrowRight, ChevronRight
+  MessageSquare, Bot, User, Zap, ArrowRight, ChevronRight, Sparkles
 } from 'lucide-react';
 import SketchIcon from '@/components/SketchIcon';
 import { HealthMetricCard } from '@/components/HealthMetricCard';
@@ -329,7 +329,7 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-background pb-20 md:pb-0 pt-20">
-      <div className="container py-6 md:py-8">
+      <div className="container max-w-full px-4 py-6 md:py-8">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}

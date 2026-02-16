@@ -126,12 +126,26 @@ export function TelegramAuth() {
               const onboardingResponse = await fetch(`/api/users/${authResult.user.id}/account?action=onboarding`);
               if (onboardingResponse.ok) {
                 const onboardingData = await onboardingResponse.json();
-                setIsFirstTime(!onboardingData.onboarding_completed);
+                const isFirstTimeUser = !onboardingData.onboarding_completed;
+                setIsFirstTime(isFirstTimeUser);
+                setCheckingOnboarding(false);
+                
+                // If first time, show onboarding; otherwise redirect to dashboard
+                if (!isFirstTimeUser) {
+                  setTimeout(() => {
+                    setLocation('/dashboard');
+                  }, 300);
+                }
+              } else {
+                // If check fails, assume first time
+                setIsFirstTime(true);
+                setCheckingOnboarding(false);
               }
             } catch (err) {
               console.error('Error checking onboarding:', err);
               // Assume first time if check fails
               setIsFirstTime(true);
+              setCheckingOnboarding(false);
             }
 
             // TODO: Fetch friends list
@@ -139,11 +153,12 @@ export function TelegramAuth() {
             setFriends([]);
           } else {
             setError(authResult.error || 'Ошибка аутентификации');
+            setLoading(false);
+            setCheckingOnboarding(false);
           }
         } catch (err) {
           console.error('Auth error:', err);
           setError('Ошибка при подключении к серверу');
-        } finally {
           setLoading(false);
           setCheckingOnboarding(false);
         }

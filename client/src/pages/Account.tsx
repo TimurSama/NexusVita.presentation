@@ -149,7 +149,7 @@ export default function Account() {
 
   return (
     <div className="min-h-screen bg-background pb-20 md:pb-0 pt-20">
-      <div className="container py-6 md:py-8 max-w-6xl">
+      <div className="container max-w-full px-4 py-6 md:py-8">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
