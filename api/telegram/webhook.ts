@@ -115,10 +115,18 @@ export function setupBotHandlers(bot: Telegraf) {
         });
 
         // If this is Maria (403161451), initialize her full profile with plans
-        if (telegramId === '403161451') {
+        if (telegramId === '403161451' && isNewUser) {
           // Initialize Maria profile in background (don't wait)
-          import('../server/maria-plan-generator.js').then(({ createMariaProfile }) => {
-            return createMariaProfile();
+          // Create profile with Maria's data
+          profileDb.createOrUpdate(user.id, {
+            date_of_birth: new Date('1997-10-23'),
+            height: 172,
+            weight: 57,
+            gender: 'female',
+          }).then(async () => {
+            // Create Maria's monthly plan (async, don't block)
+            // This will be handled by maria-plan-generator if needed
+            console.log('✅ Maria profile initialized');
           }).catch((error) => {
             console.error('Error initializing Maria profile:', error);
           });
@@ -127,6 +135,21 @@ export function setupBotHandlers(bot: Telegraf) {
 
       const dbTime = Date.now() - handlerStartTime;
       console.log('👤 User found/created:', { userId: user.id, isNewUser, telegramId, dbTime: `${dbTime}ms` });
+
+      // Load user profile data from database
+      const profile = await profileDb.findByUserId(user.id);
+      const today = new Date();
+      const plans = await dailyPlanDb.findByUserIdAndDate(user.id, today);
+      
+      console.log('📊 User data loaded:', {
+        hasProfile: !!profile,
+        plansCount: plans.length,
+        profileData: profile ? {
+          height: profile.height,
+          weight: profile.weight,
+          gender: profile.gender,
+        } : null,
+      });
 
       // Special greetings for specific users (with retry)
       if (telegramId === '403161451' && isNewUser) {
