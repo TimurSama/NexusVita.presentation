@@ -5,6 +5,7 @@ import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { AuthProvider } from "./contexts/AuthContext";
+import { UserProvider } from "./contexts/UserContext";
 import { MobileNavigation } from "./components/MobileNavigation";
 import { Header } from "./components/Header";
 import { TelegramAuth } from "./components/TelegramAuth";
@@ -150,12 +151,14 @@ function App() {
     <ErrorBoundary>
       <ThemeProvider defaultTheme="light">
         <AuthProvider>
-          <TooltipProvider>
-            <Toaster />
-            <Header />
-            <Router />
-            <MobileNavigation />
-          </TooltipProvider>
+          <UserProvider>
+            <TooltipProvider>
+              <Toaster />
+              <Header />
+              <Router />
+              <MobileNavigation />
+            </TooltipProvider>
+          </UserProvider>
         </AuthProvider>
       </ThemeProvider>
     </ErrorBoundary>
