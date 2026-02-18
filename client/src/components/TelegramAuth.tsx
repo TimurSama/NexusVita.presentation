@@ -119,7 +119,12 @@ export function TelegramAuth() {
             localStorage.setItem('userId', authResult.user.id.toString());
 
             // Refresh user data in context (will load user and profile)
-            await refreshUser();
+            try {
+              await refreshUser();
+            } catch (err) {
+              console.error('Error refreshing user:', err);
+              // Continue anyway - user is authenticated
+            }
 
             // Check if this is first time (onboarding not completed)
             try {
@@ -129,6 +134,7 @@ export function TelegramAuth() {
                 const isFirstTimeUser = !onboardingData.onboarding_completed;
                 setIsFirstTime(isFirstTimeUser);
                 setCheckingOnboarding(false);
+                setLoading(false);
                 
                 // If first time, show onboarding; otherwise redirect to health center
                 if (!isFirstTimeUser) {
@@ -153,9 +159,6 @@ export function TelegramAuth() {
             // TODO: Fetch friends list
             // For now, using mock data
             setFriends([]);
-            
-            // Loading is done - either showing onboarding or redirecting
-            setLoading(false);
           } else {
             setError(authResult.error || 'Ошибка аутентификации');
             setLoading(false);
