@@ -140,17 +140,35 @@ export default function Home() {
                 transition={{ delay: 0.3 }}
                 className="flex flex-col sm:flex-row gap-4"
               >
-                <Link href="/dashboard">
-                  <Button className="btn-premium text-lg px-8 py-6">
-                    Открыть дашборд
-                    <ArrowRight className="w-5 h-5 ml-2" />
-                  </Button>
-                </Link>
-                <Link href="/presentation">
-                  <Button variant="outline" className="text-lg px-8 py-6">
-                    Узнать больше
-                  </Button>
-                </Link>
+                {user ? (
+                  <>
+                    <Link href="/dashboard">
+                      <Button className="btn-premium text-lg px-8 py-6">
+                        Открыть дашборд
+                        <ArrowRight className="w-5 h-5 ml-2" />
+                      </Button>
+                    </Link>
+                    <Link href="/presentation">
+                      <Button variant="outline" className="text-lg px-8 py-6">
+                        Узнать больше
+                      </Button>
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <Link href="/register">
+                      <Button className="btn-premium text-lg px-8 py-6">
+                        Начать бесплатно
+                        <ArrowRight className="w-5 h-5 ml-2" />
+                      </Button>
+                    </Link>
+                    <Link href="/login">
+                      <Button variant="outline" className="text-lg px-8 py-6">
+                        Войти
+                      </Button>
+                    </Link>
+                  </>
+                )}
               </motion.div>
             </div>
           </div>

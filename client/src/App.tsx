@@ -54,6 +54,8 @@ import SpecialistProfile from "./pages/SpecialistProfile";
 import Booking from "./pages/Booking";
 import Onboarding from "./pages/Onboarding";
 import Account from "./pages/Account";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 import News from "./pages/News";
 import NewStyleLanding from "./pages/newstyle";
 import LandingV2 from "./pages/LandingV2";
@@ -126,6 +128,7 @@ function Router() {
       <Route path={"/settings"} component={Account} />
       <Route path={"/habits"} component={Habits} />
       <Route path={"/journal"} component={Journal} />
+      <Route path={"/news"} component={News} />
       <Route path={"/ai-chat"} component={AIChat} />
       <Route path={"/environment"} component={() => <div className="p-8">Среда (в разработке)</div>} />
       <Route path={"/newstyle"} component={NewStyleLanding} />
@@ -140,6 +143,8 @@ function Router() {
       <Route path={"/payment/crypto/:planId"} component={CryptoPayment} />
       <Route path={"/create-post"} component={CreatePost} />
       <Route path={"/create-story"} component={CreateStory} />
+      <Route path={"/login"} component={Login} />
+      <Route path={"/register"} component={Register} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
     </Switch>
