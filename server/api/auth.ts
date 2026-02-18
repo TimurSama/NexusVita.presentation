@@ -1,14 +1,14 @@
 import { Router } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { supabase } from '../supabase/client';
+import { query } from '../database-postgres';
 
 const router = Router();
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
 
 // Generate JWT token
-const generateToken = (userId: string, email: string, role: string) => {
+const generateToken = (userId: string | number, email: string, role: string = 'user') => {
   return jwt.sign(
     { userId, email, role },
     JWT_SECRET,
@@ -19,105 +19,57 @@ const generateToken = (userId: string, email: string, role: string) => {
 // Register with email/password
 router.post('/register', async (req, res) => {
   try {
-    const { email, password, username, full_name, ref_code } = req.body;
+    const { email, password, name } = req.body;
 
-    if (!email || !password || !username) {
-      return res.status(400).json({ error: 'Email, password and username are required' });
+    if (!email || !password || !name) {
+      return res.status(400).json({ error: 'Email, password and name are required' });
     }
 
-    // Check if username exists
-    const { data: existingUsername } = await supabase
-      .from('user_profiles')
-      .select('id')
-      .eq('username', username)
-      .single();
-
-    if (existingUsername) {
-      return res.status(400).json({ error: 'Username already taken' });
+    if (password.length < 6) {
+      return res.status(400).json({ error: 'Password must be at least 6 characters' });
     }
 
-    // Create user in Supabase Auth
-    const { data: authData, error: authError } = await supabase.auth.signUp({
-      email,
-      password,
-    });
+    // Check if email exists
+    const existingUsers = await query(
+      'SELECT id FROM users WHERE email = $1',
+      [email]
+    );
 
-    if (authError || !authData.user) {
-      return res.status(400).json({ error: authError?.message || 'Registration failed' });
+    if (existingUsers.length > 0) {
+      return res.status(400).json({ error: 'Email already registered' });
     }
 
-    const userId = authData.user.id;
+    // Hash password
+    const passwordHash = await bcrypt.hash(password, 10);
 
-    // Create user profile
-    const { error: profileError } = await supabase
-      .from('user_profiles')
-      .insert({
-        id: userId,
-        username,
-        full_name: full_name || username,
-        email,
-        role: 'user',
-        subscription_tier: 'free',
-      });
+    // Create user
+    const result = await query(
+      `INSERT INTO users (email, password_hash, name, created_at, role) 
+       VALUES ($1, $2, $3, NOW(), 'user') 
+       RETURNING id, email, name, role`,
+      [email, passwordHash, name]
+    );
 
-    if (profileError) {
-      console.error('Profile creation error:', profileError);
-    }
-
-    // Create Unity token balance
-    const { error: tokenError } = await supabase
-      .from('user_tokens')
-      .insert({
-        user_id: userId,
-        balance: 100, // Welcome bonus
-        total_earned: 100,
-        total_spent: 0,
-      });
-
-    if (tokenError) {
-      console.error('Token creation error:', tokenError);
-    }
-
-    // Handle referral
-    if (ref_code) {
-      const { data: referrer } = await supabase
-        .from('user_profiles')
-        .select('id')
-        .eq('referral_code', ref_code)
-        .single();
-
-      if (referrer) {
-        await supabase.from('referrals').insert({
-          referrer_id: referrer.id,
-          referred_id: userId,
-          status: 'pending',
-        });
-      }
-    }
-
-    // Generate token
-    const token = generateToken(userId, email, 'user');
+    const user = result[0];
+    const token = generateToken(user.id, user.email, user.role);
 
     res.status(201).json({
       success: true,
       token,
       user: {
-        id: userId,
-        email,
-        username,
-        full_name: full_name || username,
-        role: 'user',
-        subscription_tier: 'free',
-        unity_tokens: 100,
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
       },
     });
   } catch (error) {
     console.error('Registration error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Registration failed' });
   }
 });
 
-// Login with email/password
+// Login
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -126,204 +78,160 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ error: 'Email and password are required' });
     }
 
-    // Sign in with Supabase
-    const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    // Find user
+    const users = await query(
+      'SELECT id, email, name, password_hash, role FROM users WHERE email = $1',
+      [email]
+    );
 
-    if (authError || !authData.user) {
+    if (users.length === 0) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    const userId = authData.user.id;
+    const user = users[0];
 
-    // Get user profile
-    const { data: profile } = await supabase
-      .from('user_profiles')
-      .select('*')
-      .eq('id', userId)
-      .single();
+    // Verify password
+    const validPassword = await bcrypt.compare(password, user.password_hash);
+    if (!validPassword) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
 
-    // Get token balance
-    const { data: tokenData } = await supabase
-      .from('user_tokens')
-      .select('balance')
-      .eq('user_id', userId)
-      .single();
+    // Update last login
+    await query(
+      'UPDATE users SET last_login_at = NOW() WHERE id = $1',
+      [user.id]
+    );
 
-    const token = generateToken(userId, email, profile?.role || 'user');
+    const token = generateToken(user.id, user.email, user.role);
 
     res.json({
       success: true,
       token,
       user: {
-        id: userId,
-        email,
-        username: profile?.username,
-        full_name: profile?.full_name,
-        avatar_url: profile?.avatar_url,
-        role: profile?.role || 'user',
-        subscription_tier: profile?.subscription_tier || 'free',
-        unity_tokens: tokenData?.balance || 0,
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
       },
     });
   } catch (error) {
     console.error('Login error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Login failed' });
   }
 });
 
-// Google OAuth
-router.post('/google', async (req, res) => {
+// Telegram auth
+router.post('/telegram', async (req, res) => {
   try {
-    const { access_token } = req.body;
+    const { telegram_id, telegram_username, first_name, last_name } = req.body;
 
-    if (!access_token) {
-      return res.status(400).json({ error: 'Access token is required' });
+    if (!telegram_id) {
+      return res.status(400).json({ error: 'Telegram ID is required' });
     }
 
-    // Get user info from Google
-    const googleRes = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
-      headers: { Authorization: `Bearer ${access_token}` },
-    });
+    // Check if user exists by telegram_id
+    let users = await query(
+      'SELECT id, email, name, role FROM users WHERE telegram_id = $1',
+      [telegram_id.toString()]
+    );
 
-    if (!googleRes.ok) {
-      return res.status(400).json({ error: 'Invalid Google token' });
-    }
+    let user;
 
-    const googleData = await googleRes.json();
-    const { email, name, picture, id: googleId } = googleData;
-
-    // Check if user exists
-    let { data: profile } = await supabase
-      .from('user_profiles')
-      .select('*')
-      .eq('email', email)
-      .single();
-
-    let userId: string;
-
-    if (!profile) {
+    if (users.length === 0) {
       // Create new user
-      const { data: authData, error: authError } = await supabase.auth.signUp({
-        email,
-        password: crypto.randomUUID(), // Random password for OAuth users
-      });
+      const name = `${first_name || ''} ${last_name || ''}`.trim() || telegram_username || 'Telegram User';
+      const email = `tg_${telegram_id}@ethoslife.local`;
+      const passwordHash = await bcrypt.hash(require('crypto').randomBytes(32).toString('hex'), 10);
 
-      if (authError || !authData.user) {
-        return res.status(400).json({ error: 'Failed to create user' });
-      }
+      const result = await query(
+        `INSERT INTO users (email, password_hash, name, telegram_id, telegram_username, created_at, role) 
+         VALUES ($1, $2, $3, $4, $5, NOW(), 'user') 
+         RETURNING id, email, name, role`,
+        [email, passwordHash, name, telegram_id.toString(), telegram_username]
+      );
 
-      userId = authData.user.id;
-
-      // Create profile
-      await supabase.from('user_profiles').insert({
-        id: userId,
-        username: email.split('@')[0],
-        full_name: name,
-        email,
-        avatar_url: picture,
-        role: 'user',
-        subscription_tier: 'free',
-      });
-
-      // Create token balance
-      await supabase.from('user_tokens').insert({
-        user_id: userId,
-        balance: 100,
-        total_earned: 100,
-        total_spent: 0,
-      });
+      user = result[0];
     } else {
-      userId = profile.id;
+      user = users[0];
+      // Update telegram_username if changed
+      if (telegram_username) {
+        await query(
+          'UPDATE users SET telegram_username = $1 WHERE id = $2',
+          [telegram_username, user.id]
+        );
+      }
     }
 
-    const token = generateToken(userId, email, profile?.role || 'user');
+    const token = generateToken(user.id, user.email, user.role);
 
     res.json({
       success: true,
       token,
       user: {
-        id: userId,
-        email,
-        username: profile?.username,
-        full_name: profile?.full_name || name,
-        avatar_url: profile?.avatar_url || picture,
-        role: profile?.role || 'user',
-        subscription_tier: profile?.subscription_tier || 'free',
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
       },
     });
   } catch (error) {
-    console.error('Google auth error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error('Telegram auth error:', error);
+    res.status(500).json({ error: 'Authentication failed' });
   }
 });
 
-// Get current user profile
-router.get('/profile', async (req, res) => {
+// Verify token
+router.get('/verify', async (req, res) => {
   try {
     const authHeader = req.headers.authorization;
-    if (!authHeader?.startsWith('Bearer ')) {
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return res.status(401).json({ error: 'No token provided' });
     }
 
-    const token = authHeader.split(' ')[1];
+    const token = authHeader.substring(7);
     const decoded = jwt.verify(token, JWT_SECRET) as any;
 
-    const { data: profile } = await supabase
-      .from('user_profiles')
-      .select('*')
-      .eq('id', decoded.userId)
-      .single();
+    // Get fresh user data
+    const users = await query(
+      'SELECT id, email, name, role FROM users WHERE id = $1',
+      [decoded.userId]
+    );
 
-    const { data: tokenData } = await supabase
-      .from('user_tokens')
-      .select('balance')
-      .eq('user_id', decoded.userId)
-      .single();
+    if (users.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
 
     res.json({
-      user: {
-        id: decoded.userId,
-        email: decoded.email,
-        ...profile,
-        unity_tokens: tokenData?.balance || 0,
-      },
+      valid: true,
+      user: users[0],
     });
   } catch (error) {
-    console.error('Profile error:', error);
     res.status(401).json({ error: 'Invalid token' });
   }
 });
 
-// Update profile
-router.put('/profile', async (req, res) => {
+// Get current user
+router.get('/me', async (req, res) => {
   try {
     const authHeader = req.headers.authorization;
-    if (!authHeader?.startsWith('Bearer ')) {
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return res.status(401).json({ error: 'No token provided' });
     }
 
-    const token = authHeader.split(' ')[1];
+    const token = authHeader.substring(7);
     const decoded = jwt.verify(token, JWT_SECRET) as any;
 
-    const updates = req.body;
+    const users = await query(
+      'SELECT id, email, name, role, telegram_username, created_at FROM users WHERE id = $1',
+      [decoded.userId]
+    );
 
-    const { data, error } = await supabase
-      .from('user_profiles')
-      .update(updates)
-      .eq('id', decoded.userId)
-      .select()
-      .single();
-
-    if (error) {
-      return res.status(400).json({ error: error.message });
+    if (users.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
     }
 
-    res.json({ success: true, profile: data });
+    res.json({ user: users[0] });
   } catch (error) {
-    console.error('Update profile error:', error);
     res.status(401).json({ error: 'Invalid token' });
   }
 });

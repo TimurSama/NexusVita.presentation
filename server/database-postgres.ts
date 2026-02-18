@@ -35,9 +35,11 @@ export async function initDatabase() {
         email TEXT UNIQUE,
         password_hash TEXT,
         name TEXT NOT NULL,
+        role TEXT DEFAULT 'user',
         telegram_id TEXT UNIQUE,
         telegram_username TEXT,
         telegram_connected_at TIMESTAMP,
+        last_login_at TIMESTAMP,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
