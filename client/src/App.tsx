@@ -71,19 +71,10 @@ import CreatePost from "./pages/CreatePost";
 import CreateStory from "./pages/CreateStory";
 
 function Router() {
-  // Check if we're in Telegram Web App
-  const isTelegram = typeof window !== 'undefined' && (
-    window.location.search.includes('tgWebAppStartParam') || 
-    !!window.Telegram?.WebApp
-  );
-  
   return (
     <Switch>
-      {isTelegram ? (
-        <Route path={"/"} component={TelegramAuth} />
-      ) : (
-        <Route path={"/"} component={Home} />
-      )}
+      <Route path={"/"} component={Home} />
+      <Route path={"/telegram-auth"} component={TelegramAuth} />
       <Route path={"/landing"} component={Landing} />
       <Route path={"/presentation"} component={Presentation} />
       <Route path={"/whitepaper"} component={Whitepaper} />

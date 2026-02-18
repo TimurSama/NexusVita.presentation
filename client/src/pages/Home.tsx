@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'wouter';
+import { Link, useLocation } from 'wouter';
 import { motion } from 'framer-motion';
 import { ArrowRight, TrendingUp, Activity, Heart, Brain } from 'lucide-react';
 import SketchIcon from '@/components/SketchIcon';
@@ -7,9 +7,24 @@ import { HealthMetricCard } from '@/components/HealthMetricCard';
 import { Button } from '@/components/ui/button';
 import { EcosystemPlatformSection } from '@/components/EcosystemPlatformSection';
 import { useUser } from '@/contexts/UserContext';
+import { TelegramAuth } from '@/components/TelegramAuth';
 
 export default function Home() {
   const { user, profile } = useUser();
+  const [, setLocation] = useLocation();
+  
+  // Check if we're in Telegram Web App
+  const isTelegram = typeof window !== 'undefined' && (
+    window.location.search.includes('tgWebAppStartParam') || 
+    window.location.search.includes('tgWebAppData')
+  );
+  
+  // If in Telegram, redirect to telegram-auth
+  useEffect(() => {
+    if (isTelegram) {
+      setLocation('/telegram-auth');
+    }
+  }, [isTelegram, setLocation]);
   const [quickStats, setQuickStats] = useState([
     {
       title: 'Шаги',
