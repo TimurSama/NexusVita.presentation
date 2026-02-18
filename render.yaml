@@ -13,6 +13,12 @@ services:
         sync: false
       - key: POSTGRES_URL
         sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_KEY
+        sync: false
+      - key: JWT_SECRET
+        sync: false
       - key: RENDER
         value: "true"
     healthCheckPath: /health
