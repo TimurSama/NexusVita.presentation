@@ -151,6 +151,9 @@ export function TelegramAuth() {
             // TODO: Fetch friends list
             // For now, using mock data
             setFriends([]);
+            
+            // Loading is done - either showing onboarding or redirecting
+            setLoading(false);
           } else {
             setError(authResult.error || 'Ошибка аутентификации');
             setLoading(false);
