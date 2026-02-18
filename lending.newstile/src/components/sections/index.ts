@@ -1,0 +1,9 @@
+export { Hero } from './Hero';
+export { ForWhom } from './ForWhom';
+export { HowItWorks } from './HowItWorks';
+export { DashboardDemo } from './DashboardDemo';
+export { Benefits } from './Benefits';
+export { Pricing } from './Pricing';
+export { Testimonials } from './Testimonials';
+export { Partners } from './Partners';
+export { FinalCTA } from './FinalCTA';

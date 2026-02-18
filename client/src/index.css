@@ -909,3 +909,159 @@ h3 {
     0 20px 60px rgba(0, 0, 0, 0.12);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+
+/* ============================================
+   NEWSTYLE LANDING - Glass UI Styles
+   ============================================ */
+
+.newstyle-landing {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(180deg, #e8ecef 0%, #eef2f5 50%, #f5f7fa 100%);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Glass Groove Container */
+.glass-groove {
+  background: linear-gradient(145deg, rgba(230,235,240,0.6) 0%, rgba(220,225,230,0.4) 100%);
+  border-radius: 24px;
+  padding: 10px;
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.08), inset 0 4px 16px rgba(0,0,0,0.04);
+  position: relative;
+}
+
+.glass-groove-sm {
+  border-radius: 16px;
+  padding: 8px;
+}
+
+.glass-groove-lg {
+  border-radius: 32px;
+  padding: 12px;
+}
+
+/* Glass Insert */
+.glass-insert {
+  background: linear-gradient(135deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.2) 100%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(200, 210, 220, 0.4);
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.6);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.glass-insert-sm {
+  border-radius: 12px;
+}
+
+.glass-insert-lg {
+  border-radius: 28px;
+}
+
+.glass-insert:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.6), 0 0 20px rgba(180,200,220,0.3), 0 0 40px rgba(180,200,220,0.15);
+}
+
+/* Etched Text */
+.text-etched {
+  color: rgba(80, 90, 100, 0.7);
+  text-shadow: 0 1px 1px rgba(255,255,255,0.5), 0 -1px 1px rgba(0,0,0,0.05);
+}
+
+.text-etched-deep {
+  color: rgba(60, 70, 80, 0.95);
+  text-shadow: 0 1px 2px rgba(255,255,255,0.6), 0 -1px 2px rgba(0,0,0,0.08);
+}
+
+/* Technical Label */
+.tech-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: rgba(140, 150, 160, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Section Container */
+.newstyle-landing .section-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 80px 24px;
+}
+
+@media (min-width: 768px) {
+  .newstyle-landing .section-container {
+    padding: 100px 48px;
+  }
+}
+
+/* Glass Button */
+.glass-button {
+  background: linear-gradient(135deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.3) 100%);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(200, 210, 220, 0.4);
+  border-radius: 12px;
+  padding: 14px 28px;
+  font-weight: 450;
+  color: rgba(60, 70, 80, 0.95);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.6);
+}
+
+.glass-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.6), 0 0 20px rgba(180,200,220,0.3), 0 0 40px rgba(180,200,220,0.15);
+  background: linear-gradient(135deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.4) 100%);
+}
+
+.glass-button:active {
+  transform: translateY(0);
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.08), inset 0 4px 16px rgba(0,0,0,0.04);
+}
+
+/* Text Colors */
+.text-text-primary {
+  color: rgba(60, 70, 80, 0.95);
+}
+
+.text-text-secondary {
+  color: rgba(100, 110, 120, 0.8);
+}
+
+.text-text-subtle {
+  color: rgba(140, 150, 160, 0.6);
+}
+
+/* Background Colors */
+.bg-glass-border {
+  border-color: rgba(200, 210, 220, 0.4);
+}
+
+/* Blueprint */
+.bg-blueprint {
+  background-color: rgba(180, 190, 200, 0.12);
+}
+
+/* Scrollbar styling */
+.newstyle-landing ::-webkit-scrollbar {
+  width: 8px;
+}
+
+.newstyle-landing ::-webkit-scrollbar-track {
+  background: #eef2f5;
+}
+
+.newstyle-landing ::-webkit-scrollbar-thumb {
+  background: rgba(200, 210, 220, 0.4);
+  border-radius: 4px;
+}
+
+.newstyle-landing ::-webkit-scrollbar-thumb:hover {
+  background: rgba(160, 170, 180, 0.3);
+}

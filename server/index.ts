@@ -2,37 +2,29 @@ import express from "express";
 import { createServer } from "http";
 import path from "path";
 import { fileURLToPath } from "url";
-import { initDatabase } from "./database-adapter";
-import { startTelegramBot } from "./telegram-bot";
-import { createMariaProfile } from "./maria-plan-generator";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 async function startServer() {
-  // Initialize database
-  await initDatabase();
-  
-  // Create Maria's profile and plan
-  try {
-    await createMariaProfile();
-  } catch (error) {
-    console.error('Error creating Maria profile:', error);
-  }
-
-  // Start Telegram bot
-  startTelegramBot();
-
   const app = express();
   const server = createServer(app);
 
   // Middleware
-  app.use(express.json());
+  app.use(express.json({ limit: '10mb' }));
   app.use(express.urlencoded({ extended: true }));
 
   // API routes
   app.use('/api/auth', (await import('./api/auth')).default);
   app.use('/api/users', (await import('./api/users')).default);
+  app.use('/api/social', (await import('./api/social')).default);
+  app.use('/api/payments', (await import('./api/payments')).default);
+  app.use('/api/ai', (await import('./api/ai')).default);
+  app.use('/api/upload', (await import('./api/upload')).default);
+  app.use('/api/dashboard', (await import('./api/dashboard')).default);
+  app.use('/api/specialists', (await import('./api/specialists')).default);
+  app.use('/api/bookings', (await import('./api/bookings')).default);
+  app.use('/api/center', (await import('./api/center')).default);
 
   // Serve static files from dist/public in production
   const staticPath =
@@ -51,6 +43,12 @@ async function startServer() {
 
   server.listen(port, () => {
     console.log(`Server running on http://localhost:${port}/`);
+    console.log('API routes:');
+    console.log('  - /api/auth');
+    console.log('  - /api/users');
+    console.log('  - /api/social');
+    console.log('  - /api/payments');
+    console.log('  - /api/ai');
   });
 }
 

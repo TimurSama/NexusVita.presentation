@@ -1,30 +1,24 @@
 import { Router } from 'express';
-import { userDb, profileDb, documentDb, dailyPlanDb, healthMetricsDb, goalsDb } from '../database-adapter';
+import { supabase } from '../supabase/client';
 
 const router = Router();
 
 // Get user profile
 router.get('/:userId/profile', async (req, res) => {
   try {
-    const userId = parseInt(req.params.userId);
-    const user = await userDb.findById(userId);
-    
-    if (!user) {
+    const userId = req.params.userId;
+
+    const { data: profile, error } = await supabase
+      .from('user_profiles')
+      .select('*')
+      .eq('id', userId)
+      .single();
+
+    if (error || !profile) {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    const profile = await profileDb.findByUserId(userId);
-
-    res.json({
-      user: {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        telegram_connected: !!user.telegram_id,
-        telegram_username: user.telegram_username,
-      },
-      profile: profile || null,
-    });
+    res.json({ profile });
   } catch (error) {
     console.error('Get profile error:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -34,189 +28,124 @@ router.get('/:userId/profile', async (req, res) => {
 // Update user profile
 router.put('/:userId/profile', async (req, res) => {
   try {
-    const userId = parseInt(req.params.userId);
-    const { date_of_birth, height, weight, gender, blood_type } = req.body;
+    const authHeader = req.headers.authorization;
+    if (!authHeader?.startsWith('Bearer ')) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
 
-    await profileDb.createOrUpdate(userId, {
-      date_of_birth: date_of_birth ? new Date(date_of_birth) : undefined,
-      height,
-      weight,
-      gender,
-      blood_type,
-    });
+    const token = authHeader.split(' ')[1];
+    const jwt = require('jsonwebtoken');
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key');
 
-    const profile = await profileDb.findByUserId(userId);
+    const userId = req.params.userId;
+    if (decoded.userId !== userId && decoded.role !== 'admin') {
+      return res.status(403).json({ error: 'Access denied' });
+    }
 
-    res.json({ success: true, profile });
+    const updates = req.body;
+
+    const { data, error } = await supabase
+      .from('user_profiles')
+      .update(updates)
+      .eq('id', userId)
+      .select()
+      .single();
+
+    if (error) {
+      return res.status(400).json({ error: error.message });
+    }
+
+    res.json({ success: true, profile: data });
   } catch (error) {
     console.error('Update profile error:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
 
-// Get user documents
-router.get('/:userId/documents', async (req, res) => {
+// Get health modules data
+router.get('/:userId/health/:module', async (req, res) => {
   try {
-    const userId = parseInt(req.params.userId);
-    const documents = await documentDb.findByUserId(userId);
+    const { userId, module } = req.params;
+    const { limit = '10' } = req.query;
 
-    res.json({ documents });
-  } catch (error) {
-    console.error('Get documents error:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
+    const tableMap: Record<string, string> = {
+      'medicine': 'medical_documents',
+      'movement': 'workouts',
+      'nutrition': 'food_diary',
+      'psychology': 'mood_entries',
+      'sleep': 'sleep_logs',
+      'relationships': 'social_activities',
+      'habits': 'habits',
+    };
 
-// Get document by ID
-router.get('/:userId/documents/:documentId', async (req, res) => {
-  try {
-    const documentId = parseInt(req.params.documentId);
-    const document = await documentDb.findById(documentId);
-
-    if (!document) {
-      return res.status(404).json({ error: 'Document not found' });
+    const table = tableMap[module];
+    if (!table) {
+      return res.status(400).json({ error: 'Invalid module' });
     }
 
-    res.json({ document });
-  } catch (error) {
-    console.error('Get document error:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
+    const { data, error } = await supabase
+      .from(table)
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+      .limit(parseInt(limit as string));
 
-// Get daily plans
-router.get('/:userId/plans', async (req, res) => {
-  try {
-    const userId = parseInt(req.params.userId);
-    const { date, startDate, endDate } = req.query;
-
-    let plans;
-    if (date) {
-      plans = await dailyPlanDb.findByUserIdAndDate(userId, new Date(date as string));
-    } else if (startDate && endDate) {
-      plans = await dailyPlanDb.findByUserIdAndDateRange(
-        userId,
-        new Date(startDate as string),
-        new Date(endDate as string)
-      );
-    } else {
-      const today = new Date();
-      plans = await dailyPlanDb.findByUserIdAndDate(userId, today);
+    if (error) {
+      return res.status(400).json({ error: error.message });
     }
 
-    res.json({ plans });
+    res.json({ data: data || [] });
   } catch (error) {
-    console.error('Get plans error:', error);
+    console.error('Get health data error:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
 
-// Create daily plan
-router.post('/:userId/plans', async (req, res) => {
+// Create health module entry
+router.post('/:userId/health/:module', async (req, res) => {
   try {
-    const userId = parseInt(req.params.userId);
-    const { date, title, description, category, time } = req.body;
+    const authHeader = req.headers.authorization;
+    if (!authHeader?.startsWith('Bearer ')) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
 
-    const result = await dailyPlanDb.create(userId, {
-      date: new Date(date),
-      title,
-      description,
-      category,
-      time,
-    });
+    const token = authHeader.split(' ')[1];
+    const jwt = require('jsonwebtoken');
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key');
 
-    res.status(201).json({ success: true, id: Number(result.lastInsertRowid || result.id) });
+    const { userId, module } = req.params;
+    if (decoded.userId !== userId) {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+
+    const tableMap: Record<string, string> = {
+      'medicine': 'medical_documents',
+      'movement': 'workouts',
+      'nutrition': 'food_diary',
+      'psychology': 'mood_entries',
+      'sleep': 'sleep_logs',
+      'relationships': 'social_activities',
+      'habits': 'habits',
+    };
+
+    const table = tableMap[module];
+    if (!table) {
+      return res.status(400).json({ error: 'Invalid module' });
+    }
+
+    const { data, error } = await supabase
+      .from(table)
+      .insert({ user_id: userId, ...req.body })
+      .select()
+      .single();
+
+    if (error) {
+      return res.status(400).json({ error: error.message });
+    }
+
+    res.status(201).json({ success: true, data });
   } catch (error) {
-    console.error('Create plan error:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-// Update plan completion
-router.patch('/:userId/plans/:planId', async (req, res) => {
-  try {
-    const planId = parseInt(req.params.planId);
-    const { completed } = req.body;
-
-    await dailyPlanDb.updateCompleted(planId, completed);
-
-    res.json({ success: true });
-  } catch (error) {
-    console.error('Update plan error:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-// Get health metrics
-router.get('/:userId/metrics', async (req, res) => {
-  try {
-    const userId = parseInt(req.params.userId);
-    const { type, limit } = req.query;
-
-    const metrics = await healthMetricsDb.findByUserId(
-      userId,
-      type as string,
-      limit ? parseInt(limit as string) : undefined
-    );
-
-    res.json({ metrics });
-  } catch (error) {
-    console.error('Get metrics error:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-// Create health metric
-router.post('/:userId/metrics', async (req, res) => {
-  try {
-    const userId = parseInt(req.params.userId);
-    const { metric_type, value, unit, notes } = req.body;
-
-    const result = await healthMetricsDb.create(userId, {
-      metric_type,
-      value,
-      unit,
-      notes,
-    });
-
-    res.status(201).json({ success: true, id: Number(result.lastInsertRowid || result.id) });
-  } catch (error) {
-    console.error('Create metric error:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-// Get goals
-router.get('/:userId/goals', async (req, res) => {
-  try {
-    const userId = parseInt(req.params.userId);
-    const goals = await goalsDb.findByUserId(userId);
-
-    res.json({ goals });
-  } catch (error) {
-    console.error('Get goals error:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-// Create goal
-router.post('/:userId/goals', async (req, res) => {
-  try {
-    const userId = parseInt(req.params.userId);
-    const { title, description, category, target_value, unit, deadline } = req.body;
-
-    const result = await goalsDb.create(userId, {
-      title,
-      description,
-      category,
-      target_value,
-      unit,
-      deadline: deadline ? new Date(deadline) : undefined,
-    });
-
-    res.status(201).json({ success: true, id: Number(result.lastInsertRowid || result.id) });
-  } catch (error) {
-    console.error('Create goal error:', error);
+    console.error('Create health entry error:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
