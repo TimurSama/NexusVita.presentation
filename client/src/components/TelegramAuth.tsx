@@ -140,12 +140,14 @@ export function TelegramAuth() {
                 // If check fails, assume first time
                 setIsFirstTime(true);
                 setCheckingOnboarding(false);
+                setLoading(false);
               }
             } catch (err) {
               console.error('Error checking onboarding:', err);
               // Assume first time if check fails
               setIsFirstTime(true);
               setCheckingOnboarding(false);
+              setLoading(false);
             }
 
             // TODO: Fetch friends list

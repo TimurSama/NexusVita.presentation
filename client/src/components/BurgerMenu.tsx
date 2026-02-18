@@ -71,9 +71,21 @@ export function BurgerMenu({ isOpen, onClose }: BurgerMenuProps) {
     { path: '/social/specialists', icon: User, label: 'Специалисты' },
   ];
 
+  const healthPages = [
+    { path: '/health-center', icon: LayoutDashboard, label: 'Единый центр' },
+    { path: '/health/movement', icon: Activity, label: 'Движение' },
+    { path: '/health/nutrition', icon: Apple, label: 'Питание' },
+    { path: '/health/sleep', icon: Moon, label: 'Сон' },
+    { path: '/health/psychology', icon: Brain, label: 'Психология' },
+    { path: '/health/medicine', icon: Heart, label: 'Медицина' },
+  ];
+
       const otherPages = [
         { path: '/landing', icon: Presentation, label: 'Лендинг' },
+        { path: '/v2', icon: Presentation, label: 'Лендинг V2' },
+        { path: '/newstyle', icon: Presentation, label: 'Лендинг NewStyle' },
         { path: '/presentation', icon: Presentation, label: 'Презентация' },
+        { path: '/tokenomics', icon: FileText, label: 'Токеномика' },
         { path: '/whitepaper', icon: FileText, label: 'Whitepaper' },
         { path: '/documents', icon: FileText, label: 'Документы' },
         { path: '/journal', icon: FileText, label: 'Ежедневник' },
@@ -175,6 +187,35 @@ export function BurgerMenu({ isOpen, onClose }: BurgerMenuProps) {
 
             {/* Navigation */}
             <nav className="p-4 space-y-6">
+              {/* Health Directions */}
+              <div>
+                <h3 className="text-xs font-semibold text-foreground/60 uppercase tracking-wider mb-3 px-3">
+                  Направления здоровья
+                </h3>
+                {healthPages.map((item) => {
+                  const isActive = location === item.path;
+                  const Icon = item.icon;
+
+                  return (
+                    <Link key={item.path} href={item.path}>
+                      <motion.div
+                        whileHover={{ x: 4 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={handleLinkClick}
+                        className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all cursor-pointer mb-1 ${
+                          isActive
+                            ? 'bg-primary/10 text-primary'
+                            : 'text-foreground/70 hover:text-foreground hover:bg-muted/50'
+                        }`}
+                      >
+                        <Icon className="w-5 h-5" />
+                        <span className="font-medium">{item.label}</span>
+                      </motion.div>
+                    </Link>
+                  );
+                })}
+              </div>
+
               {/* Main Navigation */}
               <div>
                 <h3 className="text-xs font-semibold text-foreground/60 uppercase tracking-wider mb-3 px-3">
