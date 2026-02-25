@@ -113,6 +113,19 @@ const modules = {
       { name: 'notes', label: 'Заметки', type: 'textarea' },
     ]
   },
+  relationships: {
+    name: 'Отношения',
+    icon: Users,
+    color: 'from-orange-500 to-amber-500',
+    bgColor: 'bg-orange-50',
+    fields: [
+      { name: 'relationship_quality', label: 'Качество отношений (1-10)', type: 'slider', min: 1, max: 10 },
+      { name: 'time_together', label: 'Время вместе (часов)', type: 'number', min: 0, step: 0.5 },
+      { name: 'interaction_type', label: 'Тип взаимодействия', type: 'select', options: ['Разговор', 'Совместная активность', 'Помощь', 'Другое'] },
+      { name: 'notes', label: 'Заметки', type: 'textarea' },
+      { name: 'gratitude', label: 'За что благодарны', type: 'textarea' },
+    ]
+  },
 };
 
 export default function HealthModules() {

@@ -14,9 +14,15 @@ import {
   Flame,
   Droplets,
   Footprints,
-  Timer,
   ChevronRight,
-  Plus
+  Plus,
+  Clock,
+  CheckCircle2,
+  Circle,
+  ArrowRight,
+  Bell,
+  Target,
+  Zap
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -53,14 +59,35 @@ interface DashboardData {
   };
 }
 
+interface DailyPlan {
+  id: number;
+  title: string;
+  description?: string;
+  time?: string;
+  completed: boolean;
+  category?: string;
+}
+
+interface ModuleMetric {
+  id: string;
+  name: string;
+  icon: any;
+  color: string;
+  bgColor: string;
+  value: number;
+  unit: string;
+  trend: 'up' | 'down' | 'neutral';
+  lastEntry: string;
+}
+
 const modules = [
-  { id: 'movement', name: 'Движение', icon: Activity, color: 'from-blue-500 to-cyan-500', bgColor: 'bg-blue-50' },
-  { id: 'nutrition', name: 'Питание', icon: Utensils, color: 'from-green-500 to-emerald-500', bgColor: 'bg-green-50' },
-  { id: 'sleep', name: 'Сон', icon: Moon, color: 'from-purple-500 to-violet-500', bgColor: 'bg-purple-50' },
-  { id: 'psychology', name: 'Психология', icon: Brain, color: 'from-pink-500 to-rose-500', bgColor: 'bg-pink-50' },
-  { id: 'medicine', name: 'Медицина', icon: Heart, color: 'from-red-500 to-rose-500', bgColor: 'bg-red-50' },
-  { id: 'relationships', name: 'Отношения', icon: Users, color: 'from-orange-500 to-amber-500', bgColor: 'bg-orange-50' },
-  { id: 'habits', name: 'Привычки', icon: Sparkles, color: 'from-cyan-500 to-teal-500', bgColor: 'bg-cyan-50' },
+  { id: 'movement', name: 'Движение', icon: Activity, color: 'from-blue-500 to-cyan-500', bgColor: 'bg-blue-50', description: 'Шаги, тренировки, активность' },
+  { id: 'nutrition', name: 'Питание', icon: Utensils, color: 'from-green-500 to-emerald-500', bgColor: 'bg-green-50', description: 'Калории, БЖУ, вода' },
+  { id: 'sleep', name: 'Сон', icon: Moon, color: 'from-purple-500 to-violet-500', bgColor: 'bg-purple-50', description: 'Часы, качество, фазы' },
+  { id: 'psychology', name: 'Психология', icon: Brain, color: 'from-pink-500 to-rose-500', bgColor: 'bg-pink-50', description: 'Настроение, стресс, дневник' },
+  { id: 'medicine', name: 'Медицина', icon: Heart, color: 'from-red-500 to-rose-500', bgColor: 'bg-red-50', description: 'Анализы, приемы, лекарства' },
+  { id: 'relationships', name: 'Отношения', icon: Users, color: 'from-orange-500 to-amber-500', bgColor: 'bg-orange-50', description: 'Социальные связи, общение' },
+  { id: 'habits', name: 'Привычки', icon: Sparkles, color: 'from-cyan-500 to-teal-500', bgColor: 'bg-cyan-50', description: 'Трекер, streaks, цели' },
 ];
 
 export default function DashboardV2() {
@@ -70,11 +97,15 @@ export default function DashboardV2() {
   
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [dailyPlans, setDailyPlans] = useState<DailyPlan[]>([]);
+  const [moduleMetrics, setModuleMetrics] = useState<ModuleMetric[]>([]);
   const [selectedPeriod, setSelectedPeriod] = useState<'day' | 'week' | 'month'>('week');
 
   useEffect(() => {
     if (token) {
       loadDashboardData();
+      loadDailyPlans();
+      loadModuleMetrics();
     }
   }, [token, selectedPeriod]);
 
@@ -94,6 +125,120 @@ export default function DashboardV2() {
       console.error('Dashboard load error:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadDailyPlans = async () => {
+    if (!user?.id) return;
+    
+    try {
+      const today = new Date().toISOString().split('T')[0];
+      const res = await fetch(`/api/users/${user.id}/plans?date=${today}`, {
+        headers: { 'Authorization': `Bearer ${token}` },
+      });
+      
+      if (res.ok) {
+        const data = await res.json();
+        setDailyPlans(data.plans || []);
+      }
+    } catch (error) {
+      console.error('Plans load error:', error);
+    }
+  };
+
+  const loadModuleMetrics = async () => {
+    if (!user?.id) return;
+    
+    try {
+      const userId = user.id.toString();
+      
+      // Загрузка метрик для всех модулей
+      const metricsPromises = modules.map(async (module) => {
+        try {
+          const res = await fetch(`/api/users/${userId}/metrics?metric_type=${module.id}&limit=1`, {
+            headers: { 'Authorization': `Bearer ${token}` },
+          });
+          
+          if (res.ok) {
+            const data = await res.json();
+            const metric = data.metrics?.[0];
+            
+            return {
+              id: module.id,
+              name: module.name,
+              icon: module.icon,
+              color: module.color,
+              bgColor: module.bgColor,
+              value: metric?.value || 0,
+              unit: getUnitForModule(module.id),
+              trend: 'neutral',
+              lastEntry: metric?.recorded_at ? new Date(metric.recorded_at).toLocaleDateString('ru-RU') : 'Нет данных',
+            };
+          }
+        } catch (e) {
+          console.error(`Error loading ${module.id} metrics:`, e);
+        }
+        
+        return {
+          id: module.id,
+          name: module.name,
+          icon: module.icon,
+          color: module.color,
+          bgColor: module.bgColor,
+          value: 0,
+          unit: getUnitForModule(module.id),
+          trend: 'neutral',
+          lastEntry: 'Нет данных',
+        };
+      });
+      
+      const loadedMetrics = await Promise.all(metricsPromises);
+      setModuleMetrics(loadedMetrics);
+    } catch (error) {
+      console.error('Module metrics load error:', error);
+    }
+  };
+
+  const getUnitForModule = (moduleId: string) => {
+    const units: Record<string, string> = {
+      movement: 'шагов',
+      nutrition: 'ккал',
+      sleep: 'часов',
+      psychology: 'балл',
+      medicine: 'записей',
+      relationships: 'балл',
+      habits: 'streak',
+    };
+    return units[moduleId] || '';
+  };
+
+  const togglePlan = async (planId: number, completed: boolean) => {
+    try {
+      const res = await fetch(`/api/users/${user?.id}/plans/${planId}`, {
+        method: 'PUT',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ completed }),
+      });
+
+      if (res.ok) {
+        setDailyPlans(prev => prev.map(p => 
+          p.id === planId ? { ...p, completed } : p
+        ));
+        
+        toast({
+          title: completed ? 'Выполнено! ✅' : 'Отменено',
+          description: completed ? 'Отличная работа!' : 'Задача отмечена как невыполненная',
+        });
+      }
+    } catch (error) {
+      toast({
+        title: 'Ошибка',
+        description: 'Не удалось обновить статус',
+        variant: 'destructive',
+      });
     }
   };
 
@@ -212,12 +357,209 @@ export default function DashboardV2() {
           </motion.div>
         </div>
 
+        {/* Daily Plans & Reminders - TOP SECTION */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+        >
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <Clock className="w-5 h-5 text-slate-600" />
+              <h2 className="text-lg font-semibold">План на сегодня</h2>
+            </div>
+            <Button variant="ghost" size="sm" onClick={() => setLocation('/calendar')}>
+              Календарь <ArrowRight className="w-4 h-4 ml-1" />
+            </Button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Today's Plans */}
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-sm font-medium text-slate-600 flex items-center gap-2">
+                  <Target className="w-4 h-4" />
+                  Задачи
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                {dailyPlans.length === 0 ? (
+                  <div className="text-center py-4">
+                    <p className="text-sm text-slate-400 mb-2">Нет запланированных задач</p>
+                    <Button 
+                      size="sm" 
+                      variant="outline"
+                      onClick={() => setLocation('/journal')}
+                    >
+                      <Plus className="w-4 h-4 mr-1" />
+                      Добавить
+                    </Button>
+                  </div>
+                ) : (
+                  dailyPlans.slice(0, 4).map((plan) => (
+                    <div 
+                      key={plan.id}
+                      className={`flex items-center gap-3 p-3 rounded-lg transition-colors ${
+                        plan.completed ? 'bg-green-50' : 'bg-slate-50 hover:bg-slate-100'
+                      }`}
+                    >
+                      <button
+                        onClick={() => togglePlan(plan.id, !plan.completed)}
+                        className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${
+                          plan.completed 
+                            ? 'bg-green-500 border-green-500' 
+                            : 'border-slate-300 hover:border-cyan-500'
+                        }`}
+                      >
+                        {plan.completed && <CheckCircle2 className="w-3 h-3 text-white" />}
+                      </button>
+                      <div className="flex-1 min-w-0">
+                        <p className={`text-sm font-medium truncate ${plan.completed ? 'line-through text-slate-400' : ''}`}>
+                          {plan.title}
+                        </p>
+                        {plan.time && (
+                          <p className="text-xs text-slate-400">{plan.time}</p>
+                        )}
+                      </div>
+                    </div>
+                  ))
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Quick Add / Reminders */}
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-sm font-medium text-slate-600 flex items-center gap-2">
+                  <Bell className="w-4 h-4" />
+                  Напоминания
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <div className="p-3 bg-blue-50 rounded-lg flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
+                    <Droplets className="w-4 h-4 text-blue-600" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-sm font-medium">Выпить воды</p>
+                    <p className="text-xs text-slate-500">Через 30 минут</p>
+                  </div>
+                </div>
+                <div className="p-3 bg-purple-50 rounded-lg flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
+                    <Moon className="w-4 h-4 text-purple-600" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-sm font-medium">Подготовка ко сну</p>
+                    <p className="text-xs text-slate-500">22:00</p>
+                  </div>
+                </div>
+                <div className="p-3 bg-green-50 rounded-lg flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
+                    <Utensils className="w-4 h-4 text-green-600" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-sm font-medium">Записать прием пищи</p>
+                    <p className="text-xs text-slate-500">Ужин</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </motion.div>
+
+        {/* Module Metrics Summary */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <Activity className="w-5 h-5 text-slate-600" />
+              <h2 className="text-lg font-semibold">Сводка по направлениям</h2>
+            </div>
+            <Button variant="ghost" size="sm" onClick={() => setLocation('/health-center')}>
+              Все модули <ChevronRight className="w-4 h-4 ml-1" />
+            </Button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {moduleMetrics.map((module, index) => {
+              const moduleConfig = modules.find(m => m.id === module.id);
+              const Icon = module.icon;
+              
+              return (
+                <motion.div
+                  key={module.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 * index }}
+                >
+                  <Card className={`${module.bgColor} border-0 hover:shadow-lg transition-all cursor-pointer group`}
+                    onClick={() => setLocation(`/health/${module.id}`)}
+                  >
+                    <CardContent className="p-4">
+                      <div className="flex items-start justify-between mb-3">
+                        <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${module.color} flex items-center justify-center text-white group-hover:scale-110 transition-transform`}>
+                          <Icon className="w-5 h-5" />
+                        </div>
+                        <Button 
+                          size="sm" 
+                          variant="ghost" 
+                          className="h-7 px-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setLocation(`/health/${module.id}`);
+                          }}
+                        >
+                          Открыть
+                          <ArrowRight className="w-3 h-3 ml-1" />
+                        </Button>
+                      </div>
+                      
+                      <h3 className="font-semibold text-slate-800">{module.name}</h3>
+                      <p className="text-xs text-slate-500 mb-2">{moduleConfig?.description}</p>
+                      
+                      <div className="flex items-end justify-between">
+                        <div>
+                          <p className="text-2xl font-bold text-slate-700">
+                            {module.value > 0 ? module.value.toLocaleString() : '-'}
+                          </p>
+                          <p className="text-xs text-slate-400">{module.unit}</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-xs text-slate-400">{module.lastEntry}</p>
+                        </div>
+                      </div>
+
+                      {/* Quick Add Button */}
+                      <Button 
+                        size="sm" 
+                        variant="outline" 
+                        className="w-full mt-3 bg-white/50 hover:bg-white"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setLocation(`/health/${module.id}`);
+                        }}
+                      >
+                        <Plus className="w-3 h-3 mr-1" />
+                        Добавить
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              );
+            })}
+          </div>
+        </motion.div>
+
         {/* Today's Stats */}
         {data?.todayStats && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
+            transition={{ delay: 0.25 }}
           >
             <h2 className="text-lg font-semibold mb-4">Сегодня</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -280,52 +622,13 @@ export default function DashboardV2() {
           </motion.div>
         )}
 
-        {/* Health Modules Grid */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-        >
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold">Модули здоровья</h2>
-            <Button variant="ghost" size="sm" onClick={() => setLocation('/health-center')}>
-              Все модули <ChevronRight className="w-4 h-4 ml-1" />
-            </Button>
-          </div>
-          
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
-            {modules.map((module, index) => (
-              <motion.button
-                key={module.id}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.1 * index }}
-                onClick={() => setLocation(`/health/${module.id}`)}
-                className={`${module.bgColor} rounded-xl p-4 text-center hover:shadow-lg transition-all group`}
-              >
-                <div className={`w-12 h-12 mx-auto rounded-xl bg-gradient-to-br ${module.color} flex items-center justify-center text-white mb-3 group-hover:scale-110 transition-transform`}>
-                  <module.icon className="w-6 h-6" />
-                </div>
-                <p className="text-sm font-medium text-slate-700">{module.name}</p>
-                {data?.activeModules?.includes(module.id) && (
-                  <div className="mt-2">
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                      Активен
-                    </span>
-                  </div>
-                )}
-              </motion.button>
-            ))}
-          </div>
-        </motion.div>
-
         {/* Charts Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Activity Chart */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
+            transition={{ delay: 0.3 }}
           >
             <Card>
               <CardHeader className="pb-2">
@@ -386,7 +689,7 @@ export default function DashboardV2() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
+            transition={{ delay: 0.35 }}
           >
             <Card>
               <CardHeader className="pb-2">
@@ -418,7 +721,7 @@ export default function DashboardV2() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
+          transition={{ delay: 0.4 }}
           className="grid grid-cols-2 md:grid-cols-4 gap-4"
         >
           <Button 
@@ -442,7 +745,7 @@ export default function DashboardV2() {
             className="h-auto py-4 flex flex-col items-center gap-2"
             onClick={() => setLocation('/ai-chat')}
           >
-            <Sparkles className="w-6 h-6" />
+            <Zap className="w-6 h-6" />
             <span>ИИ Чат</span>
           </Button>
           <Button 

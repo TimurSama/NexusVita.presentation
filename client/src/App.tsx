@@ -31,6 +31,8 @@ import NutritionHealth from "./pages/health/NutritionHealth";
 import SleepHealth from "./pages/health/SleepHealth";
 import PsychologyHealth from "./pages/health/PsychologyHealth";
 import MedicineHealth from "./pages/health/MedicineHealth";
+import RelationshipsHealth from "./pages/health/RelationshipsHealth";
+import HabitsHealth from "./pages/health/HabitsHealth";
 import HealthModules from "./pages/HealthModules";
 import Relationships from "./pages/Relationships";
 import Spirituality from "./pages/Spirituality";
@@ -88,6 +90,8 @@ function Router() {
       <Route path={"/health/sleep"} component={SleepHealth} />
       <Route path={"/health/psychology"} component={PsychologyHealth} />
       <Route path={"/health/medicine"} component={MedicineHealth} />
+      <Route path={"/health/relationships"} component={RelationshipsHealth} />
+      <Route path={"/health/habits"} component={HabitsHealth} />
       <Route path={"/health/:moduleId"} component={HealthModules} />
       <Route path={"/documents"} component={Documents} />
       <Route path={"/shop"} component={Shop} />
