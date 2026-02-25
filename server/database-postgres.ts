@@ -23,6 +23,17 @@ function getPool() {
   return pool;
 }
 
+// Simple query helper function
+export async function query(text: string, params?: any[]) {
+  const client = await getPool().connect();
+  try {
+    const result = await client.query(text, params);
+    return result.rows;
+  } finally {
+    client.release();
+  }
+}
+
 // Initialize database schema
 export async function initDatabase() {
   const client = await getPool().connect();
