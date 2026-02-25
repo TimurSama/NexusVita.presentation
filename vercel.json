@@ -32,10 +32,6 @@
           "value": "1; mode=block"
         },
         {
-          "key": "X-Frame-Options",
-          "value": "ALLOWALL"
-        },
-        {
           "key": "Content-Security-Policy",
           "value": "frame-ancestors 'self' https://foxampy.vercel.app https://*.vercel.app"
         }
