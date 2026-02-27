@@ -58,6 +58,7 @@ import Onboarding from "./pages/Onboarding";
 import Account from "./pages/Account";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import GoogleCallback from "./pages/GoogleCallback";
 import News from "./pages/News";
 import NewStyleLanding from "./pages/newstyle";
 import LandingV2 from "./pages/LandingV2";
@@ -140,6 +141,7 @@ function Router() {
       <Route path={"/create-story"} component={CreateStory} />
       <Route path={"/login"} component={Login} />
       <Route path={"/register"} component={Register} />
+      <Route path={"/auth/callback"} component={GoogleCallback} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
     </Switch>

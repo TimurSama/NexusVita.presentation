@@ -236,4 +236,94 @@ router.get('/me', async (req, res) => {
   }
 });
 
+// Google OAuth callback
+router.post('/google', async (req, res) => {
+  try {
+    const { code, redirectUri } = req.body;
+
+    if (!code) {
+      return res.status(400).json({ error: 'Authorization code is required' });
+    }
+
+    const clientId = process.env.GOOGLE_CLIENT_ID;
+    const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
+
+    if (!clientId || !clientSecret) {
+      return res.status(500).json({ error: 'Google OAuth not configured' });
+    }
+
+    // Exchange code for tokens
+    const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        code,
+        client_id: clientId,
+        client_secret: clientSecret,
+        redirect_uri: redirectUri,
+        grant_type: 'authorization_code',
+      }),
+    });
+
+    const tokenData = await tokenResponse.json();
+
+    if (!tokenResponse.ok) {
+      console.error('Google token error:', tokenData);
+      return res.status(400).json({ error: 'Failed to exchange code for tokens' });
+    }
+
+    // Get user info from Google
+    const userResponse = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
+      headers: { Authorization: `Bearer ${tokenData.access_token}` },
+    });
+
+    const googleUser = await userResponse.json();
+
+    if (!userResponse.ok) {
+      console.error('Google user info error:', googleUser);
+      return res.status(400).json({ error: 'Failed to get user info from Google' });
+    }
+
+    // Check if user exists
+    let users = await query(
+      'SELECT id, email, name, role FROM users WHERE email = $1',
+      [googleUser.email]
+    );
+
+    let user;
+
+    if (users.length === 0) {
+      // Create new user
+      const passwordHash = await bcrypt.hash(require('crypto').randomBytes(32).toString('hex'), 10);
+      
+      const result = await query(
+        `INSERT INTO users (email, password_hash, name, created_at, role) 
+         VALUES ($1, $2, $3, NOW(), 'user') 
+         RETURNING id, email, name, role`,
+        [googleUser.email, passwordHash, googleUser.name]
+      );
+
+      user = result[0];
+    } else {
+      user = users[0];
+    }
+
+    const token = generateToken(user.id, user.email, user.role);
+
+    res.json({
+      success: true,
+      token,
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+      },
+    });
+  } catch (error) {
+    console.error('Google OAuth error:', error);
+    res.status(500).json({ error: 'Google authentication failed' });
+  }
+});
+
 export default router;

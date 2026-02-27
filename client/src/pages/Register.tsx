@@ -74,7 +74,26 @@ export default function Register() {
   };
 
   const handleGoogleRegister = () => {
-    setError('Регистрация через Google в разработке');
+    // Redirect to Google OAuth (same as login, Google handles new/existing users)
+    const redirectUri = `${window.location.origin}/auth/callback`;
+    const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+    
+    if (!clientId) {
+      setError('Google OAuth не настроен. Обратитесь к администратору.');
+      return;
+    }
+    
+    const scope = 'openid email profile';
+    const state = btoa(JSON.stringify({ redirect: '/onboarding', isRegister: true }));
+    
+    const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
+      `client_id=${clientId}` +
+      `&redirect_uri=${encodeURIComponent(redirectUri)}` +
+      `&response_type=code` +
+      `&scope=${encodeURIComponent(scope)}` +
+      `&state=${state}`;
+    
+    window.location.href = googleAuthUrl;
   };
 
   const handleTelegramRegister = () => {
