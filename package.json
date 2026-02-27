@@ -6,12 +6,7 @@
   "scripts": {
     "dev": "vite --host",
     "build": "vite build",
-    "build:vercel": "vite build",
-    "build:bot": "esbuild server/bot-server.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
-    "build:render": "vite build && esbuild render/unified-server.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
-    "start": "NODE_ENV=production tsx render/unified-server.ts",
-    "start:bot": "NODE_ENV=production node dist/bot-server.js",
-    "start:render": "NODE_ENV=production node dist/unified-server.js",
+    "start": "NODE_ENV=production tsx server/index.ts",
     "preview": "vite preview --host",
     "check": "tsc --noEmit",
     "format": "prettier --write ."
@@ -58,6 +53,7 @@
     "cmdk": "^1.1.1",
     "embla-carousel-react": "^8.6.0",
     "emoji-picker-react": "^4.18.0",
+    "cors": "^2.8.5",
     "express": "^4.21.2",
     "framer-motion": "^12.23.22",
     "input-otp": "^1.4.2",

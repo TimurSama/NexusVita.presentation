@@ -1,44 +1,37 @@
 services:
   - type: web
-    name: ethoslife-unified-server
+    name: ethoslife
     env: node
-    buildCommand: pnpm install --frozen-lockfile && pnpm run build:render
-    startCommand: pnpm run start:render
+    buildCommand: pnpm install && pnpm run build
+    startCommand: pnpm run start
     envVars:
       - key: NODE_ENV
         value: production
       - key: PORT
         value: 10000
-      - key: RENDER
-        value: "true"
-      # Database (Required)
+      # Database
       - key: DATABASE_URL
         sync: false
       - key: POSTGRES_URL
         sync: false
-      # Auth (Required)
+      # Auth
       - key: JWT_SECRET
         sync: false
       - key: GOOGLE_CLIENT_ID
         sync: false
       - key: GOOGLE_CLIENT_SECRET
         sync: false
-      # AI APIs (Optional but recommended)
-      - key: GROQ_API_KEY
-        sync: false
+      # AI APIs
       - key: GEMINI_API_KEY
+        sync: false
+      - key: GROQ_API_KEY
         sync: false
       - key: QWEN_API_KEY
         sync: false
-      # Payments (Optional)
+      # Payments
       - key: NOWPAYMENTS_API_KEY
         sync: false
-      # Telegram (Optional)
+      # Telegram
       - key: TELEGRAM_BOT_TOKEN
         sync: false
-      # Frontend URL
-      - key: CLIENT_URL
-        value: https://etholife.onrender.com
-      - key: API_URL
-        value: https://etholife.onrender.com
     healthCheckPath: /health

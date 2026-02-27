@@ -1,55 +1,74 @@
-import express from "express";
-import { createServer } from "http";
-import path from "path";
-import { fileURLToPath } from "url";
+import express from 'express';
+import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-async function startServer() {
-  const app = express();
-  const server = createServer(app);
+// Import API routes
+import authRoutes from './api/auth.js';
+import aiRoutes from './api/ai.js';
+import usersRoutes from './api/users.js';
+import paymentsRoutes from './api/payments.js';
+import specialistsRoutes from './api/specialists.js';
+import bookingsRoutes from './api/bookings.js';
+import dashboardRoutes from './api/dashboard.js';
+import centerRoutes from './api/center.js';
+import uploadRoutes from './api/upload.js';
+import socialRoutes from './api/social.js';
 
-  // Middleware
-  app.use(express.json({ limit: '10mb' }));
-  app.use(express.urlencoded({ extended: true }));
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-  // API routes
-  app.use('/api/auth', (await import('./api/auth')).default);
-  app.use('/api/users', (await import('./api/users')).default);
-  app.use('/api/social', (await import('./api/social')).default);
-  app.use('/api/payments', (await import('./api/payments')).default);
-  app.use('/api/ai', (await import('./api/ai')).default);
-  app.use('/api/upload', (await import('./api/upload')).default);
-  app.use('/api/dashboard', (await import('./api/dashboard')).default);
-  app.use('/api/specialists', (await import('./api/specialists')).default);
-  app.use('/api/bookings', (await import('./api/bookings')).default);
-  app.use('/api/center', (await import('./api/center')).default);
+// Middleware
+app.use(cors());
+app.use(express.json());
 
-  // Serve static files from dist/public in production
-  const staticPath =
-    process.env.NODE_ENV === "production"
-      ? path.resolve(__dirname, "public")
-      : path.resolve(__dirname, "..", "dist", "public");
-
-  app.use(express.static(staticPath));
-
-  // Handle client-side routing - serve index.html for all routes
-  app.get("*", (_req, res) => {
-    res.sendFile(path.join(staticPath, "index.html"));
+// Health check
+app.get('/health', (_req, res) => {
+  res.json({ 
+    status: 'ok', 
+    service: 'ethoslife-api',
+    timestamp: new Date().toISOString()
   });
+});
 
-  const port = process.env.PORT || 3000;
+// API routes
+app.use('/api/auth', authRoutes);
+app.use('/api/ai', aiRoutes);
+app.use('/api/users', usersRoutes);
+app.use('/api/payments', paymentsRoutes);
+app.use('/api/specialists', specialistsRoutes);
+app.use('/api/bookings', bookingsRoutes);
+app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/center', centerRoutes);
+app.use('/api/upload', uploadRoutes);
+app.use('/api/social', socialRoutes);
 
-  server.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}/`);
-    console.log('API routes:');
-    console.log('  - /api/auth');
-    console.log('  - /api/users');
-    console.log('  - /api/social');
-    console.log('  - /api/payments');
-    console.log('  - /api/ai');
+// Serve static files
+const publicPath = path.join(__dirname, '../dist/public');
+app.use(express.static(publicPath));
+
+// SPA fallback
+app.get('*', (req, res) => {
+  if (!req.path.startsWith('/api')) {
+    res.sendFile(path.join(publicPath, 'index.html'));
+  } else {
+    res.status(404).json({ error: 'API endpoint not found' });
+  }
+});
+
+// Error handling
+app.use((err: any, _req: express.Request, res: express.Response, _next: any) => {
+  console.error('Error:', err);
+  res.status(500).json({ error: 'Internal server error' });
+});
+
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`📡 Health: http://localhost:${PORT}/health`);
+  console.log(`🔑 API Keys:`, {
+    gemini: process.env.GEMINI_API_KEY ? '✅' : '❌',
+    groq: process.env.GROQ_API_KEY ? '✅' : '❌',
   });
-}
-
-startServer().catch(console.error);
+});
