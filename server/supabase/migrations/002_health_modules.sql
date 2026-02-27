@@ -357,7 +357,7 @@ CREATE TABLE public.sleep_sessions (
     -- Stages (from wearables)
     deep_sleep_minutes INTEGER,
     light_sleep_minutes INTEGER,
-    rem_sleep_minutes,
+    rem_sleep_minutes INTEGER,
     awake_minutes INTEGER,
     
     -- Factors
