@@ -9,7 +9,7 @@
     "build:vercel": "vite build",
     "build:bot": "esbuild server/bot-server.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
     "build:render": "vite build && esbuild render/unified-server.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
-    "start": "NODE_ENV=production node dist/index.js",
+    "start": "NODE_ENV=production node dist/unified-server.js",
     "start:bot": "NODE_ENV=production node dist/bot-server.js",
     "start:render": "NODE_ENV=production node dist/unified-server.js",
     "preview": "vite preview --host",
