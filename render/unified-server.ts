@@ -7,7 +7,20 @@ import { startTelegramBot } from '../server/telegram-bot.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// Import API routes
+// Import main API routes
+import authRoutes from '../server/api/auth.js';
+import aiRoutes from '../server/api/ai.js';
+import usersRoutes from '../server/api/users.js';
+import paymentsRoutes from '../server/api/payments.js';
+import specialistsRoutes from '../server/api/specialists.js';
+import bookingsRoutes from '../server/api/bookings.js';
+import dashboardRoutes from '../server/api/dashboard.js';
+import centerRoutes from '../server/api/center.js';
+import uploadRoutes from '../server/api/upload.js';
+import socialRoutes from '../server/api/social.js';
+import tokenomicsRoutes from '../server/api/tokenomics.js';
+
+// Import render-specific routes
 import { telegramAuthHandler } from './routes/auth.js';
 import { userProfileHandler, userPlansHandler, userDocumentsHandler, userMetricsHandler, userGoalsHandler } from './routes/users.js';
 import { telegramWebhookHandler, telegramWebhookInfoHandler, telegramDebugHandler } from './routes/telegram.js';
@@ -41,13 +54,26 @@ app.get('/health', (_req, res) => {
   });
 });
 
-// Auth routes
+// Main API routes
+app.use('/api/auth', authRoutes);
+app.use('/api/ai', aiRoutes);
+app.use('/api/users', usersRoutes);
+app.use('/api/payments', paymentsRoutes);
+app.use('/api/specialists', specialistsRoutes);
+app.use('/api/bookings', bookingsRoutes);
+app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/center', centerRoutes);
+app.use('/api/upload', uploadRoutes);
+app.use('/api/social', socialRoutes);
+app.use('/api/tokenomics', tokenomicsRoutes);
+
+// Telegram auth route (render-specific)
 app.post('/api/auth/telegram-auth', async (req, res) => {
   await ensureDatabase();
   return telegramAuthHandler(req, res);
 });
 
-// User routes
+// User routes (render-specific)
 app.get('/api/users/:userId/profile', async (req, res) => {
   await ensureDatabase();
   return userProfileHandler(req, res, 'GET');
@@ -139,6 +165,13 @@ app.use((_req, res) => {
 // Start server
 async function startServer() {
   console.log('🚀 Starting Unified Server (API + Bot)...');
+  console.log('📦 Environment:', process.env.NODE_ENV);
+  console.log('🔑 API Keys:', {
+    gemini: process.env.GEMINI_API_KEY ? '✅' : '❌',
+    groq: process.env.GROQ_API_KEY ? '✅' : '❌',
+    qwen: process.env.QWEN_API_KEY ? '✅' : '❌',
+    database: process.env.DATABASE_URL ? '✅' : '❌',
+  });
   const startTime = Date.now();
   
   // Initialize database
@@ -148,14 +181,18 @@ async function startServer() {
     console.log(`✅ Database initialized (${Date.now() - startTime}ms)`);
   } catch (error) {
     console.error('❌ Database initialization error:', error);
-    process.exit(1);
+    // Don't exit - server can still serve static files
   }
 
   // Start Telegram bot (using polling on Render)
   try {
-    console.log('🤖 Starting Telegram bot...');
-    startTelegramBot();
-    console.log(`✅ Telegram bot started (${Date.now() - startTime}ms)`);
+    if (process.env.TELEGRAM_BOT_TOKEN) {
+      console.log('🤖 Starting Telegram bot...');
+      startTelegramBot();
+      console.log(`✅ Telegram bot started (${Date.now() - startTime}ms)`);
+    } else {
+      console.log('⚠️ No TELEGRAM_BOT_TOKEN, skipping bot startup');
+    }
   } catch (error) {
     console.error('❌ Failed to start Telegram bot:', error);
     // Don't exit - API can still work without bot
