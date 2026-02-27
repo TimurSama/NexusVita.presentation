@@ -7,7 +7,7 @@ import { startTelegramBot } from '../server/telegram-bot.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// Import main API routes
+// Import main API routes (only existing files)
 import authRoutes from '../server/api/auth.js';
 import aiRoutes from '../server/api/ai.js';
 import usersRoutes from '../server/api/users.js';
@@ -18,7 +18,6 @@ import dashboardRoutes from '../server/api/dashboard.js';
 import centerRoutes from '../server/api/center.js';
 import uploadRoutes from '../server/api/upload.js';
 import socialRoutes from '../server/api/social.js';
-import tokenomicsRoutes from '../server/api/tokenomics.js';
 
 // Import render-specific routes
 import { telegramAuthHandler } from './routes/auth.js';
@@ -65,7 +64,6 @@ app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/center', centerRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/social', socialRoutes);
-app.use('/api/tokenomics', tokenomicsRoutes);
 
 // Telegram auth route (render-specific)
 app.post('/api/auth/telegram-auth', async (req, res) => {
@@ -112,19 +110,6 @@ app.get('/api/users/:userId/goals', async (req, res) => {
 app.post('/api/users/:userId/goals', async (req, res) => {
   await ensureDatabase();
   return userGoalsHandler(req, res, 'POST');
-});
-
-// Account routes (tokens + onboarding combined)
-app.get('/api/users/:userId/account', async (req, res) => {
-  await ensureDatabase();
-  const handler = (await import('../api/users/[userId]/account.js')).default;
-  return handler(req as any, res);
-});
-
-app.post('/api/users/:userId/account', async (req, res) => {
-  await ensureDatabase();
-  const handler = (await import('../api/users/[userId]/account.js')).default;
-  return handler(req as any, res);
 });
 
 // Telegram routes
