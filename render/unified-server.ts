@@ -1,7 +1,11 @@
 import express from 'express';
 import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { initDatabase } from '../api/lib/database.js';
 import { startTelegramBot } from '../server/telegram-bot.js';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Import API routes
 import { telegramAuthHandler } from './routes/auth.js';
@@ -109,13 +113,25 @@ app.get('/api/telegram/debug', telegramDebugHandler);
 // Admin routes
 app.all('/api/admin/setup-webhook', adminSetupWebhookHandler);
 
+// Serve static files from dist/public
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Serve index.html for all non-API routes (SPA fallback)
+app.get('*', (req, res, next) => {
+  if (!req.path.startsWith('/api')) {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  } else {
+    next();
+  }
+});
+
 // Error handling
 app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
   console.error('Unhandled error:', err);
   res.status(500).json({ error: 'Internal server error', details: String(err) });
 });
 
-// 404 handler
+// 404 handler for API routes
 app.use((_req, res) => {
   res.status(404).json({ error: 'Not found' });
 });
