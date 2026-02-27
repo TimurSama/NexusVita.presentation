@@ -7,14 +7,38 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-      - key: TELEGRAM_BOT_TOKEN
-        sync: false
+      - key: PORT
+        value: 10000
+      - key: RENDER
+        value: "true"
+      # Database (Required)
       - key: DATABASE_URL
         sync: false
       - key: POSTGRES_URL
         sync: false
+      # Auth (Required)
       - key: JWT_SECRET
         sync: false
-      - key: RENDER
-        value: "true"
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      # AI APIs (Optional but recommended)
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: QWEN_API_KEY
+        sync: false
+      # Payments (Optional)
+      - key: NOWPAYMENTS_API_KEY
+        sync: false
+      # Telegram (Optional)
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      # Frontend URL
+      - key: CLIENT_URL
+        value: https://etholife.onrender.com
+      - key: API_URL
+        value: https://etholife.onrender.com
     healthCheckPath: /health
