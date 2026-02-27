@@ -3,11 +3,18 @@ import { supabase } from '../supabase/client';
 
 const router = Router();
 
+// API Keys from environment
 const QWEN_API_KEY = process.env.QWEN_API_KEY;
 const QWEN_API_URL = 'https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation';
 
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
+
+const GROQ_API_KEY = process.env.GROQ_API_KEY;
+const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
+
 // System prompt for health assistant
-const HEALTH_SYSTEM_PROMPT = `You are NexusVita AI, a supportive health and wellness assistant. 
+const HEALTH_SYSTEM_PROMPT = `You are EthosLife AI, a supportive health and wellness assistant. 
 You help users with:
 - Health and wellness questions
 - Nutrition and diet advice
@@ -21,7 +28,8 @@ Important guidelines:
 - For serious medical concerns, recommend consulting healthcare providers
 - Be encouraging and supportive
 - Provide evidence-based general information
-- Do not diagnose conditions or prescribe treatments`;
+- Do not diagnose conditions or prescribe treatments
+- Answer in the same language as the user's question`;
 
 // Chat completion endpoint
 router.post('/chat', async (req, res) => {
@@ -41,7 +49,7 @@ router.post('/chat', async (req, res) => {
 
         // Check subscription tier
         const { data: profile } = await supabase
-          .from('user_profiles')
+          .from('profiles')
           .select('subscription_tier')
           .eq('id', userId)
           .single();
@@ -88,12 +96,83 @@ router.post('/chat', async (req, res) => {
       }
     }
 
-    // Try Qwen API first
+    // Try AI providers in order: Groq -> Gemini -> Qwen -> Fallback
     let aiResponse: string;
-    let modelUsed = 'qwen';
+    let modelUsed = 'fallback';
 
-    try {
-      if (QWEN_API_KEY) {
+    // 1. Try Groq (fastest, good quality)
+    if (GROQ_API_KEY) {
+      try {
+        const response = await fetch(GROQ_API_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${GROQ_API_KEY}`,
+          },
+          body: JSON.stringify({
+            model: 'llama3-8b-8192',
+            messages: [
+              { role: 'system', content: HEALTH_SYSTEM_PROMPT },
+              ...history.slice(-10).map((m: any) => ({ role: m.role, content: m.content })),
+              { role: 'user', content: message },
+            ],
+            max_tokens: 1500,
+            temperature: 0.7,
+          }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          aiResponse = data.choices?.[0]?.message?.content || getLocalResponse(message);
+          modelUsed = 'groq-llama3';
+          console.log('✅ Used Groq API');
+        } else {
+          throw new Error('Groq API error');
+        }
+      } catch (error) {
+        console.warn('Groq failed:', error);
+        // Try next provider
+      }
+    }
+
+    // 2. Try Gemini
+    if (modelUsed === 'fallback' && GEMINI_API_KEY) {
+      try {
+        const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [
+              { role: 'user', parts: [{ text: HEALTH_SYSTEM_PROMPT }] },
+              ...history.slice(-10).flatMap((m: any) => [
+                { role: m.role === 'user' ? 'user' : 'model', parts: [{ text: m.content }] }
+              ]),
+              { role: 'user', parts: [{ text: message }] },
+            ],
+            generationConfig: {
+              maxOutputTokens: 1500,
+              temperature: 0.7,
+            },
+          }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          aiResponse = data.candidates?.[0]?.content?.parts?.[0]?.text || getLocalResponse(message);
+          modelUsed = 'gemini-pro';
+          console.log('✅ Used Gemini API');
+        } else {
+          throw new Error('Gemini API error');
+        }
+      } catch (error) {
+        console.warn('Gemini failed:', error);
+        // Try next provider
+      }
+    }
+
+    // 3. Try Qwen
+    if (modelUsed === 'fallback' && QWEN_API_KEY) {
+      try {
         const response = await fetch(QWEN_API_URL, {
           method: 'POST',
           headers: {
@@ -120,16 +199,21 @@ router.post('/chat', async (req, res) => {
         if (response.ok) {
           const data = await response.json();
           aiResponse = data.output?.choices?.[0]?.message?.content || getLocalResponse(message);
+          modelUsed = 'qwen-max';
+          console.log('✅ Used Qwen API');
         } else {
           throw new Error('Qwen API error');
         }
-      } else {
-        throw new Error('No API key');
+      } catch (error) {
+        console.warn('Qwen failed:', error);
       }
-    } catch (error) {
-      // Fallback to local response
+    }
+
+    // 4. Fallback to local responses
+    if (modelUsed === 'fallback') {
       aiResponse = getLocalResponse(message);
       modelUsed = 'local';
+      console.log('⚠️ Using local fallback responses');
     }
 
     // Save conversation
@@ -306,7 +390,7 @@ function getLocalResponse(message: string): string {
   const lowerMsg = message.toLowerCase();
 
   if (lowerMsg.includes('привет') || lowerMsg.includes('hello') || lowerMsg.includes('hi')) {
-    return 'Привет! 👋 Я NexusVita AI, ваш помощник по здоровью и wellness. Чем могу помочь сегодня?';
+    return 'Привет! 👋 Я EthosLife AI, ваш помощник по здоровью и wellness. Чем могу помочь сегодня?';
   }
 
   if (lowerMsg.includes('сон') || lowerMsg.includes('sleep')) {
@@ -333,7 +417,7 @@ function getLocalResponse(message: string): string {
     return 'Здоровый вес - это не только цифры на весах. ⚖️\n\n• Создайте умеренный дефицит калорий\n• Фокус на питательные продукты\n• Регулярная активность\n• 7-9 часов сна\n• Управление стрессом\n\nЦель - 0.5-1 кг в неделю для устойчивого результата.';
   }
 
-  return 'Интересный вопрос! 🤔\n\nЯ рекомендую обсудить это с вашим специалистом NexusVita для персонализированных рекомендаций.\n\nА пока могу предложить:\n• Улучшение сна и восстановления\n• План питания\n• Программу тренировок\n• Техники управления стрессом\n\nЧто вам интересно?';
+  return 'Интересный вопрос! 🤔\n\nЯ рекомендую обсудить это с вашим специалистом EthosLife для персонализированных рекомендаций.\n\nА пока могу предложить:\n• Улучшение сна и восстановления\n• План питания\n• Программу тренировок\n• Техники управления стрессом\n\nЧто вам интересно?';
 }
 
 export default router;
