@@ -59,7 +59,7 @@ export default function Login() {
     const redirectUri = `${window.location.origin}/auth/callback`;
     
     // Try to get client ID from env or window config
-    const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || (window as any).GOOGLE_CLIENT_ID;
+    const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || (window as any).GOOGLE_CLIENT_ID || '';
     
     if (!clientId || clientId === 'your-google-client-id') {
       setError('Google OAuth не настроен. Пожалуйста, используйте email/password или Telegram для входа.');
