@@ -186,7 +186,7 @@ async function handleTelegramAuth(req: any, res: any) {
     console.error('Telegram auth error:', error);
     res.status(500).json({ error: 'Authentication failed' });
   }
-});
+}
 
 // Verify token
 router.get('/verify', async (req, res) => {
