@@ -6,7 +6,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { AuthProvider } from "./contexts/AuthContext";
 import { UserProvider } from "./contexts/UserContext";
-import { MobileNavigation } from "./components/MobileNavigation";
+import { BottomNavigation } from "./components/BottomNavigation";
 import { Header } from "./components/Header";
 import { TelegramAuth } from "./components/TelegramAuth";
 import Home from "./pages/Home";
@@ -158,7 +158,7 @@ function App() {
               <Toaster />
               <Header />
               <Router />
-              <MobileNavigation />
+              <BottomNavigation />
             </TooltipProvider>
           </UserProvider>
         </AuthProvider>
