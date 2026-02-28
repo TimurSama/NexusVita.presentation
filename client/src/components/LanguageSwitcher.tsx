@@ -1,12 +1,10 @@
 import { useI18n } from '@/i18n';
-import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Globe } from 'lucide-react';
 
 const languages = [
   { code: 'en', label: 'EN' },
@@ -19,21 +17,18 @@ export function LanguageSwitcher() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-          <span className="text-xs font-medium uppercase">{locale}</span>
-        </Button>
+        <button className="h-7 px-2 text-xs font-medium hover:bg-gray-100 rounded">
+          {locale.toUpperCase()}
+        </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         {languages.map((lang) => (
           <DropdownMenuItem
             key={lang.code}
             onClick={() => setLocale(lang.code)}
-            className="text-sm cursor-pointer"
+            className="text-xs cursor-pointer"
           >
             {lang.label}
-            {locale === lang.code && (
-              <span className="ml-auto text-emerald-600">✓</span>
-            )}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

@@ -6,17 +6,18 @@ import {
   Heart, 
   LayoutDashboard, 
   Bot, 
-  Target, 
-  Wallet,
-  User,
-  Settings,
-  FileText,
-  Map,
-  Users,
-  Newspaper,
   Menu,
   X,
   LogOut,
+  User,
+  Wallet,
+  Settings,
+  Target,
+  FileText,
+  Sparkles,
+  Map,
+  Users,
+  Newspaper,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
@@ -32,58 +33,71 @@ export function BottomNavigation() {
   const isActive = (path: string) => location === path;
 
   const mainNavItems = [
-    { path: '/', icon: Home, label: t('nav.home') },
-    { path: '/health-center', icon: Heart, label: t('nav.health') },
-    { path: '/dashboard', icon: LayoutDashboard, label: t('nav.dashboard') },
-    { path: '/ai-chat', icon: Bot, label: t('nav.aiChat') },
+    { path: '/', icon: Home },
+    { path: '/health-center', icon: Heart },
+    { path: '/dashboard', icon: LayoutDashboard },
+    { path: '/ai-chat', icon: Bot },
   ];
 
   const menuSections = [
     {
-      title: t('nav.home'),
+      title: 'Main',
       items: [
-        { path: '/', label: t('nav.home') },
+        { path: '/', label: 'Home' },
         { path: '/landing', label: 'Landing' },
-        { path: '/v2', label: 'Landing V2' },
         { path: '/presentation', label: 'Presentation' },
       ],
     },
     {
-      title: t('health.title'),
+      title: 'Health',
       items: [
-        { path: '/health-center', label: t('nav.health') },
-        { path: '/health/movement', label: t('health.modules.movement') },
-        { path: '/health/nutrition', label: t('health.modules.nutrition') },
-        { path: '/health/sleep', label: t('health.modules.sleep') },
-        { path: '/health/psychology', label: t('health.modules.psychology') },
-        { path: '/health/medicine', label: t('health.modules.medicine') },
+        { path: '/health-center', label: 'Health Center' },
+        { path: '/health/movement', label: 'Movement' },
+        { path: '/health/nutrition', label: 'Nutrition' },
+        { path: '/health/sleep', label: 'Sleep' },
+        { path: '/health/psychology', label: 'Psychology' },
+        { path: '/health/medicine', label: 'Medicine' },
+        { path: '/health/relationships', label: 'Relationships' },
+        { path: '/health/habits', label: 'Habits' },
       ],
     },
     {
       title: 'Platform',
       items: [
-        { path: '/wallet', label: t('nav.wallet') },
-        { path: '/specialists', label: t('nav.specialists') },
-        { path: '/map', label: t('nav.map') },
-        { path: '/news', label: t('nav.news') },
+        { path: '/wallet', label: 'Wallet' },
+        { path: '/specialists', label: 'Specialists' },
+        { path: '/map', label: 'Map' },
+        { path: '/news', label: 'News' },
       ],
     },
     {
       title: 'Info',
       items: [
-        { path: '/roadmap', label: t('nav.roadmap') },
-        { path: '/tokenomics', label: t('nav.tokenomics') },
-        { path: '/whitepaper', label: t('nav.whitepaper') },
-        { path: '/pricing', label: t('nav.pricing') },
+        { path: '/roadmap', label: 'Roadmap' },
+        { path: '/tokenomics', label: 'Tokenomics' },
+        { path: '/whitepaper', label: 'Whitepaper' },
+        { path: '/pricing', label: 'Pricing' },
       ],
     },
   ];
 
   return (
     <>
-      {/* Bottom Navigation Bar - Compact */}
-      <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200 shadow-lg">
-        <div className="flex items-center justify-around h-14 max-w-lg mx-auto">
+      {/* Bottom Navigation - Menu on LEFT */}
+      <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200">
+        <div className="flex items-center h-12">
+          {/* Menu button - LEFT */}
+          <button
+            onClick={() => setIsMenuOpen(true)}
+            className="flex items-center justify-center w-12 h-12 text-gray-600 hover:bg-gray-100"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
+
+          {/* Divider */}
+          <div className="w-px h-6 bg-gray-200" />
+
+          {/* Main nav items */}
           {mainNavItems.map((item) => {
             const Icon = item.icon;
             const active = isActive(item.path);
@@ -91,27 +105,19 @@ export function BottomNavigation() {
             return (
               <Link key={item.path} href={item.path}>
                 <button
-                  className={`flex flex-col items-center justify-center w-14 h-14 rounded-lg transition-colors ${
+                  className={`flex items-center justify-center w-12 h-12 transition-colors ${
                     active ? 'text-emerald-600' : 'text-gray-500 hover:text-gray-700'
                   }`}
                 >
-                  <Icon className={`w-5 h-5 ${active ? 'scale-110' : ''} transition-transform`} />
+                  <Icon className={`w-5 h-5 ${active ? 'scale-110' : ''}`} />
                 </button>
               </Link>
             );
           })}
-          
-          {/* Menu Button - Icon only */}
-          <button
-            onClick={() => setIsMenuOpen(true)}
-            className="flex flex-col items-center justify-center w-14 h-14 rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors"
-          >
-            <Menu className="w-5 h-5" />
-          </button>
         </div>
       </nav>
 
-      {/* Full Screen Menu */}
+      {/* Menu Overlay */}
       <AnimatePresence>
         {isMenuOpen && (
           <>
@@ -124,93 +130,74 @@ export function BottomNavigation() {
             />
 
             <motion.div
-              initial={{ y: '100%' }}
-              animate={{ y: 0 }}
-              exit={{ y: '100%' }}
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed bottom-0 left-0 right-0 max-h-[80vh] bg-white rounded-t-2xl z-50 overflow-hidden flex flex-col"
+              className="fixed top-0 left-0 bottom-0 w-[280px] bg-white z-50 overflow-y-auto"
             >
               {/* Header */}
-              <div className="flex items-center justify-between p-4 border-b">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
-                    <Heart className="w-4 h-4 text-white" />
-                  </div>
-                  <span className="font-bold">Menu</span>
-                </div>
-                <div className="flex items-center gap-2">
+              <div className="flex items-center justify-between p-3 border-b">
+                <span className="font-bold">Menu</span>
+                <div className="flex items-center gap-1">
                   <LanguageSwitcher />
                   <button
                     onClick={() => setIsMenuOpen(false)}
-                    className="w-8 h-8 rounded-lg hover:bg-gray-100 flex items-center justify-center"
+                    className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 rounded"
                   >
-                    <X className="w-5 h-5" />
+                    <X className="w-4 h-4" />
                   </button>
                 </div>
               </div>
 
-              {/* Scrollable Content */}
-              <div className="flex-1 overflow-y-auto p-4">
-                <div className="grid grid-cols-2 gap-4">
-                  {menuSections.map((section) => (
-                    <div key={section.title} className="space-y-2">
-                      <h3 className="text-xs font-semibold text-gray-400 uppercase">
-                        {section.title}
-                      </h3>
-                      <div className="space-y-1">
-                        {section.items.map((item) => (
-                          <Link key={item.path} href={item.path}>
-                            <button
-                              onClick={() => setIsMenuOpen(false)}
-                              className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
-                                isActive(item.path)
-                                  ? 'bg-emerald-50 text-emerald-700 font-medium'
-                                  : 'text-gray-700 hover:bg-gray-50'
-                              }`}
-                            >
-                              {item.label}
-                            </button>
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
+              {/* Menu Content */}
+              <div className="p-2">
+                {menuSections.map((section) => (
+                  <div key={section.title} className="mb-4">
+                    <h3 className="text-xs font-semibold text-gray-400 uppercase px-2 mb-1">
+                      {section.title}
+                    </h3>
+                    {section.items.map((item) => (
+                      <Link key={item.path} href={item.path}>
+                        <button
+                          onClick={() => setIsMenuOpen(false)}
+                          className={`w-full text-left px-2 py-1.5 text-sm rounded ${
+                            isActive(item.path)
+                              ? 'bg-emerald-50 text-emerald-700 font-medium'
+                              : 'text-gray-700 hover:bg-gray-50'
+                          }`}
+                        >
+                          {item.label}
+                        </button>
+                      </Link>
+                    ))}
+                  </div>
+                ))}
               </div>
 
               {/* Footer */}
-              <div className="p-4 border-t bg-gray-50">
+              <div className="absolute bottom-0 left-0 right-0 p-2 border-t bg-gray-50">
                 {isAuthenticated ? (
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center">
-                        <User className="w-4 h-4 text-emerald-600" />
-                      </div>
-                      <span className="text-sm font-medium truncate max-w-[150px]">
-                        {user?.name || user?.email}
-                      </span>
-                    </div>
-                    <button
-                      onClick={() => {
-                        logout();
-                        setIsMenuOpen(false);
-                      }}
-                      className="flex items-center gap-1 text-red-600 text-sm px-3 py-2 rounded-lg hover:bg-red-50"
-                    >
-                      <LogOut className="w-4 h-4" />
-                      {t('nav.logout')}
-                    </button>
-                  </div>
+                  <button
+                    onClick={() => {
+                      logout();
+                      setIsMenuOpen(false);
+                    }}
+                    className="flex items-center gap-2 w-full px-2 py-2 text-red-600 text-sm hover:bg-red-50 rounded"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    Logout
+                  </button>
                 ) : (
                   <div className="flex gap-2">
                     <Link href="/login" className="flex-1">
-                      <Button variant="outline" className="w-full" size="sm">
-                        {t('nav.login')}
+                      <Button variant="outline" className="w-full" size="sm" onClick={() => setIsMenuOpen(false)}>
+                        Login
                       </Button>
                     </Link>
                     <Link href="/register" className="flex-1">
-                      <Button className="w-full bg-emerald-600 hover:bg-emerald-700" size="sm">
-                        {t('nav.register')}
+                      <Button className="w-full bg-emerald-600 hover:bg-emerald-700" size="sm" onClick={() => setIsMenuOpen(false)}>
+                        Register
                       </Button>
                     </Link>
                   </div>
@@ -221,8 +208,7 @@ export function BottomNavigation() {
         )}
       </AnimatePresence>
 
-      {/* Spacer */}
-      <div className="h-14" />
+      <div className="h-12" />
     </>
   );
 }
