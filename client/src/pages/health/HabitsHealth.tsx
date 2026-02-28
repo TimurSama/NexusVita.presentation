@@ -215,7 +215,7 @@ export default function HabitsHealth() {
                   <Sparkles className="w-6 h-6" />
                 </div>
                 <div>
-                  <h1 className="text-xl font-bold">Привычки</h1>
+                  <h1 className="text-xl font-bold whitespace-nowrap">Привычки</h1>
                   <p className="text-white/80 text-sm">Трекер и геймификация</p>
                 </div>
               </div>

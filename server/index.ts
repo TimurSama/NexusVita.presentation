@@ -7,6 +7,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Import API routes
 import authRoutes from './api/auth.js';
+
+// Import and start Telegram bot
+import './telegram-bot.js';
 import aiRoutes from './api/ai.js';
 import usersRoutes from './api/users.js';
 import paymentsRoutes from './api/payments.js';
