@@ -31,6 +31,7 @@
     "tokenomics": "Токеномика",
     "whitepaper": "Whitepaper",
     "roadmap": "Дорожная карта",
+    "investment": "Инвестиции",
     "specialistOffer": "Специалистам",
     "centerOffer": "Центрам"
   },
@@ -339,6 +340,26 @@
     "next": "Далее",
     "back": "Назад",
     "finishSetup": "Завершить"
+  },
+  "roadmap": {
+    "title": "Дорожная карта",
+    "subtitle": "Путь от концепции к глобальной экосистеме",
+    "phases": {
+      "completed": "Завершено",
+      "active": "В процессе",
+      "upcoming": "Запланировано"
+    },
+    "tabs": {
+      "roadmap": "Дорожная карта",
+      "financials": "Финансы",
+      "tokenomics": "Токеномика"
+    },
+    "metrics": {
+      "invested": "Инвестировано",
+      "hours": "Часов разработки",
+      "valuation": "Оценка",
+      "tables": "Таблиц БД"
+    }
   },
   "notifications": {
     "title": "Уведомления",

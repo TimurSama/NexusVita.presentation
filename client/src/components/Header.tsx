@@ -11,7 +11,8 @@ import {
   Wallet,
   Bot,
   Sparkles,
-  Home
+  Home,
+  Target
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -52,7 +53,8 @@ export function Header({ user, onLogout }: HeaderProps) {
     { href: '/', label: t('nav.home'), icon: Home },
     { href: '/dashboard', label: t('nav.dashboard'), icon: User },
     { href: '/health', label: t('nav.health'), icon: Heart },
-    { href: '/ai', label: t('nav.aiChat'), icon: Bot },
+    { href: '/ai-chat', label: t('nav.aiChat'), icon: Bot },
+    { href: '/roadmap', label: t('nav.roadmap'), icon: Target },
     { href: '/pricing', label: t('nav.pricing'), icon: Sparkles },
   ];
 

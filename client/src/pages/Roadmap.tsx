@@ -1,474 +1,780 @@
-import { ChevronLeft } from 'lucide-react';
-import { useLocation } from 'wouter';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { PremiumCard } from '@/components/PremiumCard';
-import { StatCounter } from '@/components/StatCounter';
+import { 
+  Rocket, 
+  Target, 
+  Coins, 
+  Users, 
+  TrendingUp, 
+  CheckCircle2, 
+  Circle, 
+  Clock,
+  Wallet,
+  Code2,
+  Megaphone,
+  Globe,
+  Zap,
+  ArrowRight,
+  ChevronDown,
+  ChevronUp,
+  Download
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
+import { useI18n } from '@/i18n';
+
+interface RoadmapPhase {
+  id: string;
+  period: string;
+  title: string;
+  status: 'completed' | 'active' | 'upcoming';
+  icon: React.ElementType;
+  color: string;
+  budget?: string;
+  description: string;
+  milestones: {
+    title: string;
+    completed: boolean;
+    value?: string;
+    details?: string;
+  }[];
+  tokenomics?: {
+    label: string;
+    value: string;
+    change?: string;
+  }[];
+}
+
+const roadmapData: RoadmapPhase[] = [
+  {
+    id: 'foundation',
+    period: 'Q1 2024 - Q4 2025',
+    title: 'Foundation & Development',
+    status: 'completed',
+    icon: Code2,
+    color: 'from-emerald-500 to-teal-600',
+    budget: '$141,000',
+    description: 'Core platform development, database architecture, and MVP launch',
+    milestones: [
+      { 
+        title: 'Development Hours', 
+        completed: true, 
+        value: '2,450 hrs',
+        details: 'Architecture, backend, frontend, mobile optimization'
+      },
+      { 
+        title: 'Database Tables', 
+        completed: true, 
+        value: '47 tables',
+        details: 'Profiles, health modules, payments, tokenomics, social features'
+      },
+      { 
+        title: 'Health Modules', 
+        completed: true, 
+        value: '7 modules',
+        details: 'Medicine, Movement, Nutrition, Psychology, Sleep, Relationships, Habits'
+      },
+      { 
+        title: 'AI Integration', 
+        completed: true, 
+        value: '3 providers',
+        details: 'Groq, Gemini, Qwen with unified interface'
+      },
+      { 
+        title: 'Payment Systems', 
+        completed: true, 
+        value: 'Multi-currency',
+        details: 'Crypto (NOWPayments), UNITY tokens, Stripe ready'
+      },
+    ],
+    tokenomics: [
+      { label: 'Token Standard', value: 'ERC-20 (Planned)' },
+      { label: 'Exchange Rate', value: '1 USD = 8.5 UNITY' },
+      { label: 'Token Bonus', value: '15% on payments' },
+    ]
+  },
+  {
+    id: 'presale',
+    period: 'Q1 2026',
+    title: 'Pre-Seed & Token Launch',
+    status: 'active',
+    icon: Rocket,
+    color: 'from-blue-500 to-indigo-600',
+    budget: 'Target: $500K - $1M',
+    description: 'Initial funding round, token smart contract deployment, community building',
+    milestones: [
+      { 
+        title: 'Valuation', 
+        completed: true, 
+        value: '$2.5-3M',
+        details: 'Based on 2,450 dev hours at $60-120/hr market rate'
+      },
+      { 
+        title: 'Smart Contract', 
+        completed: false, 
+        value: 'In Progress',
+        details: 'UNITY token ERC-20, vesting, staking mechanics'
+      },
+      { 
+        title: 'Whitepaper', 
+        completed: true, 
+        value: 'Published',
+        details: 'Complete tokenomics, use cases, technical specs'
+      },
+      { 
+        title: 'Community', 
+        completed: false, 
+        value: '0 → 10K',
+        details: 'Telegram, Discord, Twitter growth campaign'
+      },
+      { 
+        title: 'Beta Users', 
+        completed: false, 
+        value: 'Target: 1,000',
+        details: 'Onboarding with referral rewards in UNITY'
+      },
+    ],
+    tokenomics: [
+      { label: 'Pre-seed Price', value: '$0.02 / UNITY', change: '80% discount' },
+      { label: 'Allocation', value: '15% of supply' },
+      { label: 'Vesting', value: '12 months cliff + 24 mo' },
+    ]
+  },
+  {
+    id: 'growth',
+    period: 'Q2-Q3 2026',
+    title: 'Growth & Marketing',
+    status: 'upcoming',
+    icon: Megaphone,
+    color: 'from-orange-500 to-amber-600',
+    budget: '$800K allocated',
+    description: 'Marketing campaigns, partnerships, specialist onboarding',
+    milestones: [
+      { 
+        title: 'Marketing Campaign', 
+        completed: false, 
+        value: '$400K',
+        details: 'Influencers, health bloggers, paid ads (Google, Meta)'
+      },
+      { 
+        title: 'Specialist Network', 
+        completed: false, 
+        value: '500+',
+        details: 'Doctors, trainers, nutritionists onboarded'
+      },
+      { 
+        title: 'Health Centers', 
+        completed: false, 
+        value: '50+',
+        details: 'Partner clinics and wellness centers'
+      },
+      { 
+        title: 'Mobile Apps', 
+        completed: false, 
+        value: 'iOS & Android',
+        details: 'React Native apps with full feature parity'
+      },
+      { 
+        title: 'Wearables', 
+        completed: false, 
+        value: '10+ devices',
+        details: 'Apple Watch, Fitbit, Garmin integration'
+      },
+    ],
+    tokenomics: [
+      { label: 'Rewards Pool', value: '25% of supply', change: 'For users & referrals' },
+      { label: 'Burn Mechanism', value: '5% of revenue', change: 'Deflationary' },
+      { label: 'Staking APY', value: '15-25%', change: 'Based on lock period' },
+    ]
+  },
+  {
+    id: 'scale',
+    period: 'Q4 2026 - 2027',
+    title: 'Scale & Global Expansion',
+    status: 'upcoming',
+    icon: Globe,
+    color: 'from-purple-500 to-violet-600',
+    budget: 'Seed Round: $5-10M',
+    description: 'Series A preparation, international markets, enterprise solutions',
+    milestones: [
+      { 
+        title: 'Active Users', 
+        completed: false, 
+        value: '100,000+',
+        details: 'Global user base across 20+ countries'
+      },
+      { 
+        title: 'Enterprise', 
+        completed: false, 
+        value: 'B2B Launch',
+        details: 'Corporate wellness programs, insurance integration'
+      },
+      { 
+        title: 'Telemedicine', 
+        completed: false, 
+        value: 'Full Platform',
+        details: 'Video consultations, prescriptions, insurance claims'
+      },
+      { 
+        title: 'Market Cap', 
+        completed: false, 
+        value: '$50M+',
+        details: 'UNITY token fully liquid on DEXs and CEXs'
+      },
+      { 
+        title: 'Series A', 
+        completed: false, 
+        value: '$20-30M',
+        details: 'VC funding for global scaling'
+      },
+    ],
+    tokenomics: [
+      { label: 'Public Sale', value: '$0.10 / UNITY', change: 'From $0.02' },
+      { label: 'Market Cap', value: '$50M+ target' },
+      { label: 'Daily Volume', value: '$1M+ target' },
+    ]
+  },
+];
+
+const investmentBreakdown = [
+  { category: 'Development', amount: 85000, percent: 60, icon: Code2, details: '2,450 hours @ avg $35/hr' },
+  { category: 'Design & UX', amount: 15000, percent: 11, icon: Target, details: 'UI/UX, prototyping, branding' },
+  { category: 'Infrastructure', amount: 12000, percent: 8, icon: Zap, details: 'Servers, DB, APIs, domains' },
+  { category: 'Legal & Compliance', amount: 8000, percent: 6, icon: Wallet, details: 'GDPR, HIPAA consultation' },
+  { category: 'Marketing Prep', amount: 6000, percent: 4, icon: Megaphone, details: 'Whitepaper, website, content' },
+  { category: 'Reserve', amount: 15000, percent: 11, icon: Coins, details: 'Operations, unexpected costs' },
+];
+
+const tokenDistribution = [
+  { label: 'Community Rewards', value: 25, color: 'bg-emerald-500' },
+  { label: 'Pre-seed / Seed', value: 20, color: 'bg-blue-500' },
+  { label: 'Team & Advisors', value: 20, color: 'bg-purple-500' },
+  { label: 'Marketing', value: 15, color: 'bg-orange-500' },
+  { label: 'Liquidity Pool', value: 15, color: 'bg-cyan-500' },
+  { label: 'Reserve', value: 5, color: 'bg-gray-500' },
+];
 
 export default function Roadmap() {
-  const [, setLocation] = useLocation();
+  const [expandedPhase, setExpandedPhase] = useState<string | null>('presale');
+  const [activeTab, setActiveTab] = useState<'roadmap' | 'financials' | 'tokenomics'>('roadmap');
+  const { t } = useI18n();
 
-  const phases = [
-    {
-      phase: 1,
-      name: 'Q1 2025: Базовая разработка',
-      period: 'Январь - Март 2025',
-      investment: '$545K',
-      goals: [
-        '✅ Frontend мобильного приложения (базовая версия)',
-        '✅ Backend API и база данных',
-        '✅ Система аутентификации',
-        '✅ Базовые модули здоровья (3 из 7)',
-        '✅ Система сбора данных',
-        'Создание бренда и сайта',
-        'Запуск социальных сетей',
-        'Поиск первых медицинских партнеров (5 клиник)',
-        'Переговоры с фитнес-центрами (10 центров)'
-      ],
-      metrics: [
-        { label: 'Пользователи', value: '10K' },
-        { label: 'Платящие', value: '500' },
-        { label: 'MRR', value: '$16.3K' }
-      ],
-      color: 'from-blue-500 to-blue-600',
-      icon: '🚀',
-      development: ['Frontend MVP', 'Backend API', 'Аутентификация', '3 модуля здоровья'],
-      marketing: ['Брендинг', 'Сайт', 'Соцсети', 'Первые публикации'],
-      partnerships: ['5 клиник', '10 фитнес-центров']
-    },
-    {
-      phase: 2,
-      name: 'Q2 2025: Расширение функционала',
-      period: 'Апрель - Июнь 2025',
-      investment: '$872K',
-      goals: [
-        'Все 7 модулей здоровья',
-        'ИИ-чат и рекомендации',
-        'Интеграции с устройствами',
-        'Система аналитики',
-        'Запуск рекламных кампаний',
-        'Партнерский маркетинг',
-        'Медицинские клиники: 20',
-        'Фитнес-центры: 30',
-        'Партнеры по питанию: 50'
-      ],
-      metrics: [
-        { label: 'Пользователи', value: '30K' },
-        { label: 'Платящие', value: '2K' },
-        { label: 'MRR', value: '$54.3K' }
-      ],
-      color: 'from-purple-500 to-purple-600',
-      icon: '📈',
-      development: ['Все модули', 'ИИ-чат', 'Интеграции', 'Аналитика'],
-      marketing: ['Реклама', 'Партнерский', 'Контент'],
-      partnerships: ['20 клиник', '30 фитнес', '50 питание']
-    },
-    {
-      phase: 3,
-      name: 'Q3 2025: Масштабирование',
-      period: 'Июль - Сентябрь 2025',
-      investment: '$1.3M',
-      goals: [
-        'Корпоративная версия',
-        'Расширенная аналитика',
-        'OCR для документов',
-        'Интеграции с EHR системами',
-        'Масштабирование рекламы',
-        'События и конференции',
-        'Медицинские клиники: 50',
-        'Фитнес-центры: 100',
-        'Партнеры по питанию: 200',
-        'Корпоративные клиенты: 5'
-      ],
-      metrics: [
-        { label: 'Пользователи', value: '100K' },
-        { label: 'Платящие', value: '5K' },
-        { label: 'MRR', value: '$163K' }
-      ],
-      color: 'from-green-500 to-green-600',
-      icon: '🌍',
-      development: ['Корпоративная версия', 'OCR', 'EHR интеграции'],
-      marketing: ['Масштабирование', 'События', 'PR'],
-      partnerships: ['50 клиник', '100 фитнес', '200 питание', '5 корп']
-    },
-    {
-      phase: 4,
-      name: 'Q4 2025: Оптимизация и рост',
-      period: 'Октябрь - Декабрь 2025',
-      investment: '$1.6M',
-      goals: [
-        'Оптимизация производительности',
-        'Новые функции на основе обратной связи',
-        'Мобильные приложения (iOS/Android)',
-        'Региональное расширение',
-        'Международные рынки (СНГ)',
-        'Медицинские клиники: 100',
-        'Фитнес-центры: 200',
-        'Партнеры по питанию: 500',
-        'Корпоративные клиенты: 20'
-      ],
-      metrics: [
-        { label: 'Пользователи', value: '200K' },
-        { label: 'Платящие', value: '10K' },
-        { label: 'MRR', value: '$327K' }
-      ],
-      color: 'from-orange-500 to-orange-600',
-      icon: '🗺️',
-      development: ['Оптимизация', 'Мобильные приложения', 'Новые функции'],
-      marketing: ['Региональное', 'Международное', 'СНГ'],
-      partnerships: ['100 клиник', '200 фитнес', '500 питание', '20 корп']
-    },
-    {
-      phase: 5,
-      name: '2026: Рост и расширение',
-      period: 'Январь - Декабрь 2026',
-      investment: '$3.3M',
-      goals: [
-        'Международная версия (английский, китайский)',
-        'Расширенный ИИ (GPT-4 интеграция)',
-        'Виртуальные консультации',
-        'Телемедицина',
-        'Международное расширение',
-        'Крупные PR кампании',
-        'Медицинские клиники: 500',
-        'Фитнес-центры: 1,000',
-        'Партнеры по питанию: 2,000',
-        'Корпоративные клиенты: 100'
-      ],
-      metrics: [
-        { label: 'Пользователи', value: '1M' },
-        { label: 'Платящие', value: '50K' },
-        { label: 'ARR', value: '$19.6M' }
-      ],
-      color: 'from-green-500 to-green-600',
-      icon: '🌍',
-      development: ['Международная версия', 'Расширенный ИИ', 'Телемедицина'],
-      marketing: ['Международное', 'PR кампании', 'Инфлюенсеры'],
-      partnerships: ['500 клиник', '1K фитнес', '2K питание', '100 корп']
-    },
-    {
-      phase: 6,
-      name: '2027: Доминирование рынка',
-      period: 'Январь - Декабрь 2027',
-      investment: '$10.9M',
-      goals: [
-        'ИИ-диагностика (FDA/Росздравнадзор сертификация)',
-        'Генетический анализ',
-        'Персонализированная медицина',
-        'Блокчейн для данных',
-        'Глобальное присутствие',
-        'Научные публикации',
-        'Медицинские клиники: 2,000',
-        'Фитнес-центры: 5,000',
-        'Партнеры по питанию: 10,000',
-        'Корпоративные клиенты: 500'
-      ],
-      metrics: [
-        { label: 'Пользователи', value: '5M' },
-        { label: 'Платящие', value: '250K' },
-        { label: 'ARR', value: '$98M' }
-      ],
-      color: 'from-orange-500 to-orange-600',
-      icon: '🗺️',
-      development: ['ИИ-диагностика', 'Генетика', 'Блокчейн'],
-      marketing: ['Глобальное', 'Научные публикации', 'Конференции'],
-      partnerships: ['2K клиник', '5K фитнес', '10K питание', '500 корп']
-    },
-    {
-      phase: 7,
-      name: '2028-2029: Лидерство и IPO',
-      period: 'Январь 2028 - Декабрь 2029',
-      investment: '$32.7M',
-      goals: [
-        'Глобальная платформа',
-        'Исследования и разработки',
-        'Новые технологии (AR/VR, квантовые вычисления)',
-        'Глобальный бренд',
-        'Стратегические партнерства',
-        'Медицинские клиники: 10,000+',
-        'Фитнес-центры: 50,000+',
-        'Партнеры по питанию: 100,000+',
-        'Корпоративные клиенты: 5,000+',
-        'Подготовка к IPO'
-      ],
-      metrics: [
-        { label: 'Пользователи', value: '50M' },
-        { label: 'Платящие', value: '2.5M' },
-        { label: 'ARR', value: '$980M' }
-      ],
-      color: 'from-pink-500 to-pink-600',
-      icon: '👑',
-      development: ['Глобальная платформа', 'R&D', 'AR/VR', 'Квантовые вычисления'],
-      marketing: ['Глобальный бренд', 'Стратегические партнерства'],
-      partnerships: ['10K+ клиник', '50K+ фитнес', '100K+ питание', '5K+ корп']
-    }
-  ];
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, x: -50 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: { duration: 0.5 },
-    },
-  };
+  const totalInvested = investmentBreakdown.reduce((acc, item) => acc + item.amount, 0);
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-sm border-b border-border">
-        <div className="container py-4 flex items-center gap-4">
-          <button
-            onClick={() => setLocation('/')}
-            className="flex items-center gap-2 text-foreground/70 hover:text-foreground transition-colors"
-          >
-            <ChevronLeft className="w-5 h-5" />
-            Назад
-          </button>
-          <h1 className="text-2xl font-bold text-foreground">🗺️ Дорожная карта</h1>
-        </div>
-      </header>
-
-      <main className="container py-12">
-        <div className="max-w-6xl mx-auto">
-          {/* Hero Section */}
-          <motion.section
-            initial={{ opacity: 0, y: 30 }}
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+      {/* Hero */}
+      <div className="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 text-white">
+        <div className="max-w-7xl mx-auto px-4 py-16">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-12"
+            className="text-center"
           >
-            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-500/20 via-indigo-600/10 to-indigo-700/5 p-12 border border-border/50">
-              <div className="relative z-10">
-                <h2 className="text-4xl font-bold text-foreground mb-4">5-летний план развития</h2>
-                <p className="text-foreground/70 text-lg mb-8">
-                  От MVP к глобальному лидеру в экосистеме здоровья
-                </p>
-
-                <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-                  <StatCounter value={4.4} label="Инвестиции год 1" suffix="M$" delay={0.1} />
-                  <StatCounter value={200} label="Пользователей год 1" suffix="K" delay={0.2} />
-                  <StatCounter value={7} label="Фаз развития" delay={0.3} />
-                  <StatCounter value={800} label="Партнёров год 1" delay={0.4} />
-                  <StatCounter value={2029} label="Год IPO" delay={0.5} />
-                </div>
+            <Badge className="bg-white/20 text-white mb-4">Live Tracking</Badge>
+            <h1 className="text-4xl md:text-6xl font-bold mb-4">EthosLife Roadmap</h1>
+            <p className="text-xl text-white/90 max-w-2xl mx-auto">
+              From concept to global health ecosystem. Track our journey, investments, and tokenomics.
+            </p>
+            
+            {/* Key Stats */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 max-w-4xl mx-auto">
+              <div className="bg-white/10 backdrop-blur rounded-xl p-4">
+                <div className="text-3xl font-bold">$141K</div>
+                <div className="text-sm text-white/80">Invested</div>
+              </div>
+              <div className="bg-white/10 backdrop-blur rounded-xl p-4">
+                <div className="text-3xl font-bold">2,450</div>
+                <div className="text-sm text-white/80">Dev Hours</div>
+              </div>
+              <div className="bg-white/10 backdrop-blur rounded-xl p-4">
+                <div className="text-3xl font-bold">$2.5-3M</div>
+                <div className="text-sm text-white/80">Valuation</div>
+              </div>
+              <div className="bg-white/10 backdrop-blur rounded-xl p-4">
+                <div className="text-3xl font-bold">47</div>
+                <div className="text-sm text-white/80">DB Tables</div>
               </div>
             </div>
-          </motion.section>
+          </motion.div>
+        </div>
+      </div>
 
-          {/* Timeline */}
-          <motion.section
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={containerVariants}
-            className="mb-12"
-          >
+      {/* Navigation Tabs */}
+      <div className="sticky top-0 z-40 bg-white border-b shadow-sm">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex gap-1">
+            {[
+              { id: 'roadmap', label: 'Roadmap', icon: Rocket },
+              { id: 'financials', label: 'Financials', icon: Wallet },
+              { id: 'tokenomics', label: 'Tokenomics', icon: Coins },
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id as any)}
+                className={`flex items-center gap-2 px-6 py-4 font-medium transition-colors border-b-2 ${
+                  activeTab === tab.id
+                    ? 'border-emerald-500 text-emerald-600'
+                    : 'border-transparent text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                <tab.icon className="w-4 h-4" />
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        {/* ROADMAP TAB */}
+        {activeTab === 'roadmap' && (
+          <div className="space-y-6">
+            {/* Timeline */}
             <div className="relative">
-              {/* Timeline line */}
-              <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-primary via-primary to-transparent opacity-20" />
-
-              {/* Phases */}
-              <div className="space-y-12">
-                {phases.map((phase, idx) => (
+              {/* Timeline Line */}
+              <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-emerald-500 via-blue-500 to-purple-500 transform md:-translate-x-1/2" />
+              
+              {roadmapData.map((phase, index) => {
+                const Icon = phase.icon;
+                const isExpanded = expandedPhase === phase.id;
+                const isEven = index % 2 === 0;
+                
+                return (
                   <motion.div
-                    key={idx}
-                    variants={itemVariants}
-                    className={`flex gap-8 ${idx % 2 === 0 ? 'flex-row' : 'flex-row-reverse'}`}
+                    key={phase.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    className={`relative flex items-start gap-4 md:gap-8 mb-8 ${
+                      isEven ? 'md:flex-row' : 'md:flex-row-reverse'
+                    }`}
                   >
-                    {/* Timeline dot */}
-                    <motion.div
-                      animate={{ scale: [1, 1.2, 1] }}
-                      transition={{ duration: 2, repeat: Infinity, delay: idx * 0.2 }}
-                      className="flex-shrink-0 w-12 h-12 rounded-full bg-gradient-to-br from-primary to-primary/50 flex items-center justify-center text-white font-bold text-lg relative z-10"
-                    >
-                      {phase.phase}
-                    </motion.div>
+                    {/* Timeline Dot */}
+                    <div className="absolute left-8 md:left-1/2 transform -translate-x-1/2 z-10">
+                      <div className={`w-4 h-4 rounded-full border-4 border-white shadow-lg ${
+                        phase.status === 'completed' ? 'bg-emerald-500' :
+                        phase.status === 'active' ? 'bg-blue-500 animate-pulse' :
+                        'bg-gray-300'
+                      }`} />
+                    </div>
 
-                    {/* Content */}
-                    <div className="flex-1">
-                      <motion.div
-                        whileHover={{ y: -5 }}
-                        className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${phase.color} p-6 text-white border border-white/10`}
-                      >
-                        <div className="absolute top-0 right-0 text-6xl opacity-20">{phase.icon}</div>
+                    {/* Content Card */}
+                    <div className={`ml-16 md:ml-0 md:w-5/12 ${
+                      isEven ? 'md:text-right md:pr-8' : 'md:text-left md:pl-8'
+                    }`}>
+                      <Card className={`overflow-hidden hover:shadow-lg transition-shadow ${
+                        phase.status === 'active' ? 'ring-2 ring-blue-500' : ''
+                      }`}>
+                        <CardHeader className={`bg-gradient-to-r ${phase.color} text-white`}>
+                          <div className={`flex items-center gap-3 ${isEven ? 'md:flex-row-reverse' : ''}`}>
+                            <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+                              <Icon className="w-5 h-5" />
+                            </div>
+                            <div className={isEven ? 'md:text-right' : ''}>
+                              <Badge className="bg-white/20 text-white mb-1">
+                                {phase.period}
+                              </Badge>
+                              <CardTitle className="text-lg">{phase.title}</CardTitle>
+                            </div>
+                          </div>
+                          
+                          {phase.budget && (
+                            <div className={`mt-3 flex items-center gap-2 text-sm ${isEven ? 'md:justify-end' : ''}`}>
+                              <Wallet className="w-4 h-4" />
+                              <span className="font-semibold">{phase.budget}</span>
+                            </div>
+                          )}
+                        </CardHeader>
                         
-                        <div className="relative z-10">
-                          <div className="flex items-start justify-between mb-4">
-                            <div>
-                              <h3 className="text-2xl font-bold mb-1">{phase.name}</h3>
-                              <p className="text-white/80 text-sm">{phase.period}</p>
-                            </div>
-                            <div className="text-right">
-                              <p className="text-xs text-white/70 mb-1">Инвестиции</p>
-                              <p className="text-xl font-bold">{phase.investment}</p>
-                            </div>
+                        <CardContent className="p-4">
+                          <p className="text-gray-600 text-sm mb-4">{phase.description}</p>
+                          
+                          {/* Status Badge */}
+                          <div className={`flex items-center gap-2 mb-4 ${isEven ? 'md:justify-end' : ''}`}>
+                            {phase.status === 'completed' && (
+                              <Badge className="bg-emerald-100 text-emerald-700">
+                                <CheckCircle2 className="w-3 h-3 mr-1" /> Completed
+                              </Badge>
+                            )}
+                            {phase.status === 'active' && (
+                              <Badge className="bg-blue-100 text-blue-700">
+                                <Clock className="w-3 h-3 mr-1" /> In Progress
+                              </Badge>
+                            )}
+                            {phase.status === 'upcoming' && (
+                              <Badge className="bg-gray-100 text-gray-700">
+                                <Circle className="w-3 h-3 mr-1" /> Planned
+                              </Badge>
+                            )}
                           </div>
 
-                          <div className="mb-6 pb-6 border-b border-white/20">
-                            <h4 className="text-sm font-semibold mb-3 text-white/90">Цели:</h4>
-                            <ul className="space-y-2">
-                              {phase.goals.map((goal, gidx) => (
-                                <li key={gidx} className="text-sm text-white/80 flex items-start gap-2">
-                                  <span className="text-lg leading-none">{goal.startsWith('✅') ? '✅' : '•'}</span>
-                                  <span>{goal.replace('✅ ', '')}</span>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
+                          {/* Expandable Milestones */}
+                          <button
+                            onClick={() => setExpandedPhase(isExpanded ? null : phase.id)}
+                            className="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-gray-900"
+                          >
+                            {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                            {isExpanded ? 'Hide' : 'Show'} Milestones ({phase.milestones.length})
+                          </button>
                           
-                          {phase.development && (
-                            <div className="mb-4 pb-4 border-b border-white/10">
-                              <h4 className="text-xs font-semibold mb-2 text-white/70">Разработка:</h4>
-                              <div className="flex flex-wrap gap-2">
-                                {phase.development.map((item, idx) => (
-                                  <span key={idx} className="text-xs px-2 py-1 bg-white/10 rounded text-white/80">
-                                    {item}
-                                  </span>
-                                ))}
-                              </div>
-                            </div>
-                          )}
-                          
-                          {phase.marketing && (
-                            <div className="mb-4 pb-4 border-b border-white/10">
-                              <h4 className="text-xs font-semibold mb-2 text-white/70">Маркетинг:</h4>
-                              <div className="flex flex-wrap gap-2">
-                                {phase.marketing.map((item, idx) => (
-                                  <span key={idx} className="text-xs px-2 py-1 bg-white/10 rounded text-white/80">
-                                    {item}
-                                  </span>
-                                ))}
-                              </div>
-                            </div>
-                          )}
-                          
-                          {phase.partnerships && (
-                            <div className="mb-4">
-                              <h4 className="text-xs font-semibold mb-2 text-white/70">Партнерства:</h4>
-                              <div className="flex flex-wrap gap-2">
-                                {phase.partnerships.map((item, idx) => (
-                                  <span key={idx} className="text-xs px-2 py-1 bg-white/10 rounded text-white/80">
-                                    {item}
-                                  </span>
-                                ))}
-                              </div>
-                            </div>
-                          )}
-
-                          <div>
-                            <h4 className="text-sm font-semibold mb-3 text-white/90">Ключевые метрики:</h4>
-                            <div className="grid grid-cols-3 gap-4">
-                              {phase.metrics.map((metric, midx) => (
-                                <div key={midx} className="text-center">
-                                  <p className="text-xs text-white/70 mb-1">{metric.label}</p>
-                                  <p className="text-xl font-bold">{metric.value}</p>
+                          {isExpanded && (
+                            <motion.div
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: 'auto', opacity: 1 }}
+                              className="mt-4 space-y-3"
+                            >
+                              {phase.milestones.map((milestone, mIdx) => (
+                                <div key={mIdx} className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+                                  <div className={`mt-0.5 ${milestone.completed ? 'text-emerald-500' : 'text-gray-400'}`}>
+                                    {milestone.completed ? <CheckCircle2 className="w-4 h-4" /> : <Circle className="w-4 h-4" />}
+                                  </div>
+                                  <div className="flex-1">
+                                    <div className="flex items-center justify-between">
+                                      <span className="font-medium text-sm">{milestone.title}</span>
+                                      {milestone.value && (
+                                        <Badge variant="outline" className="text-xs">
+                                          {milestone.value}
+                                        </Badge>
+                                      )}
+                                    </div>
+                                    {milestone.details && (
+                                      <p className="text-xs text-gray-500 mt-1">{milestone.details}</p>
+                                    )}
+                                  </div>
                                 </div>
                               ))}
-                            </div>
-                          </div>
-                        </div>
-                      </motion.div>
+                            </motion.div>
+                          )}
+                        </CardContent>
+                      </Card>
                     </div>
                   </motion.div>
-                ))}
-              </div>
+                );
+              })}
             </div>
-          </motion.section>
+          </div>
+        )}
 
-          {/* Key Milestones */}
-          <motion.section
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="mb-12"
-          >
-            <h2 className="text-3xl font-bold text-foreground mb-8">Ключевые вехи</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {[
-                {
-                  date: 'Q2 2025',
-                  event: 'Запуск MVP',
-                  description: 'Первая версия платформы с 3 модулями здоровья'
-                },
-                {
-                  date: 'Q4 2025',
-                  event: 'Серия A',
-                  description: 'Привлечение $2M инвестиций'
-                },
-                {
-                  date: 'H1 2026',
-                  event: 'Миллион пользователей',
-                  description: 'Достижение 1M активных пользователей'
-                },
-                {
-                  date: 'H2 2026',
-                  event: 'Серия B',
-                  description: 'Привлечение $10M инвестиций'
-                },
-                {
-                  date: '2027',
-                  event: 'Глобальное расширение',
-                  description: 'Запуск в 15 странах'
-                },
-                {
-                  date: '2030',
-                  event: 'IPO',
-                  description: 'Выход на публичный рынок'
-                },
-              ].map((milestone, idx) => (
-                <PremiumCard key={idx} delay={idx * 0.1}>
-                  <div className="flex items-start gap-4">
-                    <div className="text-3xl">📅</div>
-                    <div className="flex-1">
-                      <p className="text-xs text-foreground/60 mb-1">{milestone.date}</p>
-                      <h3 className="text-lg font-bold text-foreground mb-1">{milestone.event}</h3>
-                      <p className="text-sm text-foreground/70">{milestone.description}</p>
+        {/* FINANCIALS TAB */}
+        {activeTab === 'financials' && (
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Investment Breakdown */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Wallet className="w-5 h-5 text-emerald-500" />
+                  Investment Breakdown
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="mb-6">
+                  <div className="text-3xl font-bold text-gray-900">${totalInvested.toLocaleString()}</div>
+                  <div className="text-gray-500">Total invested in development</div>
+                </div>
+                
+                <div className="space-y-4">
+                  {investmentBreakdown.map((item, idx) => (
+                    <div key={idx}>
+                      <div className="flex items-center justify-between mb-1">
+                        <div className="flex items-center gap-2">
+                          <item.icon className="w-4 h-4 text-gray-500" />
+                          <span className="font-medium text-sm">{item.category}</span>
+                        </div>
+                        <div className="text-right">
+                          <div className="font-semibold">${item.amount.toLocaleString()}</div>
+                          <div className="text-xs text-gray-500">{item.percent}%</div>
+                        </div>
+                      </div>
+                      <Progress value={item.percent} className="h-2" />
+                      <p className="text-xs text-gray-500 mt-1">{item.details}</p>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Development ROI */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <TrendingUp className="w-5 h-5 text-blue-500" />
+                  Development ROI
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="p-4 bg-emerald-50 rounded-xl">
+                  <div className="text-sm text-emerald-700 mb-1">Current Valuation</div>
+                  <div className="text-3xl font-bold text-emerald-900">$2.5 - 3.0 Million</div>
+                  <div className="text-sm text-emerald-600 mt-2">
+                    <TrendingUp className="w-4 h-4 inline mr-1" />
+                    {Math.round((2500000 / totalInvested - 1) * 100)}% ROI from invested capital
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="p-4 bg-gray-50 rounded-xl">
+                    <div className="text-2xl font-bold">2,450</div>
+                    <div className="text-sm text-gray-600">Development Hours</div>
+                    <div className="text-xs text-gray-400 mt-1">~$58/hr avg cost</div>
+                  </div>
+                  <div className="p-4 bg-gray-50 rounded-xl">
+                    <div className="text-2xl font-bold">47</div>
+                    <div className="text-sm text-gray-600">Database Tables</div>
+                    <div className="text-xs text-gray-400 mt-1">Enterprise scale</div>
+                  </div>
+                </div>
+
+                <div className="p-4 border rounded-xl">
+                  <h4 className="font-semibold mb-3">Market Comparison</h4>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Similar health apps valuation</span>
+                      <span className="font-medium">$2-5M seed</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Dev cost market rate</span>
+                      <span className="font-medium">$80-150/hr</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Our effective rate</span>
+                      <span className="font-medium text-emerald-600">~$58/hr</span>
                     </div>
                   </div>
-                </PremiumCard>
-              ))}
-            </div>
-          </motion.section>
+                </div>
+              </CardContent>
+            </Card>
 
-          {/* Investment Summary */}
-          <motion.section
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="mb-12"
-          >
-            <h2 className="text-3xl font-bold text-foreground mb-8">Инвестиционный план</h2>
-            <PremiumCard gradient="from-green-500/10 to-green-600/5">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div>
-                  <p className="text-sm text-foreground/60 mb-2">Общие инвестиции</p>
-                  <p className="text-4xl font-bold text-primary mb-2">$71.5M</p>
-                  <p className="text-xs text-foreground/60">На 5 лет развития</p>
+            {/* Future Funding */}
+            <Card className="md:col-span-2">
+              <CardHeader>
+                <CardTitle>Future Funding Rounds</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid md:grid-cols-3 gap-6">
+                  <div className="p-4 bg-blue-50 rounded-xl">
+                    <Badge className="bg-blue-100 text-blue-700 mb-2">Q1 2026</Badge>
+                    <h4 className="font-bold text-lg">Pre-Seed</h4>
+                    <div className="text-2xl font-bold text-blue-900">$500K - $1M</div>
+                    <ul className="text-sm text-gray-600 mt-2 space-y-1">
+                      <li>• Token smart contract</li>
+                      <li>• Marketing campaign</li>
+                      <li>• 10K community members</li>
+                    </ul>
+                    <div className="mt-3 text-xs text-blue-600">
+                      Valuation: $2.5-3M
+                    </div>
+                  </div>
+
+                  <div className="p-4 bg-purple-50 rounded-xl">
+                    <Badge className="bg-purple-100 text-purple-700 mb-2">Q3-Q4 2026</Badge>
+                    <h4 className="font-bold text-lg">Seed Round</h4>
+                    <div className="text-2xl font-bold text-purple-900">$5M - $10M</div>
+                    <ul className="text-sm text-gray-600 mt-2 space-y-1">
+                      <li>• Global expansion</li>
+                      <li>• Mobile apps launch</li>
+                      <li>• 100K+ active users</li>
+                    </ul>
+                    <div className="mt-3 text-xs text-purple-600">
+                      Target valuation: $25-40M
+                    </div>
+                  </div>
+
+                  <div className="p-4 bg-emerald-50 rounded-xl">
+                    <Badge className="bg-emerald-100 text-emerald-700 mb-2">2027</Badge>
+                    <h4 className="font-bold text-lg">Series A</h4>
+                    <div className="text-2xl font-bold text-emerald-900">$20M - $30M</div>
+                    <ul className="text-sm text-gray-600 mt-2 space-y-1">
+                      <li>• Enterprise solutions</li>
+                      <li>• Insurance integrations</li>
+                      <li>• 1M+ users target</li>
+                    </ul>
+                    <div className="mt-3 text-xs text-emerald-600">
+                      Target valuation: $100M+
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-sm text-foreground/60 mb-2">Средний раунд</p>
-                  <p className="text-4xl font-bold text-green-500 mb-2">$14.3M</p>
-                  <p className="text-xs text-foreground/60">На фазу</p>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        {/* TOKENOMICS TAB */}
+        {activeTab === 'tokenomics' && (
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Token Distribution */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Coins className="w-5 h-5 text-amber-500" />
+                  UNITY Token Distribution
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {tokenDistribution.map((item, idx) => (
+                    <div key={idx} className="flex items-center gap-3">
+                      <div className={`w-4 h-4 rounded ${item.color}`} />
+                      <div className="flex-1">
+                        <div className="flex justify-between">
+                          <span className="font-medium text-sm">{item.label}</span>
+                          <span className="font-bold">{item.value}%</span>
+                        </div>
+                        <Progress value={item.value} className="h-1.5 mt-1" />
+                      </div>
+                    </div>
+                  ))}
                 </div>
-                <div>
-                  <p className="text-sm text-foreground/60 mb-2">ROI прогноз</p>
-                  <p className="text-4xl font-bold text-blue-500 mb-2">25-30x</p>
-                  <p className="text-xs text-foreground/60">К 2030 году</p>
+
+                <div className="mt-6 p-4 bg-amber-50 rounded-xl">
+                  <h4 className="font-semibold text-amber-900 mb-2">Token Utility</h4>
+                  <ul className="text-sm text-amber-800 space-y-1">
+                    <li>• 15% discount on subscription payments</li>
+                    <li>• Staking rewards: 15-25% APY</li>
+                    <li>• Rewards for health achievements</li>
+                    <li>• Referral program payouts</li>
+                    <li>• Specialist service payments</li>
+                  </ul>
                 </div>
+              </CardContent>
+            </Card>
+
+            {/* Token Metrics */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <TrendingUp className="w-5 h-5 text-emerald-500" />
+                  Token Metrics
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="p-3 bg-gray-50 rounded-lg">
+                    <div className="text-xs text-gray-500">Current Rate</div>
+                    <div className="text-lg font-bold">1 USD = 8.5 UNITY</div>
+                  </div>
+                  <div className="p-3 bg-gray-50 rounded-lg">
+                    <div className="text-xs text-gray-500">Payment Bonus</div>
+                    <div className="text-lg font-bold text-emerald-600">+15%</div>
+                  </div>
+                  <div className="p-3 bg-gray-50 rounded-lg">
+                    <div className="text-xs text-gray-500">Pre-seed Price</div>
+                    <div className="text-lg font-bold">$0.02</div>
+                  </div>
+                  <div className="p-3 bg-gray-50 rounded-lg">
+                    <div className="text-xs text-gray-500">Public Sale Target</div>
+                    <div className="text-lg font-bold">$0.10</div>
+                  </div>
+                </div>
+
+                <div className="p-4 border rounded-xl">
+                  <h4 className="font-semibold mb-3">Deflationary Mechanisms</h4>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                      <span>5% of platform revenue used for buyback & burn</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                      <span>50% of specialist fees burned</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                      <span>Quarterly token burns based on growth</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-4 bg-emerald-50 rounded-xl">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Zap className="w-5 h-5 text-emerald-600" />
+                    <span className="font-semibold text-emerald-900">Earning Opportunities</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 text-sm text-emerald-800">
+                    <div>• Daily health goals: 5-50 UNITY</div>
+                    <div>• Referrals: 100 UNITY</div>
+                    <div>• Achievements: 10-500 UNITY</div>
+                    <div>• Content creation: 50-200 UNITY</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Token Vesting Schedule */}
+            <Card className="md:col-span-2">
+              <CardHeader>
+                <CardTitle>Vesting Schedule</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid md:grid-cols-4 gap-4">
+                  <div className="p-4 border rounded-xl">
+                    <div className="font-semibold text-blue-600 mb-2">Pre-seed</div>
+                    <div className="text-sm text-gray-600 mb-2">15% allocation</div>
+                    <div className="text-xs space-y-1">
+                      <div>• 12 months cliff</div>
+                      <div>• 24 months vesting</div>
+                      <div>• Price: $0.02</div>
+                    </div>
+                  </div>
+                  <div className="p-4 border rounded-xl">
+                    <div className="font-semibold text-purple-600 mb-2">Seed</div>
+                    <div className="text-sm text-gray-600 mb-2">5% allocation</div>
+                    <div className="text-xs space-y-1">
+                      <div>• 6 months cliff</div>
+                      <div>• 18 months vesting</div>
+                      <div>• Price: $0.05</div>
+                    </div>
+                  </div>
+                  <div className="p-4 border rounded-xl">
+                    <div className="font-semibold text-emerald-600 mb-2">Team</div>
+                    <div className="text-sm text-gray-600 mb-2">20% allocation</div>
+                    <div className="text-xs space-y-1">
+                      <div>• 18 months cliff</div>
+                      <div>• 36 months vesting</div>
+                      <div>• Long-term alignment</div>
+                    </div>
+                  </div>
+                  <div className="p-4 border rounded-xl">
+                    <div className="font-semibold text-orange-600 mb-2">Community</div>
+                    <div className="text-sm text-gray-600 mb-2">25% allocation</div>
+                    <div className="text-xs space-y-1">
+                      <div>• No cliff</div>
+                      <div>• Linear release over 48 months</div>
+                      <div>• Rewards & incentives</div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+      </div>
+
+      {/* CTA Footer */}
+      <div className="max-w-7xl mx-auto px-4 pb-8">
+        <Card className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white">
+          <CardContent className="p-8">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+              <div>
+                <h3 className="text-2xl font-bold mb-2">Ready to join the journey?</h3>
+                <p className="text-white/90">Invest in the future of health technology. Pre-seed round open now.</p>
               </div>
-            </PremiumCard>
-          </motion.section>
-        </div>
-      </main>
+              <div className="flex gap-4">
+                <Button variant="secondary" size="lg">
+                  <Download className="w-4 h-4 mr-2" />
+                  Download Pitch Deck
+                </Button>
+                <Button variant="outline" className="border-white text-white hover:bg-white/10" size="lg">
+                  Contact Us
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

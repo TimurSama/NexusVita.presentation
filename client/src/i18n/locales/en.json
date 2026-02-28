@@ -31,6 +31,7 @@
     "tokenomics": "Tokenomics",
     "whitepaper": "Whitepaper",
     "roadmap": "Roadmap",
+    "investment": "Investment",
     "specialistOffer": "For Specialists",
     "centerOffer": "For Centers"
   },
@@ -344,6 +345,26 @@
     "next": "Next",
     "back": "Back",
     "finishSetup": "Finish Setup"
+  },
+  "roadmap": {
+    "title": "Roadmap",
+    "subtitle": "Our journey from concept to global ecosystem",
+    "phases": {
+      "completed": "Completed",
+      "active": "In Progress",
+      "upcoming": "Planned"
+    },
+    "tabs": {
+      "roadmap": "Roadmap",
+      "financials": "Financials",
+      "tokenomics": "Tokenomics"
+    },
+    "metrics": {
+      "invested": "Invested",
+      "hours": "Dev Hours",
+      "valuation": "Valuation",
+      "tables": "DB Tables"
+    }
   },
   "notifications": {
     "title": "Notifications",
