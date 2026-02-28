@@ -56,31 +56,46 @@ export default function Login() {
   };
 
   const handleGoogleLogin = () => {
-    // Redirect to Google OAuth
     const redirectUri = `${window.location.origin}/auth/callback`;
-    const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
     
-    if (!clientId) {
-      setError('Google OAuth не настроен. Обратитесь к администратору.');
+    // Try to get client ID from env or window config
+    const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || (window as any).GOOGLE_CLIENT_ID;
+    
+    if (!clientId || clientId === 'your-google-client-id') {
+      setError('Google OAuth не настроен. Пожалуйста, используйте email/password или Telegram для входа.');
+      console.error('VITE_GOOGLE_CLIENT_ID not configured');
       return;
     }
     
     const scope = 'openid email profile';
-    const state = btoa(JSON.stringify({ redirect: '/dashboard' }));
+    const state = btoa(JSON.stringify({ redirect: '/dashboard', timestamp: Date.now() }));
     
     const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
       `client_id=${clientId}` +
       `&redirect_uri=${encodeURIComponent(redirectUri)}` +
       `&response_type=code` +
       `&scope=${encodeURIComponent(scope)}` +
-      `&state=${state}`;
+      `&state=${state}` +
+      `&access_type=offline` +
+      `&prompt=consent`;
     
     window.location.href = googleAuthUrl;
   };
 
   const handleTelegramLogin = () => {
-    // Redirect to Telegram bot
-    window.location.href = 'https://t.me/etholife_bot';
+    // Show instructions for Telegram auth
+    const botUsername = 'etholife_bot';
+    const authUrl = `${window.location.origin}/auth/callback`;
+    
+    // Open Telegram with deep link for authentication
+    const telegramUrl = `https://t.me/${botUsername}?start=auth_${btoa(JSON.stringify({
+      redirect: authUrl,
+      timestamp: Date.now()
+    })).replace(/[+\/=]/g, '')}`;
+    
+    window.open(telegramUrl, '_blank');
+    
+    setError('Бот Telegram открыт. Нажмите "Start" в боте для авторизации, затем вернитесь на эту страницу.');
   };
 
   return (

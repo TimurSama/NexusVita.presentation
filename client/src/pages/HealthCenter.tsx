@@ -130,7 +130,7 @@ export default function HealthCenter() {
 
   return (
     <div className="min-h-screen bg-background pb-20 md:pb-0 pt-20">
-      <div className="container max-w-7xl px-4 py-6 md:py-8">
+      <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 py-4 md:py-8">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -182,7 +182,7 @@ export default function HealthCenter() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-4">
                 {quickActions.map((action, idx) => (
                   <motion.button
                     key={action.id}
@@ -192,25 +192,25 @@ export default function HealthCenter() {
                     whileHover={{ scale: 1.05, y: -2 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => setLocation(action.path)}
-                    className="premium-card p-4 text-center group hover:shadow-lg transition-all"
+                    className="premium-card p-3 sm:p-4 text-center group hover:shadow-lg transition-all"
                     style={{ borderColor: action.color + '40' }}
                   >
                     <div className="flex flex-col items-center gap-2">
                       <div 
-                        className="w-12 h-12 rounded-full flex items-center justify-center mb-2 transition-all group-hover:scale-110"
+                        className="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center mb-2 transition-all group-hover:scale-110"
                         style={{ backgroundColor: action.color + '20' }}
                       >
                         <SketchIcon 
                           icon={action.icon as any} 
-                          size={24} 
-                          className="transition-colors"
+                          size={20}
+                          className="sm:w-6 sm:h-6 transition-colors"
                           style={{ color: action.color }}
                         />
                       </div>
                       <div>
-                        <p className="font-semibold text-foreground">{action.label}</p>
+                        <p className="font-semibold text-foreground text-sm sm:text-base">{action.label}</p>
                         {action.description && (
-                          <p className="text-xs text-foreground/60 mt-1">{action.description}</p>
+                          <p className="text-xs text-foreground/60 mt-1 hidden sm:block">{action.description}</p>
                         )}
                       </div>
                     </div>
@@ -385,7 +385,7 @@ export default function HealthCenter() {
 
         {/* Detailed Information - Bottom Section */}
         <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 engraved-tabs">
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 engraved-tabs">
             <TabsTrigger value="overview" className="flex items-center gap-2">
               <BarChart3 className="w-4 h-4" />
               Обзор
@@ -406,7 +406,7 @@ export default function HealthCenter() {
 
           {/* Overview Tab */}
           <TabsContent value="overview" className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
               {healthDirections.map((direction) => {
                 const directionPlans = todayPlans.filter(p => p.category === direction.id);
                 const completed = directionPlans.filter(p => p.completed).length;

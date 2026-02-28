@@ -120,8 +120,16 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// Telegram auth
+// Telegram auth - support both endpoints
 router.post('/telegram', async (req, res) => {
+  await handleTelegramAuth(req, res);
+});
+
+router.post('/telegram-auth', async (req, res) => {
+  await handleTelegramAuth(req, res);
+});
+
+async function handleTelegramAuth(req: any, res: any) {
   try {
     const { telegram_id, telegram_username, first_name, last_name } = req.body;
 
