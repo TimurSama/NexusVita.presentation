@@ -15,10 +15,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useUser } from '@/contexts/UserContext';
+import { useI18n } from '@/i18n';
 
 export default function Login() {
   const [, setLocation] = useLocation();
   const { refreshUser } = useUser();
+  const { t } = useI18n();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -44,7 +46,7 @@ export default function Login() {
         setLocation('/dashboard');
       } else {
         const errorData = await response.json();
-        setError(errorData.error || 'Неверный email или пароль');
+        setError(errorData.error || t('auth.invalidCredentials'));
       }
     } catch (err) {
       setError('Ошибка подключения к серверу');

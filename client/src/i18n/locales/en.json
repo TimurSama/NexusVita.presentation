@@ -55,7 +55,8 @@
     "googleLogin": "Continue with Google",
     "telegramLogin": "Continue with Telegram",
     "or": "or",
-    "agreeTerms": "I agree to the Terms of Service and Privacy Policy"
+    "agreeTerms": "I agree to the Terms of Service and Privacy Policy",
+    "invalidCredentials": "Invalid email or password"
   },
   "dashboard": {
     "welcome": "Welcome back",
