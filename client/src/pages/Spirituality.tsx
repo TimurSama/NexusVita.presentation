@@ -15,9 +15,9 @@ export default function Spirituality() {
             className="flex items-center gap-2 text-foreground/70 hover:text-foreground transition-colors"
           >
             <ChevronLeft className="w-5 h-5" />
-            Назад
+            Back
           </button>
-          <h1 className="text-2xl font-bold text-foreground">🕉️ Духовность</h1>
+          <h1 className="text-2xl font-bold text-foreground">🕉️ Spirituality</h1>
         </div>
       </header>
 
@@ -28,18 +28,18 @@ export default function Spirituality() {
             animate={{ opacity: 1, y: 0 }}
             className="sketch-panel p-8 bg-gradient-to-br from-amber-500/10 to-amber-600/5"
           >
-            <h2 className="text-3xl font-bold text-foreground mb-4">Модуль духовности</h2>
+            <h2 className="text-3xl font-bold text-foreground mb-4">Spirituality Module</h2>
             <p className="text-foreground/70 mb-6">
-              Смысл жизни, личностное развитие и духовный рост.
+              Meaning of life, personal development, and spiritual growth.
             </p>
             <div className="space-y-4">
               <div className="p-4 bg-background/50 rounded-lg">
-                <h3 className="font-bold text-foreground mb-2">Основные функции</h3>
+                <h3 className="font-bold text-foreground mb-2">Key Features</h3>
                 <ul className="space-y-2 text-foreground/70">
-                  <li>• Оценка смысла жизни</li>
-                  <li>• Программы личностного развития</li>
-                  <li>• Практики медитации и рефлексии</li>
-                  <li>• Поддержка духовного роста</li>
+                  <li>• Life meaning assessment</li>
+                  <li>• Personal development programs</li>
+                  <li>• Meditation and reflection practices</li>
+                  <li>• Spiritual growth support</li>
                 </ul>
               </div>
             </div>

@@ -11,9 +11,9 @@ export default function Prevention() {
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-sm border-b border-border">
         <div className="container py-4 flex items-center gap-4">
           <button onClick={() => setLocation('/')} className="flex items-center gap-2 text-foreground/70 hover:text-foreground">
-            <ChevronLeft className="w-5 h-5" /> Назад
+            <ChevronLeft className="w-5 h-5" /> Back
           </button>
-          <h1 className="text-2xl font-bold text-foreground">Профилактика и окружающая среда</h1>
+          <h1 className="text-2xl font-bold text-foreground">Prevention and Environment</h1>
         </div>
       </header>
 
@@ -28,10 +28,10 @@ export default function Prevention() {
                   selectedTab === tab ? 'text-primary border-b-2 border-primary' : 'text-foreground/60 hover:text-foreground'
                 }`}
               >
-                {tab === 'overview' && 'Обзор'}
-                {tab === 'environment' && 'Окружение'}
-                {tab === 'prevention' && 'Профилактика'}
-                {tab === 'research' && 'Исследования'}
+                {tab === 'overview' && 'Overview'}
+                {tab === 'environment' && 'Environment'}
+                {tab === 'prevention' && 'Prevention'}
+                {tab === 'research' && 'Research'}
               </button>
             ))}
           </div>
@@ -39,17 +39,17 @@ export default function Prevention() {
           {selectedTab === 'overview' && (
             <div className="space-y-8">
               <div className="sketch-panel p-8 bg-gradient-to-br from-primary/5 to-primary/2">
-                <h2 className="text-2xl font-bold text-foreground mb-4">Профилактика и окружающая среда</h2>
+                <h2 className="text-2xl font-bold text-foreground mb-4">Prevention and Environment</h2>
                 <p className="text-foreground/70 mb-6">
-                  Окружающая среда оказывает прямое влияние на здоровье. Качество воздуха, воды, температура, загрязнение и экологические факторы интегрируются в систему для персональных рекомендаций.
+                  The environment has a direct impact on health. Air quality, water, temperature, pollution, and environmental factors are integrated into the system for personalized recommendations.
                 </p>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {[
-                    { title: 'Качество воздуха', icon: '💨', desc: 'PM2.5, озон, CO2' },
-                    { title: 'Качество воды', icon: '💧', desc: 'Чистота и минерализация' },
-                    { title: 'Температура', icon: '🌡️', desc: 'Комфортный диапазон' },
-                    { title: 'Загрязнение', icon: '⚠️', desc: 'Уровень токсинов' },
+                    { title: 'Air Quality', icon: '💨', desc: 'PM2.5, ozone, CO2' },
+                    { title: 'Water Quality', icon: '💧', desc: 'Purity and mineralization' },
+                    { title: 'Temperature', icon: '🌡️', desc: 'Comfortable range' },
+                    { title: 'Pollution', icon: '⚠️', desc: 'Toxin levels' },
                   ].map((item, idx) => (
                     <div key={idx} className="sketch-panel p-4">
                       <div className="text-3xl mb-2">{item.icon}</div>
@@ -65,15 +65,15 @@ export default function Prevention() {
           {selectedTab === 'environment' && (
             <div className="space-y-8">
               <div className="sketch-panel p-8">
-                <h2 className="text-2xl font-bold text-foreground mb-8">Мониторинг окружающей среды</h2>
+                <h2 className="text-2xl font-bold text-foreground mb-8">Environment Monitoring</h2>
                 
                 <div className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {[
-                      { metric: 'Качество воздуха (AQI)', value: '45', status: 'Хорошо' },
-                      { metric: 'Уровень влажности', value: '55%', status: 'Оптимально' },
-                      { metric: 'Температура', value: '22°C', status: 'Комфортно' },
-                      { metric: 'Уровень шума', value: '55 дБ', status: 'Приемлемо' },
+                      { metric: 'Air Quality (AQI)', value: '45', status: 'Good' },
+                      { metric: 'Humidity Level', value: '55%', status: 'Optimal' },
+                      { metric: 'Temperature', value: '22°C', status: 'Comfortable' },
+                      { metric: 'Noise Level', value: '55 dB', status: 'Acceptable' },
                     ].map((item, idx) => (
                       <div key={idx} className="sketch-panel p-4">
                         <p className="text-sm text-foreground/70 mb-2">{item.metric}</p>
@@ -89,12 +89,12 @@ export default function Prevention() {
 
           {selectedTab === 'prevention' && (
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-foreground mb-8">Профилактические программы</h2>
+              <h2 className="text-2xl font-bold text-foreground mb-8">Prevention Programs</h2>
               {[
-                { title: 'Вакцинация', count: '20+ рекомендаций' },
-                { title: 'Профилактические осмотры', count: '15 типов' },
-                { title: 'Скрининг заболеваний', count: '30+ тестов' },
-                { title: 'Диспансеризация', count: '12 программ' },
+                { title: 'Vaccination', count: '20+ recommendations' },
+                { title: 'Preventive Check-ups', count: '15 types' },
+                { title: 'Disease Screening', count: '30+ tests' },
+                { title: 'Dispensarization', count: '12 programs' },
               ].map((program, idx) => (
                 <button key={idx} className="sketch-panel p-6 w-full text-left hover:shadow-lg hover:ring-2 hover:ring-primary transition-all">
                   <h3 className="font-bold text-foreground mb-2">{program.title}</h3>
@@ -106,11 +106,11 @@ export default function Prevention() {
 
           {selectedTab === 'research' && (
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-foreground mb-8">Последние исследования</h2>
+              <h2 className="text-2xl font-bold text-foreground mb-8">Latest Research</h2>
               {[
-                { title: 'Загрязнение воздуха и здоровье', date: '2026-02-10' },
-                { title: 'Экологические факторы и долголетие', date: '2026-02-08' },
-                { title: 'Качество воды и иммунитет', date: '2026-02-05' },
+                { title: 'Air Pollution and Health', date: '2026-02-10' },
+                { title: 'Environmental Factors and Longevity', date: '2026-02-08' },
+                { title: 'Water Quality and Immunity', date: '2026-02-05' },
               ].map((research, idx) => (
                 <div key={idx} className="sketch-panel p-6 hover:shadow-lg transition-shadow cursor-pointer">
                   <h3 className="font-bold text-foreground mb-2">{research.title}</h3>

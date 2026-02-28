@@ -20,12 +20,12 @@ export default function Centers() {
   const referralCode = 'ETHOS2025-USER123';
 
   const centerTypes = [
-    { id: 'all', label: 'Все' },
-    { id: 'gym', label: 'Спортзалы' },
-    { id: 'medical', label: 'Медицинские' },
-    { id: 'spa', label: 'Спа и Wellness' },
-    { id: 'yoga', label: 'Йога-студии' },
-    { id: 'pool', label: 'Бассейны' },
+    { id: 'all', label: 'All' },
+    { id: 'gym', label: 'Gyms' },
+    { id: 'medical', label: 'Medical' },
+    { id: 'spa', label: 'Spa & Wellness' },
+    { id: 'yoga', label: 'Yoga Studios' },
+    { id: 'pool', label: 'Pools' },
   ];
 
   const centers = [
@@ -33,40 +33,40 @@ export default function Centers() {
       id: '1',
       name: 'Fitness Pro Premium',
       type: 'gym',
-      address: 'ул. Ленина, 15',
+      address: 'Lenin Street, 15',
       rating: 4.8,
       reviews: 234,
-      distance: '1.2 км',
+      distance: '1.2 km',
       image: '',
-      services: ['Тренажерный зал', 'Групповые занятия', 'Персональные тренировки'],
-      price: '$99/месяц',
+      services: ['Gym', 'Group Classes', 'Personal Training'],
+      price: '$99/month',
       hasMembership: true,
       membershipExpires: '2025-06-15',
     },
     {
       id: '2',
-      name: 'Медицинский центр "Здоровье"',
+      name: 'Health Medical Center',
       type: 'medical',
-      address: 'пр. Мира, 42',
+      address: 'Peace Ave, 42',
       rating: 4.9,
       reviews: 567,
-      distance: '2.5 км',
+      distance: '2.5 km',
       image: '',
-      services: ['Обследования', 'Консультации', 'Анализы'],
-      price: 'От $50',
+      services: ['Examinations', 'Consultations', 'Tests'],
+      price: 'From $50',
       hasMembership: false,
     },
     {
       id: '3',
-      name: 'Spa & Wellness "Релакс"',
+      name: 'Spa & Wellness "Relax"',
       type: 'spa',
-      address: 'ул. Пушкина, 8',
+      address: 'Pushkin Street, 8',
       rating: 4.7,
       reviews: 189,
-      distance: '3.1 км',
+      distance: '3.1 km',
       image: '',
-      services: ['Массаж', 'SPA-процедуры', 'Сауна'],
-      price: 'От $80',
+      services: ['Massage', 'SPA Treatments', 'Sauna'],
+      price: 'From $80',
       hasMembership: false,
     },
   ];
@@ -89,9 +89,9 @@ export default function Centers() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-6"
         >
-          <h1 className="text-4xl font-bold text-foreground mb-2 engraved-text">Центры</h1>
+          <h1 className="text-4xl font-bold text-foreground mb-2 engraved-text">Centers</h1>
           <p className="text-foreground/60">
-            Спортзалы, медицинские центры, спа и другие заведения для здоровья
+            Gyms, medical centers, spas, and other health facilities
           </p>
         </motion.div>
 
@@ -110,9 +110,9 @@ export default function Centers() {
                     <Gift className="w-6 h-6 text-primary" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-lg engraved-text mb-1">Реферальная программа</h3>
+                    <h3 className="font-bold text-lg engraved-text mb-1">Referral Program</h3>
                     <p className="text-sm text-foreground/70">
-                      Пригласите друга и получите бонусы!
+                      Invite a friend and get bonuses!
                     </p>
                   </div>
                 </div>
@@ -128,18 +128,18 @@ export default function Centers() {
                     {referralCopied ? (
                       <>
                         <Check className="w-4 h-4 mr-2" />
-                        Скопировано
+                        Copied
                       </>
                     ) : (
                       <>
                         <Copy className="w-4 h-4 mr-2" />
-                        Копировать
+                        Copy
                       </>
                     )}
                   </Button>
                   <Button variant="outline" className="engraved-button-outline">
                     <Share2 className="w-4 h-4 mr-2" />
-                    Поделиться
+                    Share
                   </Button>
                 </div>
               </div>
@@ -158,13 +158,13 @@ export default function Centers() {
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground/40" />
               <Input
-                placeholder="Поиск центров..."
+                placeholder="Search centers..."
                 className="pl-10 engraved-input"
               />
             </div>
             <Select>
               <SelectTrigger className="w-48 engraved-input">
-                <SelectValue placeholder="Тип центра" />
+                <SelectValue placeholder="Center Type" />
               </SelectTrigger>
               <SelectContent>
                 {centerTypes.map((type) => (
@@ -204,7 +204,7 @@ export default function Centers() {
                   </div>
                   {center.hasMembership && (
                     <Badge className="absolute top-2 right-2 engraved-badge bg-green-500">
-                      Абонемент активен
+                      Membership Active
                     </Badge>
                   )}
                 </div>
@@ -223,7 +223,7 @@ export default function Centers() {
                 <CardContent className="flex-1 flex flex-col justify-end">
                   <div className="space-y-3 mb-4">
                     <div>
-                      <p className="text-sm font-semibold mb-1">Услуги:</p>
+                      <p className="text-sm font-semibold mb-1">Services:</p>
                       <div className="flex flex-wrap gap-1">
                         {center.services.map((service, sIdx) => (
                           <Badge key={sIdx} variant="secondary" className="engraved-badge text-xs">
@@ -236,7 +236,7 @@ export default function Centers() {
                       <span className="font-bold text-primary">{center.price}</span>
                       {center.hasMembership && (
                         <span className="text-xs text-foreground/60">
-                          До {new Date(center.membershipExpires).toLocaleDateString('ru-RU')}
+                          Until {new Date(center.membershipExpires).toLocaleDateString('en-US')}
                         </span>
                       )}
                     </div>
@@ -244,7 +244,7 @@ export default function Centers() {
                   <div className="flex gap-2">
                     <Button className="flex-1 engraved-button">
                       <Calendar className="w-4 h-4 mr-2" />
-                      {center.hasMembership ? 'Записаться' : 'Прикрепить абонемент'}
+                      {center.hasMembership ? 'Book' : 'Attach Membership'}
                     </Button>
                     <Dialog>
                       <DialogTrigger asChild>
@@ -254,26 +254,26 @@ export default function Centers() {
                       </DialogTrigger>
                       <DialogContent>
                         <DialogHeader>
-                          <DialogTitle>Пригласить друга</DialogTitle>
+                          <DialogTitle>Invite a Friend</DialogTitle>
                           <DialogDescription>
-                            Отправьте приглашение другу в этот центр
+                            Send an invitation to a friend for this center
                           </DialogDescription>
                         </DialogHeader>
                         <div className="space-y-4">
                           <div>
-                            <Label>Email друга</Label>
+                            <Label>Friend's Email</Label>
                             <Input placeholder="friend@example.com" className="engraved-input" />
                           </div>
                           <div>
-                            <Label>Сообщение (необязательно)</Label>
+                            <Label>Message (optional)</Label>
                             <Textarea
-                              placeholder="Привет! Присоединяйся ко мне в..."
+                              placeholder="Hi! Join me at..."
                               className="engraved-input"
                             />
                           </div>
                           <Button className="w-full engraved-button">
                             <Share2 className="w-4 h-4 mr-2" />
-                            Отправить приглашение
+                            Send Invitation
                           </Button>
                         </div>
                       </DialogContent>

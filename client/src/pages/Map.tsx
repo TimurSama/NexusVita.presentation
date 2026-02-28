@@ -16,62 +16,62 @@ export default function Map() {
   const [mapType, setMapType] = useState<'activity' | 'rest' | 'groups' | 'shops'>('activity');
 
   const locationTypes = [
-    { id: 'all', label: 'Все', icon: Layers },
-    { id: 'activity', label: 'Активность', icon: Activity },
-    { id: 'rest', label: 'Отдых', icon: TreePine },
-    { id: 'groups', label: 'Групповые занятия', icon: Users },
-    { id: 'shops', label: 'Магазины', icon: ShoppingBag },
+    { id: 'all', label: 'All', icon: Layers },
+    { id: 'activity', label: 'Activity', icon: Activity },
+    { id: 'rest', label: 'Rest', icon: TreePine },
+    { id: 'groups', label: 'Group Classes', icon: Users },
+    { id: 'shops', label: 'Shops', icon: ShoppingBag },
   ];
 
   const locations = [
     {
       id: '1',
-      name: 'Парк Победы',
+      name: 'Victory Park',
       type: 'activity',
-      category: 'Беговая дорожка',
-      address: 'ул. Парковая, 1',
-      distance: '0.8 км',
+      category: 'Running Track',
+      address: 'Park Street, 1',
+      distance: '0.8 km',
       coordinates: { lat: 55.7558, lng: 37.6173 },
-      features: ['Беговая дорожка', 'Спортивная площадка', 'Парковка'],
+      features: ['Running Track', 'Sports Ground', 'Parking'],
       rating: 4.7,
       participants: 12,
       nextEvent: '2025-02-16T08:00',
     },
     {
       id: '2',
-      name: 'Сквер у озера',
+      name: 'Lake Square',
       type: 'rest',
-      category: 'Отдых на природе',
-      address: 'пр. Мира, 15',
-      distance: '1.5 км',
+      category: 'Nature Rest',
+      address: 'Peace Ave, 15',
+      distance: '1.5 km',
       coordinates: { lat: 55.7500, lng: 37.6000 },
-      features: ['Озеро', 'Беседки', 'Детская площадка'],
+      features: ['Lake', 'Gazebos', 'Playground'],
       rating: 4.9,
       participants: null,
       nextEvent: null,
     },
     {
       id: '3',
-      name: 'Йога в парке',
+      name: 'Yoga in the Park',
       type: 'groups',
-      category: 'Групповое занятие',
-      address: 'Центральный парк',
-      distance: '2.1 км',
+      category: 'Group Class',
+      address: 'Central Park',
+      distance: '2.1 km',
       coordinates: { lat: 55.7600, lng: 37.6200 },
-      features: ['Йога', 'Медитация', 'На свежем воздухе'],
+      features: ['Yoga', 'Meditation', 'Outdoor'],
       rating: 4.8,
       participants: 8,
       nextEvent: '2025-02-16T09:00',
     },
     {
       id: '4',
-      name: 'Магазин здорового питания',
+      name: 'Healthy Food Store',
       type: 'shops',
-      category: 'Продукты',
-      address: 'ул. Зеленая, 42',
-      distance: '0.5 км',
+      category: 'Products',
+      address: 'Green Street, 42',
+      distance: '0.5 km',
       coordinates: { lat: 55.7400, lng: 37.6100 },
-      features: ['Органика', 'БАДы', 'Доставка'],
+      features: ['Organic', 'Supplements', 'Delivery'],
       rating: 4.6,
       participants: null,
       nextEvent: null,
@@ -90,9 +90,9 @@ export default function Map() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-6"
         >
-          <h1 className="text-4xl font-bold text-foreground mb-2 engraved-text">Карта</h1>
+          <h1 className="text-4xl font-bold text-foreground mb-2 engraved-text">Map</h1>
           <p className="text-foreground/60">
-            Найдите места для активности, отдыха, групповых занятий и магазины
+            Find places for activity, rest, group classes, and shops
           </p>
         </motion.div>
 
@@ -107,7 +107,7 @@ export default function Map() {
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground/40" />
               <Input
-                placeholder="Поиск локаций..."
+                placeholder="Search locations..."
                 className="pl-10 engraved-input"
               />
             </div>
@@ -128,7 +128,7 @@ export default function Map() {
             </Select>
             <Button variant="outline" className="engraved-button-outline">
               <Navigation className="w-4 h-4 mr-2" />
-              Мое местоположение
+              My Location
             </Button>
           </div>
         </motion.div>
@@ -144,19 +144,19 @@ export default function Map() {
             <TabsList>
               <TabsTrigger value="activity">
                 <Activity className="w-4 h-4 mr-2" />
-                Активность
+                Activity
               </TabsTrigger>
               <TabsTrigger value="rest">
                 <TreePine className="w-4 h-4 mr-2" />
-                Отдых
+                Rest
               </TabsTrigger>
               <TabsTrigger value="groups">
                 <Users className="w-4 h-4 mr-2" />
-                Групповые занятия
+                Group Classes
               </TabsTrigger>
               <TabsTrigger value="shops">
                 <ShoppingBag className="w-4 h-4 mr-2" />
-                Магазины
+                Shops
               </TabsTrigger>
             </TabsList>
           </Tabs>
@@ -178,9 +178,9 @@ export default function Map() {
                   <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent" />
                   <div className="relative z-10 text-center">
                     <MapPin className="w-16 h-16 text-primary/30 mx-auto mb-4" />
-                    <p className="text-foreground/60 mb-2">Интерактивная карта</p>
+                    <p className="text-foreground/60 mb-2">Interactive Map</p>
                     <p className="text-sm text-foreground/40">
-                      Интеграция с Google Maps / Yandex Maps
+                      Google Maps / Yandex Maps integration
                     </p>
                   </div>
                   {/* Mock markers */}
@@ -217,8 +217,8 @@ export default function Map() {
           >
             <Card className="engraved-card">
               <CardHeader>
-                <CardTitle className="engraved-text">Локации рядом</CardTitle>
-                <CardDescription>{filteredLocations.length} найдено</CardDescription>
+                <CardTitle className="engraved-text">Nearby Locations</CardTitle>
+                <CardDescription>{filteredLocations.length} found</CardDescription>
               </CardHeader>
             </Card>
             <div className="space-y-4 max-h-[500px] overflow-y-auto">
@@ -268,7 +268,7 @@ export default function Map() {
                           <div className="flex items-center gap-2 text-sm text-foreground/70">
                             <Calendar className="w-4 h-4" />
                             <span>
-                              Следующее событие: {new Date(location.nextEvent).toLocaleString('ru-RU', {
+                              Next event: {new Date(location.nextEvent).toLocaleString('en-US', {
                                 day: 'numeric',
                                 month: 'short',
                                 hour: '2-digit',
@@ -278,7 +278,7 @@ export default function Map() {
                           </div>
                         )}
                         <Button className="w-full engraved-button" size="sm">
-                          Подробнее
+                          Details
                         </Button>
                       </div>
                     </CardContent>

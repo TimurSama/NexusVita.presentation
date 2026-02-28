@@ -11,9 +11,9 @@ export default function CognitiveHealth() {
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-sm border-b border-border">
         <div className="container py-4 flex items-center gap-4">
           <button onClick={() => setLocation('/')} className="flex items-center gap-2 text-foreground/70 hover:text-foreground">
-            <ChevronLeft className="w-5 h-5" /> Назад
+            <ChevronLeft className="w-5 h-5" /> Back
           </button>
-          <h1 className="text-2xl font-bold text-foreground">Когнитивное здоровье</h1>
+          <h1 className="text-2xl font-bold text-foreground">Cognitive Health</h1>
         </div>
       </header>
 
@@ -28,10 +28,10 @@ export default function CognitiveHealth() {
                   selectedTab === tab ? 'text-primary border-b-2 border-primary' : 'text-foreground/60 hover:text-foreground'
                 }`}
               >
-                {tab === 'overview' && 'Обзор'}
-                {tab === 'assessment' && 'Тестирование'}
-                {tab === 'training' && 'Тренировка'}
-                {tab === 'research' && 'Исследования'}
+                {tab === 'overview' && 'Overview'}
+                {tab === 'assessment' && 'Assessment'}
+                {tab === 'training' && 'Training'}
+                {tab === 'research' && 'Research'}
               </button>
             ))}
           </div>
@@ -39,17 +39,17 @@ export default function CognitiveHealth() {
           {selectedTab === 'overview' && (
             <div className="space-y-8">
               <div className="sketch-panel p-8 bg-gradient-to-br from-primary/5 to-primary/2">
-                <h2 className="text-2xl font-bold text-foreground mb-4">Когнитивное здоровье</h2>
+                <h2 className="text-2xl font-bold text-foreground mb-4">Cognitive Health</h2>
                 <p className="text-foreground/70 mb-6">
-                  Когнитивное здоровье включает концентрацию внимания, память, скорость обработки информации и стратегическое мышление. Это ключевой компонент продуктивности и качества жизни.
+                  Cognitive health includes attention concentration, memory, information processing speed, and strategic thinking. It is a key component of productivity and quality of life.
                 </p>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {[
-                    { title: 'Концентрация', icon: '🎯', desc: 'Способность к фокусировке' },
-                    { title: 'Память', icon: '🧠', desc: 'Краткосрочная и долгосрочная' },
-                    { title: 'Скорость обработки', icon: '⚡', desc: 'Реакция и анализ' },
-                    { title: 'Стратегическое мышление', icon: '♟️', desc: 'Планирование и анализ' },
+                    { title: 'Concentration', icon: '🎯', desc: 'Ability to focus' },
+                    { title: 'Memory', icon: '🧠', desc: 'Short-term and long-term' },
+                    { title: 'Processing Speed', icon: '⚡', desc: 'Reaction and analysis' },
+                    { title: 'Strategic Thinking', icon: '♟️', desc: 'Planning and analysis' },
                   ].map((item, idx) => (
                     <div key={idx} className="sketch-panel p-4">
                       <div className="text-3xl mb-2">{item.icon}</div>
@@ -65,14 +65,14 @@ export default function CognitiveHealth() {
           {selectedTab === 'assessment' && (
             <div className="space-y-8">
               <div className="sketch-panel p-8">
-                <h2 className="text-2xl font-bold text-foreground mb-8">Когнитивное тестирование</h2>
+                <h2 className="text-2xl font-bold text-foreground mb-8">Cognitive Assessment</h2>
                 
                 <div className="space-y-6">
                   {[
-                    { title: 'Тест внимания', desc: 'Оцените вашу способность к концентрации' },
-                    { title: 'Тест памяти', desc: 'Проверьте краткосрочную и долгосрочную память' },
-                    { title: 'Тест скорости реакции', desc: 'Измерьте время реакции' },
-                    { title: 'Тест логического мышления', desc: 'Решите логические головоломки' },
+                    { title: 'Attention Test', desc: 'Assess your ability to concentrate' },
+                    { title: 'Memory Test', desc: 'Check your short-term and long-term memory' },
+                    { title: 'Reaction Speed Test', desc: 'Measure your reaction time' },
+                    { title: 'Logical Thinking Test', desc: 'Solve logic puzzles' },
                   ].map((test, idx) => (
                     <button key={idx} className="sketch-panel p-6 w-full text-left hover:shadow-lg hover:ring-2 hover:ring-primary transition-all">
                       <h3 className="font-bold text-foreground mb-2">{test.title}</h3>
@@ -86,12 +86,12 @@ export default function CognitiveHealth() {
 
           {selectedTab === 'training' && (
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-foreground mb-8">Программы тренировки</h2>
+              <h2 className="text-2xl font-bold text-foreground mb-8">Training Programs</h2>
               {[
-                { title: 'Brain Training', count: '200+ упражнений' },
-                { title: 'Скоростное чтение', count: '15 курсов' },
-                { title: 'Мнемоника', count: '20 техник' },
-                { title: 'Стратегические игры', count: '50+ игр' },
+                { title: 'Brain Training', count: '200+ exercises' },
+                { title: 'Speed Reading', count: '15 courses' },
+                { title: 'Mnemonics', count: '20 techniques' },
+                { title: 'Strategy Games', count: '50+ games' },
               ].map((program, idx) => (
                 <div key={idx} className="sketch-panel p-6 hover:shadow-lg transition-shadow">
                   <h3 className="font-bold text-foreground mb-2">{program.title}</h3>
@@ -103,11 +103,11 @@ export default function CognitiveHealth() {
 
           {selectedTab === 'research' && (
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-foreground mb-8">Последние исследования</h2>
+              <h2 className="text-2xl font-bold text-foreground mb-8">Latest Research</h2>
               {[
-                { title: 'Нейропластичность и обучение', date: '2026-02-10' },
-                { title: 'Влияние сна на память', date: '2026-02-08' },
-                { title: 'Когнитивный резерв и долголетие', date: '2026-02-05' },
+                { title: 'Neuroplasticity and Learning', date: '2026-02-10' },
+                { title: 'Sleep Impact on Memory', date: '2026-02-08' },
+                { title: 'Cognitive Reserve and Longevity', date: '2026-02-05' },
               ].map((research, idx) => (
                 <div key={idx} className="sketch-panel p-6 hover:shadow-lg transition-shadow cursor-pointer">
                   <h3 className="font-bold text-foreground mb-2">{research.title}</h3>

@@ -56,9 +56,9 @@ export default function Documents() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-6"
         >
-          <h1 className="text-4xl font-bold text-foreground mb-2 engraved-text">Документы</h1>
+          <h1 className="text-4xl font-bold text-foreground mb-2 engraved-text">Documents</h1>
           <p className="text-foreground/60">
-            Ваши медицинские документы и исследования
+            Your medical documents and research
           </p>
         </motion.div>
 
@@ -72,7 +72,7 @@ export default function Documents() {
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground/40" />
             <Input
-              placeholder="Поиск документов..."
+              placeholder="Search documents..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10 engraved-input"
@@ -81,11 +81,11 @@ export default function Documents() {
         </motion.div>
 
         {loading ? (
-          <div className="text-center text-foreground/60">Загрузка документов...</div>
+          <div className="text-center text-foreground/60">Loading documents...</div>
         ) : filteredDocuments.length === 0 ? (
           <Card className="engraved-card p-12 text-center">
             <FileText className="w-16 h-16 text-foreground/20 mx-auto mb-4" />
-            <p className="text-foreground/60">Документы не найдены</p>
+            <p className="text-foreground/60">No documents found</p>
           </Card>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -101,13 +101,13 @@ export default function Documents() {
                     <div className="flex items-start justify-between mb-2">
                       <FileText className="w-8 h-8 text-primary" />
                       <Badge variant="outline" className="engraved-badge">
-                        {doc.document_type === 'medical' ? 'Медицинский' : doc.document_type}
+                        {doc.document_type === 'medical' ? 'Medical' : doc.document_type}
                       </Badge>
                     </div>
                     <CardTitle className="engraved-text text-lg">{doc.title}</CardTitle>
                     <CardDescription className="flex items-center gap-2 mt-2">
                       <Calendar className="w-4 h-4" />
-                      {new Date(doc.created_at).toLocaleDateString('ru-RU')}
+                      {new Date(doc.created_at).toLocaleDateString('en-US')}
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="flex-1 flex flex-col justify-end">
@@ -115,7 +115,7 @@ export default function Documents() {
                       className="w-full engraved-button"
                       onClick={() => setSelectedDocument(doc)}
                     >
-                      Открыть документ
+                      Open Document
                     </Button>
                   </CardContent>
                 </Card>
@@ -130,7 +130,7 @@ export default function Documents() {
             <DialogHeader>
               <DialogTitle className="engraved-text">{selectedDocument?.title}</DialogTitle>
               <DialogDescription>
-                {selectedDocument && new Date(selectedDocument.created_at).toLocaleDateString('ru-RU')}
+                {selectedDocument && new Date(selectedDocument.created_at).toLocaleDateString('en-US')}
               </DialogDescription>
             </DialogHeader>
             <ScrollArea className="max-h-[70vh] pr-4">
@@ -148,7 +148,7 @@ export default function Documents() {
                 className="engraved-button-outline"
                 onClick={() => setSelectedDocument(null)}
               >
-                Закрыть
+                Close
               </Button>
               <Button
                 className="engraved-button"
@@ -164,7 +164,7 @@ export default function Documents() {
                 }}
               >
                 <Download className="w-4 h-4 mr-2" />
-                Скачать
+                Download
               </Button>
             </div>
           </DialogContent>

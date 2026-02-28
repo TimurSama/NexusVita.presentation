@@ -24,8 +24,8 @@ export default function Habits() {
   const [habits, setHabits] = useState<Habit[]>([
     {
       id: '1',
-      title: 'Пить 2 литра воды',
-      description: 'Ежедневное потребление воды',
+      title: 'Drink 2 liters of water',
+      description: 'Daily water intake',
       category: 'health',
       frequency: 'daily',
       streak: 12,
@@ -35,8 +35,8 @@ export default function Habits() {
     },
     {
       id: '2',
-      title: '10,000 шагов',
-      description: 'Ежедневная цель по шагам',
+      title: '10,000 steps',
+      description: 'Daily step goal',
       category: 'fitness',
       frequency: 'daily',
       streak: 8,
@@ -46,8 +46,8 @@ export default function Habits() {
     },
     {
       id: '3',
-      title: 'Медитация 10 минут',
-      description: 'Ежедневная практика',
+      title: 'Meditation 10 minutes',
+      description: 'Daily practice',
       category: 'mental',
       frequency: 'daily',
       streak: 21,
@@ -57,8 +57,8 @@ export default function Habits() {
     },
     {
       id: '4',
-      title: 'Чтение 30 минут',
-      description: 'Развитие и обучение',
+      title: 'Reading 30 minutes',
+      description: 'Development and learning',
       category: 'mental',
       frequency: 'daily',
       streak: 5,
@@ -89,58 +89,58 @@ export default function Habits() {
           className="mb-8 flex items-center justify-between"
         >
           <div>
-            <h1 className="text-4xl font-bold text-foreground mb-2">Привычки</h1>
+            <h1 className="text-4xl font-bold text-foreground mb-2">Habits</h1>
             <p className="text-foreground/60">
-              Стройте здоровые привычки день за днем
+              Build healthy habits day by day
             </p>
           </div>
           <Dialog>
             <DialogTrigger asChild>
               <Button className="btn-premium">
                 <Plus className="w-4 h-4 mr-2" />
-                Новая привычка
+                New Habit
               </Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Создать новую привычку</DialogTitle>
+                <DialogTitle>Create New Habit</DialogTitle>
               </DialogHeader>
               <div className="space-y-4">
                 <div>
-                  <Label>Название</Label>
-                  <Input placeholder="Например: Пить воду" />
+                  <Label>Title</Label>
+                  <Input placeholder="Example: Drink water" />
                 </div>
                 <div>
-                  <Label>Описание</Label>
-                  <Input placeholder="Описание привычки" />
+                  <Label>Description</Label>
+                  <Input placeholder="Habit description" />
                 </div>
                 <div>
-                  <Label>Категория</Label>
+                  <Label>Category</Label>
                   <Select>
                     <SelectTrigger>
-                      <SelectValue placeholder="Выберите категорию" />
+                      <SelectValue placeholder="Select category" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="health">Здоровье</SelectItem>
-                      <SelectItem value="fitness">Фитнес</SelectItem>
-                      <SelectItem value="mental">Ментальное</SelectItem>
-                      <SelectItem value="social">Социальное</SelectItem>
+                      <SelectItem value="health">Health</SelectItem>
+                      <SelectItem value="fitness">Fitness</SelectItem>
+                      <SelectItem value="mental">Mental</SelectItem>
+                      <SelectItem value="social">Social</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 <div>
-                  <Label>Частота</Label>
+                  <Label>Frequency</Label>
                   <Select>
                     <SelectTrigger>
-                      <SelectValue placeholder="Ежедневно" />
+                      <SelectValue placeholder="Daily" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="daily">Ежедневно</SelectItem>
-                      <SelectItem value="weekly">Еженедельно</SelectItem>
+                      <SelectItem value="daily">Daily</SelectItem>
+                      <SelectItem value="weekly">Weekly</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
-                <Button className="w-full btn-premium">Создать</Button>
+                <Button className="w-full btn-premium">Create</Button>
               </div>
             </DialogContent>
           </Dialog>
@@ -155,10 +155,10 @@ export default function Habits() {
           >
             <div className="flex items-center gap-3 mb-2">
               <Flame className="w-6 h-6 text-primary" />
-              <h3 className="text-lg font-semibold text-foreground">Активные стрики</h3>
+              <h3 className="text-lg font-semibold text-foreground">Active Streaks</h3>
             </div>
             <p className="text-3xl font-bold text-foreground">{totalStreaks}</p>
-            <p className="text-sm text-foreground/60 mt-1">Всего дней подряд</p>
+            <p className="text-sm text-foreground/60 mt-1">Total days in a row</p>
           </motion.div>
 
           <motion.div
@@ -169,12 +169,12 @@ export default function Habits() {
           >
             <div className="flex items-center gap-3 mb-2">
               <Calendar className="w-6 h-6 text-primary" />
-              <h3 className="text-lg font-semibold text-foreground">Сегодня</h3>
+              <h3 className="text-lg font-semibold text-foreground">Today</h3>
             </div>
             <p className="text-3xl font-bold text-foreground">
               {completedToday} / {habits.length}
             </p>
-            <p className="text-sm text-foreground/60 mt-1">Привычек выполнено</p>
+            <p className="text-sm text-foreground/60 mt-1">Habits completed</p>
           </motion.div>
 
           <motion.div
@@ -185,12 +185,12 @@ export default function Habits() {
           >
             <div className="flex items-center gap-3 mb-2">
               <TrendingUp className="w-6 h-6 text-primary" />
-              <h3 className="text-lg font-semibold text-foreground">Прогресс</h3>
+              <h3 className="text-lg font-semibold text-foreground">Progress</h3>
             </div>
             <p className="text-3xl font-bold text-foreground">
               {Math.round((completedToday / habits.length) * 100)}%
             </p>
-            <p className="text-sm text-foreground/60 mt-1">Выполнение сегодня</p>
+            <p className="text-sm text-foreground/60 mt-1">Completion today</p>
           </motion.div>
         </div>
 
@@ -220,11 +220,11 @@ export default function Habits() {
                       <div className="flex items-center gap-2">
                         <Flame className="w-4 h-4 text-primary" />
                         <span className="text-sm font-semibold text-foreground">
-                          {habit.streak} дней
+                          {habit.streak} days
                         </span>
                       </div>
                       <span className="text-sm text-foreground/60">
-                        Лучший: {habit.bestStreak} дней
+                        Best: {habit.bestStreak} days
                       </span>
                     </div>
                   </div>

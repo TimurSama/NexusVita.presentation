@@ -11,18 +11,18 @@ export default function Shop() {
   const [activeCategory, setActiveCategory] = useState('all');
 
   const categories = [
-    { id: 'all', label: 'Все', icon: ShoppingBag },
-    { id: 'products', label: 'Продукты', icon: Apple },
-    { id: 'equipment', label: 'Инвентарь', icon: Package },
-    { id: 'accessories', label: 'Аксессуары', icon: ShoppingBag },
-    { id: 'clothing', label: 'Одежда', icon: Shirt },
-    { id: 'supplements', label: 'БАДы', icon: Pill },
+    { id: 'all', label: 'All', icon: ShoppingBag },
+    { id: 'products', label: 'Products', icon: Apple },
+    { id: 'equipment', label: 'Equipment', icon: Package },
+    { id: 'accessories', label: 'Accessories', icon: ShoppingBag },
+    { id: 'clothing', label: 'Clothing', icon: Shirt },
+    { id: 'supplements', label: 'Supplements', icon: Pill },
   ];
 
   const products = [
     {
       id: '1',
-      name: 'Органические протеиновые батончики',
+      name: 'Organic Protein Bars',
       category: 'products',
       price: 24.99,
       originalPrice: 29.99,
@@ -30,11 +30,11 @@ export default function Shop() {
       reviews: 156,
       image: '',
       partner: false,
-      badge: 'Хит продаж',
+      badge: 'Bestseller',
     },
     {
       id: '2',
-      name: 'Гантели регулируемые 2x20кг',
+      name: 'Adjustable Dumbbells 2x20kg',
       category: 'equipment',
       price: 149.99,
       originalPrice: null,
@@ -47,7 +47,7 @@ export default function Shop() {
     },
     {
       id: '3',
-      name: 'Фитнес-браслет EthosLife Pro',
+      name: 'EthosLife Pro Fitness Bracelet',
       category: 'accessories',
       price: 199.99,
       originalPrice: 249.99,
@@ -55,11 +55,11 @@ export default function Shop() {
       reviews: 234,
       image: '',
       partner: false,
-      badge: 'Новинка',
+      badge: 'New',
     },
     {
       id: '4',
-      name: 'Спортивная футболка Premium',
+      name: 'Premium Sports T-Shirt',
       category: 'clothing',
       price: 49.99,
       originalPrice: 69.99,
@@ -71,7 +71,7 @@ export default function Shop() {
     },
     {
       id: '5',
-      name: 'Витамин D3 + K2 комплекс',
+      name: 'Vitamin D3 + K2 Complex',
       category: 'supplements',
       price: 34.99,
       originalPrice: null,
@@ -80,11 +80,11 @@ export default function Shop() {
       image: '',
       partner: true,
       partnerName: 'HealthSupplements',
-      badge: 'Рекомендовано',
+      badge: 'Recommended',
     },
     {
       id: '6',
-      name: 'Йога-мат премиум класса',
+      name: 'Premium Yoga Mat',
       category: 'equipment',
       price: 79.99,
       originalPrice: 99.99,
@@ -108,9 +108,9 @@ export default function Shop() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-6"
         >
-          <h1 className="text-4xl font-bold text-foreground mb-2 engraved-text">Магазин</h1>
+          <h1 className="text-4xl font-bold text-foreground mb-2 engraved-text">Shop</h1>
           <p className="text-foreground/60">
-            Продукты, инвентарь, аксессуары и БАДы для здорового образа жизни
+            Products, equipment, accessories, and supplements for a healthy lifestyle
           </p>
         </motion.div>
 
@@ -124,7 +124,7 @@ export default function Shop() {
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground/40" />
             <Input
-              placeholder="Поиск товаров..."
+              placeholder="Search products..."
               className="pl-10 engraved-input"
             />
           </div>
@@ -170,7 +170,7 @@ export default function Shop() {
                   )}
                   {product.partner && (
                     <Badge variant="outline" className="absolute top-2 left-2 engraved-badge">
-                      Партнер: {product.partnerName}
+                      Partner: {product.partnerName}
                     </Badge>
                   )}
                   <Button
@@ -200,7 +200,7 @@ export default function Shop() {
                   </div>
                   <Button className="w-full engraved-button">
                     <ShoppingCart className="w-4 h-4 mr-2" />
-                    В корзину
+                    Add to Cart
                   </Button>
                 </CardContent>
               </Card>

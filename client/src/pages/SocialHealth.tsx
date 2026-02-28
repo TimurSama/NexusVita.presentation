@@ -11,9 +11,9 @@ export default function SocialHealth() {
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-sm border-b border-border">
         <div className="container py-4 flex items-center gap-4">
           <button onClick={() => setLocation('/')} className="flex items-center gap-2 text-foreground/70 hover:text-foreground">
-            <ChevronLeft className="w-5 h-5" /> Назад
+            <ChevronLeft className="w-5 h-5" /> Back
           </button>
-          <h1 className="text-2xl font-bold text-foreground">Социальное здоровье</h1>
+          <h1 className="text-2xl font-bold text-foreground">Social Health</h1>
         </div>
       </header>
 
@@ -28,10 +28,10 @@ export default function SocialHealth() {
                   selectedTab === tab ? 'text-primary border-b-2 border-primary' : 'text-foreground/60 hover:text-foreground'
                 }`}
               >
-                {tab === 'overview' && 'Обзор'}
-                {tab === 'community' && 'Сообщество'}
-                {tab === 'challenges' && 'Челленджи'}
-                {tab === 'research' && 'Исследования'}
+                {tab === 'overview' && 'Overview'}
+                {tab === 'community' && 'Community'}
+                {tab === 'challenges' && 'Challenges'}
+                {tab === 'research' && 'Research'}
               </button>
             ))}
           </div>
@@ -39,17 +39,17 @@ export default function SocialHealth() {
           {selectedTab === 'overview' && (
             <div className="space-y-8">
               <div className="sketch-panel p-8 bg-gradient-to-br from-primary/5 to-primary/2">
-                <h2 className="text-2xl font-bold text-foreground mb-4">Социальное здоровье</h2>
+                <h2 className="text-2xl font-bold text-foreground mb-4">Social Health</h2>
                 <p className="text-foreground/70 mb-6">
-                  Социальное здоровье — это качество взаимоотношений, уровень поддержки, участие в сообществе и чувство принадлежности. Это критический фактор психического и физического благополучия.
+                  Social health is the quality of relationships, level of support, community involvement, and sense of belonging. It is a critical factor in mental and physical well-being.
                 </p>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {[
-                    { title: 'Социальные связи', icon: '👥', desc: 'Качество отношений' },
-                    { title: 'Поддержка', icon: '🤝', desc: 'Уровень социальной поддержки' },
-                    { title: 'Участие', icon: '🎯', desc: 'Активность в сообществе' },
-                    { title: 'Принадлежность', icon: '❤️', desc: 'Чувство принадлежности' },
+                    { title: 'Social Connections', icon: '👥', desc: 'Quality of relationships' },
+                    { title: 'Support', icon: '🤝', desc: 'Level of social support' },
+                    { title: 'Involvement', icon: '🎯', desc: 'Activity in community' },
+                    { title: 'Belonging', icon: '❤️', desc: 'Sense of belonging' },
                   ].map((item, idx) => (
                     <div key={idx} className="sketch-panel p-4">
                       <div className="text-3xl mb-2">{item.icon}</div>
@@ -64,12 +64,12 @@ export default function SocialHealth() {
 
           {selectedTab === 'community' && (
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-foreground mb-8">Сообщество EthosLife</h2>
+              <h2 className="text-2xl font-bold text-foreground mb-8">EthosLife Community</h2>
               {[
-                { title: 'Активные участники', count: '50,000+' },
-                { title: 'Группы по интересам', count: '500+' },
-                { title: 'Ежедневные активности', count: '10,000+' },
-                { title: 'Мероприятия в месяц', count: '200+' },
+                { title: 'Active Members', count: '50,000+' },
+                { title: 'Interest Groups', count: '500+' },
+                { title: 'Daily Activities', count: '10,000+' },
+                { title: 'Monthly Events', count: '200+' },
               ].map((stat, idx) => (
                 <div key={idx} className="sketch-panel p-6 hover:shadow-lg transition-shadow">
                   <h3 className="font-bold text-foreground mb-2">{stat.title}</h3>
@@ -81,16 +81,16 @@ export default function SocialHealth() {
 
           {selectedTab === 'challenges' && (
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-foreground mb-8">Активные челленджи</h2>
+              <h2 className="text-2xl font-bold text-foreground mb-8">Active Challenges</h2>
               {[
-                { title: '30-дневный челленж здоровья', participants: '5,000+' },
-                { title: 'Челленж физической активности', participants: '3,200+' },
-                { title: 'Челленж медитации', participants: '2,100+' },
-                { title: 'Челленж социального взаимодействия', participants: '1,800+' },
+                { title: '30-Day Health Challenge', participants: '5,000+' },
+                { title: 'Physical Activity Challenge', participants: '3,200+' },
+                { title: 'Meditation Challenge', participants: '2,100+' },
+                { title: 'Social Interaction Challenge', participants: '1,800+' },
               ].map((challenge, idx) => (
                 <button key={idx} className="sketch-panel p-6 w-full text-left hover:shadow-lg hover:ring-2 hover:ring-primary transition-all">
                   <h3 className="font-bold text-foreground mb-2">{challenge.title}</h3>
-                  <p className="text-sm text-primary font-semibold">{challenge.participants} участников</p>
+                  <p className="text-sm text-primary font-semibold">{challenge.participants} participants</p>
                 </button>
               ))}
             </div>
@@ -98,11 +98,11 @@ export default function SocialHealth() {
 
           {selectedTab === 'research' && (
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-foreground mb-8">Последние исследования</h2>
+              <h2 className="text-2xl font-bold text-foreground mb-8">Latest Research</h2>
               {[
-                { title: 'Социальные связи и долголетие', date: '2026-02-10' },
-                { title: 'Одиночество и здоровье', date: '2026-02-08' },
-                { title: 'Сообщество и психическое благополучие', date: '2026-02-05' },
+                { title: 'Social Connections and Longevity', date: '2026-02-10' },
+                { title: 'Loneliness and Health', date: '2026-02-08' },
+                { title: 'Community and Mental Well-being', date: '2026-02-05' },
               ].map((research, idx) => (
                 <div key={idx} className="sketch-panel p-6 hover:shadow-lg transition-shadow cursor-pointer">
                   <h3 className="font-bold text-foreground mb-2">{research.title}</h3>

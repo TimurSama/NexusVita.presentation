@@ -39,18 +39,18 @@ export default function News() {
             name: 'EthosLife Team',
             avatar: '/logo.png',
           },
-          content: `🚀 Инвестиционная возможность: Присоединяйтесь к экосистеме здоровья будущего!
+          content: `🚀 Investment Opportunity: Join the future health ecosystem!
 
-Мы открываем раунд инвестиций для развития платформы EthosLife. Ваши инвестиции помогут нам:
-• Запустить полноценную альфа-версию
-• Развить AI-ассистента для здоровья
-• Открыть первые физические центры здоровья
-• Создать токеномику и DAO
+We are opening an investment round for the development of the EthosLife platform. Your investments will help us:
+• Launch a full-featured alpha version
+• Develop an AI health assistant
+• Open the first physical health centers
+• Create tokenomics and DAO
 
-Минимальная инвестиция: $1,000
-Ожидаемая доходность: 300% за 3 года
+Minimum investment: $1,000
+Expected return: 300% over 3 years
 
-Свяжитесь с нами: invest@ethoslife.io`,
+Contact us: invest@ethoslife.io`,
           likes: 128,
           comments: 45,
           shares: 67,
@@ -65,18 +65,18 @@ export default function News() {
             name: 'EthosLife Team',
             avatar: '/logo.png',
           },
-          content: `🎉 Скоро: Альфа-релиз EthosLife!
+          content: `🎉 Coming Soon: EthosLife Alpha Release!
 
-Что будет в первой версии:
-✅ 7 направлений здоровья с трекерами
-✅ AI-ассистент для персональных рекомендаций
-✅ Социальная сеть здоровья
-✅ Интеграция с Telegram
-✅ Токен ELT и система наград
-✅ База специалистов и онлайн-консультации
+What will be in the first version:
+✅ 7 health directions with trackers
+✅ AI assistant for personal recommendations
+✅ Health social network
+✅ Telegram integration
+✅ ELT token and reward system
+✅ Specialist database and online consultations
 
-Дата релиза: Март 2026
-Присоединяйтесь к списку ожидания!`,
+Release date: March 2026
+Join the waitlist!`,
           likes: 256,
           comments: 89,
           shares: 134,
@@ -88,20 +88,20 @@ export default function News() {
           id: 3,
           author: {
             id: 0,
-            name: 'Научный отдел',
+            name: 'Science Department',
             avatar: '/logo.png',
           },
-          content: `📊 Исследование: 10,000 шагов в день снижают риск смертности на 50%
+          content: `📊 Research: 10,000 steps per day reduces mortality risk by 50%
 
-Новое исследование Journal of American Medical Association (2025):
-• 78,000 участников, 7 лет наблюдения
-• 10,000+ шагов = снижение риска сердечных заболеваний на 52%
-• Даже 4,000 шагов дают значимый эффект
-• Скорость ходьбы важнее количества
+New research from Journal of American Medical Association (2025):
+• 78,000 participants, 7 years of observation
+• 10,000+ steps = 52% reduction in heart disease risk
+• Even 4,000 steps provide significant effect
+• Walking speed matters more than quantity
 
-Вывод: Начните с доступного количества шагов и постепенно увеличивайте темп.
+Conclusion: Start with an achievable number of steps and gradually increase the pace.
 
-#Движение #Здоровье #Исследования`,
+#Movement #Health #Research`,
           likes: 89,
           comments: 23,
           shares: 45,
@@ -113,20 +113,20 @@ export default function News() {
           id: 4,
           author: {
             id: 0,
-            name: 'Научный отдел',
+            name: 'Science Department',
             avatar: '/logo.png',
           },
-          content: `😴 Сон и мозг: 7-8 часов оптимально для когнитивных функций
+          content: `😴 Sleep and Brain: 7-8 hours is optimal for cognitive function
 
-Исследование Nature Aging (2025):
-• Люди с 7-8 часами сна показывают лучшие результаты в тестах на память
-• Недосып (<6ч) ускоряет старение мозга на 2-3 года
-• Пересып (>9ч) связан с когнитивным снижением
-• Регулярность важнее длительности
+Nature Aging research (2025):
+• People with 7-8 hours of sleep show better memory test results
+• Sleep deprivation (<6h) accelerates brain aging by 2-3 years
+• Oversleeping (>9h) is associated with cognitive decline
+• Consistency matters more than duration
 
-Совет: Ложитесь и вставайте в одно время даже на выходных.
+Tip: Go to bed and wake up at the same time even on weekends.
 
-#Сон #Мозг #Исследования`,
+#Sleep #Brain #Research`,
           likes: 156,
           comments: 34,
           shares: 78,
@@ -138,23 +138,23 @@ export default function News() {
           id: 5,
           author: {
             id: 0,
-            name: 'Научный отдел',
+            name: 'Science Department',
             avatar: '/logo.png',
           },
-          content: `🥗 Средиземноморская диета снижает риск депрессии на 33%
+          content: `🥗 Mediterranean Diet Reduces Depression Risk by 33%
 
-Мета-анализ 45 исследований (2025):
-• 12,000 участников из 8 стран
-• Рыба, орехи, оливковое масло, овощи — ключевые продукты
-• Эффект заметен уже через 3 месяца
-• Связь через микробиом кишечника
+Meta-analysis of 45 studies (2025):
+• 12,000 participants from 8 countries
+• Fish, nuts, olive oil, vegetables — key products
+• Effect noticeable after just 3 months
+• Connection through gut microbiome
 
-Простые шаги:
-1. Замените масло на оливковое
-2. Добавьте горсть орехов в день
-3. Ешьте рыбу 2 раза в неделю
+Simple steps:
+1. Replace butter with olive oil
+2. Add a handful of nuts per day
+3. Eat fish 2 times a week
 
-#Питание #Психология #Исследования`,
+#Nutrition #Psychology #Research`,
           likes: 112,
           comments: 28,
           shares: 56,
@@ -166,23 +166,23 @@ export default function News() {
           id: 6,
           author: {
             id: 0,
-            name: 'Научный отдел',
+            name: 'Science Department',
             avatar: '/logo.png',
           },
-          content: `🧘 Медитация изменяет структуру мозга за 8 недель
+          content: `🧘 Meditation Changes Brain Structure in 8 Weeks
 
-Исследование Harvard Medical School (2025):
-• MRI до и после 8-недельного курса медитации
-• Увеличение серого вещества в гиппокампе (память)
-• Снижение активности миндалевидного тела (тревога)
-• Эффект сохраняется 6+ месяцев
+Harvard Medical School research (2025):
+• MRI before and after 8-week meditation course
+• Increased gray matter in hippocampus (memory)
+• Reduced amygdala activity (anxiety)
+• Effect lasts 6+ months
 
-Достаточно 10-15 минут в день:
-• Осознанное дыхание
+Just 10-15 minutes per day:
+• Mindful breathing
 • Body scan
 • Loving-kindness meditation
 
-#Психология #Медитация #Мозг`,
+#Psychology #Meditation #Brain`,
           likes: 203,
           comments: 56,
           shares: 112,
@@ -194,22 +194,22 @@ export default function News() {
           id: 7,
           author: {
             id: 0,
-            name: 'Научный отдел',
+            name: 'Science Department',
             avatar: '/logo.png',
           },
-          content: `🩺 Раннее выявление: 5 анализов, которые нужно сдавать ежегодно
+          content: `🩺 Early Detection: 5 Tests to Take Annually
 
-Рекомендации ВОЗ и американских кардиологов (2025):
+WHO and American Cardiologists recommendations (2025):
 
-1. Общий анализ крови — анемия, воспаления
-2. Липидный профиль — холестерин (начиная с 20 лет)
-3. Гликированный гемоглобин — преддиабет
-4. Витамин D — 80% населения дефицит
-5. ТТГ — щитовидная железа
+1. Complete blood count — anemia, inflammation
+2. Lipid profile — cholesterol (starting at age 20)
+3. Glycated hemoglobin — prediabetes
+4. Vitamin D — 80% of population is deficient
+5. TSH — thyroid gland
 
-💡 Совет: Запланируйте "день здоровья" — сдайте все анализы за один визит.
+💡 Tip: Schedule a "health day" — get all tests in one visit.
 
-#Медицина #Профилактика #Здоровье`,
+#Medicine #Prevention #Health`,
           likes: 178,
           comments: 41,
           shares: 89,
@@ -221,23 +221,23 @@ export default function News() {
           id: 8,
           author: {
             id: 0,
-            name: 'Научный отдел',
+            name: 'Science Department',
             avatar: '/logo.png',
           },
-          content: `👥 Одиночество опаснее курения: риск смертности +45%
+          content: `👥 Loneliness is More Dangerous Than Smoking: +45% Mortality Risk
 
-Крупнейшее исследование PNAS (2025):
-• 580,000 участников, 15 лет
-• Социальная изоляция = риск как 15 сигарет в день
-• Качество связей важнее количества
-• Даже онлайн-общение даёт защитный эффект
+Largest PNAS research study (2025):
+• 580,000 participants, 15 years
+• Social isolation = risk equivalent to 15 cigarettes per day
+• Quality of connections matters more than quantity
+• Even online communication provides protective effect
 
-Выводы:
-• Поддерживайте 3-5 близких отношений
-• Общайтесь регулярно (раз в 2 недели минимум)
-• Присоединяйтесь к сообществам по интересам
+Conclusions:
+• Maintain 3-5 close relationships
+• Communicate regularly (at least once every 2 weeks)
+• Join communities of interest
 
-#СоциальноеЗдоровье #Общение #Исследования`,
+#SocialHealth #Communication #Research`,
           likes: 245,
           comments: 67,
           shares: 156,
@@ -258,7 +258,7 @@ export default function News() {
       <div className="min-h-screen bg-background flex items-center justify-center pb-20">
         <div className="text-center">
           <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-foreground/60">Загрузка новостей...</p>
+          <p className="text-foreground/60">Loading news...</p>
         </div>
       </div>
     );
@@ -273,9 +273,9 @@ export default function News() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-6"
         >
-          <h1 className="text-3xl font-bold text-foreground mb-2">Новости</h1>
+          <h1 className="text-3xl font-bold text-foreground mb-2">News</h1>
           <p className="text-foreground/60">
-            Лента активности и обновлений
+            Activity feed and updates
           </p>
         </motion.div>
 
@@ -284,17 +284,17 @@ export default function News() {
             <CardContent className="py-12 text-center">
               <BookOpen className="w-16 h-16 text-foreground/20 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-foreground mb-2">
-                Лента пуста
+                Feed is empty
               </h3>
               <p className="text-foreground/60 mb-4">
-                Здесь будут появляться новости от друзей, достижения и полезные статьи
+                News from friends, achievements, and useful articles will appear here
               </p>
               <Button
                 variant="outline"
                 className="engraved-button-outline"
                 onClick={() => window.location.href = '/social/friends'}
               >
-                Найти друзей
+                Find Friends
               </Button>
             </CardContent>
           </Card>
@@ -317,13 +317,13 @@ export default function News() {
                     <div className="flex-1">
                       <CardTitle className="text-base">{post.author.name}</CardTitle>
                       <CardDescription className="text-xs">
-                        {new Date(post.createdAt).toLocaleDateString('ru-RU')}
+                        {new Date(post.createdAt).toLocaleDateString('en-US')}
                       </CardDescription>
                     </div>
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-foreground mb-4">{post.content}</p>
+                  <p className="text-foreground mb-4 whitespace-pre-line">{post.content}</p>
                   {post.image && (
                     <img
                       src={post.image}

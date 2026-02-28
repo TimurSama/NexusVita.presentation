@@ -12,12 +12,12 @@ export default function EconomicModel() {
 
   const revenueStreams = [
     {
-      name: 'Подписки (SaaS)',
+      name: 'Subscriptions (SaaS)',
       value: 11,
       amount: 0.7,
       unit: 'M$',
       color: 'from-blue-500 to-blue-600',
-      description: 'Базовый ($11/мес), Премиум ($33/мес), Корпоративный ($1,100/мес)',
+      description: 'Basic ($11/month), Premium ($33/month), Corporate ($1,100/month)',
       icon: '👤',
       details: {
         basic: { price: 11, users: 2500, mrr: 0.027 },
@@ -26,12 +26,12 @@ export default function EconomicModel() {
       }
     },
     {
-      name: 'Комиссии с партнеров',
+      name: 'Partner Commissions',
       value: 66,
       amount: 4.3,
       unit: 'M$',
       color: 'from-green-500 to-green-600',
-      description: 'Медицинские клиники (15%), Фитнес-центры (10%), Питание (5%)',
+      description: 'Medical clinics (15%), Fitness centers (10%), Nutrition (5%)',
       icon: '🏢',
       details: {
         clinics: { commission: 15, count: 50, revenue: 1.47 },
@@ -40,12 +40,12 @@ export default function EconomicModel() {
       }
     },
     {
-      name: 'Продажа данных',
+      name: 'Data Sales',
       value: 7,
       amount: 0.43,
       unit: 'M$',
       color: 'from-purple-500 to-purple-600',
-      description: 'Анонимизированные данные для исследований и фармацевтики',
+      description: 'Anonymized data for research and pharmaceutical companies',
       icon: '📊',
       details: {
         research: { price: 0.054, count: 4, revenue: 0.22 },
@@ -53,12 +53,12 @@ export default function EconomicModel() {
       }
     },
     {
-      name: 'Реклама и спонсорство',
+      name: 'Advertising and Sponsorship',
       value: 17,
       amount: 1.09,
       unit: 'M$',
       color: 'from-orange-500 to-orange-600',
-      description: 'Реклама в приложении (CPM $5.4) и спонсорство контента',
+      description: 'In-app advertising (CPM $5.4) and content sponsorship',
       icon: '📢',
       details: {
         ads: { cpm: 5.4, impressions: 10, revenue: 0.65 },
@@ -148,7 +148,7 @@ export default function EconomicModel() {
     { label: 'CAC (Cost of Acquisition)', value: 15, unit: '$' },
     { label: 'LTV (Lifetime Value)', value: 450, unit: '$' },
     { label: 'LTV/CAC Ratio', value: 30, unit: 'x' },
-    { label: 'Payback Period', value: 2.5, unit: 'мес' },
+    { label: 'Payback Period', value: 2.5, unit: 'mo' },
   ];
 
   const margins = [
@@ -167,9 +167,9 @@ export default function EconomicModel() {
             className="flex items-center gap-2 text-foreground/70 hover:text-foreground transition-colors"
           >
             <ChevronLeft className="w-5 h-5" />
-            Назад
+            Back
           </button>
-          <h1 className="text-2xl font-bold text-foreground">💰 Экономическая модель</h1>
+          <h1 className="text-2xl font-bold text-foreground">💰 Economic Model</h1>
         </div>
       </header>
 
@@ -183,16 +183,16 @@ export default function EconomicModel() {
           >
             <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-green-500/20 via-green-600/10 to-green-700/5 p-12 border border-border/50">
               <div className="relative z-10">
-                <h2 className="text-4xl font-bold text-foreground mb-4">Устойчивая модель доходов</h2>
+                <h2 className="text-4xl font-bold text-foreground mb-4">Sustainable Revenue Model</h2>
                 <p className="text-foreground/70 text-lg mb-8">
-                  Диверсифицированные источники дохода: $6.6M в первый год, прогноз $980M к 2030 году
+                  Diversified revenue streams: $6.6M in year 1, projected $980M by 2030
                 </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                  <StatCounter value={6.6} label="Доход год 1" suffix="M$" delay={0.1} />
-                  <StatCounter value={5.27} label="Прибыль год 1" suffix="M$" delay={0.2} />
-                  <StatCounter value={79.7} label="Маржинальность" suffix="%" delay={0.3} />
-                  <StatCounter value={4} label="Источников дохода" delay={0.4} />
+                  <StatCounter value={6.6} label="Year 1 Revenue" suffix="M$" delay={0.1} />
+                  <StatCounter value={5.27} label="Year 1 Profit" suffix="M$" delay={0.2} />
+                  <StatCounter value={79.7} label="Margin" suffix="%" delay={0.3} />
+                  <StatCounter value={4} label="Revenue Streams" delay={0.4} />
                 </div>
               </div>
             </div>
@@ -205,7 +205,7 @@ export default function EconomicModel() {
             viewport={{ once: true }}
             className="mb-12"
           >
-            <h2 className="text-3xl font-bold text-foreground mb-8">4 Источника дохода (Год 1)</h2>
+            <h2 className="text-3xl font-bold text-foreground mb-8">4 Revenue Streams (Year 1)</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
               {revenueStreams.map((stream, idx) => (
                 <motion.div
@@ -229,13 +229,13 @@ export default function EconomicModel() {
                     {stream.details && (
                       <div className="mt-3 pt-3 border-t border-white/20 text-xs space-y-1">
                         {stream.details.clinics && (
-                          <div>Клиники: {stream.details.clinics.count} × {stream.details.clinics.commission}% = ${stream.details.clinics.revenue}M</div>
+                          <div>Clinics: {stream.details.clinics.count} × {stream.details.clinics.commission}% = ${stream.details.clinics.revenue}M</div>
                         )}
                         {stream.details.fitness && (
-                          <div>Фитнес: {stream.details.fitness.count} × {stream.details.fitness.commission}% = ${stream.details.fitness.revenue}M</div>
+                          <div>Fitness: {stream.details.fitness.count} × {stream.details.fitness.commission}% = ${stream.details.fitness.revenue}M</div>
                         )}
                         {stream.details.basic && (
-                          <div>Базовый: {stream.details.basic.users} × ${stream.details.basic.price} = ${stream.details.basic.mrr}M/мес</div>
+                          <div>Basic: {stream.details.basic.users} × ${stream.details.basic.price} = ${stream.details.basic.mrr}M/mo</div>
                         )}
                       </div>
                     )}
@@ -246,7 +246,7 @@ export default function EconomicModel() {
 
             {/* Revenue Distribution Chart */}
             <PremiumCard>
-              <h3 className="text-xl font-bold text-foreground mb-6">Распределение доходов</h3>
+              <h3 className="text-xl font-bold text-foreground mb-6">Revenue Distribution</h3>
               <DataVisualization data={revenueStreams.map(s => ({
                 label: s.name,
                 value: s.value,
@@ -262,7 +262,7 @@ export default function EconomicModel() {
             viewport={{ once: true }}
             className="mb-12"
           >
-            <h2 className="text-3xl font-bold text-foreground mb-8">Финансовые прогнозы</h2>
+            <h2 className="text-3xl font-bold text-foreground mb-8">Financial Projections</h2>
             
             {/* Year Selector */}
             <div className="flex gap-2 mb-8 overflow-x-auto pb-2">
@@ -291,33 +291,33 @@ export default function EconomicModel() {
               >
                 <PremiumCard gradient="from-blue-500/10 to-blue-600/5">
                   <div className="text-center">
-                    <p className="text-sm text-foreground/60 mb-2">Доход</p>
+                    <p className="text-sm text-foreground/60 mb-2">Revenue</p>
                     <p className="text-3xl font-bold text-primary mb-1">${currentProjection.revenue}M</p>
-                    <p className="text-xs text-foreground/60">В год {selectedYear}</p>
+                    <p className="text-xs text-foreground/60">Year {selectedYear}</p>
                   </div>
                 </PremiumCard>
 
                 <PremiumCard gradient="from-green-500/10 to-green-600/5">
                   <div className="text-center">
-                    <p className="text-sm text-foreground/60 mb-2">Пользователи</p>
+                    <p className="text-sm text-foreground/60 mb-2">Users</p>
                     <p className="text-3xl font-bold text-green-500 mb-1">{currentProjection.users}M</p>
-                    <p className="text-xs text-foreground/60">Активных</p>
+                    <p className="text-xs text-foreground/60">Active</p>
                   </div>
                 </PremiumCard>
 
                 <PremiumCard gradient="from-purple-500/10 to-purple-600/5">
                   <div className="text-center">
-                    <p className="text-sm text-foreground/60 mb-2">Прибыль</p>
+                    <p className="text-sm text-foreground/60 mb-2">Profit</p>
                     <p className="text-3xl font-bold text-purple-500 mb-1">${currentProjection.profit}M</p>
-                    <p className="text-xs text-foreground/60">Маржа {currentProjection.margin}%</p>
+                    <p className="text-xs text-foreground/60">{currentProjection.margin}% margin</p>
                   </div>
                 </PremiumCard>
 
                 <PremiumCard gradient="from-orange-500/10 to-orange-600/5">
                   <div className="text-center">
-                    <p className="text-sm text-foreground/60 mb-2">Расходы</p>
+                    <p className="text-sm text-foreground/60 mb-2">Expenses</p>
                     <p className="text-3xl font-bold text-orange-500 mb-1">${currentProjection.expenses}M</p>
-                    <p className="text-xs text-foreground/60">Операционные</p>
+                    <p className="text-xs text-foreground/60">Operational</p>
                   </div>
                 </PremiumCard>
               </motion.div>
@@ -325,10 +325,10 @@ export default function EconomicModel() {
 
             {/* Projection Chart */}
             <PremiumCard>
-              <h3 className="text-xl font-bold text-foreground mb-6">Рост доходов и пользователей</h3>
+              <h3 className="text-xl font-bold text-foreground mb-6">Revenue and User Growth</h3>
               <div className="space-y-6">
                 <div>
-                  <p className="text-sm font-semibold text-foreground mb-3">Доход (M$)</p>
+                  <p className="text-sm font-semibold text-foreground mb-3">Revenue (M$)</p>
                   <DataVisualization data={projections.map(p => ({
                     label: p.year.toString(),
                     value: Math.min(100, (p.revenue / 980) * 100),
@@ -336,7 +336,7 @@ export default function EconomicModel() {
                   }))} />
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-foreground mb-3">Пользователи (M)</p>
+                  <p className="text-sm font-semibold text-foreground mb-3">Users (M)</p>
                   <DataVisualization data={projections.map(p => ({
                     label: p.year.toString(),
                     value: Math.min(100, (p.users / 50) * 100),
@@ -354,7 +354,7 @@ export default function EconomicModel() {
             viewport={{ once: true }}
             className="mb-12"
           >
-            <h2 className="text-3xl font-bold text-foreground mb-8">Юнит-экономика</h2>
+            <h2 className="text-3xl font-bold text-foreground mb-8">Unit Economics</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {unitEconomics.map((item, idx) => (
                 <PremiumCard key={idx} delay={idx * 0.1}>
@@ -383,7 +383,7 @@ export default function EconomicModel() {
             viewport={{ once: true }}
             className="mb-12"
           >
-            <h2 className="text-3xl font-bold text-foreground mb-8">Маржинальность</h2>
+            <h2 className="text-3xl font-bold text-foreground mb-8">Margins</h2>
             <PremiumCard>
               <DataVisualization data={margins.map(m => ({
                 label: m.label,
@@ -400,12 +400,12 @@ export default function EconomicModel() {
             viewport={{ once: true }}
             className="mb-12"
           >
-            <h2 className="text-3xl font-bold text-foreground mb-8">Ключевые метрики</h2>
+            <h2 className="text-3xl font-bold text-foreground mb-8">Key Metrics</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {[
                 { label: 'MRR Growth', value: '15%', icon: '📈' },
                 { label: 'Churn Rate', value: '2.5%', icon: '📉' },
-                { label: 'CAC Payback', value: '2.5 мес', icon: '⏱️' },
+                { label: 'CAC Payback', value: '2.5 mo', icon: '⏱️' },
               ].map((metric, idx) => (
                 <PremiumCard key={idx} delay={idx * 0.1}>
                   <div className="text-center">

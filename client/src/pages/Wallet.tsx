@@ -105,8 +105,8 @@ export default function Wallet() {
   const handleSend = async () => {
     if (!sendAmount || !recipient) {
       toast({
-        title: "Ошибка",
-        description: "Укажите сумму и получателя",
+        title: "Error",
+        description: "Please specify amount and recipient",
         variant: "destructive",
       });
       return;
@@ -131,8 +131,8 @@ export default function Wallet() {
       }
 
       toast({
-        title: "Успешно",
-        description: `Отправлено ${sendAmount} UNITY`,
+        title: "Success",
+        description: `Sent ${sendAmount} UNITY`,
       });
 
       setSendAmount("");
@@ -140,7 +140,7 @@ export default function Wallet() {
       loadWalletData();
     } catch (error: any) {
       toast({
-        title: "Ошибка",
+        title: "Error",
         description: error.message,
         variant: "destructive",
       });
@@ -151,13 +151,13 @@ export default function Wallet() {
     const url = `${window.location.origin}/register?ref=${referralCode}`;
     navigator.clipboard.writeText(url);
     toast({
-      title: "Скопировано",
-      description: "Реферальная ссылка скопирована",
+      title: "Copied",
+      description: "Referral link copied to clipboard",
     });
   };
 
   const getTransactionIcon = (type: string, description: string) => {
-    if (description.includes('referral') || description.includes('реферал')) {
+    if (description.includes('referral') || description.includes('referral')) {
       return <Gift className="w-5 h-5 text-purple-500" />;
     }
     if (type === 'credit') {
@@ -183,8 +183,8 @@ export default function Wallet() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-slate-600 mb-4">Войдите, чтобы просмотреть кошелек</p>
-          <Button onClick={() => setLocation("/login")}>Войти</Button>
+          <p className="text-slate-600 mb-4">Sign in to view your wallet</p>
+          <Button onClick={() => setLocation("/login")}>Sign In</Button>
         </div>
       </div>
     );
@@ -197,7 +197,7 @@ export default function Wallet() {
         <div className="max-w-4xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-white/80 text-sm">Ваш баланс</p>
+              <p className="text-white/80 text-sm">Your Balance</p>
               <h1 className="text-3xl font-bold">{balance.balance.toLocaleString()} UNITY</h1>
               <p className="text-white/80 text-sm">≈ ${(balance.balance * 0.1176).toFixed(2)} USD</p>
             </div>
@@ -223,7 +223,7 @@ export default function Wallet() {
                 </div>
                 <div>
                   <p className="text-lg font-bold text-green-600">+{balance.total_earned.toLocaleString()}</p>
-                  <p className="text-xs text-slate-500">Всего получено</p>
+                  <p className="text-xs text-slate-500">Total Received</p>
                 </div>
               </div>
             </CardContent>
@@ -237,7 +237,7 @@ export default function Wallet() {
                 </div>
                 <div>
                   <p className="text-lg font-bold text-red-600">-{balance.total_spent.toLocaleString()}</p>
-                  <p className="text-xs text-slate-500">Всего потрачено</p>
+                  <p className="text-xs text-slate-500">Total Spent</p>
                 </div>
               </div>
             </CardContent>
@@ -255,16 +255,16 @@ export default function Wallet() {
               <DialogTrigger asChild>
                 <Button variant="outline" className="h-auto py-4 flex flex-col items-center gap-2">
                   <Send className="w-6 h-6" />
-                  <span className="text-sm">Отправить</span>
+                  <span className="text-sm">Send</span>
                 </Button>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle>Отправить UNITY</DialogTitle>
+                  <DialogTitle>Send UNITY</DialogTitle>
                 </DialogHeader>
                 <div className="space-y-4 py-4">
                   <div>
-                    <Label>Получатель (username)</Label>
+                    <Label>Recipient (username)</Label>
                     <Input
                       value={recipient}
                       onChange={(e) => setRecipient(e.target.value)}
@@ -272,7 +272,7 @@ export default function Wallet() {
                     />
                   </div>
                   <div>
-                    <Label>Сумма (UNITY)</Label>
+                    <Label>Amount (UNITY)</Label>
                     <Input
                       type="number"
                       value={sendAmount}
@@ -282,7 +282,7 @@ export default function Wallet() {
                     />
                   </div>
                   <Button onClick={handleSend} className="w-full">
-                    Отправить
+                    Send
                   </Button>
                 </div>
               </DialogContent>
@@ -294,25 +294,25 @@ export default function Wallet() {
               onClick={() => setLocation('/pricing')}
             >
               <RefreshCw className="w-6 h-6" />
-              <span className="text-sm">Купить</span>
+              <span className="text-sm">Buy</span>
             </Button>
 
             <Dialog>
               <DialogTrigger asChild>
                 <Button variant="outline" className="h-auto py-4 flex flex-col items-center gap-2">
                   <QrCode className="w-6 h-6" />
-                  <span className="text-sm">QR-код</span>
+                  <span className="text-sm">QR Code</span>
                 </Button>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle>Ваш QR-код</DialogTitle>
+                  <DialogTitle>Your QR Code</DialogTitle>
                 </DialogHeader>
                 <div className="flex flex-col items-center py-4">
                   <div className="w-48 h-48 bg-slate-100 rounded-lg flex items-center justify-center">
                     <QrCode className="w-32 h-32 text-slate-400" />
                   </div>
-                  <p className="text-sm text-slate-500 mt-4">Отсканируйте для перевода</p>
+                  <p className="text-sm text-slate-500 mt-4">Scan to transfer</p>
                 </div>
               </DialogContent>
             </Dialog>
@@ -331,14 +331,14 @@ export default function Wallet() {
                 <div>
                   <div className="flex items-center gap-2 mb-2">
                     <Gift className="w-5 h-5" />
-                    <span className="font-semibold">Реферальная программа</span>
+                    <span className="font-semibold">Referral Program</span>
                   </div>
                   <p className="text-white/80 text-sm mb-4">
-                    Приглашайте друзей и получайте 20% от их первой покупки
+                    Invite friends and get 20% from their first purchase
                   </p>
                   <div className="flex items-center gap-2">
                     <code className="bg-white/20 px-3 py-1.5 rounded-lg text-sm">
-                      {referralCode || 'Загрузка...'}
+                      {referralCode || 'Loading...'}
                     </code>
                     <Button
                       size="sm"
@@ -352,7 +352,7 @@ export default function Wallet() {
                 </div>
                 <div className="text-right">
                   <p className="text-3xl font-bold">+500</p>
-                  <p className="text-sm text-white/80">UNITY за друга</p>
+                  <p className="text-sm text-white/80">UNITY per friend</p>
                 </div>
               </div>
             </CardContent>
@@ -367,11 +367,11 @@ export default function Wallet() {
         >
           <Tabs defaultValue="all">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold">История транзакций</h2>
+              <h2 className="text-lg font-semibold">Transaction History</h2>
               <TabsList>
-                <TabsTrigger value="all">Все</TabsTrigger>
-                <TabsTrigger value="in">Входящие</TabsTrigger>
-                <TabsTrigger value="out">Исходящие</TabsTrigger>
+                <TabsTrigger value="all">All</TabsTrigger>
+                <TabsTrigger value="in">Incoming</TabsTrigger>
+                <TabsTrigger value="out">Outgoing</TabsTrigger>
               </TabsList>
             </div>
 
@@ -380,9 +380,9 @@ export default function Wallet() {
                 <Card>
                   <CardContent className="p-8 text-center">
                     <RefreshCw className="w-12 h-12 mx-auto mb-4 text-slate-300" />
-                    <p className="text-slate-500">Пока нет транзакций</p>
+                    <p className="text-slate-500">No transactions yet</p>
                     <p className="text-sm text-slate-400 mt-1">
-                      Начните использовать UNITY для оплаты подписок
+                      Start using UNITY to pay for subscriptions
                     </p>
                   </CardContent>
                 </Card>
@@ -398,7 +398,7 @@ export default function Wallet() {
                           <div>
                             <p className="font-medium">{tx.description}</p>
                             <p className="text-xs text-slate-500">
-                              {new Date(tx.created_at).toLocaleDateString('ru-RU', {
+                              {new Date(tx.created_at).toLocaleDateString('en-US', {
                                 day: 'numeric',
                                 month: 'short',
                                 hour: '2-digit',
@@ -439,7 +439,7 @@ export default function Wallet() {
                           <div>
                             <p className="font-medium">{tx.description}</p>
                             <p className="text-xs text-slate-500">
-                              {new Date(tx.created_at).toLocaleDateString('ru-RU')}
+                              {new Date(tx.created_at).toLocaleDateString('en-US')}
                             </p>
                           </div>
                         </div>
@@ -464,7 +464,7 @@ export default function Wallet() {
                           <div>
                             <p className="font-medium">{tx.description}</p>
                             <p className="text-xs text-slate-500">
-                              {new Date(tx.created_at).toLocaleDateString('ru-RU')}
+                              {new Date(tx.created_at).toLocaleDateString('en-US')}
                             </p>
                           </div>
                         </div>
@@ -490,9 +490,9 @@ export default function Wallet() {
                   <WalletIcon className="w-4 h-4 text-cyan-600" />
                 </div>
                 <div>
-                  <p className="font-medium text-sm">О Unity Token</p>
+                  <p className="font-medium text-sm">About Unity Token</p>
                   <p className="text-xs text-slate-500 mt-1">
-                    1 UNITY = $0.1176 USD (1 USD = 8.5 UNITY). Оплачивайте токенами и получайте скидку 15%.
+                    1 UNITY = $0.1176 USD (1 USD = 8.5 UNITY). Pay with tokens and get a 15% discount.
                   </p>
                   <Button 
                     variant="link" 
@@ -500,7 +500,7 @@ export default function Wallet() {
                     className="p-0 h-auto mt-2"
                     onClick={() => setLocation('/tokenomics')}
                   >
-                    Подробнее <ExternalLink className="w-3 h-3 ml-1" />
+                    Learn More <ExternalLink className="w-3 h-3 ml-1" />
                   </Button>
                 </div>
               </div>

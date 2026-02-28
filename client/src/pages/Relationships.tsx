@@ -34,28 +34,28 @@ export default function Relationships() {
             <div className="flex items-center gap-3">
               <SketchIcon icon="relationships" size={32} className="text-primary" />
               <div>
-                <h1 className="text-4xl font-bold text-foreground">Отношения</h1>
-                <p className="text-foreground/60">Социальные связи и здоровые отношения</p>
+                <h1 className="text-4xl font-bold text-foreground">Relationships</h1>
+                <p className="text-foreground/60">Social connections and healthy relationships</p>
               </div>
             </div>
             <Dialog>
               <DialogTrigger asChild>
                 <Button variant="outline" className="gap-2">
                   <Settings className="h-4 w-4" />
-                  Настройки
+                  Settings
                 </Button>
               </DialogTrigger>
               <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
-                  <DialogTitle>Настройки модуля Отношения</DialogTitle>
+                  <DialogTitle>Relationships Module Settings</DialogTitle>
                 </DialogHeader>
                 <SettingsPanel
-                  title="Настройки"
+                  title="Settings"
                   settings={relationshipsSettings}
                   onSave={(settings) => {
                     console.log('Relationships settings saved:', settings);
                   }}
-                  categories={['Общие', 'Уведомления', 'Сообщество', 'Приватность', 'Интеграции']}
+                  categories={['General', 'Notifications', 'Community', 'Privacy', 'Integrations']}
                 />
               </DialogContent>
             </Dialog>
@@ -64,10 +64,10 @@ export default function Relationships() {
 
         <Tabs defaultValue="overview" className="space-y-6">
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="overview">Обзор</TabsTrigger>
+            <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="questionnaire">
               <ClipboardList className="w-4 h-4 mr-2" />
-              Анкета
+              Questionnaire
             </TabsTrigger>
           </TabsList>
 
@@ -77,18 +77,18 @@ export default function Relationships() {
               animate={{ opacity: 1, y: 0 }}
               className="premium-card p-8"
             >
-              <h2 className="text-3xl font-bold text-foreground mb-4">Модуль отношений</h2>
+              <h2 className="text-3xl font-bold text-foreground mb-4">Relationships Module</h2>
               <p className="text-foreground/70 mb-6">
-                Социальные связи, общение и построение здоровых отношений.
+                Social connections, communication, and building healthy relationships.
               </p>
               <div className="space-y-4">
                 <div className="p-4 bg-background/50 rounded-lg">
-                  <h3 className="font-bold text-foreground mb-2">Основные функции</h3>
+                  <h3 className="font-bold text-foreground mb-2">Key Features</h3>
                   <ul className="space-y-2 text-foreground/70">
-                    <li>• Оценка качества отношений</li>
-                    <li>• Рекомендации по улучшению коммуникации</li>
-                    <li>• Поддержка социальных связей</li>
-                    <li>• Интеграция с социальными сетями</li>
+                    <li>• Relationship quality assessment</li>
+                    <li>• Communication improvement recommendations</li>
+                    <li>• Social connection support</li>
+                    <li>• Social media integration</li>
                   </ul>
                 </div>
               </div>

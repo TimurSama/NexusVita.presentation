@@ -51,7 +51,7 @@ export default function Account() {
     notifications_enabled: true,
     email_notifications: false,
     telegram_notifications: true,
-    language: 'ru',
+    language: 'en',
     timezone: 'Europe/Moscow',
   });
 
@@ -100,27 +100,27 @@ export default function Account() {
 
   const handleSavePublicProfile = async () => {
     // TODO: Save to API when endpoint is ready
-    toast.success('Настройки публичного профиля сохранены');
+    toast.success('Public profile settings saved');
     setIsEditing(false);
   };
 
   const handleSaveAccountSettings = async () => {
     // TODO: Save to API when endpoint is ready
-    toast.success('Настройки аккаунта сохранены');
+    toast.success('Account settings saved');
   };
 
   const handleSaveBusinessSettings = async () => {
     if (!businessSettings.name) {
-      toast.error('Укажите название');
+      toast.error('Please specify a name');
       return;
     }
     // TODO: Save to API when endpoint is ready
-    toast.success('Настройки бизнеса сохранены');
+    toast.success('Business settings saved');
   };
 
   const copyPublicUrl = () => {
     navigator.clipboard.writeText(publicProfile.public_url);
-    toast.success('Ссылка скопирована');
+    toast.success('Link copied');
   };
 
   if (loading) {
@@ -128,7 +128,7 @@ export default function Account() {
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-foreground/60">Загрузка...</p>
+          <p className="text-foreground/60">Loading...</p>
         </div>
       </div>
     );
@@ -139,8 +139,8 @@ export default function Account() {
       <div className="min-h-screen bg-background flex items-center justify-center">
         <Card className="engraved-card max-w-md">
           <CardHeader>
-            <CardTitle>Ошибка</CardTitle>
-            <CardDescription>Пользователь не найден</CardDescription>
+            <CardTitle>Error</CardTitle>
+            <CardDescription>User not found</CardDescription>
           </CardHeader>
         </Card>
       </div>
@@ -158,9 +158,9 @@ export default function Account() {
         >
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-4xl font-bold text-foreground mb-2">Аккаунт</h1>
+              <h1 className="text-4xl font-bold text-foreground mb-2">Account</h1>
               <p className="text-foreground/60">
-                Управление профилем, настройками и токенами
+                Manage profile, settings, and tokens
               </p>
             </div>
             <Button
@@ -168,7 +168,7 @@ export default function Account() {
               onClick={() => setLocation('/profile')}
               className="engraved-button-outline"
             >
-              Профиль здоровья
+              Health Profile
             </Button>
           </div>
         </motion.div>
@@ -177,19 +177,19 @@ export default function Account() {
           <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="wallet">
               <Wallet className="w-4 h-4 mr-2" />
-              Кошелек
+              Wallet
             </TabsTrigger>
             <TabsTrigger value="public">
               <Globe className="w-4 h-4 mr-2" />
-              Публичная страница
+              Public Page
             </TabsTrigger>
             <TabsTrigger value="settings">
               <Settings className="w-4 h-4 mr-2" />
-              Настройки
+              Settings
             </TabsTrigger>
             <TabsTrigger value="business">
               <Building2 className="w-4 h-4 mr-2" />
-              Бизнес
+              Business
             </TabsTrigger>
           </TabsList>
 
@@ -200,7 +200,7 @@ export default function Account() {
               <CardHeader>
                 <CardTitle className="engraved-text flex items-center gap-2">
                   <Wallet className="w-6 h-6 text-primary" />
-                  Баланс токенов
+                  Token Balance
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -212,11 +212,11 @@ export default function Account() {
                   <div className="flex gap-2">
                     <Button variant="outline" size="sm" className="engraved-button-outline">
                       <QrCode className="w-4 h-4 mr-2" />
-                      QR код
+                      QR Code
                     </Button>
                     <Button variant="outline" size="sm" className="engraved-button-outline">
                       <Send className="w-4 h-4 mr-2" />
-                      Отправить
+                      Send
                     </Button>
                   </div>
                 </div>
@@ -229,13 +229,13 @@ export default function Account() {
                 <CardContent className="pt-6">
                   <div className="flex items-center gap-3 mb-2">
                     <Gift className="w-5 h-5 text-primary" />
-                    <h3 className="font-semibold">Заработать</h3>
+                    <h3 className="font-semibold">Earn</h3>
                   </div>
                   <p className="text-sm text-foreground/60 mb-4">
-                    Выполняйте задания и получайте токены
+                    Complete tasks and earn tokens
                   </p>
                   <Button className="w-full engraved-button" size="sm">
-                    Задания
+                    Tasks
                   </Button>
                 </CardContent>
               </Card>
@@ -244,10 +244,10 @@ export default function Account() {
                 <CardContent className="pt-6">
                   <div className="flex items-center gap-3 mb-2">
                     <TrendingUp className="w-5 h-5 text-primary" />
-                    <h3 className="font-semibold">Потратить</h3>
+                    <h3 className="font-semibold">Spend</h3>
                   </div>
                   <p className="text-sm text-foreground/60 mb-4">
-                    Используйте токены для покупок
+                    Use tokens for purchases
                   </p>
                   <Button 
                     variant="outline" 
@@ -255,7 +255,7 @@ export default function Account() {
                     size="sm"
                     onClick={() => setLocation('/shop')}
                   >
-                    Магазин
+                    Shop
                   </Button>
                 </CardContent>
               </Card>
@@ -264,10 +264,10 @@ export default function Account() {
                 <CardContent className="pt-6">
                   <div className="flex items-center gap-3 mb-2">
                     <History className="w-5 h-5 text-primary" />
-                    <h3 className="font-semibold">История</h3>
+                    <h3 className="font-semibold">History</h3>
                   </div>
                   <p className="text-sm text-foreground/60 mb-4">
-                    Все транзакции токенов
+                    All token transactions
                   </p>
                   <Button 
                     variant="outline" 
@@ -278,7 +278,7 @@ export default function Account() {
                       historyElement?.scrollIntoView({ behavior: 'smooth' });
                     }}
                   >
-                    Показать
+                    Show
                   </Button>
                 </CardContent>
               </Card>
@@ -287,14 +287,14 @@ export default function Account() {
             {/* Transaction History */}
             <Card id="token-history" className="engraved-card">
               <CardHeader>
-                <CardTitle className="engraved-text">История транзакций</CardTitle>
+                <CardTitle className="engraved-text">Transaction History</CardTitle>
               </CardHeader>
               <CardContent>
                 {tokenHistory.length === 0 ? (
                   <div className="text-center py-8">
-                    <p className="text-foreground/60">Нет транзакций</p>
+                    <p className="text-foreground/60">No transactions</p>
                     <p className="text-sm text-foreground/40 mt-2">
-                      Транзакции появятся здесь после использования токенов
+                      Transactions will appear here after using tokens
                     </p>
                   </div>
                 ) : (
@@ -317,7 +317,7 @@ export default function Account() {
                           <div>
                             <p className="font-medium">{tx.description || tx.source}</p>
                             <p className="text-sm text-foreground/60">
-                              {new Date(tx.created_at).toLocaleDateString('ru-RU')}
+                              {new Date(tx.created_at).toLocaleDateString('en-US')}
                             </p>
                           </div>
                         </div>
@@ -340,9 +340,9 @@ export default function Account() {
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <div>
-                    <CardTitle className="engraved-text">Публичная страница</CardTitle>
+                    <CardTitle className="engraved-text">Public Page</CardTitle>
                     <CardDescription>
-                      Настройте, какая информация будет видна другим пользователям
+                      Configure what information is visible to other users
                     </CardDescription>
                   </div>
                   <Button
@@ -354,12 +354,12 @@ export default function Account() {
                     {isEditing ? (
                       <>
                         <Save className="w-4 h-4 mr-2" />
-                        Сохранить
+                        Save
                       </>
                     ) : (
                       <>
                         <Edit className="w-4 h-4 mr-2" />
-                        Редактировать
+                        Edit
                       </>
                     )}
                   </Button>
@@ -368,7 +368,7 @@ export default function Account() {
               <CardContent className="space-y-6">
                 {/* Public URL */}
                 <div>
-                  <Label>Публичная ссылка</Label>
+                  <Label>Public Link</Label>
                   <div className="flex gap-2 mt-2">
                     <Input
                       value={publicProfile.public_url}
@@ -388,7 +388,7 @@ export default function Account() {
                       onClick={() => window.open(publicProfile.public_url, '_blank')}
                       className="engraved-button-outline"
                     >
-                      Открыть
+                      Open
                     </Button>
                   </div>
                 </div>
@@ -397,9 +397,9 @@ export default function Account() {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <Label>Показывать имя</Label>
+                      <Label>Show Name</Label>
                       <p className="text-sm text-foreground/60">
-                        Ваше имя будет видно на публичной странице
+                        Your name will be visible on the public page
                       </p>
                     </div>
                     <Switch
@@ -413,9 +413,9 @@ export default function Account() {
 
                   <div className="flex items-center justify-between">
                     <div>
-                      <Label>Показывать метрики</Label>
+                      <Label>Show Metrics</Label>
                       <p className="text-sm text-foreground/60">
-                        Показывать данные о здоровье (анонимно)
+                        Display health data (anonymously)
                       </p>
                     </div>
                     <Switch
@@ -429,9 +429,9 @@ export default function Account() {
 
                   <div className="flex items-center justify-between">
                     <div>
-                      <Label>Показывать цели</Label>
+                      <Label>Show Goals</Label>
                       <p className="text-sm text-foreground/60">
-                        Отображать ваши цели и прогресс
+                        Display your goals and progress
                       </p>
                     </div>
                     <Switch
@@ -445,9 +445,9 @@ export default function Account() {
 
                   <div className="flex items-center justify-between">
                     <div>
-                      <Label>Показывать достижения</Label>
+                      <Label>Show Achievements</Label>
                       <p className="text-sm text-foreground/60">
-                        Отображать ваши достижения и награды
+                        Display your achievements and rewards
                       </p>
                     </div>
                     <Switch
@@ -461,9 +461,9 @@ export default function Account() {
 
                   <div className="flex items-center justify-between">
                     <div>
-                      <Label>Разрешить сообщения</Label>
+                      <Label>Allow Messages</Label>
                       <p className="text-sm text-foreground/60">
-                        Другие пользователи смогут отправлять вам сообщения
+                        Other users will be able to send you messages
                       </p>
                     </div>
                     <Switch
@@ -482,7 +482,7 @@ export default function Account() {
                     onClick={handleSavePublicProfile}
                   >
                     <Save className="w-4 h-4 mr-2" />
-                    Сохранить настройки
+                    Save Settings
                   </Button>
                 )}
               </CardContent>
@@ -495,13 +495,13 @@ export default function Account() {
               <CardHeader>
                 <CardTitle className="engraved-text flex items-center gap-2">
                   <User className="w-5 h-5" />
-                  Личные настройки
+                  Personal Settings
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="space-y-4">
                   <div>
-                    <Label>Язык</Label>
+                    <Label>Language</Label>
                     <Select
                       value={accountSettings.language}
                       onValueChange={(value) =>
@@ -512,14 +512,14 @@ export default function Account() {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="ru">Русский</SelectItem>
                         <SelectItem value="en">English</SelectItem>
+                        <SelectItem value="ru">Russian</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
 
                   <div>
-                    <Label>Часовой пояс</Label>
+                    <Label>Time Zone</Label>
                     <Select
                       value={accountSettings.timezone}
                       onValueChange={(value) =>
@@ -530,9 +530,11 @@ export default function Account() {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="Europe/Moscow">Москва (UTC+3)</SelectItem>
-                        <SelectItem value="Europe/Kiev">Киев (UTC+2)</SelectItem>
-                        <SelectItem value="Europe/Minsk">Минск (UTC+3)</SelectItem>
+                        <SelectItem value="Europe/Moscow">Moscow (UTC+3)</SelectItem>
+                        <SelectItem value="Europe/Kiev">Kyiv (UTC+2)</SelectItem>
+                        <SelectItem value="Europe/Minsk">Minsk (UTC+3)</SelectItem>
+                        <SelectItem value="America/New_York">New York (UTC-5)</SelectItem>
+                        <SelectItem value="Europe/London">London (UTC+0)</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -541,14 +543,14 @@ export default function Account() {
                 <div className="pt-4 border-t">
                   <h3 className="font-semibold mb-4 flex items-center gap-2">
                     <Bell className="w-5 h-5" />
-                    Уведомления
+                    Notifications
                   </h3>
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <div>
-                        <Label>Уведомления включены</Label>
+                        <Label>Notifications Enabled</Label>
                         <p className="text-sm text-foreground/60">
-                          Общие настройки уведомлений
+                          General notification settings
                         </p>
                       </div>
                       <Switch
@@ -561,9 +563,9 @@ export default function Account() {
 
                     <div className="flex items-center justify-between">
                       <div>
-                        <Label>Email уведомления</Label>
+                        <Label>Email Notifications</Label>
                         <p className="text-sm text-foreground/60">
-                          Получать уведомления на email
+                          Receive notifications via email
                         </p>
                       </div>
                       <Switch
@@ -577,9 +579,9 @@ export default function Account() {
 
                     <div className="flex items-center justify-between">
                       <div>
-                        <Label>Telegram уведомления</Label>
+                        <Label>Telegram Notifications</Label>
                         <p className="text-sm text-foreground/60">
-                          Получать уведомления в Telegram
+                          Receive notifications in Telegram
                         </p>
                       </div>
                       <Switch
@@ -598,7 +600,7 @@ export default function Account() {
                   onClick={handleSaveAccountSettings}
                 >
                   <Save className="w-4 h-4 mr-2" />
-                  Сохранить настройки
+                  Save Settings
                 </Button>
               </CardContent>
             </Card>
@@ -610,46 +612,46 @@ export default function Account() {
               <CardHeader>
                 <CardTitle className="engraved-text flex items-center gap-2">
                   <Building2 className="w-5 h-5" />
-                  Бизнес-аккаунт
+                  Business Account
                 </CardTitle>
                 <CardDescription>
-                  Настройки для специалистов, магазинов, центров и партнеров
+                  Settings for specialists, shops, centers, and partners
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div>
-                  <Label>Тип бизнеса</Label>
+                  <Label>Business Type</Label>
                   <Select
                     value={businessType}
                     onValueChange={(value: any) => setBusinessType(value)}
                   >
                     <SelectTrigger className="engraved-input mt-2">
-                      <SelectValue placeholder="Выберите тип" />
+                      <SelectValue placeholder="Select type" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="none">Не выбран</SelectItem>
+                      <SelectItem value="none">Not Selected</SelectItem>
                       <SelectItem value="specialist">
                         <div className="flex items-center gap-2">
                           <User className="w-4 h-4" />
-                          Специалист (врач, тренер, консультант)
+                          Specialist (Doctor, Trainer, Consultant)
                         </div>
                       </SelectItem>
                       <SelectItem value="shop">
                         <div className="flex items-center gap-2">
                           <Store className="w-4 h-4" />
-                          Магазин
+                          Shop
                         </div>
                       </SelectItem>
                       <SelectItem value="center">
                         <div className="flex items-center gap-2">
                           <Building2 className="w-4 h-4" />
-                          Центр здоровья / Клиника
+                          Health Center / Clinic
                         </div>
                       </SelectItem>
                       <SelectItem value="partner">
                         <div className="flex items-center gap-2">
                           <Handshake className="w-4 h-4" />
-                          Партнер
+                          Partner
                         </div>
                       </SelectItem>
                     </SelectContent>
@@ -659,32 +661,32 @@ export default function Account() {
                 {businessType !== 'none' && (
                   <div className="space-y-4 pt-4 border-t">
                     <div>
-                      <Label>Название *</Label>
+                      <Label>Name *</Label>
                       <Input
                         value={businessSettings.name}
                         onChange={(e) =>
                           setBusinessSettings(prev => ({ ...prev, name: e.target.value }))
                         }
-                        placeholder="Название вашего бизнеса"
+                        placeholder="Your business name"
                         className="engraved-input mt-2"
                       />
                     </div>
 
                     <div>
-                      <Label>Описание</Label>
+                      <Label>Description</Label>
                       <textarea
                         value={businessSettings.description}
                         onChange={(e) =>
                           setBusinessSettings(prev => ({ ...prev, description: e.target.value }))
                         }
-                        placeholder="Краткое описание вашего бизнеса"
+                        placeholder="Brief description of your business"
                         className="engraved-input mt-2 min-h-24 w-full"
                       />
                     </div>
 
                     {businessType === 'specialist' && (
                       <div>
-                        <Label>Специализация</Label>
+                        <Label>Specialization</Label>
                         <Select
                           value={businessSettings.category}
                           onValueChange={(value) =>
@@ -692,15 +694,15 @@ export default function Account() {
                           }
                         >
                           <SelectTrigger className="engraved-input mt-2">
-                            <SelectValue placeholder="Выберите специализацию" />
+                            <SelectValue placeholder="Select specialization" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="doctor">Врач</SelectItem>
-                            <SelectItem value="trainer">Тренер</SelectItem>
-                            <SelectItem value="nutritionist">Нутрициолог</SelectItem>
-                            <SelectItem value="psychologist">Психолог</SelectItem>
-                            <SelectItem value="coach">Коуч</SelectItem>
-                            <SelectItem value="other">Другое</SelectItem>
+                            <SelectItem value="doctor">Doctor</SelectItem>
+                            <SelectItem value="trainer">Trainer</SelectItem>
+                            <SelectItem value="nutritionist">Nutritionist</SelectItem>
+                            <SelectItem value="psychologist">Psychologist</SelectItem>
+                            <SelectItem value="coach">Coach</SelectItem>
+                            <SelectItem value="other">Other</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
@@ -708,7 +710,7 @@ export default function Account() {
 
                     {businessType === 'shop' && (
                       <div>
-                        <Label>Категория магазина</Label>
+                        <Label>Shop Category</Label>
                         <Select
                           value={businessSettings.category}
                           onValueChange={(value) =>
@@ -716,14 +718,14 @@ export default function Account() {
                           }
                         >
                           <SelectTrigger className="engraved-input mt-2">
-                            <SelectValue placeholder="Выберите категорию" />
+                            <SelectValue placeholder="Select category" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="nutrition">Питание</SelectItem>
-                            <SelectItem value="supplements">БАДы</SelectItem>
-                            <SelectItem value="equipment">Оборудование</SelectItem>
-                            <SelectItem value="clothing">Одежда</SelectItem>
-                            <SelectItem value="other">Другое</SelectItem>
+                            <SelectItem value="nutrition">Nutrition</SelectItem>
+                            <SelectItem value="supplements">Supplements</SelectItem>
+                            <SelectItem value="equipment">Equipment</SelectItem>
+                            <SelectItem value="clothing">Clothing</SelectItem>
+                            <SelectItem value="other">Other</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
@@ -731,7 +733,7 @@ export default function Account() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <Label>Email для связи</Label>
+                        <Label>Contact Email</Label>
                         <Input
                           type="email"
                           value={businessSettings.contact_email}
@@ -744,33 +746,33 @@ export default function Account() {
                       </div>
 
                       <div>
-                        <Label>Телефон</Label>
+                        <Label>Phone</Label>
                         <Input
                           type="tel"
                           value={businessSettings.contact_phone}
                           onChange={(e) =>
                             setBusinessSettings(prev => ({ ...prev, contact_phone: e.target.value }))
                           }
-                          placeholder="+7 (999) 123-45-67"
+                          placeholder="+1 (999) 123-4567"
                           className="engraved-input mt-2"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <Label>Адрес</Label>
+                      <Label>Address</Label>
                       <Input
                         value={businessSettings.address}
                         onChange={(e) =>
                           setBusinessSettings(prev => ({ ...prev, address: e.target.value }))
                         }
-                        placeholder="Город, улица, дом"
+                        placeholder="City, Street, Building"
                         className="engraved-input mt-2"
                       />
                     </div>
 
                     <div>
-                      <Label>Веб-сайт</Label>
+                      <Label>Website</Label>
                       <Input
                         type="url"
                         value={businessSettings.website}
@@ -785,7 +787,7 @@ export default function Account() {
                     {businessSettings.verified && (
                       <div className="flex items-center gap-2 text-green-600">
                         <CheckCircle2 className="w-5 h-5" />
-                        <span className="font-semibold">Аккаунт верифицирован</span>
+                        <span className="font-semibold">Account Verified</span>
                       </div>
                     )}
 
@@ -794,7 +796,7 @@ export default function Account() {
                       onClick={handleSaveBusinessSettings}
                     >
                       <Save className="w-4 h-4 mr-2" />
-                      Сохранить настройки бизнеса
+                      Save Business Settings
                     </Button>
                   </div>
                 )}

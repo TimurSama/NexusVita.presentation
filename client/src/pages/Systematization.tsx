@@ -11,76 +11,76 @@ export default function Systematization() {
 
   const complexes = [
     {
-      name: 'Физический комплекс',
+      name: 'Physical Complex',
       icon: '💪',
       color: 'from-orange-500 to-orange-600',
       marketSize: '$2.1T',
-      modules: ['Медицина', 'Питание', 'Движение'],
-      description: 'Интеграция медицинской диагностики, персональной диетологии и фитнес-программ',
+      modules: ['Medicine', 'Nutrition', 'Movement'],
+      description: 'Integration of medical diagnostics, personal dietetics, and fitness programs',
       marketShare: 28,
-      growth: '+15% в год'
+      growth: '+15% per year'
     },
     {
-      name: 'Психоэмоциональный комплекс',
+      name: 'Psycho-Emotional Complex',
       icon: '🧠',
       color: 'from-purple-500 to-purple-600',
       marketSize: '$1.8T',
-      modules: ['Психология', 'Сон', 'Отношения'],
-      description: 'Психическое здоровье, качество сна и социальные связи',
+      modules: ['Psychology', 'Sleep', 'Relationships'],
+      description: 'Mental health, sleep quality, and social connections',
       marketShare: 24,
-      growth: '+22% в год'
+      growth: '+22% per year'
     },
     {
-      name: 'Социальный комплекс',
+      name: 'Social Complex',
       icon: '👥',
       color: 'from-pink-500 to-pink-600',
       marketSize: '$1.5T',
-      modules: ['Отношения', 'Сообщество', 'Сотрудничество'],
-      description: 'Укрепление социальных связей и построение здоровых отношений',
+      modules: ['Relationships', 'Community', 'Collaboration'],
+      description: 'Strengthening social connections and building healthy relationships',
       marketShare: 20,
-      growth: '+18% в год'
+      growth: '+18% per year'
     },
     {
-      name: 'Духовный комплекс',
+      name: 'Spiritual Complex',
       icon: '🕉️',
       color: 'from-amber-500 to-amber-600',
       marketSize: '$1.2T',
-      modules: ['Духовность', 'Смысл', 'Развитие'],
-      description: 'Личностный рост, смысл жизни и духовное развитие',
+      modules: ['Spirituality', 'Meaning', 'Development'],
+      description: 'Personal growth, life purpose, and spiritual development',
       marketShare: 16,
-      growth: '+25% в год'
+      growth: '+25% per year'
     },
     {
-      name: 'Экосистемный комплекс',
+      name: 'Ecosystem Complex',
       icon: '🌍',
       color: 'from-green-500 to-green-600',
       marketSize: '$2.7T',
-      modules: ['Интеграция', 'Данные', 'Партнёры'],
-      description: 'Объединение всех компонентов в единую экосистему здоровья',
+      modules: ['Integration', 'Data', 'Partners'],
+      description: 'Uniting all components into a single health ecosystem',
       marketShare: 36,
-      growth: '+30% в год'
+      growth: '+30% per year'
     }
   ];
 
   const synergies = [
     {
-      title: 'Синергия данных',
-      description: 'Интеграция 2000+ показателей здоровья для холистического анализа',
+      title: 'Data Synergy',
+      description: 'Integration of 2000+ health indicators for holistic analysis',
       icon: '📊'
     },
     {
-      title: 'Синергия рекомендаций',
-      description: 'Персональные протоколы учитывают все 7 направлений здоровья',
+      title: 'Recommendation Synergy',
+      description: 'Personal protocols consider all 7 health directions',
       icon: '✨'
     },
     {
-      title: 'Синергия партнёров',
-      description: 'Экосистема 5000+ партнёров для комплексного обслуживания',
+      title: 'Partner Synergy',
+      description: 'Ecosystem of 5000+ partners for comprehensive service',
       icon: '🤝'
     },
     {
-      title: 'Синергия результатов',
-      description: 'Улучшение одного направления усиливает результаты в других',
+      title: 'Results Synergy',
+      description: 'Improvement in one direction enhances results in others',
       icon: '🚀'
     },
   ];
@@ -114,9 +114,9 @@ export default function Systematization() {
             className="flex items-center gap-2 text-foreground/70 hover:text-foreground transition-colors"
           >
             <ChevronLeft className="w-5 h-5" />
-            Назад
+            Back
           </button>
-          <h1 className="text-2xl font-bold text-foreground">🔗 Систематизация</h1>
+          <h1 className="text-2xl font-bold text-foreground">🔗 Systematization</h1>
         </div>
       </header>
 
@@ -130,17 +130,17 @@ export default function Systematization() {
           >
             <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-cyan-500/20 via-cyan-600/10 to-cyan-700/5 p-12 border border-border/50">
               <div className="relative z-10">
-                <h2 className="text-4xl font-bold text-foreground mb-4">5 Интегрированных комплексов</h2>
+                <h2 className="text-4xl font-bold text-foreground mb-4">5 Integrated Complexes</h2>
                 <p className="text-foreground/70 text-lg mb-8">
-                  Система взаимодействующих компонентов, охватывающих $9.3 триллиона глобального рынка здоровья
+                  A system of interacting components covering $9.3 trillion of the global health market
                 </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-                  <StatCounter value={9.3} label="Триллионов рынка" suffix="T$" delay={0.1} />
-                  <StatCounter value={5} label="Комплексов" delay={0.2} />
-                  <StatCounter value={7} label="Модулей здоровья" delay={0.3} />
-                  <StatCounter value={2000} label="Показателей" suffix="+" delay={0.4} />
-                  <StatCounter value={5000} label="Партнёров" suffix="+" delay={0.5} />
+                  <StatCounter value={9.3} label="Trillion Market" suffix="T$" delay={0.1} />
+                  <StatCounter value={5} label="Complexes" delay={0.2} />
+                  <StatCounter value={7} label="Health Modules" delay={0.3} />
+                  <StatCounter value={2000} label="Indicators" suffix="+" delay={0.4} />
+                  <StatCounter value={5000} label="Partners" suffix="+" delay={0.5} />
                 </div>
               </div>
             </div>
@@ -237,19 +237,19 @@ export default function Systematization() {
 
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                 <div className="p-4 bg-background/50 rounded-lg">
-                  <p className="text-xs text-foreground/60 mb-1">Размер рынка</p>
+                  <p className="text-xs text-foreground/60 mb-1">Market Size</p>
                   <p className="text-2xl font-bold text-primary">{complexes[selectedComplex].marketSize}</p>
                 </div>
                 <div className="p-4 bg-background/50 rounded-lg">
-                  <p className="text-xs text-foreground/60 mb-1">Доля EthosLife</p>
+                  <p className="text-xs text-foreground/60 mb-1">EthosLife Share</p>
                   <p className="text-2xl font-bold text-primary">{complexes[selectedComplex].marketShare}%</p>
                 </div>
                 <div className="p-4 bg-background/50 rounded-lg">
-                  <p className="text-xs text-foreground/60 mb-1">Годовой рост</p>
+                  <p className="text-xs text-foreground/60 mb-1">Annual Growth</p>
                   <p className="text-2xl font-bold text-green-500">{complexes[selectedComplex].growth}</p>
                 </div>
                 <div className="p-4 bg-background/50 rounded-lg">
-                  <p className="text-xs text-foreground/60 mb-1">Модули</p>
+                  <p className="text-xs text-foreground/60 mb-1">Modules</p>
                   <p className="text-lg font-bold text-foreground">{complexes[selectedComplex].modules.length}</p>
                 </div>
               </div>
@@ -272,7 +272,7 @@ export default function Systematization() {
             variants={containerVariants}
             className="mb-12"
           >
-            <h2 className="text-3xl font-bold text-foreground mb-8">Синергии системы</h2>
+            <h2 className="text-3xl font-bold text-foreground mb-8">System Synergies</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {synergies.map((synergy, idx) => (
                 <motion.div
@@ -300,22 +300,22 @@ export default function Systematization() {
             className="mb-12"
           >
             <PremiumCard gradient="from-green-500/10 to-green-600/5">
-              <h3 className="text-2xl font-bold text-foreground mb-6">Рыночная возможность</h3>
+              <h3 className="text-2xl font-bold text-foreground mb-6">Market Opportunity</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
-                  <p className="text-sm text-foreground/60 mb-2">Общий адресуемый рынок (TAM)</p>
+                  <p className="text-sm text-foreground/60 mb-2">Total Addressable Market (TAM)</p>
                   <p className="text-3xl font-bold text-primary">$9.3T</p>
-                  <p className="text-xs text-foreground/60 mt-2">Глобальный рынок здоровья</p>
+                  <p className="text-xs text-foreground/60 mt-2">Global health market</p>
                 </div>
                 <div>
-                  <p className="text-sm text-foreground/60 mb-2">Достижимый рынок (SAM)</p>
+                  <p className="text-sm text-foreground/60 mb-2">Serviceable Addressable Market (SAM)</p>
                   <p className="text-3xl font-bold text-primary">$2.1T</p>
-                  <p className="text-xs text-foreground/60 mt-2">Цифровые решения</p>
+                  <p className="text-xs text-foreground/60 mt-2">Digital solutions</p>
                 </div>
                 <div>
-                  <p className="text-sm text-foreground/60 mb-2">Целевой рынок (SOM)</p>
+                  <p className="text-sm text-foreground/60 mb-2">Serviceable Obtainable Market (SOM)</p>
                   <p className="text-3xl font-bold text-primary">$150B</p>
-                  <p className="text-xs text-foreground/60 mt-2">К 2030 году</p>
+                  <p className="text-xs text-foreground/60 mt-2">By 2030</p>
                 </div>
               </div>
             </PremiumCard>
