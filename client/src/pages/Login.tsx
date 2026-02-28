@@ -60,7 +60,7 @@ export default function Login() {
         setError(errorData.error || t('auth.invalidCredentials'));
       }
     } catch (err) {
-      setError('Ошибка подключения к серверу');
+      setError('Server connection error');
     } finally {
       setLoading(false);
     }
@@ -73,7 +73,7 @@ export default function Login() {
     const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || (window as any).GOOGLE_CLIENT_ID || '';
     
     if (!clientId || clientId === 'your-google-client-id') {
-      setError('Google OAuth не настроен. Пожалуйста, используйте email/password или Telegram для входа.');
+      setError('Google OAuth is not configured. Please use email/password or Telegram login.');
       console.error('VITE_GOOGLE_CLIENT_ID not configured');
       return;
     }
@@ -95,7 +95,7 @@ export default function Login() {
 
   const handleTelegramLogin = () => {
     // Show instructions for Telegram auth
-    const botUsername = 'etholife_bot';
+    const botUsername = 'etholife_bot'; // Change to your bot username
     const authUrl = `${window.location.origin}/auth/callback`;
     
     // Open Telegram with deep link for authentication
@@ -106,7 +106,7 @@ export default function Login() {
     
     window.open(telegramUrl, '_blank');
     
-    setError('Бот Telegram открыт. Нажмите "Start" в боте для авторизации, затем вернитесь на эту страницу.');
+    setError('Telegram bot opened. Click "Start" in the bot to authenticate, then return to this page.');
   };
 
   return (
@@ -121,9 +121,9 @@ export default function Login() {
             <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl mx-auto mb-4 flex items-center justify-center">
               <span className="text-white text-2xl font-bold">EL</span>
             </div>
-            <CardTitle className="text-2xl font-bold">Вход в EthosLife</CardTitle>
+            <CardTitle className="text-2xl font-bold">Sign In to EthosLife</CardTitle>
             <CardDescription>
-              Войдите в свой аккаунт или создайте новый
+              Sign in to your account or create a new one
             </CardDescription>
           </CardHeader>
 
@@ -159,7 +159,7 @@ export default function Login() {
 
               <div>
                 <label className="text-sm font-medium text-slate-700 mb-1.5 block">
-                  Пароль
+                  Password
                 </label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
@@ -196,7 +196,7 @@ export default function Login() {
                   <Loader2 className="w-5 h-5 animate-spin" />
                 ) : (
                   <>
-                    Войти
+                    Sign In
                     <ArrowRight className="ml-2 w-5 h-5" />
                   </>
                 )}
@@ -209,7 +209,7 @@ export default function Login() {
                 <div className="w-full border-t border-slate-200"></div>
               </div>
               <div className="relative flex justify-center">
-                <span className="bg-white px-4 text-sm text-slate-500">или</span>
+                <span className="bg-white px-4 text-sm text-slate-500">or</span>
               </div>
             </div>
 
@@ -221,7 +221,7 @@ export default function Login() {
                 onClick={handleGoogleLogin}
               >
                 <Chrome className="mr-2 w-5 h-5 text-red-500" />
-                Войти через Google
+                Continue with Google
               </Button>
 
               <Button
@@ -230,19 +230,19 @@ export default function Login() {
                 onClick={handleTelegramLogin}
               >
                 <MessageCircle className="mr-2 w-5 h-5 text-blue-500" />
-                Войти через Telegram
+                Continue with Telegram
               </Button>
             </div>
 
             {/* Register Link */}
             <div className="text-center pt-4 border-t border-slate-100">
               <p className="text-slate-600">
-                Ещё нет аккаунта?{' '}
+                Don't have an account?{' '}
                 <button
                   onClick={() => setLocation('/register')}
                   className="text-blue-600 hover:text-blue-700 font-medium"
                 >
-                  Зарегистрироваться
+                  Sign Up
                 </button>
               </p>
             </div>
@@ -252,7 +252,7 @@ export default function Login() {
               onClick={() => setLocation('/')}
               className="w-full text-center text-sm text-slate-400 hover:text-slate-600 pt-2"
             >
-              ← Вернуться на главную
+              ← Back to Home
             </button>
           </CardContent>
         </Card>

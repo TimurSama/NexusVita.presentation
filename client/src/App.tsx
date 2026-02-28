@@ -126,7 +126,7 @@ function Router() {
       <Route path={"/journal"} component={Journal} />
       <Route path={"/news"} component={News} />
       <Route path={"/ai-chat"} component={AIChat} />
-      <Route path={"/environment"} component={() => <div className="p-8">Среда (в разработке)</div>} />
+      <Route path={"/environment"} component={() => <div className="p-8">Environment (coming soon)</div>} />
       <Route path={"/newstyle"} component={NewStyleLanding} />
       <Route path={"/v2"} component={LandingV2} />
       <Route path={"/pricing"} component={Pricing} />
