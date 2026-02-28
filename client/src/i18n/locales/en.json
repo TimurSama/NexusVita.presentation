@@ -20,25 +20,19 @@
     "profile": "Profile",
     "settings": "Settings",
     "wallet": "Wallet",
-    "aiChat": "AI Chat"
-  },
-  "health": {
-    "modules": {
-      "medicine": "Medicine",
-      "movement": "Movement",
-      "nutrition": "Nutrition",
-      "psychology": "Psychology",
-      "sleep": "Sleep",
-      "relationships": "Relationships",
-      "habits": "Habits",
-      "medicineDesc": "Track medical records, lab results, and appointments",
-      "movementDesc": "Monitor physical activity, workouts, and fitness goals",
-      "nutritionDesc": "Log meals, track calories, and plan your diet",
-      "psychologyDesc": "Track mood, journal thoughts, and manage stress",
-      "sleepDesc": "Monitor sleep quality and establish healthy routines",
-      "relationshipsDesc": "Nurture social connections and track interactions",
-      "habitsDesc": "Build healthy habits and maintain daily streaks"
-    }
+    "aiChat": "AI Chat",
+    "calendar": "Calendar",
+    "documents": "Documents",
+    "habits": "Habits",
+    "journal": "Journal",
+    "news": "News",
+    "shop": "Shop",
+    "map": "Map",
+    "tokenomics": "Tokenomics",
+    "whitepaper": "Whitepaper",
+    "roadmap": "Roadmap",
+    "specialistOffer": "For Specialists",
+    "centerOffer": "For Centers"
   },
   "auth": {
     "loginTitle": "Sign in to EthosLife",
@@ -55,11 +49,43 @@
     "googleLogin": "Continue with Google",
     "telegramLogin": "Continue with Telegram",
     "or": "or",
+    "popular": "Most Popular",
     "agreeTerms": "I agree to the Terms of Service and Privacy Policy",
-    "invalidCredentials": "Invalid email or password"
+    "invalidCredentials": "Invalid email or password",
+    "connectionError": "Connection error",
+    "registrationSuccess": "Registration successful!",
+    "redirecting": "Redirecting...",
+    "logoutConfirm": "Are you sure you want to sign out?"
+  },
+  "health": {
+    "title": "Health Modules",
+    "subtitle": "Track all aspects of your health in one place",
+    "modules": {
+      "medicine": "Medicine",
+      "movement": "Movement",
+      "nutrition": "Nutrition",
+      "psychology": "Psychology",
+      "sleep": "Sleep",
+      "relationships": "Relationships",
+      "habits": "Habits",
+      "medicineDesc": "Track medical records, lab results, and appointments",
+      "movementDesc": "Monitor physical activity, workouts, and fitness goals",
+      "nutritionDesc": "Log meals, track calories, and plan your diet",
+      "psychologyDesc": "Track mood, journal thoughts, and manage stress",
+      "sleepDesc": "Monitor sleep quality and establish healthy routines",
+      "relationshipsDesc": "Nurture social connections and track interactions",
+      "habitsDesc": "Build healthy habits and maintain daily streaks"
+    },
+    "addData": "Add Data",
+    "viewHistory": "View History",
+    "setGoal": "Set Goal",
+    "currentStatus": "Current Status",
+    "inDevelopment": "Feature in development",
+    "comingSoon": "Coming soon"
   },
   "dashboard": {
     "welcome": "Welcome back",
+    "welcomeNew": "Welcome to EthosLife",
     "dailyPlan": "Daily Plan",
     "metrics": "Health Metrics",
     "goals": "Your Goals",
@@ -68,7 +94,19 @@
     "aiAssistant": "AI Health Assistant",
     "askAI": "Ask AI about your health...",
     "upgrade": "Upgrade to Premium",
-    "subscribe": "Subscribe to unlock all features"
+    "subscribe": "Subscribe to unlock all features",
+    "noData": "No data yet",
+    "addFirst": "Add your first entry",
+    "steps": "Steps",
+    "calories": "Calories",
+    "sleep": "Sleep",
+    "mood": "Mood",
+    "target": "Target",
+    "completed": "Completed",
+    "pending": "Pending",
+    "today": "Today",
+    "thisWeek": "This Week",
+    "thisMonth": "This Month"
   },
   "pricing": {
     "title": "Choose your plan",
@@ -78,6 +116,12 @@
     "premium": "Premium",
     "month": "month",
     "year": "year",
+    "currentPlan": "Current Plan",
+    "subscribe": "Subscribe",
+    "startFree": "Start Free",
+    "monthly": "Monthly",
+    "yearly": "Yearly",
+    "save": "Save",
     "features": {
       "freeModules": "3 health modules",
       "allModules": "All 7 health modules",
@@ -87,11 +131,77 @@
       "unlimitedHabits": "Unlimited habits",
       "export": "Export data",
       "prioritySupport": "Priority support",
-      "specialists": "Access to specialists"
+      "specialists": "Access to specialists",
+      "wearables": "Wearables integration",
+      "analytics": "Advanced analytics"
     },
     "currentPlan": "Current Plan",
     "upgrade": "Upgrade",
-    "subscribe": "Subscribe"
+    "subscribe": "Subscribe",
+    "startFree": "Start Free",
+    "getStarted": "Get Started",
+    "contactSales": "Contact Sales",
+    "moneyBack": "30-day money-back guarantee",
+    "cancelAnytime": "Cancel anytime",
+    "popular": "Most Popular",
+    "contactSales": "Contact Sales"
+  },
+  "wallet": {
+    "title": "Unity Wallet",
+    "balance": "Balance",
+    "tokens": "tokens",
+    "buyTokens": "Buy Tokens",
+    "sellTokens": "Sell Tokens",
+    "transactionHistory": "Transaction History",
+    "noTransactions": "No transactions yet",
+    "earned": "Earned",
+    "spent": "Spent",
+    "referral": "Referral bonus",
+    "subscription": "Subscription bonus",
+    "achievement": "Achievement reward",
+    "rate": "Exchange Rate",
+    "1USD": "1 USD = 8.5 UNITY",
+    "bonusInfo": "15% bonus when paying with tokens"
+  },
+  "aiChat": {
+    "title": "AI Health Assistant",
+    "subtitle": "Ask any question about your health",
+    "placeholder": "Type your question...",
+    "send": "Send",
+    "loading": "AI is thinking...",
+    "error": "Something went wrong. Please try again.",
+    "limitReached": "Daily limit reached. Upgrade for more messages.",
+    "newChat": "New Chat",
+    "history": "Chat History",
+    "suggested": "Suggested questions",
+    "examples": {
+      "sleep": "How to improve sleep quality?",
+      "nutrition": "What should I eat for breakfast?",
+      "exercise": "Best exercises for beginners",
+      "stress": "How to manage stress?"
+    }
+  },
+  "specialists": {
+    "title": "Health Specialists",
+    "subtitle": "Connect with certified professionals",
+    "search": "Search specialists...",
+    "filter": "Filter by",
+    "all": "All",
+    "nutritionists": "Nutritionists",
+    "trainers": "Trainers",
+    "psychologists": "Psychologists",
+    "doctors": "Doctors",
+    "book": "Book Consultation",
+    "viewProfile": "View Profile",
+    "rating": "Rating",
+    "reviews": "reviews",
+    "experience": "years experience",
+    "price": "Consultation price",
+    "perHour": "per hour",
+    "available": "Available now",
+    "unavailable": "Unavailable",
+    "becomeSpecialist": "Become a Specialist",
+    "joinText": "Join our platform and reach thousands of clients"
   },
   "common": {
     "save": "Save",
@@ -103,8 +213,10 @@
     "loading": "Loading...",
     "error": "Error",
     "success": "Success",
+    "saved": "Saved",
     "close": "Close",
     "back": "Back",
+    "average": "Average",
     "next": "Next",
     "continue": "Continue",
     "done": "Done",
@@ -113,11 +225,135 @@
     "more": "More",
     "less": "Less",
     "show": "Show",
-    "hide": "Hide"
+    "hide": "Hide",
+    "open": "Open",
+    "submit": "Submit",
+    "confirm": "Confirm",
+    "copy": "Copy",
+    "share": "Share",
+    "download": "Download",
+    "upload": "Upload",
+    "select": "Select",
+    "all": "All",
+    "none": "None",
+    "required": "Required",
+    "optional": "Optional",
+    "description": "Description",
+    "details": "Details",
+    "settings": "Settings",
+    "profile": "Profile",
+    "logout": "Logout",
+    "help": "Help",
+    "support": "Support",
+    "contact": "Contact",
+    "about": "About",
+    "terms": "Terms of Service",
+    "privacy": "Privacy Policy",
+    "cookies": "Cookie Policy"
   },
   "language": {
     "select": "Language",
     "en": "English",
     "ru": "Русский"
+  },
+  "errors": {
+    "generic": "Something went wrong",
+    "notFound": "Page not found",
+    "unauthorized": "Please sign in to continue",
+    "forbidden": "Access denied",
+    "serverError": "Server error. Please try again later.",
+    "networkError": "Network error. Check your connection.",
+    "timeout": "Request timed out",
+    "validation": "Please check your input",
+    "required": "This field is required",
+    "invalidEmail": "Please enter a valid email",
+    "invalidPassword": "Password must be at least 6 characters",
+    "passwordMismatch": "Passwords do not match"
+  },
+  "time": {
+    "now": "Just now",
+    "minuteAgo": "1 minute ago",
+    "minutesAgo": "{{count}} minutes ago",
+    "hourAgo": "1 hour ago",
+    "hoursAgo": "{{count}} hours ago",
+    "dayAgo": "1 day ago",
+    "daysAgo": "{{count}} days ago",
+    "weekAgo": "1 week ago",
+    "weeksAgo": "{{count}} weeks ago",
+    "monthAgo": "1 month ago",
+    "monthsAgo": "{{count}} months ago",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "tomorrow": "Tomorrow"
+  },
+  "landing": {
+    "hero": {
+      "title": "Your Health Journey Starts Here",
+      "subtitle": "Track, analyze, and improve all aspects of your health with AI-powered insights",
+      "ctaPrimary": "Get Started Free",
+      "ctaSecondary": "Learn More"
+    },
+    "features": {
+      "title": "Everything You Need",
+      "subtitle": "Comprehensive health tracking in one place",
+      "tracking": {
+        "title": "Track Everything",
+        "desc": "Monitor 7 key health areas: medicine, movement, nutrition, psychology, sleep, relationships, and habits"
+      },
+      "ai": {
+        "title": "AI Assistant",
+        "desc": "Get personalized health recommendations from our advanced AI"
+      },
+      "community": {
+        "title": "Expert Support",
+        "desc": "Connect with certified health specialists when you need professional help"
+      }
+    },
+    "howItWorks": {
+      "title": "How It Works",
+      "step1": {
+        "title": "Create Account",
+        "desc": "Sign up in seconds and set up your health profile"
+      },
+      "step2": {
+        "title": "Track Health",
+        "desc": "Log your daily activities, meals, sleep, and mood"
+      },
+      "step3": {
+        "title": "Get Insights",
+        "desc": "Receive AI-powered recommendations and track progress"
+      }
+    },
+    "testimonials": {
+      "title": "What Users Say"
+    },
+    "cta": {
+      "title": "Ready to Start?",
+      "subtitle": "Join thousands of users improving their health",
+      "button": "Start Your Journey"
+    }
+  },
+  "onboarding": {
+    "welcome": "Welcome to EthosLife",
+    "setup": "Let's set up your profile",
+    "healthGoals": "What are your health goals?",
+    "trackingPreferences": "What would you like to track?",
+    "notifications": "Enable notifications to stay on track",
+    "finish": "You're all set!",
+    "skip": "Skip for now",
+    "next": "Next",
+    "back": "Back",
+    "finishSetup": "Finish Setup"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "empty": "No new notifications",
+    "markAllRead": "Mark all as read",
+    "reminders": {
+      "habit": "Don't forget your habit",
+      "medication": "Time to take medication",
+      "sleep": "Time to wind down for sleep",
+      "water": "Stay hydrated - drink water"
+    }
   }
 }

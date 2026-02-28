@@ -14,10 +14,6 @@ import {
   Save,
   Clock,
   Flame,
-  Droplets,
-  Smile,
-  Frown,
-  Meh
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -27,113 +23,117 @@ import { Textarea } from "@/components/ui/textarea";
 import { Slider } from "@/components/ui/slider";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
+import { useI18n } from "@/i18n";
 
-const modules = {
+const getModuleConfig = (t: any) => ({
   movement: {
-    name: 'Движение',
+    name: t('health.modules.movement'),
     icon: Activity,
     color: 'from-blue-500 to-cyan-500',
     bgColor: 'bg-blue-50',
     fields: [
-      { name: 'activity_type', label: 'Тип активности', type: 'select', options: ['Бег', 'Ходьба', 'Плавание', 'Велосипед', 'Силовая', 'Йога', 'Другое'] },
-      { name: 'duration', label: 'Длительность (мин)', type: 'number', min: 1 },
-      { name: 'steps', label: 'Шаги', type: 'number', min: 0 },
-      { name: 'calories_burned', label: 'Сожжено калорий', type: 'number', min: 0 },
-      { name: 'distance', label: 'Расстояние (км)', type: 'number', min: 0, step: 0.1 },
-      { name: 'heart_rate_avg', label: 'Средний пульс', type: 'number', min: 0 },
-      { name: 'notes', label: 'Заметки', type: 'textarea' },
+      { name: 'activity_type', label: 'Activity Type', type: 'select', options: ['Running', 'Walking', 'Swimming', 'Cycling', 'Strength', 'Yoga', 'Other'] },
+      { name: 'duration', label: 'Duration (min)', type: 'number', min: 1 },
+      { name: 'steps', label: t('dashboard.steps'), type: 'number', min: 0 },
+      { name: 'calories_burned', label: 'Calories Burned', type: 'number', min: 0 },
+      { name: 'distance', label: 'Distance (km)', type: 'number', min: 0, step: 0.1 },
+      { name: 'heart_rate_avg', label: 'Avg Heart Rate', type: 'number', min: 0 },
+      { name: 'notes', label: 'Notes', type: 'textarea' },
     ]
   },
   nutrition: {
-    name: 'Питание',
+    name: t('health.modules.nutrition'),
     icon: Utensils,
     color: 'from-green-500 to-emerald-500',
     bgColor: 'bg-green-50',
     fields: [
-      { name: 'meal_type', label: 'Прием пищи', type: 'select', options: ['Завтрак', 'Обед', 'Ужин', 'Перекус'] },
-      { name: 'food_name', label: 'Название блюда', type: 'text' },
-      { name: 'calories', label: 'Калории', type: 'number', min: 0 },
-      { name: 'protein', label: 'Белки (г)', type: 'number', min: 0 },
-      { name: 'carbs', label: 'Углеводы (г)', type: 'number', min: 0 },
-      { name: 'fats', label: 'Жиры (г)', type: 'number', min: 0 },
-      { name: 'water', label: 'Вода (л)', type: 'number', min: 0, step: 0.1 },
+      { name: 'meal_type', label: 'Meal', type: 'select', options: ['Breakfast', 'Lunch', 'Dinner', 'Snack'] },
+      { name: 'food_name', label: 'Food Name', type: 'text' },
+      { name: 'calories', label: t('dashboard.calories'), type: 'number', min: 0 },
+      { name: 'protein', label: 'Protein (g)', type: 'number', min: 0 },
+      { name: 'carbs', label: 'Carbs (g)', type: 'number', min: 0 },
+      { name: 'fats', label: 'Fats (g)', type: 'number', min: 0 },
+      { name: 'water', label: 'Water (L)', type: 'number', min: 0, step: 0.1 },
     ]
   },
   sleep: {
-    name: 'Сон',
+    name: t('health.modules.sleep'),
     icon: Moon,
     color: 'from-purple-500 to-violet-500',
     bgColor: 'bg-purple-50',
     fields: [
-      { name: 'bedtime', label: 'Легли спать', type: 'time' },
-      { name: 'wakeup_time', label: 'Проснулись', type: 'time' },
-      { name: 'duration_hours', label: 'Длительность (часов)', type: 'number', min: 0, max: 24, step: 0.5 },
-      { name: 'quality_score', label: 'Качество сна', type: 'slider', min: 1, max: 10 },
-      { name: 'awakenings', label: 'Пробуждений за ночь', type: 'number', min: 0 },
-      { name: 'dream_notes', label: 'Сны / заметки', type: 'textarea' },
+      { name: 'bedtime', label: 'Bedtime', type: 'time' },
+      { name: 'wakeup_time', label: 'Wake Up', type: 'time' },
+      { name: 'duration_hours', label: 'Duration (hours)', type: 'number', min: 0, max: 24, step: 0.5 },
+      { name: 'quality_score', label: 'Sleep Quality', type: 'slider', min: 1, max: 10 },
+      { name: 'awakenings', label: 'Night Awakenings', type: 'number', min: 0 },
+      { name: 'dream_notes', label: 'Dreams / Notes', type: 'textarea' },
     ]
   },
   psychology: {
-    name: 'Психология',
+    name: t('health.modules.psychology'),
     icon: Brain,
     color: 'from-pink-500 to-rose-500',
     bgColor: 'bg-pink-50',
     fields: [
-      { name: 'mood_score', label: 'Настроение (1-10)', type: 'slider', min: 1, max: 10 },
-      { name: 'stress_level', label: 'Уровень стресса (1-10)', type: 'slider', min: 1, max: 10 },
-      { name: 'energy_level', label: 'Энергия (1-10)', type: 'slider', min: 1, max: 10 },
-      { name: 'anxiety_level', label: 'Тревожность (1-10)', type: 'slider', min: 1, max: 10 },
-      { name: 'journal_entry', label: 'Запись в дневнике', type: 'textarea' },
-      { name: 'gratitude', label: 'За что благодарны сегодня', type: 'textarea' },
+      { name: 'mood_score', label: 'Mood (1-10)', type: 'slider', min: 1, max: 10 },
+      { name: 'stress_level', label: 'Stress Level (1-10)', type: 'slider', min: 1, max: 10 },
+      { name: 'energy_level', label: 'Energy (1-10)', type: 'slider', min: 1, max: 10 },
+      { name: 'anxiety_level', label: 'Anxiety (1-10)', type: 'slider', min: 1, max: 10 },
+      { name: 'journal_entry', label: 'Journal Entry', type: 'textarea' },
+      { name: 'gratitude', label: 'Gratitude', type: 'textarea' },
     ]
   },
   medicine: {
-    name: 'Медицина',
+    name: t('health.modules.medicine'),
     icon: Heart,
     color: 'from-red-500 to-rose-500',
     bgColor: 'bg-red-50',
     fields: [
-      { name: 'document_type', label: 'Тип документа', type: 'select', options: ['Анализ', 'Прием врача', 'Диагноз', 'Назначение', 'Вакцинация'] },
-      { name: 'title', label: 'Название', type: 'text' },
-      { name: 'doctor_name', label: 'Врач', type: 'text' },
-      { name: 'clinic', label: 'Клиника', type: 'text' },
-      { name: 'results', label: 'Результаты', type: 'textarea' },
-      { name: 'notes', label: 'Заметки', type: 'textarea' },
+      { name: 'document_type', label: 'Document Type', type: 'select', options: ['Lab Test', 'Doctor Visit', 'Diagnosis', 'Prescription', 'Vaccination'] },
+      { name: 'title', label: 'Title', type: 'text' },
+      { name: 'doctor_name', label: 'Doctor', type: 'text' },
+      { name: 'clinic', label: 'Clinic', type: 'text' },
+      { name: 'results', label: 'Results', type: 'textarea' },
+      { name: 'notes', label: 'Notes', type: 'textarea' },
     ]
   },
   habits: {
-    name: 'Привычки',
+    name: t('health.modules.habits'),
     icon: Sparkles,
     color: 'from-cyan-500 to-teal-500',
     bgColor: 'bg-cyan-50',
     fields: [
-      { name: 'habit_name', label: 'Название привычки', type: 'text' },
-      { name: 'completed', label: 'Выполнено', type: 'checkbox' },
-      { name: 'difficulty', label: 'Сложность (1-10)', type: 'slider', min: 1, max: 10 },
-      { name: 'notes', label: 'Заметки', type: 'textarea' },
+      { name: 'habit_name', label: 'Habit Name', type: 'text' },
+      { name: 'completed', label: 'Completed', type: 'checkbox' },
+      { name: 'difficulty', label: 'Difficulty (1-10)', type: 'slider', min: 1, max: 10 },
+      { name: 'notes', label: 'Notes', type: 'textarea' },
     ]
   },
   relationships: {
-    name: 'Отношения',
+    name: t('health.modules.relationships'),
     icon: Users,
     color: 'from-orange-500 to-amber-500',
     bgColor: 'bg-orange-50',
     fields: [
-      { name: 'relationship_quality', label: 'Качество отношений (1-10)', type: 'slider', min: 1, max: 10 },
-      { name: 'time_together', label: 'Время вместе (часов)', type: 'number', min: 0, step: 0.5 },
-      { name: 'interaction_type', label: 'Тип взаимодействия', type: 'select', options: ['Разговор', 'Совместная активность', 'Помощь', 'Другое'] },
-      { name: 'notes', label: 'Заметки', type: 'textarea' },
-      { name: 'gratitude', label: 'За что благодарны', type: 'textarea' },
+      { name: 'relationship_quality', label: 'Quality (1-10)', type: 'slider', min: 1, max: 10 },
+      { name: 'time_together', label: 'Time Together (hours)', type: 'number', min: 0, step: 0.5 },
+      { name: 'interaction_type', label: 'Interaction Type', type: 'select', options: ['Conversation', 'Activity', 'Help', 'Other'] },
+      { name: 'notes', label: 'Notes', type: 'textarea' },
+      { name: 'gratitude', label: 'Gratitude', type: 'textarea' },
     ]
   },
-};
+});
 
 export default function HealthModules() {
   const [, setLocation] = useLocation();
   const params = useParams();
-  const moduleId = params.moduleId as keyof typeof modules;
   const { user, token } = useAuth();
   const { toast } = useToast();
+  const { t } = useI18n();
+  
+  const modules = getModuleConfig(t);
+  const moduleId = params.moduleId as keyof typeof modules;
   
   const [formData, setFormData] = useState<Record<string, any>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -144,8 +144,8 @@ export default function HealthModules() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-slate-600 mb-4">Модуль не найден</p>
-          <Button onClick={() => setLocation('/dashboard')}>На дашборд</Button>
+          <p className="text-slate-600 mb-4">{t('errors.notFound')}</p>
+          <Button onClick={() => setLocation('/dashboard')}>{t('nav.dashboard')}</Button>
         </div>
       </div>
     );
@@ -158,8 +158,8 @@ export default function HealthModules() {
     
     if (!token) {
       toast({
-        title: "Требуется авторизация",
-        description: "Войдите, чтобы сохранить данные",
+        title: t('errors.unauthorized'),
+        description: t('auth.noAccount'),
         variant: "destructive",
       });
       return;
@@ -182,16 +182,16 @@ export default function HealthModules() {
       }
 
       toast({
-        title: "Сохранено!",
-        description: "Данные успешно добавлены",
+        title: t('common.success'),
+        description: t('common.saved'),
       });
 
       setFormData({});
     } catch (error) {
       console.error('Save error:', error);
       toast({
-        title: "Ошибка",
-        description: "Не удалось сохранить данные",
+        title: t('common.error'),
+        description: t('errors.generic'),
         variant: "destructive",
       });
     } finally {
@@ -242,7 +242,7 @@ export default function HealthModules() {
             onChange={(e) => setFormData({ ...formData, [field.name]: e.target.value })}
             className="w-full h-10 px-3 rounded-md border border-input bg-background"
           >
-            <option value="">Выберите...</option>
+            <option value="">{t('common.select')}...</option>
             {field.options.map((opt: string) => (
               <option key={opt} value={opt}>{opt}</option>
             ))}
@@ -276,7 +276,7 @@ export default function HealthModules() {
               onChange={(e) => setFormData({ ...formData, [field.name]: e.target.checked })}
               className="w-5 h-5 rounded border-gray-300"
             />
-            <span>Выполнено</span>
+            <span>{t('dashboard.completed')}</span>
           </label>
         );
       
@@ -312,7 +312,7 @@ export default function HealthModules() {
               </div>
               <div>
                 <h1 className="text-xl font-bold">{module.name}</h1>
-                <p className="text-white/80 text-sm">Добавить запись</p>
+                <p className="text-white/80 text-sm">{t('health.addData')}</p>
               </div>
             </div>
           </div>
@@ -326,7 +326,7 @@ export default function HealthModules() {
         >
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Новая запись</CardTitle>
+              <CardTitle className="text-lg">{t('common.create')}</CardTitle>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-6">
@@ -344,7 +344,7 @@ export default function HealthModules() {
                     className="flex-1"
                     onClick={() => setLocation('/dashboard')}
                   >
-                    Отмена
+                    {t('common.cancel')}
                   </Button>
                   <Button
                     type="submit"
@@ -352,9 +352,9 @@ export default function HealthModules() {
                     className={`flex-1 bg-gradient-to-r ${module.color}`}
                   >
                     {isSubmitting ? (
-                      <><Clock className="w-4 h-4 mr-2 animate-spin" /> Сохранение...</>
+                      <><Clock className="w-4 h-4 mr-2 animate-spin" /> {t('common.loading')}</>
                     ) : (
-                      <><Save className="w-4 h-4 mr-2" /> Сохранить</>
+                      <><Save className="w-4 h-4 mr-2" /> {t('common.save')}</>
                     )}
                   </Button>
                 </div>
@@ -376,7 +376,7 @@ export default function HealthModules() {
                 <Plus className="w-5 h-5" />
               </div>
               <p className="text-2xl font-bold">0</p>
-              <p className="text-xs text-slate-500">Сегодня</p>
+              <p className="text-xs text-slate-500">{t('time.today')}</p>
             </CardContent>
           </Card>
           <Card>
@@ -385,7 +385,7 @@ export default function HealthModules() {
                 <Flame className="w-5 h-5" />
               </div>
               <p className="text-2xl font-bold">0</p>
-              <p className="text-xs text-slate-500">Неделя</p>
+              <p className="text-xs text-slate-500">{t('dashboard.thisWeek')}</p>
             </CardContent>
           </Card>
           <Card>
@@ -394,7 +394,7 @@ export default function HealthModules() {
                 <Activity className="w-5 h-5" />
               </div>
               <p className="text-2xl font-bold">0</p>
-              <p className="text-xs text-slate-500">Месяц</p>
+              <p className="text-xs text-slate-500">{t('dashboard.thisMonth')}</p>
             </CardContent>
           </Card>
         </motion.div>
