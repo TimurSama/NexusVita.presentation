@@ -1,0 +1,122 @@
+{
+  "app": {
+    "name": "EthosLife",
+    "tagline": "Здоровье — это жизненная привычка",
+    "description": "Комплексная экосистема здоровья для управления вашим благополучием"
+  },
+  "nav": {
+    "menu": "Меню",
+    "home": "Главная",
+    "dashboard": "Дашборд",
+    "health": "Здоровье",
+    "modules": "Модули",
+    "specialists": "Специалисты",
+    "centers": "Центры",
+    "pricing": "Тарифы",
+    "about": "О нас",
+    "login": "Войти",
+    "register": "Регистрация",
+    "logout": "Выйти",
+    "profile": "Профиль",
+    "settings": "Настройки",
+    "wallet": "Кошелек",
+    "aiChat": "ИИ Чат"
+  },
+  "health": {
+    "modules": {
+      "medicine": "Медицина",
+      "movement": "Движение",
+      "nutrition": "Питание",
+      "psychology": "Психология",
+      "sleep": "Сон",
+      "relationships": "Отношения",
+      "habits": "Привычки",
+      "medicineDesc": "Отслеживайте медицинские записи, анализы и приемы",
+      "movementDesc": "Следите за физической активностью, тренировками и целями",
+      "nutritionDesc": "Ведите дневник питания, считайте калории",
+      "psychologyDesc": "Отслеживайте настроение, ведите дневник мыслей",
+      "sleepDesc": "Контролируйте качество сна и режим",
+      "relationshipsDesc": "Развивайте социальные связи и общение",
+      "habitsDesc": "Вырабатывайте полезные привычки и стрики"
+    }
+  },
+  "auth": {
+    "loginTitle": "Вход в EthosLife",
+    "registerTitle": "Создайте аккаунт",
+    "email": "Email",
+    "password": "Пароль",
+    "confirmPassword": "Подтвердите пароль",
+    "name": "Полное имя",
+    "forgotPassword": "Забыли пароль?",
+    "noAccount": "Еще нет аккаунта?",
+    "hasAccount": "Уже есть аккаунт?",
+    "loginButton": "Войти",
+    "registerButton": "Создать аккаунт",
+    "googleLogin": "Войти через Google",
+    "telegramLogin": "Войти через Telegram",
+    "or": "или",
+    "agreeTerms": "Я согласен с Условиями использования и Политикой конфиденциальности"
+  },
+  "dashboard": {
+    "welcome": "С возвращением",
+    "dailyPlan": "План на день",
+    "metrics": "Метрики здоровья",
+    "goals": "Ваши цели",
+    "achievements": "Достижения",
+    "recentActivity": "Недавняя активность",
+    "aiAssistant": "ИИ-помощник по здоровью",
+    "askAI": "Спросите ИИ о вашем здоровье...",
+    "upgrade": "Перейти на Premium",
+    "subscribe": "Подпишитесь, чтобы открыть все функции"
+  },
+  "pricing": {
+    "title": "Выберите ваш план",
+    "subtitle": "Инвестируйте в свое здоровье с нашими гибкими планами",
+    "free": "Free",
+    "basic": "Basic",
+    "premium": "Premium",
+    "month": "месяц",
+    "year": "год",
+    "features": {
+      "freeModules": "3 модуля здоровья",
+      "allModules": "Все 7 модулей здоровья",
+      "aiChat": "ИИ-чат (5 сообщений/день)",
+      "unlimitedAI": "Безлимитный ИИ-чат",
+      "habits": "3 привычки",
+      "unlimitedHabits": "Безлимит привычек",
+      "export": "Экспорт данных",
+      "prioritySupport": "Приоритетная поддержка",
+      "specialists": "Доступ к специалистам"
+    },
+    "currentPlan": "Текущий план",
+    "upgrade": "Обновить",
+    "subscribe": "Подписаться"
+  },
+  "common": {
+    "save": "Сохранить",
+    "cancel": "Отмена",
+    "delete": "Удалить",
+    "edit": "Редактировать",
+    "create": "Создать",
+    "search": "Поиск",
+    "loading": "Загрузка...",
+    "error": "Ошибка",
+    "success": "Успешно",
+    "close": "Закрыть",
+    "back": "Назад",
+    "next": "Далее",
+    "continue": "Продолжить",
+    "done": "Готово",
+    "yes": "Да",
+    "no": "Нет",
+    "more": "Еще",
+    "less": "Скрыть",
+    "show": "Показать",
+    "hide": "Скрыть"
+  },
+  "language": {
+    "select": "Язык",
+    "en": "English",
+    "ru": "Русский"
+  }
+}

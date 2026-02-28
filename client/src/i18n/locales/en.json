@@ -1,0 +1,122 @@
+{
+  "app": {
+    "name": "EthosLife",
+    "tagline": "Health is a lifestyle habit",
+    "description": "Comprehensive health ecosystem for managing your wellbeing"
+  },
+  "nav": {
+    "menu": "Menu",
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "health": "Health",
+    "modules": "Modules",
+    "specialists": "Specialists",
+    "centers": "Centers",
+    "pricing": "Pricing",
+    "about": "About",
+    "login": "Sign In",
+    "register": "Sign Up",
+    "logout": "Sign Out",
+    "profile": "Profile",
+    "settings": "Settings",
+    "wallet": "Wallet",
+    "aiChat": "AI Chat"
+  },
+  "health": {
+    "modules": {
+      "medicine": "Medicine",
+      "movement": "Movement",
+      "nutrition": "Nutrition",
+      "psychology": "Psychology",
+      "sleep": "Sleep",
+      "relationships": "Relationships",
+      "habits": "Habits",
+      "medicineDesc": "Track medical records, lab results, and appointments",
+      "movementDesc": "Monitor physical activity, workouts, and fitness goals",
+      "nutritionDesc": "Log meals, track calories, and plan your diet",
+      "psychologyDesc": "Track mood, journal thoughts, and manage stress",
+      "sleepDesc": "Monitor sleep quality and establish healthy routines",
+      "relationshipsDesc": "Nurture social connections and track interactions",
+      "habitsDesc": "Build healthy habits and maintain daily streaks"
+    }
+  },
+  "auth": {
+    "loginTitle": "Sign in to EthosLife",
+    "registerTitle": "Create your account",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "name": "Full Name",
+    "forgotPassword": "Forgot password?",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "loginButton": "Sign In",
+    "registerButton": "Create Account",
+    "googleLogin": "Continue with Google",
+    "telegramLogin": "Continue with Telegram",
+    "or": "or",
+    "agreeTerms": "I agree to the Terms of Service and Privacy Policy"
+  },
+  "dashboard": {
+    "welcome": "Welcome back",
+    "dailyPlan": "Daily Plan",
+    "metrics": "Health Metrics",
+    "goals": "Your Goals",
+    "achievements": "Achievements",
+    "recentActivity": "Recent Activity",
+    "aiAssistant": "AI Health Assistant",
+    "askAI": "Ask AI about your health...",
+    "upgrade": "Upgrade to Premium",
+    "subscribe": "Subscribe to unlock all features"
+  },
+  "pricing": {
+    "title": "Choose your plan",
+    "subtitle": "Invest in your health with our flexible plans",
+    "free": "Free",
+    "basic": "Basic",
+    "premium": "Premium",
+    "month": "month",
+    "year": "year",
+    "features": {
+      "freeModules": "3 health modules",
+      "allModules": "All 7 health modules",
+      "aiChat": "AI chat (5 messages/day)",
+      "unlimitedAI": "Unlimited AI chat",
+      "habits": "3 habits tracking",
+      "unlimitedHabits": "Unlimited habits",
+      "export": "Export data",
+      "prioritySupport": "Priority support",
+      "specialists": "Access to specialists"
+    },
+    "currentPlan": "Current Plan",
+    "upgrade": "Upgrade",
+    "subscribe": "Subscribe"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "search": "Search",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "continue": "Continue",
+    "done": "Done",
+    "yes": "Yes",
+    "no": "No",
+    "more": "More",
+    "less": "Less",
+    "show": "Show",
+    "hide": "Hide"
+  },
+  "language": {
+    "select": "Language",
+    "en": "English",
+    "ru": "Русский"
+  }
+}

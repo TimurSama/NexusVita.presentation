@@ -4,10 +4,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import SketchIcon from './SketchIcon';
 import { BurgerMenu } from './BurgerMenu';
+import { LanguageSwitcher } from './LanguageSwitcher';
+import { useI18n } from '@/i18n';
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [location] = useLocation();
+  const { t } = useI18n();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -27,7 +30,7 @@ export function Header() {
               whileTap={{ scale: 0.95 }}
               onClick={toggleMenu}
               className="p-2 rounded-xl hover:bg-muted transition-colors md:hidden"
-              aria-label="Открыть меню"
+              aria-label={t('common.show') + ' ' + t('nav.menu')}
             >
               {isMenuOpen ? (
                 <X className="w-6 h-6 text-foreground" />
@@ -37,15 +40,20 @@ export function Header() {
             </motion.button>
 
             {/* Desktop Menu Button */}
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              onClick={toggleMenu}
-              className="hidden md:flex items-center gap-2 px-4 py-2 rounded-xl hover:bg-muted transition-colors"
-              aria-label="Открыть меню"
-            >
-              <Menu className="w-5 h-5 text-foreground" />
-              <span className="text-sm font-medium text-foreground">Меню</span>
-            </motion.button>
+            <div className="hidden md:flex items-center gap-2">
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                onClick={toggleMenu}
+                className="flex items-center gap-2 px-4 py-2 rounded-xl hover:bg-muted transition-colors"
+                aria-label={t('common.show') + ' ' + t('nav.menu')}
+              >
+                <Menu className="w-5 h-5 text-foreground" />
+                <span className="text-sm font-medium text-foreground">{t('nav.menu')}</span>
+              </motion.button>
+              
+              {/* Language Switcher */}
+              <LanguageSwitcher />
+            </div>
 
             {/* Logo - Centered */}
             <Link href="/">
@@ -57,17 +65,20 @@ export function Header() {
                 <SketchIcon icon="heart" size={32} className="text-primary" />
                 <div className="hidden sm:block">
                   <h1 className="text-xl md:text-2xl font-bold text-foreground tracking-tight">
-                    EthosLife
+                    {t('app.name')}
                   </h1>
                   <p className="text-xs text-foreground/60 hidden md:block">
-                    Здоровая жизнь - это привычка
+                    {t('app.tagline')}
                   </p>
                 </div>
               </motion.div>
             </Link>
 
-            {/* Right side - placeholder for future actions */}
-            <div className="w-10 md:w-20" />
+            {/* Right side - Language switcher for mobile */}
+            <div className="flex items-center md:hidden">
+              <LanguageSwitcher />
+            </div>
+            <div className="hidden md:block w-20" />
           </div>
         </div>
       </header>
