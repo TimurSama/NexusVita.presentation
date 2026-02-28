@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { motion } from 'framer-motion';
 import { 
@@ -9,11 +9,13 @@ import {
   ArrowRight,
   Chrome,
   MessageCircle,
-  Loader2
+  Loader2,
+  AlertCircle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useUser } from '@/contexts/UserContext';
 import { useI18n } from '@/i18n';
 
@@ -26,6 +28,15 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [configError, setConfigError] = useState<string | null>(null);
+
+  // Check OAuth configuration on mount
+  useEffect(() => {
+    const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || (window as any).GOOGLE_CLIENT_ID;
+    if (!googleClientId || googleClientId === 'your-google-client-id') {
+      setConfigError('Google OAuth is not configured. Please use email/password or Telegram login.');
+    }
+  }, []);
 
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -117,6 +128,16 @@ export default function Login() {
           </CardHeader>
 
           <CardContent className="space-y-4">
+            {/* Configuration Warning */}
+            {configError && (
+              <Alert className="bg-amber-50 border-amber-200">
+                <AlertCircle className="h-4 w-4 text-amber-600" />
+                <AlertDescription className="text-amber-800 text-sm">
+                  {configError}
+                </AlertDescription>
+              </Alert>
+            )}
+
             {/* Email/Password Form */}
             <form onSubmit={handleEmailLogin} className="space-y-4">
               <div>
