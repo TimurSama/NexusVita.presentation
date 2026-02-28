@@ -3,11 +3,10 @@ import { Link, useLocation } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Home, 
-  LayoutDashboard, 
   Heart, 
+  LayoutDashboard, 
   Bot, 
   Target, 
-  Sparkles,
   Wallet,
   User,
   Settings,
@@ -17,24 +16,12 @@ import {
   Newspaper,
   Menu,
   X,
-  ChevronRight,
   LogOut,
-  Globe
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import { useI18n } from '@/i18n';
 import { LanguageSwitcher } from './LanguageSwitcher';
-
-interface NavSection {
-  title: string;
-  items: {
-    path: string;
-    icon: React.ElementType;
-    label: string;
-    badge?: string;
-  }[];
-}
 
 export function BottomNavigation() {
   const [location] = useLocation();
@@ -42,227 +29,187 @@ export function BottomNavigation() {
   const { user, logout, isAuthenticated } = useAuth();
   const { t } = useI18n();
 
-  const navSections: NavSection[] = [
-    {
-      title: t('nav.home'),
-      items: [
-        { path: '/', icon: Home, label: t('nav.home') },
-        { path: '/landing', icon: Sparkles, label: 'Landing V1' },
-        { path: '/v2', icon: Sparkles, label: 'Landing V2' },
-        { path: '/newstyle', icon: Sparkles, label: 'New Style' },
-      ],
-    },
-    {
-      title: t('nav.health'),
-      items: [
-        { path: '/health-center', icon: Heart, label: t('nav.health') },
-        { path: '/health/movement', icon: Heart, label: t('health.modules.movement') },
-        { path: '/health/nutrition', icon: Heart, label: t('health.modules.nutrition') },
-        { path: '/health/sleep', icon: Heart, label: t('health.modules.sleep') },
-        { path: '/health/psychology', icon: Heart, label: t('health.modules.psychology') },
-        { path: '/health/medicine', icon: Heart, label: t('health.modules.medicine') },
-        { path: '/health/relationships', icon: Heart, label: t('health.modules.relationships') },
-        { path: '/health/habits', icon: Heart, label: t('health.modules.habits') },
-      ],
-    },
-    {
-      title: 'Platform',
-      items: [
-        { path: '/dashboard', icon: LayoutDashboard, label: t('nav.dashboard') },
-        { path: '/ai-chat', icon: Bot, label: t('nav.aiChat') },
-        { path: '/wallet', icon: Wallet, label: t('nav.wallet') },
-        { path: '/specialists', icon: Users, label: t('nav.specialists') },
-        { path: '/map', icon: Map, label: t('nav.map') },
-        { path: '/news', icon: Newspaper, label: t('nav.news') },
-      ],
-    },
-    {
-      title: 'Investment',
-      items: [
-        { path: '/roadmap', icon: Target, label: t('nav.roadmap') },
-        { path: '/tokenomics', icon: Wallet, label: t('nav.tokenomics') },
-        { path: '/whitepaper', icon: FileText, label: t('nav.whitepaper') },
-        { path: '/pricing', icon: Sparkles, label: t('nav.pricing') },
-      ],
-    },
-    {
-      title: 'Account',
-      items: [
-        { path: '/account', icon: User, label: t('nav.profile') },
-        { path: '/settings', icon: Settings, label: t('nav.settings') },
-      ],
-    },
-  ];
+  const isActive = (path: string) => location === path;
 
-  // Quick nav items for bottom bar
-  const quickNavItems = [
+  const mainNavItems = [
     { path: '/', icon: Home, label: t('nav.home') },
     { path: '/health-center', icon: Heart, label: t('nav.health') },
     { path: '/dashboard', icon: LayoutDashboard, label: t('nav.dashboard') },
     { path: '/ai-chat', icon: Bot, label: t('nav.aiChat') },
   ];
 
-  const isActive = (path: string) => location === path;
+  const menuSections = [
+    {
+      title: t('nav.home'),
+      items: [
+        { path: '/', label: t('nav.home') },
+        { path: '/landing', label: 'Landing' },
+        { path: '/v2', label: 'Landing V2' },
+        { path: '/presentation', label: 'Presentation' },
+      ],
+    },
+    {
+      title: t('health.title'),
+      items: [
+        { path: '/health-center', label: t('nav.health') },
+        { path: '/health/movement', label: t('health.modules.movement') },
+        { path: '/health/nutrition', label: t('health.modules.nutrition') },
+        { path: '/health/sleep', label: t('health.modules.sleep') },
+        { path: '/health/psychology', label: t('health.modules.psychology') },
+        { path: '/health/medicine', label: t('health.modules.medicine') },
+      ],
+    },
+    {
+      title: 'Platform',
+      items: [
+        { path: '/wallet', label: t('nav.wallet') },
+        { path: '/specialists', label: t('nav.specialists') },
+        { path: '/map', label: t('nav.map') },
+        { path: '/news', label: t('nav.news') },
+      ],
+    },
+    {
+      title: 'Info',
+      items: [
+        { path: '/roadmap', label: t('nav.roadmap') },
+        { path: '/tokenomics', label: t('nav.tokenomics') },
+        { path: '/whitepaper', label: t('nav.whitepaper') },
+        { path: '/pricing', label: t('nav.pricing') },
+      ],
+    },
+  ];
 
   return (
     <>
-      {/* Bottom Navigation Bar */}
+      {/* Bottom Navigation Bar - Compact */}
       <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200 shadow-lg">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-center justify-around h-16">
-            {/* Burger Button */}
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setIsMenuOpen(true)}
-              className="flex flex-col items-center justify-center gap-1 px-4 py-2 rounded-xl text-gray-600 hover:bg-gray-100 transition-colors"
-            >
-              <Menu className="w-6 h-6" />
-              <span className="text-xs font-medium">{t('nav.menu')}</span>
-            </motion.button>
-
-            {/* Quick Nav Items */}
-            {quickNavItems.map((item) => {
-              const Icon = item.icon;
-              const active = isActive(item.path);
-              
-              return (
-                <Link key={item.path} href={item.path}>
-                  <motion.button
-                    whileTap={{ scale: 0.95 }}
-                    className={`flex flex-col items-center justify-center gap-1 px-4 py-2 rounded-xl transition-colors ${
-                      active
-                        ? 'text-emerald-600 bg-emerald-50'
-                        : 'text-gray-600 hover:bg-gray-100'
-                    }`}
-                  >
-                    <Icon className={`w-5 h-5 ${active ? 'scale-110' : ''}`} />
-                    <span className="text-xs font-medium">{item.label}</span>
-                  </motion.button>
-                </Link>
-              );
-            })}
-          </div>
+        <div className="flex items-center justify-around h-14 max-w-lg mx-auto">
+          {mainNavItems.map((item) => {
+            const Icon = item.icon;
+            const active = isActive(item.path);
+            
+            return (
+              <Link key={item.path} href={item.path}>
+                <button
+                  className={`flex flex-col items-center justify-center w-14 h-14 rounded-lg transition-colors ${
+                    active ? 'text-emerald-600' : 'text-gray-500 hover:text-gray-700'
+                  }`}
+                >
+                  <Icon className={`w-5 h-5 ${active ? 'scale-110' : ''} transition-transform`} />
+                </button>
+              </Link>
+            );
+          })}
+          
+          {/* Menu Button - Icon only */}
+          <button
+            onClick={() => setIsMenuOpen(true)}
+            className="flex flex-col items-center justify-center w-14 h-14 rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
         </div>
       </nav>
 
-      {/* Full Screen Menu Overlay */}
+      {/* Full Screen Menu */}
       <AnimatePresence>
         {isMenuOpen && (
           <>
-            {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsMenuOpen(false)}
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
+              className="fixed inset-0 bg-black/50 z-50"
             />
 
-            {/* Menu Panel - Slide from bottom on mobile, from left on desktop */}
             <motion.div
               initial={{ y: '100%' }}
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed bottom-0 left-0 right-0 md:left-0 md:top-0 md:bottom-0 md:w-[400px] md:right-auto bg-white z-50 overflow-hidden flex flex-col rounded-t-3xl md:rounded-none"
+              className="fixed bottom-0 left-0 right-0 max-h-[80vh] bg-white rounded-t-2xl z-50 overflow-hidden flex flex-col"
             >
               {/* Header */}
-              <div className="p-4 border-b bg-gradient-to-r from-emerald-500 to-teal-600 text-white">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
-                      <Heart className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h1 className="font-bold text-lg">EthosLife</h1>
-                      <p className="text-xs text-white/80">
-                        {isAuthenticated ? user?.name || user?.email : 'Guest'}
-                      </p>
-                    </div>
+              <div className="flex items-center justify-between p-4 border-b">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
+                    <Heart className="w-4 h-4 text-white" />
                   </div>
-                  <div className="flex items-center gap-2">
-                    <LanguageSwitcher />
-                    <button
-                      onClick={() => setIsMenuOpen(false)}
-                      className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center"
-                    >
-                      <X className="w-5 h-5" />
-                    </button>
-                  </div>
+                  <span className="font-bold">Menu</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <LanguageSwitcher />
+                  <button
+                    onClick={() => setIsMenuOpen(false)}
+                    className="w-8 h-8 rounded-lg hover:bg-gray-100 flex items-center justify-center"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
                 </div>
               </div>
 
               {/* Scrollable Content */}
-              <div className="flex-1 overflow-y-auto pb-20">
-                {navSections.map((section) => (
-                  <div key={section.title} className="border-b last:border-0">
-                    <div className="px-4 py-2 bg-gray-50">
-                      <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+              <div className="flex-1 overflow-y-auto p-4">
+                <div className="grid grid-cols-2 gap-4">
+                  {menuSections.map((section) => (
+                    <div key={section.title} className="space-y-2">
+                      <h3 className="text-xs font-semibold text-gray-400 uppercase">
                         {section.title}
                       </h3>
-                    </div>
-                    <div className="p-2">
-                      {section.items.map((item) => {
-                        const Icon = item.icon;
-                        const active = isActive(item.path);
-                        
-                        return (
+                      <div className="space-y-1">
+                        {section.items.map((item) => (
                           <Link key={item.path} href={item.path}>
                             <button
                               onClick={() => setIsMenuOpen(false)}
-                              className={`w-full flex items-center gap-3 px-3 py-3 rounded-lg transition-colors ${
-                                active
-                                  ? 'bg-emerald-50 text-emerald-700'
+                              className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
+                                isActive(item.path)
+                                  ? 'bg-emerald-50 text-emerald-700 font-medium'
                                   : 'text-gray-700 hover:bg-gray-50'
                               }`}
                             >
-                              <Icon className={`w-5 h-5 ${active ? 'text-emerald-600' : 'text-gray-400'}`} />
-                              <span className="flex-1 text-left font-medium">{item.label}</span>
-                              {item.badge && (
-                                <span className="px-2 py-0.5 bg-emerald-100 text-emerald-700 text-xs rounded-full">
-                                  {item.badge}
-                                </span>
-                              )}
-                              <ChevronRight className={`w-4 h-4 ${active ? 'text-emerald-600' : 'text-gray-300'}`} />
+                              {item.label}
                             </button>
                           </Link>
-                        );
-                      })}
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
 
               {/* Footer */}
               <div className="p-4 border-t bg-gray-50">
                 {isAuthenticated ? (
-                  <Button
-                    variant="outline"
-                    className="w-full justify-center gap-2 text-red-600 border-red-200 hover:bg-red-50"
-                    onClick={() => {
-                      logout();
-                      setIsMenuOpen(false);
-                    }}
-                  >
-                    <LogOut className="w-4 h-4" />
-                    {t('nav.logout')}
-                  </Button>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center">
+                        <User className="w-4 h-4 text-emerald-600" />
+                      </div>
+                      <span className="text-sm font-medium truncate max-w-[150px]">
+                        {user?.name || user?.email}
+                      </span>
+                    </div>
+                    <button
+                      onClick={() => {
+                        logout();
+                        setIsMenuOpen(false);
+                      }}
+                      className="flex items-center gap-1 text-red-600 text-sm px-3 py-2 rounded-lg hover:bg-red-50"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      {t('nav.logout')}
+                    </button>
+                  </div>
                 ) : (
                   <div className="flex gap-2">
                     <Link href="/login" className="flex-1">
-                      <Button
-                        variant="outline"
-                        className="w-full"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
+                      <Button variant="outline" className="w-full" size="sm">
                         {t('nav.login')}
                       </Button>
                     </Link>
                     <Link href="/register" className="flex-1">
-                      <Button
-                        className="w-full bg-emerald-600 hover:bg-emerald-700"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
+                      <Button className="w-full bg-emerald-600 hover:bg-emerald-700" size="sm">
                         {t('nav.register')}
                       </Button>
                     </Link>
@@ -274,8 +221,8 @@ export function BottomNavigation() {
         )}
       </AnimatePresence>
 
-      {/* Spacer for fixed bottom nav */}
-      <div className="h-16" />
+      {/* Spacer */}
+      <div className="h-14" />
     </>
   );
 }

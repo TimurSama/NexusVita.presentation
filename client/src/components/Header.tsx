@@ -29,7 +29,6 @@ interface HeaderProps {
 
 export function Header({ user, onLogout }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [location] = useLocation();
   const { t } = useI18n();
 
   useEffect(() => {
@@ -45,63 +44,58 @@ export function Header({ user, onLogout }: HeaderProps) {
       className={cn(
         'fixed top-0 left-0 right-0 z-30 transition-all duration-300',
         isScrolled
-          ? 'bg-white/90 backdrop-blur-lg shadow-sm'
+          ? 'bg-white/95 backdrop-blur shadow-sm'
           : 'bg-transparent'
       )}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-14">
-          {/* Logo only */}
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center group-hover:scale-105 transition-transform">
-              <Heart className="w-5 h-5 text-white" />
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="flex items-center justify-between h-12">
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
+              <Heart className="w-4 h-4 text-white" />
             </div>
-            <span className="font-bold text-xl tracking-tight whitespace-nowrap">
+            <span className="font-bold text-lg whitespace-nowrap">
               Ethos<span className="text-emerald-600">Life</span>
             </span>
           </Link>
 
-          {/* Right Side - Language & User */}
-          <div className="flex items-center gap-2">
-            {/* Language Switcher */}
+          {/* Right Side */}
+          <div className="flex items-center gap-1">
             <LanguageSwitcher />
 
-            {/* User Menu or Auth Buttons */}
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="gap-2 px-2">
-                    <Avatar className="w-8 h-8">
-                      <AvatarFallback className="bg-emerald-100 text-emerald-700 text-sm">
+                  <Button variant="ghost" size="sm" className="gap-1 px-2 h-8">
+                    <Avatar className="w-6 h-6">
+                      <AvatarFallback className="bg-emerald-100 text-emerald-700 text-xs">
                         {user.name?.charAt(0).toUpperCase() || 'U'}
                       </AvatarFallback>
                     </Avatar>
-                    <span className="hidden sm:inline text-sm font-medium max-w-[120px] truncate">
-                      {user.name || user.email}
-                    </span>
-                    <ChevronDown className="w-4 h-4 text-gray-400" />
+                    <ChevronDown className="w-3 h-3 text-gray-400" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  <div className="px-3 py-2">
+                <DropdownMenuContent align="end" className="w-48">
+                  <div className="px-2 py-1.5">
                     <p className="text-sm font-medium truncate">{user.name || user.email}</p>
                     <p className="text-xs text-gray-500 truncate">{user.email}</p>
                   </div>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
-                    <Link href="/dashboard" className="cursor-pointer">
+                    <Link href="/dashboard" className="cursor-pointer text-sm">
                       <User className="w-4 h-4 mr-2" />
                       {t('nav.profile')}
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href="/wallet" className="cursor-pointer">
+                    <Link href="/wallet" className="cursor-pointer text-sm">
                       <Wallet className="w-4 h-4 mr-2" />
                       {t('nav.wallet')}
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href="/settings" className="cursor-pointer">
+                    <Link href="/settings" className="cursor-pointer text-sm">
                       <Settings className="w-4 h-4 mr-2" />
                       {t('nav.settings')}
                     </Link>
@@ -109,7 +103,7 @@ export function Header({ user, onLogout }: HeaderProps) {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem 
                     onClick={onLogout}
-                    className="text-red-600 cursor-pointer"
+                    className="text-red-600 cursor-pointer text-sm"
                   >
                     <LogOut className="w-4 h-4 mr-2" />
                     {t('nav.logout')}
@@ -117,16 +111,16 @@ export function Header({ user, onLogout }: HeaderProps) {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1">
                 <Link href="/login">
-                  <Button variant="ghost" size="sm">
+                  <Button variant="ghost" size="sm" className="h-8 text-xs">
                     {t('nav.login')}
                   </Button>
                 </Link>
                 <Link href="/register">
                   <Button 
                     size="sm"
-                    className="bg-emerald-600 hover:bg-emerald-700"
+                    className="h-8 text-xs bg-emerald-600 hover:bg-emerald-700"
                   >
                     {t('nav.register')}
                   </Button>

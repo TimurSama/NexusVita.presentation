@@ -9,22 +9,18 @@ import {
 import { Globe } from 'lucide-react';
 
 const languages = [
-  { code: 'en', label: 'English', flag: '🇬🇧' },
-  { code: 'ru', label: 'Русский', flag: '🇷🇺' },
+  { code: 'en', label: 'EN' },
+  { code: 'ru', label: 'RU' },
 ] as const;
 
 export function LanguageSwitcher() {
-  const { locale, setLocale, t } = useI18n();
-
-  const currentLang = languages.find(l => l.code === locale);
+  const { locale, setLocale } = useI18n();
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm" className="gap-2 px-2">
-          <Globe className="h-4 w-4" />
-          <span className="hidden sm:inline">{currentLang?.flag}</span>
-          <span className="text-xs uppercase">{locale}</span>
+        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+          <span className="text-xs font-medium uppercase">{locale}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
@@ -32,12 +28,11 @@ export function LanguageSwitcher() {
           <DropdownMenuItem
             key={lang.code}
             onClick={() => setLocale(lang.code)}
-            className="gap-2 cursor-pointer"
+            className="text-sm cursor-pointer"
           >
-            <span>{lang.flag}</span>
-            <span>{lang.label}</span>
+            {lang.label}
             {locale === lang.code && (
-              <span className="ml-auto text-xs text-primary">✓</span>
+              <span className="ml-auto text-emerald-600">✓</span>
             )}
           </DropdownMenuItem>
         ))}

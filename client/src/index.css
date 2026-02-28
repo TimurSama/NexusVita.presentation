@@ -177,7 +177,6 @@
     word-break: normal;
     overflow-wrap: normal;
     writing-mode: horizontal-tb;
-    padding-bottom: 80px; /* Space for bottom navigation */
     /* Текстура фона - матовое зернистое стекло */
     background-image: 
       radial-gradient(circle at 1px 1px, rgba(0,0,0,0.03) 1px, transparent 0),
