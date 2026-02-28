@@ -18,50 +18,50 @@ export default function Landing() {
   const plans = [
     {
       id: 'basic',
-      name: 'Базовый',
+      name: 'Basic',
       price: '$9.99',
-      period: '/месяц',
-      description: 'Для начинающих свой путь к здоровью',
+      period: '/month',
+      description: 'For those starting their health journey',
       features: [
-        'Единый биопрофиль',
-        '3 модуля здоровья',
-        'Базовые рекомендации AI',
-        'Интеграция с 2 устройствами',
-        'Поддержка 24/7',
+        'Single bioprofile',
+        '3 health modules',
+        'Basic AI recommendations',
+        'Integration with 2 devices',
+        '24/7 support',
       ],
       popular: false,
     },
     {
       id: 'premium',
-      name: 'Премиум',
+      name: 'Premium',
       price: '$29.99',
-      period: '/месяц',
-      description: 'Полный доступ ко всем возможностям',
+      period: '/month',
+      description: 'Full access to all features',
       features: [
-        'Все 7 модулей здоровья',
-        'AI-диагностика 2000+ показателей',
-        'Персональный AI-ассистент',
-        'Неограниченные интеграции',
-        'Приоритетная поддержка',
-        'Эксклюзивные консультации',
-        'Ранний доступ к новым функциям',
+        'All 7 health modules',
+        'AI diagnostics 2000+ indicators',
+        'Personal AI assistant',
+        'Unlimited integrations',
+        'Priority support',
+        'Exclusive consultations',
+        'Early access to new features',
       ],
       popular: true,
     },
     {
       id: 'enterprise',
-      name: 'Корпоративный',
+      name: 'Enterprise',
       price: '$99',
-      period: '/месяц',
-      description: 'Для компаний и команд',
+      period: '/month',
+      description: 'For companies and teams',
       features: [
-        'Все функции Премиум',
-        'Корпоративный дашборд',
-        'Управление командой',
-        'Кастомные интеграции',
-        'Выделенный менеджер',
-        'API доступ',
-        'Белый лейбл',
+        'All Premium features',
+        'Corporate dashboard',
+        'Team management',
+        'Custom integrations',
+        'Dedicated manager',
+        'API access',
+        'White label',
       ],
       popular: false,
     },
@@ -69,52 +69,52 @@ export default function Landing() {
 
   const testimonials = [
     {
-      name: 'Анна Петрова',
-      role: 'Врач-терапевт',
-      text: 'EthosLife изменил мой подход к профилактике. Теперь у меня полная картина здоровья пациента.',
+      name: 'Anna Petrova',
+      role: 'Therapist',
+      text: 'EthosLife has changed my approach to prevention. Now I have a complete picture of my patients health.',
       rating: 5,
     },
     {
-      name: 'Михаил Соколов',
-      role: 'Фитнес-тренер',
-      text: 'Мои клиенты стали более мотивированными благодаря отслеживанию прогресса в EthosLife.',
+      name: 'Michael Sokolov',
+      role: 'Fitness Trainer',
+      text: 'My clients have become more motivated thanks to progress tracking in EthosLife.',
       rating: 5,
     },
     {
-      name: 'Елена Иванова',
-      role: 'Пользователь',
-      text: 'За 3 месяца использования я похудела на 8 кг и нормализовала давление. Платформа работает!',
+      name: 'Elena Ivanova',
+      role: 'User',
+      text: 'In 3 months of use, I lost 8 kg and normalized my blood pressure. The platform works!',
       rating: 5,
     },
   ];
 
   const stats = [
-    { value: '2000+', label: 'Показателей здоровья', icon: Activity },
-    { value: '95%', label: 'Точность AI-диагностики', icon: Brain },
-    { value: '500K+', label: 'Пользователей', icon: Users },
-    { value: '7', label: 'Модулей здоровья', icon: Heart },
+    { value: '2000+', label: 'Health Indicators', icon: Activity },
+    { value: '95%', label: 'AI Diagnostic Accuracy', icon: Brain },
+    { value: '500K+', label: 'Users', icon: Users },
+    { value: '7', label: 'Health Modules', icon: Heart },
   ];
 
   const benefits = [
     {
       icon: Zap,
-      title: 'Мгновенные результаты',
-      description: 'Получите персональный план оздоровления за 5 минут',
+      title: 'Instant Results',
+      description: 'Get a personalized wellness plan in 5 minutes',
     },
     {
       icon: Shield,
-      title: 'Безопасность данных',
-      description: 'End-to-end шифрование и полный контроль над данными',
+      title: 'Data Security',
+      description: 'End-to-end encryption and full data control',
     },
     {
       icon: TrendingUp,
-      title: 'Доказанная эффективность',
-      description: '95% пользователей видят улучшения в первый месяц',
+      title: 'Proven Effectiveness',
+      description: '95% of users see improvements in the first month',
     },
     {
       icon: Gift,
-      title: 'Бесплатный пробный период',
-      description: '14 дней полного доступа без оплаты',
+      title: 'Free Trial',
+      description: '14 days of full access without payment',
     },
   ];
 
@@ -131,7 +131,7 @@ export default function Landing() {
   const handleRegister = () => {
     // Registration logic here
     console.log('Registering:', { name, email, plan: selectedPlan });
-    alert('Регистрация успешна! Проверьте email для подтверждения.');
+    alert('Registration successful! Check your email for confirmation.');
   };
 
   return (
@@ -154,16 +154,16 @@ export default function Landing() {
               transition={{ delay: 0.2, type: 'spring' }}
               className="engraved-card mb-8 p-8"
             >
-              <Badge className="mb-4 engraved-badge">Новое поколение здоровья</Badge>
+              <Badge className="mb-4 engraved-badge">Next Generation Health</Badge>
               <h1 className="text-5xl md:text-7xl font-bold mb-6 engraved-text">
                 EthosLife
               </h1>
               <p className="text-2xl md:text-3xl text-foreground/80 mb-4 engraved-text">
-                Здоровая жизнь - это привычка
+                Healthy living is a habit
               </p>
               <p className="text-lg md:text-xl text-foreground/70 mb-8 leading-relaxed">
-                Единая платформа для управления всеми аспектами здоровья. 
-                AI-анализ 2000+ показателей, персонализированные рекомендации и непрерывный мониторинг 24/7.
+                A unified platform for managing all aspects of health. 
+                AI analysis of 2000+ indicators, personalized recommendations and continuous 24/7 monitoring.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button
@@ -171,7 +171,7 @@ export default function Landing() {
                   className="engraved-button text-lg px-8 py-6"
                   onClick={handleGetStarted}
                 >
-                  Начать бесплатно
+                  Start Free
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
                 <Button
@@ -180,7 +180,7 @@ export default function Landing() {
                   className="engraved-button-outline text-lg px-8 py-6"
                   onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
                 >
-                  Узнать больше
+                  Learn More
                 </Button>
               </div>
             </motion.div>
@@ -220,11 +220,11 @@ export default function Landing() {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-4 engraved-text">
-              Проблема, которую мы решаем
+              The Problem We Solve
             </h2>
             <p className="text-xl text-foreground/70 max-w-3xl mx-auto">
-              Данные о здоровье разбросаны по разным приложениям и системам. 
-              Нет единой картины, нет персонализации, нет комплексного подхода.
+              Health data is scattered across different apps and systems. 
+              No unified picture, no personalization, no comprehensive approach.
             </p>
           </motion.div>
 
@@ -235,23 +235,23 @@ export default function Landing() {
               viewport={{ once: true }}
               className="engraved-card p-8"
             >
-              <h3 className="text-2xl font-bold mb-4 engraved-text">Проблема</h3>
+              <h3 className="text-2xl font-bold mb-4 engraved-text">Problem</h3>
               <ul className="space-y-3 text-foreground/80">
                 <li className="flex items-start gap-2">
                   <span className="text-red-500 mt-1">✗</span>
-                  <span>Данные в разных приложениях</span>
+                  <span>Data in different apps</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-red-500 mt-1">✗</span>
-                  <span>Нет персонализации</span>
+                  <span>No personalization</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-red-500 mt-1">✗</span>
-                  <span>Фрагментированная информация</span>
+                  <span>Fragmented information</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-red-500 mt-1">✗</span>
-                  <span>Нет комплексного подхода</span>
+                  <span>No comprehensive approach</span>
                 </li>
               </ul>
             </motion.div>
@@ -262,23 +262,23 @@ export default function Landing() {
               viewport={{ once: true }}
               className="engraved-card p-8"
             >
-              <h3 className="text-2xl font-bold mb-4 engraved-text">Решение EthosLife</h3>
+              <h3 className="text-2xl font-bold mb-4 engraved-text">EthosLife Solution</h3>
               <ul className="space-y-3 text-foreground/80">
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="text-green-500 mt-1 w-5 h-5 flex-shrink-0" />
-                  <span>Единая платформа для всех данных</span>
+                  <span>Unified platform for all data</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="text-green-500 mt-1 w-5 h-5 flex-shrink-0" />
-                  <span>AI-персонализация на основе 2000+ показателей</span>
+                  <span>AI personalization based on 2000+ indicators</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="text-green-500 mt-1 w-5 h-5 flex-shrink-0" />
-                  <span>Комплексный подход к здоровью</span>
+                  <span>Comprehensive approach to health</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="text-green-500 mt-1 w-5 h-5 flex-shrink-0" />
-                  <span>Непрерывный мониторинг 24/7</span>
+                  <span>Continuous 24/7 monitoring</span>
                 </li>
               </ul>
             </motion.div>
@@ -296,7 +296,7 @@ export default function Landing() {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-4 engraved-text">
-              Почему выбирают EthosLife
+              Why Choose EthosLife
             </h2>
           </motion.div>
 
@@ -329,7 +329,7 @@ export default function Landing() {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-4 engraved-text">
-              Что говорят пользователи
+              What Users Say
             </h2>
           </motion.div>
 
@@ -369,10 +369,10 @@ export default function Landing() {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-4 engraved-text">
-              Выберите свой план
+              Choose Your Plan
             </h2>
             <p className="text-xl text-foreground/70">
-              14 дней бесплатно. Отмена в любой момент.
+              14 days free. Cancel anytime.
             </p>
           </motion.div>
 
@@ -388,7 +388,7 @@ export default function Landing() {
               >
                 {plan.popular && (
                   <Badge className="absolute -top-4 left-1/2 -translate-x-1/2 engraved-badge">
-                    Популярный
+                    Popular
                   </Badge>
                 )}
                 <div className="text-center mb-6">
@@ -415,7 +415,7 @@ export default function Landing() {
                     document.getElementById('registration')?.scrollIntoView({ behavior: 'smooth' });
                   }}
                 >
-                  Выбрать план
+                  Select Plan
                 </Button>
               </motion.div>
             ))}
@@ -434,10 +434,10 @@ export default function Landing() {
           >
             <div className="text-center mb-8">
               <h2 className="text-4xl font-bold mb-4 engraved-text">
-                Начните свой путь к здоровью
+                Start Your Health Journey
               </h2>
               <p className="text-lg text-foreground/70">
-                Создайте аккаунт и получите 14 дней бесплатного доступа
+                Create an account and get 14 days of free access
               </p>
             </div>
 
@@ -450,7 +450,7 @@ export default function Landing() {
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="font-bold engraved-text">
-                      Выбранный план: {plans.find(p => p.id === selectedPlan)?.name}
+                      Selected plan: {plans.find(p => p.id === selectedPlan)?.name}
                     </div>
                     <div className="text-sm text-foreground/70">
                       {plans.find(p => p.id === selectedPlan)?.price}
@@ -462,7 +462,7 @@ export default function Landing() {
                     size="sm"
                     onClick={() => setSelectedPlan(null)}
                   >
-                    Изменить
+                    Change
                   </Button>
                 </div>
               </motion.div>
@@ -471,13 +471,13 @@ export default function Landing() {
             <form onSubmit={(e) => { e.preventDefault(); handleRegister(); }} className="space-y-6">
               <div>
                 <label className="block text-sm font-medium mb-2 engraved-text">
-                  Ваше имя
+                  Your Name
                 </label>
                 <Input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Иван Иванов"
+                  placeholder="John Smith"
                   required
                   className="engraved-input"
                 />
@@ -491,7 +491,7 @@ export default function Landing() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="ivan@example.com"
+                  placeholder="john@example.com"
                   required
                   className="engraved-input"
                 />
@@ -500,7 +500,7 @@ export default function Landing() {
               {!selectedPlan && (
                 <div>
                   <label className="block text-sm font-medium mb-2 engraved-text">
-                    Выберите план
+                    Choose Plan
                   </label>
                   <div className="grid gap-3">
                     {plans.map((plan) => (
@@ -520,7 +520,7 @@ export default function Landing() {
                             </div>
                           </div>
                           {plan.popular && (
-                            <Badge className="engraved-badge">Популярный</Badge>
+                            <Badge className="engraved-badge">Popular</Badge>
                           )}
                         </div>
                       </button>
@@ -537,10 +537,10 @@ export default function Landing() {
                   className="w-5 h-5"
                 />
                 <label htmlFor="terms" className="text-sm text-foreground/70">
-                  Я соглашаюсь с{' '}
-                  <a href="#" className="text-primary hover:underline">условиями использования</a>{' '}
-                  и{' '}
-                  <a href="#" className="text-primary hover:underline">политикой конфиденциальности</a>
+                  I agree to the{' '}
+                  <a href="#" className="text-primary hover:underline">terms of service</a>{' '}
+                  and{' '}
+                  <a href="#" className="text-primary hover:underline">privacy policy</a>
                 </label>
               </div>
 
@@ -551,13 +551,13 @@ export default function Landing() {
                 disabled={!name || !email || !selectedPlan}
               >
                 <Lock className="mr-2 w-5 h-5" />
-                Создать аккаунт и начать
+                Create Account & Start
                 <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
 
               <p className="text-center text-sm text-foreground/60">
                 <Gift className="inline w-4 h-4 mr-1" />
-                14 дней бесплатно. Отмена в любой момент. Без скрытых платежей.
+                14 days free. Cancel anytime. No hidden fees.
               </p>
             </form>
           </motion.div>
@@ -575,17 +575,17 @@ export default function Landing() {
           >
             <Sparkles className="w-16 h-16 text-primary mb-6 mx-auto" />
             <h2 className="text-4xl md:text-5xl font-bold mb-6 engraved-text">
-              Готовы изменить свою жизнь?
+              Ready to Change Your Life?
             </h2>
             <p className="text-xl text-foreground/70 mb-8">
-              Присоединяйтесь к 500,000+ пользователям, которые уже на пути к здоровью
+              Join 500,000+ users already on their way to better health
             </p>
             <Button
               size="lg"
               className="engraved-button text-lg px-8 py-6"
               onClick={() => document.getElementById('registration')?.scrollIntoView({ behavior: 'smooth' })}
             >
-              Начать бесплатно
+              Start Free
               <ArrowRight className="ml-2 w-5 h-5" />
             </Button>
           </motion.div>

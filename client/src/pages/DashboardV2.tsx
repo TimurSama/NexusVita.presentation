@@ -81,13 +81,13 @@ interface ModuleMetric {
 }
 
 const modules = [
-  { id: 'movement', name: 'Движение', icon: Activity, color: 'from-blue-500 to-cyan-500', bgColor: 'bg-blue-50', description: 'Шаги, тренировки, активность' },
-  { id: 'nutrition', name: 'Питание', icon: Utensils, color: 'from-green-500 to-emerald-500', bgColor: 'bg-green-50', description: 'Калории, БЖУ, вода' },
-  { id: 'sleep', name: 'Сон', icon: Moon, color: 'from-purple-500 to-violet-500', bgColor: 'bg-purple-50', description: 'Часы, качество, фазы' },
-  { id: 'psychology', name: 'Психология', icon: Brain, color: 'from-pink-500 to-rose-500', bgColor: 'bg-pink-50', description: 'Настроение, стресс, дневник' },
-  { id: 'medicine', name: 'Медицина', icon: Heart, color: 'from-red-500 to-rose-500', bgColor: 'bg-red-50', description: 'Анализы, приемы, лекарства' },
-  { id: 'relationships', name: 'Отношения', icon: Users, color: 'from-orange-500 to-amber-500', bgColor: 'bg-orange-50', description: 'Социальные связи, общение' },
-  { id: 'habits', name: 'Привычки', icon: Sparkles, color: 'from-cyan-500 to-teal-500', bgColor: 'bg-cyan-50', description: 'Трекер, streaks, цели' },
+  { id: 'movement', name: 'Movement', icon: Activity, color: 'from-blue-500 to-cyan-500', bgColor: 'bg-blue-50', description: 'Steps, workouts, activity' },
+  { id: 'nutrition', name: 'Nutrition', icon: Utensils, color: 'from-green-500 to-emerald-500', bgColor: 'bg-green-50', description: 'Calories, macros, water' },
+  { id: 'sleep', name: 'Sleep', icon: Moon, color: 'from-purple-500 to-violet-500', bgColor: 'bg-purple-50', description: 'Hours, quality, phases' },
+  { id: 'psychology', name: 'Psychology', icon: Brain, color: 'from-pink-500 to-rose-500', bgColor: 'bg-pink-50', description: 'Mood, stress, journal' },
+  { id: 'medicine', name: 'Medicine', icon: Heart, color: 'from-red-500 to-rose-500', bgColor: 'bg-red-50', description: 'Tests, appointments, medications' },
+  { id: 'relationships', name: 'Relationships', icon: Users, color: 'from-orange-500 to-amber-500', bgColor: 'bg-orange-50', description: 'Social connections, communication' },
+  { id: 'habits', name: 'Habits', icon: Sparkles, color: 'from-cyan-500 to-teal-500', bgColor: 'bg-cyan-50', description: 'Tracker, streaks, goals' },
 ];
 
 export default function DashboardV2() {
@@ -152,7 +152,7 @@ export default function DashboardV2() {
     try {
       const userId = user.id.toString();
       
-      // Загрузка метрик для всех модулей
+      // Load metrics for all modules
       const metricsPromises = modules.map(async (module) => {
         try {
           const res = await fetch(`/api/users/${userId}/metrics?metric_type=${module.id}&limit=1`, {
@@ -172,7 +172,7 @@ export default function DashboardV2() {
               value: metric?.value || 0,
               unit: getUnitForModule(module.id),
               trend: 'neutral',
-              lastEntry: metric?.recorded_at ? new Date(metric.recorded_at).toLocaleDateString('ru-RU') : 'Нет данных',
+              lastEntry: metric?.recorded_at ? new Date(metric.recorded_at).toLocaleDateString('en-US') : 'No data',
             };
           }
         } catch (e) {
@@ -188,7 +188,7 @@ export default function DashboardV2() {
           value: 0,
           unit: getUnitForModule(module.id),
           trend: 'neutral',
-          lastEntry: 'Нет данных',
+          lastEntry: 'No data',
         };
       });
       
@@ -201,12 +201,12 @@ export default function DashboardV2() {
 
   const getUnitForModule = (moduleId: string) => {
     const units: Record<string, string> = {
-      movement: 'шагов',
-      nutrition: 'ккал',
-      sleep: 'часов',
-      psychology: 'балл',
-      medicine: 'записей',
-      relationships: 'балл',
+      movement: 'steps',
+      nutrition: 'kcal',
+      sleep: 'hours',
+      psychology: 'score',
+      medicine: 'records',
+      relationships: 'score',
       habits: 'streak',
     };
     return units[moduleId] || '';
@@ -229,14 +229,14 @@ export default function DashboardV2() {
         ));
         
         toast({
-          title: completed ? 'Выполнено! ✅' : 'Отменено',
-          description: completed ? 'Отличная работа!' : 'Задача отмечена как невыполненная',
+          title: completed ? 'Completed! ✅' : 'Cancelled',
+          description: completed ? 'Great work!' : 'Task marked as incomplete',
         });
       }
     } catch (error) {
       toast({
-        title: 'Ошибка',
-        description: 'Не удалось обновить статус',
+        title: 'Error',
+        description: 'Failed to update status',
         variant: 'destructive',
       });
     }
@@ -252,8 +252,8 @@ export default function DashboardV2() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-slate-600 mb-4">Войдите, чтобы просмотреть дашборд</p>
-          <Button onClick={() => setLocation("/login")}>Войти</Button>
+          <p className="text-slate-600 mb-4">Sign in to view dashboard</p>
+          <Button onClick={() => setLocation("/login")}>Sign In</Button>
         </div>
       </div>
     );
@@ -277,10 +277,10 @@ export default function DashboardV2() {
               <CardContent className="p-6">
                 <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                   <div>
-                    <p className="text-slate-500">Добро пожаловать,</p>
+                    <p className="text-slate-500">Welcome,</p>
                     <h1 className="text-2xl font-bold">{user.full_name || user.username}</h1>
                     <p className="text-sm text-slate-400 mt-1">
-                      {new Date().toLocaleDateString('ru-RU', { 
+                      {new Date().toLocaleDateString('en-US', { 
                         weekday: 'long', 
                         year: 'numeric', 
                         month: 'long', 
@@ -295,7 +295,7 @@ export default function DashboardV2() {
                         <div className={`text-4xl font-bold ${getHealthScoreColor(data.healthScore)}`}>
                           {data.healthScore}
                         </div>
-                        <p className="text-xs text-slate-400">Индекс здоровья</p>
+                        <p className="text-xs text-slate-400">Health Score</p>
                       </div>
                       <div className="w-16 h-16 relative">
                         <svg className="w-full h-full transform -rotate-90">
@@ -342,10 +342,10 @@ export default function DashboardV2() {
                       <span className="text-orange-100">Streak</span>
                     </div>
                     <div className="text-3xl font-bold">
-                      {data?.streaks?.current || 0} дней
+                      {data?.streaks?.current || 0} days
                     </div>
                     <p className="text-sm text-orange-100 mt-1">
-                      Лучший: {data?.streaks?.longest || 0} дней
+                      Best: {data?.streaks?.longest || 0} days
                     </p>
                   </div>
                   <div className="text-right">
@@ -366,10 +366,10 @@ export default function DashboardV2() {
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <Clock className="w-5 h-5 text-slate-600" />
-              <h2 className="text-lg font-semibold">План на сегодня</h2>
+              <h2 className="text-lg font-semibold">Today's Plan</h2>
             </div>
             <Button variant="ghost" size="sm" onClick={() => setLocation('/calendar')}>
-              Календарь <ArrowRight className="w-4 h-4 ml-1" />
+              Calendar <ArrowRight className="w-4 h-4 ml-1" />
             </Button>
           </div>
 
@@ -379,20 +379,20 @@ export default function DashboardV2() {
               <CardHeader className="pb-3">
                 <CardTitle className="text-sm font-medium text-slate-600 flex items-center gap-2">
                   <Target className="w-4 h-4" />
-                  Задачи
+                  Tasks
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-2">
                 {dailyPlans.length === 0 ? (
                   <div className="text-center py-4">
-                    <p className="text-sm text-slate-400 mb-2">Нет запланированных задач</p>
+                    <p className="text-sm text-slate-400 mb-2">No scheduled tasks</p>
                     <Button 
                       size="sm" 
                       variant="outline"
                       onClick={() => setLocation('/journal')}
                     >
                       <Plus className="w-4 h-4 mr-1" />
-                      Добавить
+                      Add
                     </Button>
                   </div>
                 ) : (
@@ -432,7 +432,7 @@ export default function DashboardV2() {
               <CardHeader className="pb-3">
                 <CardTitle className="text-sm font-medium text-slate-600 flex items-center gap-2">
                   <Bell className="w-4 h-4" />
-                  Напоминания
+                  Reminders
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-2">
@@ -441,8 +441,8 @@ export default function DashboardV2() {
                     <Droplets className="w-4 h-4 text-blue-600" />
                   </div>
                   <div className="flex-1">
-                    <p className="text-sm font-medium">Выпить воды</p>
-                    <p className="text-xs text-slate-500">Через 30 минут</p>
+                    <p className="text-sm font-medium">Drink water</p>
+                    <p className="text-xs text-slate-500">In 30 minutes</p>
                   </div>
                 </div>
                 <div className="p-3 bg-purple-50 rounded-lg flex items-center gap-3">
@@ -450,7 +450,7 @@ export default function DashboardV2() {
                     <Moon className="w-4 h-4 text-purple-600" />
                   </div>
                   <div className="flex-1">
-                    <p className="text-sm font-medium">Подготовка ко сну</p>
+                    <p className="text-sm font-medium">Sleep preparation</p>
                     <p className="text-xs text-slate-500">22:00</p>
                   </div>
                 </div>
@@ -459,8 +459,8 @@ export default function DashboardV2() {
                     <Utensils className="w-4 h-4 text-green-600" />
                   </div>
                   <div className="flex-1">
-                    <p className="text-sm font-medium">Записать прием пищи</p>
-                    <p className="text-xs text-slate-500">Ужин</p>
+                    <p className="text-sm font-medium">Log meal</p>
+                    <p className="text-xs text-slate-500">Dinner</p>
                   </div>
                 </div>
               </CardContent>
@@ -477,10 +477,10 @@ export default function DashboardV2() {
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <Activity className="w-5 h-5 text-slate-600" />
-              <h2 className="text-lg font-semibold">Сводка по направлениям</h2>
+              <h2 className="text-lg font-semibold">Module Summary</h2>
             </div>
             <Button variant="ghost" size="sm" onClick={() => setLocation('/health-center')}>
-              Все модули <ChevronRight className="w-4 h-4 ml-1" />
+              All modules <ChevronRight className="w-4 h-4 ml-1" />
             </Button>
           </div>
 
@@ -513,7 +513,7 @@ export default function DashboardV2() {
                             setLocation(`/health/${module.id}`);
                           }}
                         >
-                          Открыть
+                          Open
                           <ArrowRight className="w-3 h-3 ml-1" />
                         </Button>
                       </div>
@@ -544,7 +544,7 @@ export default function DashboardV2() {
                         }}
                       >
                         <Plus className="w-3 h-3 mr-1" />
-                        Добавить
+                        Add
                       </Button>
                     </CardContent>
                   </Card>
@@ -561,7 +561,7 @@ export default function DashboardV2() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.25 }}
           >
-            <h2 className="text-lg font-semibold mb-4">Сегодня</h2>
+            <h2 className="text-lg font-semibold mb-4">Today</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <Card>
                 <CardContent className="p-4">
@@ -571,7 +571,7 @@ export default function DashboardV2() {
                     </div>
                     <div>
                       <p className="text-2xl font-bold">{data.todayStats.steps.toLocaleString()}</p>
-                      <p className="text-xs text-slate-500">шагов</p>
+                      <p className="text-xs text-slate-500">steps</p>
                     </div>
                   </div>
                 </CardContent>
@@ -584,8 +584,8 @@ export default function DashboardV2() {
                       <Droplets className="w-5 h-5 text-cyan-600" />
                     </div>
                     <div>
-                      <p className="text-2xl font-bold">{data.todayStats.water}л</p>
-                      <p className="text-xs text-slate-500">воды</p>
+                      <p className="text-2xl font-bold">{data.todayStats.water}L</p>
+                      <p className="text-xs text-slate-500">water</p>
                     </div>
                   </div>
                 </CardContent>
@@ -598,8 +598,8 @@ export default function DashboardV2() {
                       <Moon className="w-5 h-5 text-purple-600" />
                     </div>
                     <div>
-                      <p className="text-2xl font-bold">{data.todayStats.sleep}ч</p>
-                      <p className="text-xs text-slate-500">сна</p>
+                      <p className="text-2xl font-bold">{data.todayStats.sleep}h</p>
+                      <p className="text-xs text-slate-500">sleep</p>
                     </div>
                   </div>
                 </CardContent>
@@ -613,7 +613,7 @@ export default function DashboardV2() {
                     </div>
                     <div>
                       <p className="text-2xl font-bold">{data.todayStats.calories}</p>
-                      <p className="text-xs text-slate-500">ккал</p>
+                      <p className="text-xs text-slate-500">kcal</p>
                     </div>
                   </div>
                 </CardContent>
@@ -633,7 +633,7 @@ export default function DashboardV2() {
             <Card>
               <CardHeader className="pb-2">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-base">Активность</CardTitle>
+                  <CardTitle className="text-base">Activity</CardTitle>
                   <div className="flex gap-1">
                     {(['day', 'week', 'month'] as const).map((period) => (
                       <button
@@ -645,7 +645,7 @@ export default function DashboardV2() {
                             : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                         }`}
                       >
-                        {period === 'day' ? 'День' : period === 'week' ? 'Неделя' : 'Месяц'}
+                        {period === 'day' ? 'Day' : period === 'week' ? 'Week' : 'Month'}
                       </button>
                     ))}
                   </div>
@@ -660,7 +660,7 @@ export default function DashboardV2() {
                         dataKey="date" 
                         stroke="#94a3b8"
                         fontSize={12}
-                        tickFormatter={(value) => new Date(value).toLocaleDateString('ru-RU', { weekday: 'short' })}
+                        tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { weekday: 'short' })}
                       />
                       <YAxis stroke="#94a3b8" fontSize={12} />
                       <Tooltip />
@@ -693,7 +693,7 @@ export default function DashboardV2() {
           >
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-base">Качество сна</CardTitle>
+                <CardTitle className="text-base">Sleep Quality</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="h-64">
@@ -704,7 +704,7 @@ export default function DashboardV2() {
                         dataKey="date" 
                         stroke="#94a3b8"
                         fontSize={12}
-                        tickFormatter={(value) => new Date(value).toLocaleDateString('ru-RU', { weekday: 'short' })}
+                        tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { weekday: 'short' })}
                       />
                       <YAxis stroke="#94a3b8" fontSize={12} />
                       <Tooltip />
@@ -730,7 +730,7 @@ export default function DashboardV2() {
             onClick={() => setLocation('/create-post')}
           >
             <Plus className="w-6 h-6" />
-            <span>Новый пост</span>
+            <span>New Post</span>
           </Button>
           <Button 
             variant="outline" 
@@ -738,7 +738,7 @@ export default function DashboardV2() {
             onClick={() => setLocation('/journal')}
           >
             <Calendar className="w-6 h-6" />
-            <span>Дневник</span>
+            <span>Journal</span>
           </Button>
           <Button 
             variant="outline" 
@@ -746,7 +746,7 @@ export default function DashboardV2() {
             onClick={() => setLocation('/ai-chat')}
           >
             <Zap className="w-6 h-6" />
-            <span>ИИ Чат</span>
+            <span>AI Chat</span>
           </Button>
           <Button 
             variant="outline" 
@@ -754,7 +754,7 @@ export default function DashboardV2() {
             onClick={() => setLocation('/social/friends')}
           >
             <Users className="w-6 h-6" />
-            <span>Друзья</span>
+            <span>Friends</span>
           </Button>
         </motion.div>
       </main>

@@ -46,7 +46,7 @@ export default function MedicineHealth() {
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-foreground/60">Загрузка...</p>
+          <p className="text-foreground/60">Loading...</p>
         </div>
       </div>
     );
@@ -74,8 +74,8 @@ export default function MedicineHealth() {
                 <SketchIcon icon="medicine" size={28} className="text-red-500" />
               </div>
               <div>
-                <h1 className="text-4xl font-bold text-foreground">Медицина</h1>
-                <p className="text-foreground/60">Анализы, диагностика и лечение</p>
+                <h1 className="text-4xl font-bold text-foreground">Medicine</h1>
+                <p className="text-foreground/60">Tests, diagnostics and treatment</p>
               </div>
             </div>
           </div>
@@ -87,9 +87,9 @@ export default function MedicineHealth() {
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-foreground/60 mb-1">Документов</p>
+                  <p className="text-sm text-foreground/60 mb-1">Documents</p>
                   <p className="text-3xl font-bold text-foreground">{documents.length}</p>
-                  <p className="text-xs text-foreground/60 mt-1">Медицинские записи</p>
+                  <p className="text-xs text-foreground/60 mt-1">Medical records</p>
                 </div>
                 <FileText className="w-12 h-12 text-red-500 opacity-50" />
               </div>
@@ -100,9 +100,9 @@ export default function MedicineHealth() {
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-foreground/60 mb-1">Анализов</p>
+                  <p className="text-sm text-foreground/60 mb-1">Tests</p>
                   <p className="text-3xl font-bold text-foreground">--</p>
-                  <p className="text-xs text-foreground/60 mt-1">За этот месяц</p>
+                  <p className="text-xs text-foreground/60 mt-1">This month</p>
                 </div>
                 <Heart className="w-12 h-12 text-pink-500 opacity-50" />
               </div>
@@ -113,9 +113,9 @@ export default function MedicineHealth() {
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-foreground/60 mb-1">Планов лечения</p>
+                  <p className="text-sm text-foreground/60 mb-1">Treatment Plans</p>
                   <p className="text-3xl font-bold text-foreground">--</p>
-                  <p className="text-xs text-foreground/60 mt-1">Активных</p>
+                  <p className="text-xs text-foreground/60 mt-1">Active</p>
                 </div>
                 <Target className="w-12 h-12 text-blue-500 opacity-50" />
               </div>
@@ -126,18 +126,18 @@ export default function MedicineHealth() {
         {/* Main Content */}
         <Tabs defaultValue="overview" className="space-y-6">
           <TabsList className="grid w-full grid-cols-5 engraved-tabs">
-            <TabsTrigger value="overview">Обзор</TabsTrigger>
-            <TabsTrigger value="tests">Анализы</TabsTrigger>
-            <TabsTrigger value="diagnosis">Диагностика</TabsTrigger>
-            <TabsTrigger value="prevention">Профилактика</TabsTrigger>
-            <TabsTrigger value="settings">Настройки</TabsTrigger>
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="tests">Tests</TabsTrigger>
+            <TabsTrigger value="diagnosis">Diagnosis</TabsTrigger>
+            <TabsTrigger value="prevention">Prevention</TabsTrigger>
+            <TabsTrigger value="settings">Settings</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
             <Card className="engraved-card">
               <CardHeader>
-                <CardTitle className="engraved-text">Медицинский обзор</CardTitle>
-                <CardDescription>Ваши медицинские данные и показатели</CardDescription>
+                <CardTitle className="engraved-text">Medical Overview</CardTitle>
+                <CardDescription>Your medical data and indicators</CardDescription>
               </CardHeader>
               <CardContent>
                 {documents.length > 0 ? (
@@ -147,7 +147,7 @@ export default function MedicineHealth() {
                         <h3 className="font-semibold text-foreground mb-1">{doc.title}</h3>
                         <p className="text-sm text-foreground/60 line-clamp-2">{doc.content}</p>
                         <p className="text-xs text-foreground/40 mt-2">
-                          {new Date(doc.created_at).toLocaleDateString('ru-RU')}
+                          {new Date(doc.created_at).toLocaleDateString('en-US')}
                         </p>
                       </div>
                     ))}
@@ -155,14 +155,14 @@ export default function MedicineHealth() {
                 ) : (
                   <div className="text-center py-8">
                     <FileText className="w-12 h-12 text-foreground/30 mx-auto mb-4" />
-                    <p className="text-foreground/60 mb-4">Нет медицинских документов</p>
+                    <p className="text-foreground/60 mb-4">No medical documents</p>
                     <Button
                       variant="outline"
                       onClick={() => setLocation('/documents')}
                       className="engraved-button-outline"
                     >
                       <Plus className="w-4 h-4 mr-2" />
-                      Добавить документ
+                      Add Document
                     </Button>
                   </div>
                 )}
@@ -173,10 +173,10 @@ export default function MedicineHealth() {
           <TabsContent value="tests" className="space-y-6">
             <Card className="engraved-card">
               <CardHeader>
-                <CardTitle className="engraved-text">Анализы</CardTitle>
+                <CardTitle className="engraved-text">Tests</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-foreground/60">Функционал находится в разработке</p>
+                <p className="text-foreground/60">Feature under development</p>
               </CardContent>
             </Card>
           </TabsContent>
@@ -184,10 +184,10 @@ export default function MedicineHealth() {
           <TabsContent value="diagnosis" className="space-y-6">
             <Card className="engraved-card">
               <CardHeader>
-                <CardTitle className="engraved-text">Диагностика</CardTitle>
+                <CardTitle className="engraved-text">Diagnosis</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-foreground/60">Функционал находится в разработке</p>
+                <p className="text-foreground/60">Feature under development</p>
               </CardContent>
             </Card>
           </TabsContent>
@@ -195,10 +195,10 @@ export default function MedicineHealth() {
           <TabsContent value="prevention" className="space-y-6">
             <Card className="engraved-card">
               <CardHeader>
-                <CardTitle className="engraved-text">Профилактика</CardTitle>
+                <CardTitle className="engraved-text">Prevention</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-foreground/60">Функционал находится в разработке</p>
+                <p className="text-foreground/60">Feature under development</p>
               </CardContent>
             </Card>
           </TabsContent>
@@ -206,10 +206,10 @@ export default function MedicineHealth() {
           <TabsContent value="settings" className="space-y-6">
             <Card className="engraved-card">
               <CardHeader>
-                <CardTitle className="engraved-text">Настройки</CardTitle>
+                <CardTitle className="engraved-text">Settings</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-foreground/60">Настройки находятся в разработке</p>
+                <p className="text-foreground/60">Settings under development</p>
               </CardContent>
             </Card>
           </TabsContent>

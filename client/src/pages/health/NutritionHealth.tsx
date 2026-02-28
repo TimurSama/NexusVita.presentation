@@ -63,7 +63,7 @@ export default function NutritionHealth() {
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-foreground/60">Загрузка...</p>
+          <p className="text-foreground/60">Loading...</p>
         </div>
       </div>
     );
@@ -91,8 +91,8 @@ export default function NutritionHealth() {
                 <SketchIcon icon="nutrition" size={28} className="text-green-500" />
               </div>
               <div>
-                <h1 className="text-4xl font-bold text-foreground">Питание</h1>
-                <p className="text-foreground/60">Рацион и калории</p>
+                <h1 className="text-4xl font-bold text-foreground">Nutrition</h1>
+                <p className="text-foreground/60">Diet and calories</p>
               </div>
             </div>
           </div>
@@ -104,9 +104,9 @@ export default function NutritionHealth() {
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-foreground/60 mb-1">Калории сегодня</p>
+                  <p className="text-sm text-foreground/60 mb-1">Calories Today</p>
                   <p className="text-3xl font-bold text-foreground">{todayCalories}</p>
-                  <p className="text-xs text-foreground/60 mt-1">Цель: 2,200 ккал</p>
+                  <p className="text-xs text-foreground/60 mt-1">Goal: 2,200 kcal</p>
                 </div>
                 <Apple className="w-12 h-12 text-green-500 opacity-50" />
               </div>
@@ -117,9 +117,9 @@ export default function NutritionHealth() {
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-foreground/60 mb-1">Белки</p>
+                  <p className="text-sm text-foreground/60 mb-1">Protein</p>
                   <p className="text-3xl font-bold text-foreground">--</p>
-                  <p className="text-xs text-foreground/60 mt-1">г</p>
+                  <p className="text-xs text-foreground/60 mt-1">g</p>
                 </div>
                 <Target className="w-12 h-12 text-blue-500 opacity-50" />
               </div>
@@ -130,9 +130,9 @@ export default function NutritionHealth() {
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-foreground/60 mb-1">Активных целей</p>
+                  <p className="text-sm text-foreground/60 mb-1">Active Goals</p>
                   <p className="text-3xl font-bold text-foreground">{goals.filter(g => !g.completed).length}</p>
-                  <p className="text-xs text-foreground/60 mt-1">Всего: {goals.length}</p>
+                  <p className="text-xs text-foreground/60 mt-1">Total: {goals.length}</p>
                 </div>
                 <TrendingUp className="w-12 h-12 text-purple-500 opacity-50" />
               </div>
@@ -143,21 +143,21 @@ export default function NutritionHealth() {
         {/* Main Content */}
         <Tabs defaultValue="overview" className="space-y-6">
           <TabsList className="grid w-full grid-cols-5 engraved-tabs">
-            <TabsTrigger value="overview">Обзор</TabsTrigger>
-            <TabsTrigger value="diary">Дневник</TabsTrigger>
-            <TabsTrigger value="macros">Макронутриенты</TabsTrigger>
-            <TabsTrigger value="plans">Планы</TabsTrigger>
-            <TabsTrigger value="settings">Настройки</TabsTrigger>
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="diary">Diary</TabsTrigger>
+            <TabsTrigger value="macros">Macros</TabsTrigger>
+            <TabsTrigger value="plans">Plans</TabsTrigger>
+            <TabsTrigger value="settings">Settings</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
             <Card className="engraved-card">
               <CardHeader>
-                <CardTitle className="engraved-text">Обзор питания</CardTitle>
-                <CardDescription>Статистика и рекомендации</CardDescription>
+                <CardTitle className="engraved-text">Nutrition Overview</CardTitle>
+                <CardDescription>Statistics and recommendations</CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-foreground/60">Функционал находится в разработке</p>
+                <p className="text-foreground/60">Feature under development</p>
               </CardContent>
             </Card>
           </TabsContent>
@@ -166,15 +166,15 @@ export default function NutritionHealth() {
             <Card className="engraved-card">
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <CardTitle className="engraved-text">Дневник питания</CardTitle>
+                  <CardTitle className="engraved-text">Food Diary</CardTitle>
                   <Button variant="outline" size="sm" className="engraved-button-outline">
                     <Plus className="w-4 h-4 mr-2" />
-                    Добавить прием пищи
+                    Add Meal
                   </Button>
                 </div>
               </CardHeader>
               <CardContent>
-                <p className="text-foreground/60">Функционал находится в разработке</p>
+                <p className="text-foreground/60">Feature under development</p>
               </CardContent>
             </Card>
           </TabsContent>
@@ -182,11 +182,11 @@ export default function NutritionHealth() {
           <TabsContent value="macros" className="space-y-6">
             <Card className="engraved-card">
               <CardHeader>
-                <CardTitle className="engraved-text">Макронутриенты</CardTitle>
-                <CardDescription>Белки, жиры, углеводы</CardDescription>
+                <CardTitle className="engraved-text">Macronutrients</CardTitle>
+                <CardDescription>Protein, fats, carbohydrates</CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-foreground/60">Функционал находится в разработке</p>
+                <p className="text-foreground/60">Feature under development</p>
               </CardContent>
             </Card>
           </TabsContent>
@@ -194,10 +194,10 @@ export default function NutritionHealth() {
           <TabsContent value="plans" className="space-y-6">
             <Card className="engraved-card">
               <CardHeader>
-                <CardTitle className="engraved-text">Планы питания</CardTitle>
+                <CardTitle className="engraved-text">Meal Plans</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-foreground/60">Функционал находится в разработке</p>
+                <p className="text-foreground/60">Feature under development</p>
               </CardContent>
             </Card>
           </TabsContent>
@@ -205,10 +205,10 @@ export default function NutritionHealth() {
           <TabsContent value="settings" className="space-y-6">
             <Card className="engraved-card">
               <CardHeader>
-                <CardTitle className="engraved-text">Настройки</CardTitle>
+                <CardTitle className="engraved-text">Settings</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-foreground/60">Настройки находятся в разработке</p>
+                <p className="text-foreground/60">Settings under development</p>
               </CardContent>
             </Card>
           </TabsContent>

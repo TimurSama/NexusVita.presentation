@@ -21,63 +21,63 @@ export default function Nutrition() {
 
   const todayMacros = [
     {
-      title: 'Калории',
+      title: 'Calories',
       value: 1840,
-      unit: 'ккал',
+      unit: 'kcal',
       trend: 'stable' as const,
       target: 2200,
       icon: 'nutrition' as const,
-      description: 'Цель: 2,200 ккал',
+      description: 'Goal: 2,200 kcal',
     },
     {
-      title: 'Белки',
+      title: 'Protein',
       value: 120,
-      unit: 'г',
+      unit: 'g',
       trend: 'up' as const,
       target: 150,
       icon: 'nutrition' as const,
-      description: 'Цель: 150г',
+      description: 'Goal: 150g',
     },
     {
-      title: 'Углеводы',
+      title: 'Carbs',
       value: 180,
-      unit: 'г',
+      unit: 'g',
       trend: 'stable' as const,
       target: 250,
       icon: 'nutrition' as const,
-      description: 'Цель: 250г',
+      description: 'Goal: 250g',
     },
     {
-      title: 'Жиры',
+      title: 'Fats',
       value: 65,
-      unit: 'г',
+      unit: 'g',
       trend: 'down' as const,
       target: 80,
       icon: 'nutrition' as const,
-      description: 'Цель: 80г',
+      description: 'Goal: 80g',
     },
   ];
 
   const meals = [
     {
       id: '1',
-      name: 'Завтрак',
+      name: 'Breakfast',
       time: '08:00',
       calories: 450,
-      items: ['Овсянка с фруктами', 'Кофе'],
+      items: ['Oatmeal with fruits', 'Coffee'],
       completed: true,
     },
     {
       id: '2',
-      name: 'Обед',
+      name: 'Lunch',
       time: '13:00',
       calories: 650,
-      items: ['Салат с курицей', 'Овощи на пару'],
+      items: ['Chicken salad', 'Steamed vegetables'],
       completed: false,
     },
     {
       id: '3',
-      name: 'Ужин',
+      name: 'Dinner',
       time: '19:00',
       calories: 0,
       items: [],
@@ -106,28 +106,28 @@ export default function Nutrition() {
             <div className="flex items-center gap-3">
               <SketchIcon icon="nutrition" size={32} className="text-primary" />
               <div>
-                <h1 className="text-4xl font-bold text-foreground">Питание</h1>
-                <p className="text-foreground/60">Дневник питания и анализ макронутриентов</p>
+                <h1 className="text-4xl font-bold text-foreground">Nutrition</h1>
+                <p className="text-foreground/60">Food diary and macronutrient analysis</p>
               </div>
             </div>
             <Dialog>
               <DialogTrigger asChild>
                 <Button variant="outline" className="gap-2">
                   <Settings className="h-4 w-4" />
-                  Настройки
+                  Settings
                 </Button>
               </DialogTrigger>
               <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
-                  <DialogTitle>Настройки модуля Питание</DialogTitle>
+                  <DialogTitle>Nutrition Module Settings</DialogTitle>
                 </DialogHeader>
                 <SettingsPanel
-                  title="Настройки"
+                  title="Settings"
                   settings={nutritionSettings}
                   onSave={(settings) => {
                     console.log('Nutrition settings saved:', settings);
                   }}
-                  categories={['Общие', 'Цели', 'Уведомления', 'Интеграции']}
+                  categories={['General', 'Goals', 'Notifications', 'Integrations']}
                 />
               </DialogContent>
             </Dialog>
@@ -136,13 +136,13 @@ export default function Nutrition() {
 
         <Tabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-6">
           <TabsList className="grid w-full grid-cols-5">
-            <TabsTrigger value="overview">Обзор</TabsTrigger>
-            <TabsTrigger value="diary">Дневник</TabsTrigger>
-            <TabsTrigger value="macros">Макронутриенты</TabsTrigger>
-            <TabsTrigger value="plans">Планы</TabsTrigger>
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="diary">Diary</TabsTrigger>
+            <TabsTrigger value="macros">Macros</TabsTrigger>
+            <TabsTrigger value="plans">Plans</TabsTrigger>
             <TabsTrigger value="questionnaire">
               <ClipboardList className="w-4 h-4 mr-2" />
-              Анкета
+              Questionnaire
             </TabsTrigger>
           </TabsList>
 
@@ -161,10 +161,10 @@ export default function Nutrition() {
             {/* Today's Meals */}
             <div className="premium-card p-6">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-2xl font-bold text-foreground">Приемы пищи сегодня</h2>
+                <h2 className="text-2xl font-bold text-foreground">Today's Meals</h2>
                 <Button className="btn-premium" size="sm">
                   <Plus className="w-4 h-4 mr-2" />
-                  Добавить
+                  Add
                 </Button>
               </div>
               <div className="space-y-4">
@@ -186,7 +186,7 @@ export default function Nutrition() {
                         <p className="text-sm text-foreground/60">{meal.time}</p>
                       </div>
                       <div className="text-right">
-                        <p className="font-bold text-foreground">{meal.calories} ккал</p>
+                        <p className="font-bold text-foreground">{meal.calories} kcal</p>
                         {meal.completed && (
                           <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center mt-1">
                             <svg className="w-4 h-4 text-primary-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -216,10 +216,10 @@ export default function Nutrition() {
             {/* Quick Actions */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
-                { label: 'Сканер продуктов', icon: Camera, type: 'lucide' as const },
-                { label: 'Поиск блюд', icon: Search, type: 'lucide' as const },
-                { label: 'Добавить прием пищи', icon: Plus, type: 'lucide' as const },
-                { label: 'Планы питания', icon: 'nutrition' as const, type: 'sketch' as const },
+                { label: 'Barcode Scanner', icon: Camera, type: 'lucide' as const },
+                { label: 'Search Foods', icon: Search, type: 'lucide' as const },
+                { label: 'Add Meal', icon: Plus, type: 'lucide' as const },
+                { label: 'Meal Plans', icon: 'nutrition' as const, type: 'sketch' as const },
               ].map((action, idx) => (
                 <motion.button
                   key={idx}
@@ -244,26 +244,26 @@ export default function Nutrition() {
           <TabsContent value="diary" className="space-y-6">
             <div className="flex items-center justify-end gap-2 mb-4">
               <FeatureButton
-                label="Сканер продуктов"
-                featureName="Сканер штрих-кодов"
-                description="Сканируйте штрих-коды продуктов для быстрого добавления в дневник питания. Система автоматически определит состав и калорийность."
+                label="Barcode Scanner"
+                featureName="Barcode Scanner"
+                description="Scan food barcodes for quick addition to your food diary. The system will automatically determine the composition and calories."
                 icon={<Camera className="h-4 w-4" />}
                 size="sm"
               />
               <Button className="gap-2">
                 <Plus className="h-4 w-4" />
-                Добавить продукт
+                Add Food
               </Button>
             </div>
             <div className="premium-card p-6">
-              <h2 className="text-2xl font-bold text-foreground mb-4">Дневник питания</h2>
-              <p className="text-foreground/60">Используйте кнопки выше для добавления продуктов</p>
+              <h2 className="text-2xl font-bold text-foreground mb-4">Food Diary</h2>
+              <p className="text-foreground/60">Use the buttons above to add foods</p>
             </div>
           </TabsContent>
 
           <TabsContent value="macros" className="space-y-6">
             <div className="premium-card p-6">
-              <h2 className="text-2xl font-bold text-foreground mb-4">Детальный анализ макронутриентов</h2>
+              <h2 className="text-2xl font-bold text-foreground mb-4">Detailed Macronutrient Analysis</h2>
               <div className="space-y-4">
                 {todayMacros.map((macro, idx) => (
                   <div key={idx}>
@@ -282,8 +282,8 @@ export default function Nutrition() {
 
           <TabsContent value="plans" className="space-y-6">
             <div className="premium-card p-6">
-              <h2 className="text-2xl font-bold text-foreground mb-4">Планы питания</h2>
-              <p className="text-foreground/60">Раздел в разработке</p>
+              <h2 className="text-2xl font-bold text-foreground mb-4">Meal Plans</h2>
+              <p className="text-foreground/60">Section under development</p>
             </div>
           </TabsContent>
         </Tabs>

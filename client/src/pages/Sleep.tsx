@@ -34,28 +34,28 @@ export default function Sleep() {
             <div className="flex items-center gap-3">
               <SketchIcon icon="sleep" size={32} className="text-primary" />
               <div>
-                <h1 className="text-4xl font-bold text-foreground">Сон</h1>
-                <p className="text-foreground/60">Качество сна и восстановление</p>
+                <h1 className="text-4xl font-bold text-foreground">Sleep</h1>
+                <p className="text-foreground/60">Sleep quality and recovery</p>
               </div>
             </div>
             <Dialog>
               <DialogTrigger asChild>
                 <Button variant="outline" className="gap-2">
                   <Settings className="h-4 w-4" />
-                  Настройки
+                  Settings
                 </Button>
               </DialogTrigger>
               <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
-                  <DialogTitle>Настройки модуля Сон</DialogTitle>
+                  <DialogTitle>Sleep Module Settings</DialogTitle>
                 </DialogHeader>
                 <SettingsPanel
-                  title="Настройки"
+                  title="Settings"
                   settings={sleepSettings}
                   onSave={(settings) => {
                     console.log('Sleep settings saved:', settings);
                   }}
-                  categories={['Общие', 'Уведомления', 'Цели', 'Интеграции']}
+                  categories={['General', 'Notifications', 'Goals', 'Integrations']}
                 />
               </DialogContent>
             </Dialog>
@@ -64,10 +64,10 @@ export default function Sleep() {
 
         <Tabs defaultValue="overview" className="space-y-6">
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="overview">Обзор</TabsTrigger>
+            <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="questionnaire">
               <ClipboardList className="w-4 h-4 mr-2" />
-              Анкета
+              Questionnaire
             </TabsTrigger>
           </TabsList>
 
@@ -77,18 +77,18 @@ export default function Sleep() {
               animate={{ opacity: 1, y: 0 }}
               className="premium-card p-8"
             >
-              <h2 className="text-3xl font-bold text-foreground mb-4">Модуль сна</h2>
+              <h2 className="text-3xl font-bold text-foreground mb-4">Sleep Module</h2>
               <p className="text-foreground/70 mb-6">
-                Качество сна, восстановление и оптимизация циркадных ритмов.
+                Sleep quality, recovery and circadian rhythm optimization.
               </p>
               <div className="space-y-4">
                 <div className="p-4 bg-background/50 rounded-lg">
-                  <h3 className="font-bold text-foreground mb-2">Основные функции</h3>
+                  <h3 className="font-bold text-foreground mb-2">Key Features</h3>
                   <ul className="space-y-2 text-foreground/70">
-                    <li>• Отслеживание качества сна</li>
-                    <li>• Анализ циркадных ритмов</li>
-                    <li>• Рекомендации по улучшению сна</li>
-                    <li>• Интеграция с трекерами сна</li>
+                    <li>• Track sleep quality</li>
+                    <li>• Analyze circadian rhythms</li>
+                    <li>• Sleep improvement recommendations</li>
+                    <li>• Sleep tracker integration</li>
                   </ul>
                 </div>
               </div>

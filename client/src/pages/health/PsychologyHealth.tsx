@@ -52,7 +52,7 @@ export default function PsychologyHealth() {
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-foreground/60">Загрузка...</p>
+          <p className="text-foreground/60">Loading...</p>
         </div>
       </div>
     );
@@ -80,8 +80,8 @@ export default function PsychologyHealth() {
                 <SketchIcon icon="psychology" size={28} className="text-amber-500" />
               </div>
               <div>
-                <h1 className="text-4xl font-bold text-foreground">Психология</h1>
-                <p className="text-foreground/60">Ментальное здоровье и настроение</p>
+                <h1 className="text-4xl font-bold text-foreground">Psychology</h1>
+                <p className="text-foreground/60">Mental health and mood</p>
               </div>
             </div>
           </div>
@@ -92,9 +92,9 @@ export default function PsychologyHealth() {
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-foreground/60 mb-1">Настроение сегодня</p>
+                <p className="text-sm text-foreground/60 mb-1">Mood Today</p>
                 <p className="text-3xl font-bold text-foreground">{todayMood}/10</p>
-                <p className="text-xs text-foreground/60 mt-1">Среднее: 7.5/10</p>
+                <p className="text-xs text-foreground/60 mt-1">Average: 7.5/10</p>
               </div>
               <Brain className="w-12 h-12 text-amber-500 opacity-50" />
             </div>
@@ -104,19 +104,19 @@ export default function PsychologyHealth() {
         {/* Main Content */}
         <Tabs defaultValue="overview" className="space-y-6">
           <TabsList className="grid w-full grid-cols-4 engraved-tabs">
-            <TabsTrigger value="overview">Обзор</TabsTrigger>
-            <TabsTrigger value="mood">Настроение</TabsTrigger>
-            <TabsTrigger value="stress">Стресс</TabsTrigger>
-            <TabsTrigger value="tools">Инструменты</TabsTrigger>
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="mood">Mood</TabsTrigger>
+            <TabsTrigger value="stress">Stress</TabsTrigger>
+            <TabsTrigger value="tools">Tools</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
             <Card className="engraved-card">
               <CardHeader>
-                <CardTitle className="engraved-text">Обзор психологического состояния</CardTitle>
+                <CardTitle className="engraved-text">Mental State Overview</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-foreground/60">Функционал находится в разработке</p>
+                <p className="text-foreground/60">Feature under development</p>
               </CardContent>
             </Card>
           </TabsContent>
@@ -124,10 +124,10 @@ export default function PsychologyHealth() {
           <TabsContent value="mood" className="space-y-6">
             <Card className="engraved-card">
               <CardHeader>
-                <CardTitle className="engraved-text">Трекер настроения</CardTitle>
+                <CardTitle className="engraved-text">Mood Tracker</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-foreground/60">Функционал находится в разработке</p>
+                <p className="text-foreground/60">Feature under development</p>
               </CardContent>
             </Card>
           </TabsContent>
@@ -135,10 +135,10 @@ export default function PsychologyHealth() {
           <TabsContent value="stress" className="space-y-6">
             <Card className="engraved-card">
               <CardHeader>
-                <CardTitle className="engraved-text">Уровень стресса</CardTitle>
+                <CardTitle className="engraved-text">Stress Level</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-foreground/60">Функционал находится в разработке</p>
+                <p className="text-foreground/60">Feature under development</p>
               </CardContent>
             </Card>
           </TabsContent>
@@ -146,10 +146,10 @@ export default function PsychologyHealth() {
           <TabsContent value="tools" className="space-y-6">
             <Card className="engraved-card">
               <CardHeader>
-                <CardTitle className="engraved-text">Инструменты</CardTitle>
+                <CardTitle className="engraved-text">Tools</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-foreground/60">Функционал находится в разработке</p>
+                <p className="text-foreground/60">Feature under development</p>
               </CardContent>
             </Card>
           </TabsContent>

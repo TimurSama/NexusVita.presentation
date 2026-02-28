@@ -9,7 +9,6 @@ import {
   EyeOff, 
   ArrowRight,
   Chrome,
-  MessageCircle,
   Loader2,
   CheckCircle2
 } from 'lucide-react';
@@ -36,13 +35,13 @@ export default function Register() {
     setError(null);
 
     if (password !== confirmPassword) {
-      setError('Пароли не совпадают');
+      setError('Passwords do not match');
       setLoading(false);
       return;
     }
 
     if (password.length < 6) {
-      setError('Пароль должен быть не менее 6 символов');
+      setError('Password must be at least 6 characters');
       setLoading(false);
       return;
     }
@@ -64,27 +63,26 @@ export default function Register() {
         }, 1500);
       } else {
         const errorData = await response.json();
-        setError(errorData.error || 'Ошибка регистрации');
+        setError(errorData.error || 'Registration error');
       }
     } catch (err) {
-      setError('Ошибка подключения к серверу');
+      setError('Server connection error');
     } finally {
       setLoading(false);
     }
   };
 
   const handleGoogleRegister = () => {
-    // Redirect to Google OAuth (same as login, Google handles new/existing users)
     const redirectUri = `${window.location.origin}/auth/callback`;
     const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
     
     if (!clientId) {
-      setError('Google OAuth не настроен. Обратитесь к администратору.');
+      setError('Google OAuth is not configured');
       return;
     }
     
     const scope = 'openid email profile';
-    const state = btoa(JSON.stringify({ redirect: '/onboarding', isRegister: true }));
+    const state = btoa(JSON.stringify({ redirect: '/onboarding' }));
     
     const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
       `client_id=${clientId}` +
@@ -94,10 +92,6 @@ export default function Register() {
       `&state=${state}`;
     
     window.location.href = googleAuthUrl;
-  };
-
-  const handleTelegramRegister = () => {
-    window.location.href = 'https://t.me/etholife_bot';
   };
 
   if (success) {
@@ -111,8 +105,8 @@ export default function Register() {
           <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
             <CheckCircle2 className="w-10 h-10 text-green-600" />
           </div>
-          <h2 className="text-2xl font-bold text-slate-900 mb-2">Регистрация успешна!</h2>
-          <p className="text-slate-600">Перенаправляем на страницу знакомства...</p>
+          <h2 className="text-2xl font-bold text-slate-900 mb-2">Success!</h2>
+          <p className="text-slate-600">Your account has been created. Redirecting...</p>
         </motion.div>
       </div>
     );
@@ -127,27 +121,26 @@ export default function Register() {
       >
         <Card className="shadow-xl border-0">
           <CardHeader className="text-center pb-6">
-            <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl mx-auto mb-4 flex items-center justify-center">
-              <span className="text-white text-2xl font-bold">EL</span>
+            <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl mx-auto mb-4 flex items-center justify-center">
+              <User className="w-8 h-8 text-white" />
             </div>
-            <CardTitle className="text-2xl font-bold">Создать аккаунт</CardTitle>
+            <CardTitle className="text-2xl font-bold">Create Account</CardTitle>
             <CardDescription>
-              Присоединяйтесь к экосистеме здоровья EthosLife
+              Sign up to start your health journey
             </CardDescription>
           </CardHeader>
 
           <CardContent className="space-y-4">
-            {/* Registration Form */}
             <form onSubmit={handleRegister} className="space-y-4">
               <div>
                 <label className="text-sm font-medium text-slate-700 mb-1.5 block">
-                  Имя
+                  Full Name
                 </label>
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                   <Input
                     type="text"
-                    placeholder="Иван Иванов"
+                    placeholder="John Doe"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     className="pl-10 h-12"
@@ -175,7 +168,7 @@ export default function Register() {
 
               <div>
                 <label className="text-sm font-medium text-slate-700 mb-1.5 block">
-                  Пароль
+                  Password
                 </label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
@@ -186,7 +179,6 @@ export default function Register() {
                     onChange={(e) => setPassword(e.target.value)}
                     className="pl-10 pr-10 h-12"
                     required
-                    minLength={6}
                   />
                   <button
                     type="button"
@@ -200,7 +192,7 @@ export default function Register() {
 
               <div>
                 <label className="text-sm font-medium text-slate-700 mb-1.5 block">
-                  Подтвердите пароль
+                  Confirm Password
                 </label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
@@ -223,70 +215,55 @@ export default function Register() {
 
               <Button 
                 type="submit" 
-                className="w-full h-12 text-base font-medium bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                className="w-full h-12 text-base font-medium bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700"
                 disabled={loading}
               >
                 {loading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
                 ) : (
                   <>
-                    Создать аккаунт
+                    Create Account
                     <ArrowRight className="ml-2 w-5 h-5" />
                   </>
                 )}
               </Button>
             </form>
 
-            {/* Divider */}
             <div className="relative py-2">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-slate-200"></div>
               </div>
               <div className="relative flex justify-center">
-                <span className="bg-white px-4 text-sm text-slate-500">или</span>
+                <span className="bg-white px-4 text-sm text-slate-500">or</span>
               </div>
             </div>
 
-            {/* Social Register */}
-            <div className="space-y-3">
-              <Button
-                variant="outline"
-                className="w-full h-12 text-base font-medium"
-                onClick={handleGoogleRegister}
-              >
-                <Chrome className="mr-2 w-5 h-5 text-red-500" />
-                Через Google
-              </Button>
+            <Button
+              variant="outline"
+              className="w-full h-12 text-base font-medium"
+              onClick={handleGoogleRegister}
+            >
+              <Chrome className="mr-2 w-5 h-5 text-red-500" />
+              Continue with Google
+            </Button>
 
-              <Button
-                variant="outline"
-                className="w-full h-12 text-base font-medium border-blue-200 hover:bg-blue-50"
-                onClick={handleTelegramRegister}
-              >
-                <MessageCircle className="mr-2 w-5 h-5 text-blue-500" />
-                Через Telegram
-              </Button>
-            </div>
-
-            {/* Login Link */}
             <div className="text-center pt-4 border-t border-slate-100">
               <p className="text-slate-600">
-                Уже есть аккаунт?{' '}
+                Already have an account?{' '}
                 <button
                   onClick={() => setLocation('/login')}
                   className="text-blue-600 hover:text-blue-700 font-medium"
                 >
-                  Войти
+                  Sign In
                 </button>
               </p>
             </div>
 
-            {/* Back to Home */}
             <button
               onClick={() => setLocation('/')}
               className="w-full text-center text-sm text-slate-400 hover:text-slate-600 pt-2"
             >
-              ← Вернуться на главную
+              ← Back to Home
             </button>
           </CardContent>
         </Card>

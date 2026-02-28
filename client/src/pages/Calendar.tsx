@@ -19,11 +19,11 @@ export default function Calendar() {
 
   const events: Record<string, CalendarEvent[]> = {
     '2025-02-12': [
-      { id: '1', time: '07:00', title: 'Утренняя зарядка', type: 'workout' },
-      { id: '2', time: '08:00', title: 'Завтрак', type: 'meal' },
-      { id: '3', time: '12:00', title: 'Обед', type: 'meal' },
-      { id: '4', time: '18:00', title: 'Тренировка', type: 'workout' },
-      { id: '5', time: '22:00', title: 'Медитация', type: 'therapy' },
+      { id: '1', time: '07:00', title: 'Morning Exercise', type: 'workout' },
+      { id: '2', time: '08:00', title: 'Breakfast', type: 'meal' },
+      { id: '3', time: '12:00', title: 'Lunch', type: 'meal' },
+      { id: '4', time: '18:00', title: 'Workout', type: 'workout' },
+      { id: '5', time: '22:00', title: 'Meditation', type: 'therapy' },
     ],
   };
 
@@ -36,11 +36,11 @@ export default function Calendar() {
     const startingDayOfWeek = firstDay.getDay();
 
     const days = [];
-    // Пустые ячейки для дней до начала месяца
+    // Empty cells for days before month start
     for (let i = 0; i < startingDayOfWeek; i++) {
       days.push(null);
     }
-    // Дни месяца
+    // Month days
     for (let day = 1; day <= daysInMonth; day++) {
       days.push(new Date(year, month, day));
     }
@@ -49,8 +49,8 @@ export default function Calendar() {
 
   const days = getDaysInMonth(currentDate);
   const monthNames = [
-    'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
-    'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
   ];
 
   const getEventColor = (type: CalendarEvent['type']) => {
@@ -80,23 +80,23 @@ export default function Calendar() {
           className="mb-8 flex items-center justify-between"
         >
           <div>
-            <h1 className="text-4xl font-bold text-foreground mb-2">Календарь</h1>
+            <h1 className="text-4xl font-bold text-foreground mb-2">Calendar</h1>
             <p className="text-foreground/60">
-              Планирование и отслеживание активности
+              Planning and activity tracking
             </p>
           </div>
           <Dialog>
             <DialogTrigger asChild>
               <Button className="btn-premium">
                 <Plus className="w-4 h-4 mr-2" />
-                Добавить событие
+                Add Event
               </Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Новое событие</DialogTitle>
+                <DialogTitle>New Event</DialogTitle>
               </DialogHeader>
-              <p className="text-foreground/60">Форма добавления события (в разработке)</p>
+              <p className="text-foreground/60">Event form (under development)</p>
             </DialogContent>
           </Dialog>
         </motion.div>
@@ -139,7 +139,7 @@ export default function Calendar() {
 
             {/* Calendar Grid */}
             <div className="grid grid-cols-7 gap-2 mb-4">
-              {['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].map((day) => (
+              {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => (
                 <div key={day} className="text-center text-sm font-semibold text-foreground/60 py-2">
                   {day}
                 </div>
@@ -196,7 +196,7 @@ export default function Calendar() {
             className="premium-card p-6"
           >
             <h3 className="text-xl font-bold text-foreground mb-4">
-              {selectedDate.toLocaleDateString('ru-RU', {
+              {selectedDate.toLocaleDateString('en-US', {
                 weekday: 'long',
                 day: 'numeric',
                 month: 'long',
@@ -234,9 +234,9 @@ export default function Calendar() {
               </div>
             ) : (
               <div className="text-center py-12 text-foreground/60">
-                <p>Нет событий на этот день</p>
+                <p>No events for this day</p>
                 <Button variant="ghost" className="mt-4">
-                  Добавить событие
+                  Add Event
                 </Button>
               </div>
             )}

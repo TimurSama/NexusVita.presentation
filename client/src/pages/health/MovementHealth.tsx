@@ -71,7 +71,7 @@ export default function MovementHealth() {
   })?.value || 0;
 
   const weeklyData = metrics.slice(0, 7).reverse().map(m => ({
-    date: new Date(m.recorded_at || m.created_at).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' }),
+    date: new Date(m.recorded_at || m.created_at).toLocaleDateString('en-US', { day: 'numeric', month: 'short' }),
     steps: m.value,
   }));
 
@@ -80,7 +80,7 @@ export default function MovementHealth() {
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-foreground/60">Загрузка...</p>
+          <p className="text-foreground/60">Loading...</p>
         </div>
       </div>
     );
@@ -108,8 +108,8 @@ export default function MovementHealth() {
                 <SketchIcon icon="movement" size={28} className="text-blue-500" />
               </div>
               <div>
-                <h1 className="text-4xl font-bold text-foreground">Движение</h1>
-                <p className="text-foreground/60">Активность и тренировки</p>
+                <h1 className="text-4xl font-bold text-foreground">Movement</h1>
+                <p className="text-foreground/60">Activity and workouts</p>
               </div>
             </div>
           </div>
@@ -121,9 +121,9 @@ export default function MovementHealth() {
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-foreground/60 mb-1">Шаги сегодня</p>
+                  <p className="text-sm text-foreground/60 mb-1">Steps Today</p>
                   <p className="text-3xl font-bold text-foreground">{todaySteps.toLocaleString()}</p>
-                  <p className="text-xs text-foreground/60 mt-1">Цель: 10,000</p>
+                  <p className="text-xs text-foreground/60 mt-1">Goal: 10,000</p>
                 </div>
                 <Activity className="w-12 h-12 text-blue-500 opacity-50" />
               </div>
@@ -134,9 +134,9 @@ export default function MovementHealth() {
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-foreground/60 mb-1">Активных планов</p>
+                  <p className="text-sm text-foreground/60 mb-1">Active Plans</p>
                   <p className="text-3xl font-bold text-foreground">{plans.filter(p => !p.completed).length}</p>
-                  <p className="text-xs text-foreground/60 mt-1">Из {plans.length} всего</p>
+                  <p className="text-xs text-foreground/60 mt-1">Of {plans.length} total</p>
                 </div>
                 <Target className="w-12 h-12 text-green-500 opacity-50" />
               </div>
@@ -147,9 +147,9 @@ export default function MovementHealth() {
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-foreground/60 mb-1">Активных целей</p>
+                  <p className="text-sm text-foreground/60 mb-1">Active Goals</p>
                   <p className="text-3xl font-bold text-foreground">{goals.filter(g => !g.completed).length}</p>
-                  <p className="text-xs text-foreground/60 mt-1">Всего целей: {goals.length}</p>
+                  <p className="text-xs text-foreground/60 mt-1">Total goals: {goals.length}</p>
                 </div>
                 <TrendingUp className="w-12 h-12 text-purple-500 opacity-50" />
               </div>
@@ -162,23 +162,23 @@ export default function MovementHealth() {
           <TabsList className="grid w-full grid-cols-5 engraved-tabs">
             <TabsTrigger value="overview" className="flex items-center gap-2">
               <BarChart3 className="w-4 h-4" />
-              Обзор
+              Overview
             </TabsTrigger>
             <TabsTrigger value="plans" className="flex items-center gap-2">
               <Calendar className="w-4 h-4" />
-              Планы
+              Plans
             </TabsTrigger>
             <TabsTrigger value="metrics" className="flex items-center gap-2">
               <Activity className="w-4 h-4" />
-              Метрики
+              Metrics
             </TabsTrigger>
             <TabsTrigger value="goals" className="flex items-center gap-2">
               <Target className="w-4 h-4" />
-              Цели
+              Goals
             </TabsTrigger>
             <TabsTrigger value="settings" className="flex items-center gap-2">
               <Settings className="w-4 h-4" />
-              Настройки
+              Settings
             </TabsTrigger>
           </TabsList>
 
@@ -187,8 +187,8 @@ export default function MovementHealth() {
             {/* Weekly Chart */}
             <Card className="engraved-card">
               <CardHeader>
-                <CardTitle className="engraved-text">Активность за неделю</CardTitle>
-                <CardDescription>График шагов за последние 7 дней</CardDescription>
+                <CardTitle className="engraved-text">Weekly Activity</CardTitle>
+                <CardDescription>Steps chart for the last 7 days</CardDescription>
               </CardHeader>
               <CardContent>
                 {weeklyData.length > 0 ? (
@@ -210,14 +210,14 @@ export default function MovementHealth() {
                 ) : (
                   <div className="text-center py-12">
                     <Activity className="w-12 h-12 text-foreground/30 mx-auto mb-4" />
-                    <p className="text-foreground/60">Нет данных для отображения</p>
+                    <p className="text-foreground/60">No data to display</p>
                     <Button
                       variant="outline"
                       className="mt-4 engraved-button-outline"
                       onClick={() => setLocation('/health-center')}
                     >
                       <Plus className="w-4 h-4 mr-2" />
-                      Добавить метрики
+                      Add Metrics
                     </Button>
                   </div>
                 )}
@@ -228,7 +228,7 @@ export default function MovementHealth() {
             <Card className="engraved-card">
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <CardTitle className="engraved-text">Планы на сегодня</CardTitle>
+                  <CardTitle className="engraved-text">Today's Plans</CardTitle>
                   <Button
                     variant="outline"
                     size="sm"
@@ -236,7 +236,7 @@ export default function MovementHealth() {
                     className="engraved-button-outline"
                   >
                     <Plus className="w-4 h-4 mr-2" />
-                    Добавить
+                    Add
                   </Button>
                 </div>
               </CardHeader>
@@ -272,14 +272,14 @@ export default function MovementHealth() {
                 ) : (
                   <div className="text-center py-8">
                     <Calendar className="w-12 h-12 text-foreground/30 mx-auto mb-4" />
-                    <p className="text-foreground/60 mb-4">Нет планов на сегодня</p>
+                    <p className="text-foreground/60 mb-4">No plans for today</p>
                     <Button
                       variant="outline"
                       onClick={() => setLocation('/calendar')}
                       className="engraved-button-outline"
                     >
                       <Plus className="w-4 h-4 mr-2" />
-                      Создать план
+                      Create Plan
                     </Button>
                   </div>
                 )}
@@ -292,19 +292,19 @@ export default function MovementHealth() {
             <Card className="engraved-card">
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <CardTitle className="engraved-text">Тренировочные планы</CardTitle>
+                  <CardTitle className="engraved-text">Workout Plans</CardTitle>
                   <Button
                     variant="outline"
                     size="sm"
                     className="engraved-button-outline"
                   >
                     <Plus className="w-4 h-4 mr-2" />
-                    Новый план
+                    New Plan
                   </Button>
                 </div>
               </CardHeader>
               <CardContent>
-                <p className="text-foreground/60">Функционал планов находится в разработке</p>
+                <p className="text-foreground/60">Plans feature under development</p>
               </CardContent>
             </Card>
           </TabsContent>
@@ -314,14 +314,14 @@ export default function MovementHealth() {
             <Card className="engraved-card">
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <CardTitle className="engraved-text">История метрик</CardTitle>
+                  <CardTitle className="engraved-text">Metrics History</CardTitle>
                   <Button
                     variant="outline"
                     size="sm"
                     className="engraved-button-outline"
                   >
                     <Plus className="w-4 h-4 mr-2" />
-                    Добавить метрику
+                    Add Metric
                   </Button>
                 </div>
               </CardHeader>
@@ -333,17 +333,17 @@ export default function MovementHealth() {
                         <div className="flex items-center justify-between">
                           <div>
                             <p className="font-semibold text-foreground">
-                              {metric.value.toLocaleString()} {metric.unit || 'шагов'}
+                              {metric.value.toLocaleString()} {metric.unit || 'steps'}
                             </p>
                             <p className="text-sm text-foreground/60">
-                              {new Date(metric.recorded_at || metric.created_at).toLocaleDateString('ru-RU', {
+                              {new Date(metric.recorded_at || metric.created_at).toLocaleDateString('en-US', {
                                 day: 'numeric',
                                 month: 'long',
                                 year: 'numeric',
                               })}
                             </p>
                           </div>
-                          <Badge variant="outline">Шаги</Badge>
+                          <Badge variant="outline">Steps</Badge>
                         </div>
                       </div>
                     ))}
@@ -351,7 +351,7 @@ export default function MovementHealth() {
                 ) : (
                   <div className="text-center py-8">
                     <Activity className="w-12 h-12 text-foreground/30 mx-auto mb-4" />
-                    <p className="text-foreground/60">Нет записей метрик</p>
+                    <p className="text-foreground/60">No metric records</p>
                   </div>
                 )}
               </CardContent>
@@ -363,14 +363,14 @@ export default function MovementHealth() {
             <Card className="engraved-card">
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <CardTitle className="engraved-text">Цели по движению</CardTitle>
+                  <CardTitle className="engraved-text">Movement Goals</CardTitle>
                   <Button
                     variant="outline"
                     size="sm"
                     className="engraved-button-outline"
                   >
                     <Plus className="w-4 h-4 mr-2" />
-                    Новая цель
+                    New Goal
                   </Button>
                 </div>
               </CardHeader>
@@ -387,13 +387,13 @@ export default function MovementHealth() {
                           <div className="flex items-center justify-between mb-2">
                             <h3 className="font-semibold text-foreground">{goal.title}</h3>
                             <Badge variant={goal.completed ? "default" : "outline"}>
-                              {goal.completed ? 'Выполнено' : `${progress}%`}
+                              {goal.completed ? 'Completed' : `${progress}%`}
                             </Badge>
                           </div>
                           {goal.target_value && (
                             <div className="space-y-2">
                               <div className="flex items-center justify-between text-sm">
-                                <span className="text-foreground/60">Прогресс</span>
+                                <span className="text-foreground/60">Progress</span>
                                 <span className="font-medium text-foreground">
                                   {goal.current_value}{goal.unit || ''} / {goal.target_value}{goal.unit || ''}
                                 </span>
@@ -413,7 +413,7 @@ export default function MovementHealth() {
                 ) : (
                   <div className="text-center py-8">
                     <Target className="w-12 h-12 text-foreground/30 mx-auto mb-4" />
-                    <p className="text-foreground/60">Нет целей по движению</p>
+                    <p className="text-foreground/60">No movement goals</p>
                   </div>
                 )}
               </CardContent>
@@ -424,11 +424,11 @@ export default function MovementHealth() {
           <TabsContent value="settings" className="space-y-6">
             <Card className="engraved-card">
               <CardHeader>
-                <CardTitle className="engraved-text">Настройки направления</CardTitle>
-                <CardDescription>Персонализация модуля движения</CardDescription>
+                <CardTitle className="engraved-text">Module Settings</CardTitle>
+                <CardDescription>Personalize the movement module</CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-foreground/60">Настройки находятся в разработке</p>
+                <p className="text-foreground/60">Settings under development</p>
               </CardContent>
             </Card>
           </TabsContent>

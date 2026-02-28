@@ -124,16 +124,16 @@ export default function Profile() {
   const bmi = height && weight ? (weight / ((height / 100) ** 2)).toFixed(1) : null;
 
   const biometrics = [
-    { label: 'Возраст', value: age ? `${age} лет` : 'Не указан', isEmpty: !age },
-    { label: 'Рост', value: height ? `${height} см` : 'Не указан', isEmpty: !height },
-    { label: 'Вес', value: weight ? `${weight} кг` : 'Не указан', isEmpty: !weight },
-    { label: 'ИМТ', value: bmi || 'Не рассчитан', isEmpty: !bmi },
+    { label: 'Age', value: age ? `${age} years` : 'Not set', isEmpty: !age },
+    { label: 'Height', value: height ? `${height} cm` : 'Not set', isEmpty: !height },
+    { label: 'Weight', value: weight ? `${weight} kg` : 'Not set', isEmpty: !weight },
+    { label: 'BMI', value: bmi || 'Not calculated', isEmpty: !bmi },
   ];
 
   const recentAnalyses = recentDocuments.map((doc: any) => ({
     type: doc.title,
-    date: new Date(doc.created_at).toLocaleDateString('ru-RU'),
-    status: 'Загружено',
+    date: new Date(doc.created_at).toLocaleDateString('en-US'),
+    status: 'Uploaded',
   }));
 
   return (
@@ -147,9 +147,9 @@ export default function Profile() {
         >
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-4xl font-bold text-foreground mb-2">Профиль здоровья</h1>
+              <h1 className="text-4xl font-bold text-foreground mb-2">Health Profile</h1>
               <p className="text-foreground/60">
-                Единая цифровая карта вашего здоровья
+                Your unified digital health card
               </p>
             </div>
             <div className="flex gap-2">
@@ -182,8 +182,8 @@ export default function Profile() {
         >
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="text-2xl font-bold text-foreground mb-2">Индекс здоровья</h2>
-              <p className="text-foreground/60">Динамический показатель состояния</p>
+              <h2 className="text-2xl font-bold text-foreground mb-2">Health Score</h2>
+              <p className="text-foreground/60">Dynamic wellness indicator</p>
             </div>
             <div className="relative w-32 h-32">
               <svg className="w-32 h-32 transform -rotate-90">
@@ -223,14 +223,14 @@ export default function Profile() {
               'bg-red-500/10 text-red-600'
             }`}>
               <span className="text-sm font-semibold">
-                Риск: {riskLevel === 'low' ? 'Низкий' : riskLevel === 'medium' ? 'Средний' : 'Высокий'}
+                Risk: {riskLevel === 'low' ? 'Low' : riskLevel === 'medium' ? 'Medium' : 'High'}
               </span>
             </div>
             {healthScore > 0 && (
               <>
                 <TrendingUp className="w-5 h-5 text-primary" />
                 <span className="text-sm text-foreground/60">
-                  {healthScore >= 80 ? 'Отличное состояние' : healthScore >= 50 ? 'Хорошее состояние' : 'Требует внимания'}
+                  {healthScore >= 80 ? 'Excellent condition' : healthScore >= 50 ? 'Good condition' : 'Needs attention'}
                 </span>
               </>
             )}
@@ -240,10 +240,10 @@ export default function Profile() {
         {/* Tabs */}
         <Tabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-6">
           <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="overview">Обзор</TabsTrigger>
-            <TabsTrigger value="biometrics">Биометрия</TabsTrigger>
-            <TabsTrigger value="medical">Медицина</TabsTrigger>
-            <TabsTrigger value="documents">Документы</TabsTrigger>
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="biometrics">Biometrics</TabsTrigger>
+            <TabsTrigger value="medical">Medical</TabsTrigger>
+            <TabsTrigger value="documents">Documents</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
@@ -260,7 +260,7 @@ export default function Profile() {
                   <p className="text-sm text-foreground/60 mb-1">{bio.label}</p>
                   <p className={`text-2xl font-bold ${bio.isEmpty ? 'text-foreground/40' : 'text-foreground'}`}>
                     {bio.isEmpty ? (
-                      <span className="text-sm font-normal italic">Введите данные</span>
+                      <span className="text-sm font-normal italic">Enter data</span>
                     ) : (
                       bio.value
                     )}
@@ -271,11 +271,11 @@ export default function Profile() {
 
             {/* Recent Activity */}
             <div className="premium-card p-6">
-              <h3 className="text-xl font-bold text-foreground mb-4">Недавняя активность</h3>
+              <h3 className="text-xl font-bold text-foreground mb-4">Recent Activity</h3>
               {recentAnalyses.length === 0 ? (
                 <div className="text-center py-8">
-                  <p className="text-foreground/40 italic">Нет записей</p>
-                  <p className="text-sm text-foreground/30 mt-2">Добавьте документы и анализы в разделе "Документы"</p>
+                  <p className="text-foreground/40 italic">No entries</p>
+                  <p className="text-sm text-foreground/30 mt-2">Add documents and analyses in the "Documents" section</p>
                 </div>
               ) : (
                 <div className="space-y-3">
@@ -292,7 +292,7 @@ export default function Profile() {
                         </div>
                       </div>
                       <span className={`px-3 py-1 rounded-lg text-sm font-medium ${
-                        item.status === 'Норма'
+                        item.status === 'Normal'
                           ? 'bg-primary/10 text-primary'
                           : 'bg-accent/10 text-accent'
                       }`}>
@@ -308,7 +308,7 @@ export default function Profile() {
           <TabsContent value="biometrics" className="space-y-6">
             <div className="premium-card p-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-bold text-foreground">Биометрические данные</h3>
+                <h3 className="text-xl font-bold text-foreground">Biometric Data</h3>
                 <Button
                   variant="outline"
                   size="sm"
@@ -332,13 +332,13 @@ export default function Profile() {
                         
                         if (response.ok) {
                           await refreshProfile();
-                          toast.success('Профиль сохранен');
+                          toast.success('Profile saved');
                         } else {
-                          toast.error('Ошибка при сохранении профиля');
+                          toast.error('Error saving profile');
                         }
                       } catch (error) {
                         console.error('Error saving profile:', error);
-                        toast.error('Ошибка при сохранении профиля');
+                        toast.error('Error saving profile');
                       }
                     }
                     setIsEditingBiometrics(!isEditingBiometrics);
@@ -346,7 +346,7 @@ export default function Profile() {
                   className="gap-2"
                 >
                   <Edit className="h-4 w-4" />
-                  {isEditingBiometrics ? 'Сохранить' : 'Редактировать'}
+                  {isEditingBiometrics ? 'Save' : 'Edit'}
                 </Button>
               </div>
               
@@ -356,7 +356,7 @@ export default function Profile() {
                     <div key={idx} className={`p-4 rounded-xl bg-muted/30 ${item.isEmpty ? 'opacity-60' : ''}`}>
                       <p className="text-sm text-foreground/60 mb-1">{item.label}</p>
                       <p className={`text-3xl font-bold ${item.isEmpty ? 'text-foreground/40 italic text-lg' : 'text-foreground'}`}>
-                        {item.isEmpty ? 'Введите данные' : item.value}
+                        {item.isEmpty ? 'Enter data' : item.value}
                       </p>
                     </div>
                   ))}
@@ -367,48 +367,48 @@ export default function Profile() {
                     <WheelPicker
                       value={height || 175}
                       onChange={(v) => setHeight(v)}
-                      label="Рост"
+                      label="Height"
                       min={100}
                       max={220}
-                      unit="см"
+                      unit="cm"
                     />
                     <WeightSelector
                       value={weight || 70}
                       onChange={(v) => setWeight(v)}
-                      label="Вес"
+                      label="Weight"
                       min={30}
                       max={200}
-                      unit="кг"
+                      unit="kg"
                     />
                     <MayanCalendar
                       value={birthDate || new Date(1990, 0, 1)}
                       onChange={(v) => setBirthDate(v)}
-                      label="Дата рождения"
+                      label="Date of Birth"
                     />
                   </div>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="text-sm font-medium mb-2 block">Пол</label>
+                      <label className="text-sm font-medium mb-2 block">Gender</label>
                       <select
                         value={gender}
                         onChange={(e) => setGender(e.target.value)}
                         className="w-full px-3 py-2 rounded-md border border-border bg-background"
                       >
-                        <option value="">Не указан</option>
-                        <option value="male">Мужской</option>
-                        <option value="female">Женский</option>
-                        <option value="other">Другое</option>
+                        <option value="">Not specified</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
                       </select>
                     </div>
                     <div>
-                      <label className="text-sm font-medium mb-2 block">Группа крови</label>
+                      <label className="text-sm font-medium mb-2 block">Blood Type</label>
                       <select
                         value={bloodType}
                         onChange={(e) => setBloodType(e.target.value)}
                         className="w-full px-3 py-2 rounded-md border border-border bg-background"
                       >
-                        <option value="">Не указана</option>
+                        <option value="">Not specified</option>
                         <option value="A+">A+</option>
                         <option value="A-">A-</option>
                         <option value="B+">B+</option>
@@ -428,28 +428,28 @@ export default function Profile() {
           <TabsContent value="medical" className="space-y-6">
             <div className="premium-card p-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-bold text-foreground">Медицинская история</h3>
+                <h3 className="text-xl font-bold text-foreground">Medical History</h3>
                 <FeatureButton
-                  label="Добавить запись"
-                  featureName="Медицинская история"
-                  description="Ведите полную историю ваших заболеваний, операций, травм и других медицинских событий. Система поможет отслеживать динамику и предоставит аналитику."
+                  label="Add Record"
+                  featureName="Medical History"
+                  description="Keep a complete history of your illnesses, surgeries, injuries and other medical events. The system will help track dynamics and provide analytics."
                 />
               </div>
-              <p className="text-foreground/60">Используйте кнопку выше для добавления медицинских записей</p>
+              <p className="text-foreground/60">Use the button above to add medical records</p>
             </div>
           </TabsContent>
 
           <TabsContent value="documents" className="space-y-6">
             <div className="premium-card p-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-bold text-foreground">Документы и анализы</h3>
+                <h3 className="text-xl font-bold text-foreground">Documents & Analyses</h3>
                 <FeatureButton
-                  label="Загрузить документ"
-                  featureName="Загрузка медицинских документов"
-                  description="Загружайте результаты анализов, выписки, рецепты и другие медицинские документы. Система автоматически распознает данные с помощью OCR технологии."
+                  label="Upload Document"
+                  featureName="Medical Document Upload"
+                  description="Upload test results, medical records, prescriptions and other medical documents. The system will automatically recognize data using OCR technology."
                 />
               </div>
-              <p className="text-foreground/60">Используйте кнопку выше для загрузки документов</p>
+              <p className="text-foreground/60">Use the button above to upload documents</p>
             </div>
           </TabsContent>
         </Tabs>

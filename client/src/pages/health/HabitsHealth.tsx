@@ -41,11 +41,11 @@ const categoryColors: Record<string, string> = {
 };
 
 const categoryLabels: Record<string, string> = {
-  health: 'Здоровье',
-  productivity: 'Продуктивность',
-  mindfulness: 'Осознанность',
-  social: 'Социальное',
-  other: 'Другое',
+  health: 'Health',
+  productivity: 'Productivity',
+  mindfulness: 'Mindfulness',
+  social: 'Social',
+  other: 'Other',
 };
 
 export default function HabitsHealth() {
@@ -78,18 +78,18 @@ export default function HabitsHealth() {
     try {
       const userId = user.id.toString();
       
-      // Загрузка привычек
+      // Load habits
       const res = await fetch(`/api/users/${userId}/plans?category=habits`);
       if (res.ok) {
         const data = await res.json();
-        // Преобразуем планы в формат привычек
+        // Convert plans to habits format
         const habitsData = (data.plans || []).map((p: any) => ({
           id: p.id,
           name: p.title,
           description: p.description,
           frequency: 'daily',
           target_days: 21,
-          current_streak: Math.floor(Math.random() * 10), // Временно
+          current_streak: Math.floor(Math.random() * 10), // Temporary
           longest_streak: Math.floor(Math.random() * 30) + 10,
           total_completions: Math.floor(Math.random() * 50) + 5,
           category: p.category || 'health',
@@ -99,7 +99,7 @@ export default function HabitsHealth() {
         setHabits(habitsData);
       }
 
-      // Загрузка выполнений за сегодня
+      // Load today's completions
       const completionsRes = await fetch(`/api/users/${userId}/metrics?metric_type=habit_completion&limit=50`);
       if (completionsRes.ok) {
         const data = await completionsRes.json();
@@ -124,30 +124,30 @@ export default function HabitsHealth() {
     
     try {
       if (isCompleted) {
-        // Отменить выполнение
+        // Cancel completion
         setTodayCompletions(prev => prev.filter(id => id !== habitId));
-        toast({ title: 'Отменено', description: 'Выполнение привычки отменено' });
+        toast({ title: 'Cancelled', description: 'Habit completion cancelled' });
       } else {
-        // Отметить выполнение
+        // Mark as completed
         const res = await fetch(`/api/users/${user.id}/metrics`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             metric_type: 'habit_completion',
             value: 1,
-            notes: 'Привычка выполнена',
+            notes: 'Habit completed',
             metadata: { habit_id: habitId },
           }),
         });
 
         if (res.ok) {
           setTodayCompletions(prev => [...prev, habitId]);
-          toast({ title: 'Отлично!', description: 'Привычка выполнена! 🔥' });
+          toast({ title: 'Great!', description: 'Habit completed! 🔥' });
           loadHabits();
         }
       }
     } catch (error) {
-      toast({ title: 'Ошибка', description: 'Не удалось сохранить', variant: 'destructive' });
+      toast({ title: 'Error', description: 'Failed to save', variant: 'destructive' });
     }
   };
 
@@ -168,7 +168,7 @@ export default function HabitsHealth() {
       });
 
       if (res.ok) {
-        toast({ title: 'Привычка создана!', description: 'Начните отслеживать прямо сейчас' });
+        toast({ title: 'Habit created!', description: 'Start tracking now' });
         setShowAddForm(false);
         setNewHabit({
           name: '',
@@ -180,7 +180,7 @@ export default function HabitsHealth() {
         loadHabits();
       }
     } catch (error) {
-      toast({ title: 'Ошибка', description: 'Не удалось создать привычку', variant: 'destructive' });
+      toast({ title: 'Error', description: 'Failed to create habit', variant: 'destructive' });
     }
   };
 
@@ -188,13 +188,13 @@ export default function HabitsHealth() {
   const totalStreak = habits.reduce((sum, h) => sum + h.current_streak, 0);
 
   const chartData = [
-    { name: 'Пн', completed: 5 },
-    { name: 'Вт', completed: 7 },
-    { name: 'Ср', completed: 4 },
-    { name: 'Чт', completed: 8 },
-    { name: 'Пт', completed: 6 },
-    { name: 'Сб', completed: 9 },
-    { name: 'Вс', completed: habits.length > 0 ? completedToday : 3 },
+    { name: 'Mon', completed: 5 },
+    { name: 'Tue', completed: 7 },
+    { name: 'Wed', completed: 4 },
+    { name: 'Thu', completed: 8 },
+    { name: 'Fri', completed: 6 },
+    { name: 'Sat', completed: 9 },
+    { name: 'Sun', completed: habits.length > 0 ? completedToday : 3 },
   ];
 
   return (
@@ -215,8 +215,8 @@ export default function HabitsHealth() {
                   <Sparkles className="w-6 h-6" />
                 </div>
                 <div>
-                  <h1 className="text-xl font-bold whitespace-nowrap">Привычки</h1>
-                  <p className="text-white/80 text-sm">Трекер и геймификация</p>
+                  <h1 className="text-xl font-bold whitespace-nowrap">Habits</h1>
+                  <p className="text-white/80 text-sm">Tracker and gamification</p>
                 </div>
               </div>
             </div>
@@ -225,7 +225,7 @@ export default function HabitsHealth() {
               className="bg-white/20 hover:bg-white/30 text-white"
             >
               <Plus className="w-4 h-4 mr-2" />
-              Новая
+              New
             </Button>
           </div>
         </div>
@@ -242,7 +242,7 @@ export default function HabitsHealth() {
                 </div>
                 <div>
                   <p className="text-2xl font-bold">{habits.length}</p>
-                  <p className="text-xs text-slate-500">Привычек</p>
+                  <p className="text-xs text-slate-500">Habits</p>
                 </div>
               </div>
             </CardContent>
@@ -256,7 +256,7 @@ export default function HabitsHealth() {
                 </div>
                 <div>
                   <p className="text-2xl font-bold">{totalStreak}</p>
-                  <p className="text-xs text-slate-500">Дней streak</p>
+                  <p className="text-xs text-slate-500">Days streak</p>
                 </div>
               </div>
             </CardContent>
@@ -270,7 +270,7 @@ export default function HabitsHealth() {
                 </div>
                 <div>
                   <p className="text-2xl font-bold">{completedToday}/{habits.length}</p>
-                  <p className="text-xs text-slate-500">Сегодня</p>
+                  <p className="text-xs text-slate-500">Today</p>
                 </div>
               </div>
             </CardContent>
@@ -284,7 +284,7 @@ export default function HabitsHealth() {
                 </div>
                 <div>
                   <p className="text-2xl font-bold">{Math.max(...habits.map(h => h.longest_streak), 0)}</p>
-                  <p className="text-xs text-slate-500">Лучший streak</p>
+                  <p className="text-xs text-slate-500">Best streak</p>
                 </div>
               </div>
             </CardContent>
@@ -293,9 +293,9 @@ export default function HabitsHealth() {
 
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="grid w-full grid-cols-3 mb-6">
-            <TabsTrigger value="today">Сегодня</TabsTrigger>
-            <TabsTrigger value="all">Все привычки</TabsTrigger>
-            <TabsTrigger value="stats">Статистика</TabsTrigger>
+            <TabsTrigger value="today">Today</TabsTrigger>
+            <TabsTrigger value="all">All Habits</TabsTrigger>
+            <TabsTrigger value="stats">Statistics</TabsTrigger>
           </TabsList>
 
           <TabsContent value="today" className="space-y-4">
@@ -303,10 +303,10 @@ export default function HabitsHealth() {
               <Card>
                 <CardContent className="p-8 text-center">
                   <Sparkles className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-                  <p className="text-slate-500">У вас пока нет привычек</p>
+                  <p className="text-slate-500">You have no habits yet</p>
                   <Button onClick={() => setShowAddForm(true)} className="mt-4">
                     <Plus className="w-4 h-4 mr-2" />
-                    Создать первую привычку
+                    Create First Habit
                   </Button>
                 </CardContent>
               </Card>
@@ -353,7 +353,7 @@ export default function HabitsHealth() {
                               <Flame className="w-4 h-4" />
                               <span className="font-semibold">{habit.current_streak}</span>
                             </div>
-                            <p className="text-xs text-slate-400">дней streak</p>
+                            <p className="text-xs text-slate-400">day streak</p>
                           </div>
                         </div>
                       </CardContent>
@@ -385,15 +385,15 @@ export default function HabitsHealth() {
                     <div className="grid grid-cols-3 gap-4 mt-4 pt-4 border-t">
                       <div className="text-center">
                         <p className="text-2xl font-bold text-orange-500">{habit.current_streak}</p>
-                        <p className="text-xs text-slate-500">Текущий streak</p>
+                        <p className="text-xs text-slate-500">Current streak</p>
                       </div>
                       <div className="text-center">
                         <p className="text-2xl font-bold text-yellow-500">{habit.longest_streak}</p>
-                        <p className="text-xs text-slate-500">Лучший streak</p>
+                        <p className="text-xs text-slate-500">Best streak</p>
                       </div>
                       <div className="text-center">
                         <p className="text-2xl font-bold text-cyan-500">{habit.total_completions}</p>
-                        <p className="text-xs text-slate-500">Всего раз</p>
+                        <p className="text-xs text-slate-500">Total times</p>
                       </div>
                     </div>
                   </CardContent>
@@ -405,7 +405,7 @@ export default function HabitsHealth() {
           <TabsContent value="stats">
             <Card>
               <CardHeader>
-                <CardTitle>Выполнение по дням недели</CardTitle>
+                <CardTitle>Weekly Completion</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="h-64">
@@ -438,7 +438,7 @@ export default function HabitsHealth() {
             >
               <div className="p-6">
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-lg font-semibold">Новая привычка</h2>
+                  <h2 className="text-lg font-semibold">New Habit</h2>
                   <button onClick={() => setShowAddForm(false)}>
                     <Plus className="w-6 h-6 rotate-45" />
                   </button>
@@ -446,27 +446,27 @@ export default function HabitsHealth() {
 
                 <form onSubmit={handleAddHabit} className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium mb-2">Название</label>
+                    <label className="block text-sm font-medium mb-2">Name</label>
                     <Input
                       value={newHabit.name}
                       onChange={(e) => setNewHabit({ ...newHabit, name: e.target.value })}
-                      placeholder="Например: Читать 30 минут"
+                      placeholder="e.g. Read 30 minutes"
                       required
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-2">Описание</label>
+                    <label className="block text-sm font-medium mb-2">Description</label>
                     <Textarea
                       value={newHabit.description}
                       onChange={(e) => setNewHabit({ ...newHabit, description: e.target.value })}
-                      placeholder="Дополнительные детали..."
+                      placeholder="Additional details..."
                       rows={2}
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-2">Категория</label>
+                    <label className="block text-sm font-medium mb-2">Category</label>
                     <Select 
                       value={newHabit.category} 
                       onValueChange={(v: any) => setNewHabit({ ...newHabit, category: v })}
@@ -475,21 +475,21 @@ export default function HabitsHealth() {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="health">Здоровье</SelectItem>
-                        <SelectItem value="productivity">Продуктивность</SelectItem>
-                        <SelectItem value="mindfulness">Осознанность</SelectItem>
-                        <SelectItem value="social">Социальное</SelectItem>
-                        <SelectItem value="other">Другое</SelectItem>
+                        <SelectItem value="health">Health</SelectItem>
+                        <SelectItem value="productivity">Productivity</SelectItem>
+                        <SelectItem value="mindfulness">Mindfulness</SelectItem>
+                        <SelectItem value="social">Social</SelectItem>
+                        <SelectItem value="other">Other</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
 
                   <div className="flex gap-3 pt-4">
                     <Button type="button" variant="outline" className="flex-1" onClick={() => setShowAddForm(false)}>
-                      Отмена
+                      Cancel
                     </Button>
                     <Button type="submit" className="flex-1 bg-gradient-to-r from-cyan-500 to-teal-500">
-                      Создать
+                      Create
                     </Button>
                   </div>
                 </form>

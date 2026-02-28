@@ -20,37 +20,37 @@ export default function Movement() {
 
   const todayStats = [
     {
-      title: 'Шаги',
+      title: 'Steps',
       value: 8420,
       unit: '',
       trend: 'up' as const,
       target: 10000,
       icon: 'movement' as const,
-      description: 'Цель: 10,000 шагов',
+      description: 'Goal: 10,000 steps',
     },
     {
-      title: 'Активность',
+      title: 'Activity',
       value: 45,
-      unit: 'мин',
+      unit: 'min',
       trend: 'up' as const,
       target: 60,
       icon: 'movement' as const,
-      description: 'Цель: 60 минут',
+      description: 'Goal: 60 minutes',
     },
     {
-      title: 'Калории',
+      title: 'Calories',
       value: 420,
-      unit: 'ккал',
+      unit: 'kcal',
       trend: 'up' as const,
       icon: 'movement' as const,
-      description: 'Сожжено сегодня',
+      description: 'Burned today',
     },
   ];
 
   const workouts = [
     {
       id: '1',
-      name: 'Силовая тренировка',
+      name: 'Strength Training',
       duration: 45,
       calories: 320,
       date: '2025-02-12',
@@ -58,7 +58,7 @@ export default function Movement() {
     },
     {
       id: '2',
-      name: 'Кардио',
+      name: 'Cardio',
       duration: 30,
       calories: 250,
       date: '2025-02-11',
@@ -66,7 +66,7 @@ export default function Movement() {
     },
     {
       id: '3',
-      name: 'Йога',
+      name: 'Yoga',
       duration: 60,
       calories: 180,
       date: '2025-02-10',
@@ -95,28 +95,28 @@ export default function Movement() {
             <div className="flex items-center gap-3">
               <SketchIcon icon="movement" size={32} className="text-primary" />
               <div>
-                <h1 className="text-4xl font-bold text-foreground">Движение</h1>
-                <p className="text-foreground/60">Трекинг активности и тренировок</p>
+                <h1 className="text-4xl font-bold text-foreground">Movement</h1>
+                <p className="text-foreground/60">Activity and workout tracking</p>
               </div>
             </div>
             <Dialog>
               <DialogTrigger asChild>
                 <Button variant="outline" className="gap-2">
                   <Settings className="h-4 w-4" />
-                  Настройки
+                  Settings
                 </Button>
               </DialogTrigger>
               <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
-                  <DialogTitle>Настройки модуля Движение</DialogTitle>
+                  <DialogTitle>Movement Module Settings</DialogTitle>
                 </DialogHeader>
                 <SettingsPanel
-                  title="Настройки"
+                  title="Settings"
                   settings={movementSettings}
                   onSave={(settings) => {
                     console.log('Movement settings saved:', settings);
                   }}
-                  categories={['Общие', 'Цели', 'Интеграции', 'Уведомления']}
+                  categories={['General', 'Goals', 'Integrations', 'Notifications']}
                 />
               </DialogContent>
             </Dialog>
@@ -125,13 +125,13 @@ export default function Movement() {
 
         <Tabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-6">
           <TabsList className="grid w-full grid-cols-5">
-            <TabsTrigger value="overview">Обзор</TabsTrigger>
-            <TabsTrigger value="workouts">Тренировки</TabsTrigger>
-            <TabsTrigger value="programs">Программы</TabsTrigger>
-            <TabsTrigger value="analytics">Аналитика</TabsTrigger>
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="workouts">Workouts</TabsTrigger>
+            <TabsTrigger value="programs">Programs</TabsTrigger>
+            <TabsTrigger value="analytics">Analytics</TabsTrigger>
             <TabsTrigger value="questionnaire">
               <ClipboardList className="w-4 h-4 mr-2" />
-              Анкета
+              Questionnaire
             </TabsTrigger>
           </TabsList>
 
@@ -150,11 +150,11 @@ export default function Movement() {
             {/* Weekly Progress */}
             <div className="premium-card p-6">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-2xl font-bold text-foreground">Недельный прогресс</h2>
+                <h2 className="text-2xl font-bold text-foreground">Weekly Progress</h2>
                 <TrendingUp className="w-5 h-5 text-primary" />
               </div>
               <div className="space-y-4">
-                {['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].map((day, idx) => {
+                {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day, idx) => {
                   const progress = Math.random() * 100;
                   return (
                     <div key={idx}>
@@ -179,10 +179,10 @@ export default function Movement() {
             {/* Quick Actions */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
-                { label: 'Начать тренировку', icon: Activity },
-                { label: 'Добавить активность', icon: Zap },
-                { label: 'Цели', icon: Target },
-                { label: 'Статистика', icon: TrendingUp },
+                { label: 'Start Workout', icon: Activity },
+                { label: 'Add Activity', icon: Zap },
+                { label: 'Goals', icon: Target },
+                { label: 'Statistics', icon: TrendingUp },
               ].map((action, idx) => (
                 <motion.button
                   key={idx}
@@ -203,17 +203,17 @@ export default function Movement() {
           <TabsContent value="workouts" className="space-y-6">
             <div className="flex items-center justify-end gap-2 mb-4">
               <FeatureButton
-                label="Подключить устройство"
-                featureName="Интеграция с wearables"
-                description="Подключите Apple Watch, Garmin, Fitbit или другие устройства для автоматической синхронизации данных о тренировках, пульсе и активности."
+                label="Connect Device"
+                featureName="Wearables Integration"
+                description="Connect Apple Watch, Garmin, Fitbit or other devices for automatic synchronization of workout data, heart rate and activity."
                 icon={<Watch className="h-4 w-4" />}
                 size="sm"
               />
             </div>
             <div className="premium-card p-6">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-foreground">История тренировок</h2>
-                <Button className="btn-premium">Новая тренировка</Button>
+                <h2 className="text-2xl font-bold text-foreground">Workout History</h2>
+                <Button className="btn-premium">New Workout</Button>
               </div>
               <div className="space-y-4">
                 {workouts.map((workout, idx) => (
@@ -228,8 +228,8 @@ export default function Movement() {
                       <div>
                         <h3 className="font-semibold text-foreground mb-1">{workout.name}</h3>
                         <div className="flex items-center gap-4 text-sm text-foreground/60">
-                          <span>{workout.duration} мин</span>
-                          <span>{workout.calories} ккал</span>
+                          <span>{workout.duration} min</span>
+                          <span>{workout.calories} kcal</span>
                           <span>{workout.date}</span>
                         </div>
                       </div>
@@ -249,8 +249,8 @@ export default function Movement() {
 
           <TabsContent value="programs" className="space-y-6">
             <div className="premium-card p-6">
-              <h2 className="text-2xl font-bold text-foreground mb-4">Программы тренировок</h2>
-              <p className="text-foreground/60">Раздел в разработке</p>
+              <h2 className="text-2xl font-bold text-foreground mb-4">Workout Programs</h2>
+              <p className="text-foreground/60">Section under development</p>
             </div>
           </TabsContent>
 
@@ -258,15 +258,15 @@ export default function Movement() {
             <div className="premium-card p-6">
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground mb-2">Опросник активности</h2>
+                  <h2 className="text-2xl font-bold text-foreground mb-2">Activity Questionnaire</h2>
                   <p className="text-foreground/60">
-                    Расскажите о вашей физической активности и целях
+                    Tell us about your physical activity and goals
                   </p>
                 </div>
                 {questionnaireCompleted && (
                   <div className="flex items-center gap-2 text-primary">
                     <CheckCircle2 className="h-5 w-5" />
-                    <span className="font-medium">Анкета заполнена</span>
+                    <span className="font-medium">Questionnaire Completed</span>
                   </div>
                 )}
               </div>
@@ -282,8 +282,8 @@ export default function Movement() {
 
           <TabsContent value="analytics" className="space-y-6">
             <div className="premium-card p-6">
-              <h2 className="text-2xl font-bold text-foreground mb-4">Аналитика</h2>
-              <p className="text-foreground/60">Раздел в разработке</p>
+              <h2 className="text-2xl font-bold text-foreground mb-4">Analytics</h2>
+              <p className="text-foreground/60">Section under development</p>
             </div>
           </TabsContent>
         </Tabs>

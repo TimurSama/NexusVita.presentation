@@ -17,41 +17,41 @@ import {
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
 
-// Mock data - в будущем будет заменено на реальные данные из API
+// Mock data - will be replaced with real data from API
 const mockEntries: JournalEntry[] = [
   {
     id: '1',
     type: 'day',
-    title: 'Отличный день',
-    content: 'Сегодня было много продуктивной работы. Успел завершить важный проект и провел время с семьей.',
+    title: 'Great Day',
+    content: 'Today was very productive. Managed to complete an important project and spent time with family.',
     date: new Date(),
     mood: 9,
-    tags: ['работа', 'семья', 'продуктивность'],
-    category: 'Работа',
+    tags: ['work', 'family', 'productivity'],
+    category: 'Work',
     createdAt: new Date(),
     updatedAt: new Date(),
   },
   {
     id: '2',
     type: 'health',
-    title: 'Тренировка',
-    content: 'Пробежал 5 км, чувствую себя отлично. Пульс в норме, восстановление хорошее.',
+    title: 'Workout',
+    content: 'Ran 5 km, feeling great. Heart rate normal, recovery good.',
     date: new Date(Date.now() - 86400000),
     mood: 8,
-    tags: ['спорт', 'бег', 'здоровье'],
-    category: 'Спорт',
+    tags: ['sports', 'running', 'health'],
+    category: 'Sports',
     createdAt: new Date(Date.now() - 86400000),
     updatedAt: new Date(Date.now() - 86400000),
   },
   {
     id: '3',
     type: 'reflection',
-    title: 'Размышления о будущем',
-    content: 'Думаю о том, как важно ставить цели и двигаться к ним постепенно. Каждый день - это шаг вперед.',
+    title: 'Thoughts on the Future',
+    content: 'Thinking about how important it is to set goals and move towards them gradually. Every day is a step forward.',
     date: new Date(Date.now() - 172800000),
     mood: 7,
-    tags: ['размышления', 'цели'],
-    category: 'Личное',
+    tags: ['reflections', 'goals'],
+    category: 'Personal',
     createdAt: new Date(Date.now() - 172800000),
     updatedAt: new Date(Date.now() - 172800000),
   },
@@ -181,7 +181,7 @@ export default function Journal() {
   };
 
   const handleDeleteEntry = (id: string) => {
-    if (confirm('Вы уверены, что хотите удалить эту запись?')) {
+    if (confirm('Are you sure you want to delete this entry?')) {
       setEntries(entries.filter((e) => e.id !== id));
     }
   };
@@ -199,10 +199,10 @@ export default function Journal() {
             <div>
               <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-2 flex items-center gap-3">
                 <SketchIcon icon="chart" size={32} className="text-primary" />
-                Ежедневник
+                Journal
               </h1>
               <p className="text-foreground/60 text-lg">
-                Записывайте свои мысли, события и достижения
+                Record your thoughts, events and achievements
               </p>
             </div>
             <div className="flex items-center gap-2">
@@ -210,7 +210,7 @@ export default function Journal() {
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" size="lg" className="gap-2">
                     <Download className="h-5 w-5" />
-                    Экспорт
+                    Export
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
@@ -221,7 +221,7 @@ export default function Journal() {
                     }}
                   >
                     <FileSpreadsheet className="h-4 w-4 mr-2" />
-                    Экспорт в CSV
+                    Export to CSV
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() => {
@@ -229,7 +229,7 @@ export default function Journal() {
                     }}
                   >
                     <FileText className="h-4 w-4 mr-2" />
-                    Экспорт в PDF
+                    Export to PDF
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
@@ -239,13 +239,13 @@ export default function Journal() {
                     }}
                   >
                     <FileText className="h-4 w-4 mr-2" />
-                    Экспорт статистики
+                    Export Statistics
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
               <Button onClick={handleNewEntry} size="lg" className="gap-2">
                 <Plus className="h-5 w-5" />
-                Новая запись
+                New Entry
               </Button>
             </div>
           </div>

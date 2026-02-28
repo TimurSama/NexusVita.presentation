@@ -53,8 +53,8 @@ export default function Psychology() {
             <div className="flex items-center gap-3">
               <SketchIcon icon="psychology" size={32} className="text-primary" />
               <div>
-                <h1 className="text-4xl font-bold text-foreground">Психология</h1>
-                <p className="text-foreground/60">Ментальное здоровье и эмоциональное благополучие</p>
+                <h1 className="text-4xl font-bold text-foreground">Psychology</h1>
+                <p className="text-foreground/60">Mental health and emotional wellbeing</p>
               </div>
             </div>
           </div>
@@ -62,31 +62,31 @@ export default function Psychology() {
 
         <Tabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-6">
           <TabsList className="grid w-full grid-cols-5">
-            <TabsTrigger value="overview">Обзор</TabsTrigger>
-            <TabsTrigger value="mood">Настроение</TabsTrigger>
-            <TabsTrigger value="stress">Стресс</TabsTrigger>
-            <TabsTrigger value="tools">Инструменты</TabsTrigger>
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="mood">Mood</TabsTrigger>
+            <TabsTrigger value="stress">Stress</TabsTrigger>
+            <TabsTrigger value="tools">Tools</TabsTrigger>
             <TabsTrigger value="questionnaire">
               <ClipboardList className="w-4 h-4 mr-2" />
-              Анкета
+              Questionnaire
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
             {/* Current Mood */}
             <div className="premium-card p-6">
-              <h2 className="text-2xl font-bold text-foreground mb-4">Текущее настроение</h2>
+              <h2 className="text-2xl font-bold text-foreground mb-4">Current Mood</h2>
               <div className="flex items-center justify-center gap-4 mb-6">
                 <div className="text-center">
                   <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center mb-2">
                     <Smile className="w-12 h-12 text-primary" />
                   </div>
                   <p className="text-3xl font-bold text-foreground">{mood}/10</p>
-                  <p className="text-sm text-foreground/60 mt-1">Отлично</p>
+                  <p className="text-sm text-foreground/60 mt-1">Excellent</p>
                 </div>
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium text-foreground">Оцените настроение</label>
+                <label className="text-sm font-medium text-foreground">Rate your mood</label>
                 <Slider
                   value={[mood]}
                   onValueChange={(value) => setMood(value[0])}
@@ -96,8 +96,8 @@ export default function Psychology() {
                   className="w-full"
                 />
                 <div className="flex items-center justify-between text-xs text-foreground/60">
-                  <span>Плохо</span>
-                  <span>Отлично</span>
+                  <span>Bad</span>
+                  <span>Excellent</span>
                 </div>
               </div>
             </div>
@@ -111,10 +111,10 @@ export default function Psychology() {
               >
                 <div className="flex items-center gap-3 mb-2">
                   <TrendingUp className="w-5 h-5 text-primary" />
-                  <h3 className="font-semibold text-foreground">Стресс</h3>
+                  <h3 className="font-semibold text-foreground">Stress</h3>
                 </div>
                 <p className="text-3xl font-bold text-foreground">{stressLevel}/10</p>
-                <p className="text-sm text-foreground/60 mt-1">Низкий уровень</p>
+                <p className="text-sm text-foreground/60 mt-1">Low level</p>
               </motion.div>
 
               <motion.div
@@ -125,10 +125,10 @@ export default function Psychology() {
               >
                 <div className="flex items-center gap-3 mb-2">
                   <SketchIcon icon="sleep" size={20} className="text-primary" />
-                  <h3 className="font-semibold text-foreground">Качество сна</h3>
+                  <h3 className="font-semibold text-foreground">Sleep Quality</h3>
                 </div>
                 <p className="text-3xl font-bold text-foreground">{sleepQuality}/10</p>
-                <p className="text-sm text-foreground/60 mt-1">Хорошо</p>
+                <p className="text-sm text-foreground/60 mt-1">Good</p>
               </motion.div>
 
               <motion.div
@@ -139,16 +139,16 @@ export default function Psychology() {
               >
                 <div className="flex items-center gap-3 mb-2">
                   <SketchIcon icon="zap" size={20} className="text-primary" />
-                  <h3 className="font-semibold text-foreground">Энергия</h3>
+                  <h3 className="font-semibold text-foreground">Energy</h3>
                 </div>
                 <p className="text-3xl font-bold text-foreground">{energyLevel}/10</p>
-                <p className="text-sm text-foreground/60 mt-1">Высокий уровень</p>
+                <p className="text-sm text-foreground/60 mt-1">High level</p>
               </motion.div>
             </div>
 
             {/* Mood History */}
             <div className="premium-card p-6">
-              <h2 className="text-2xl font-bold text-foreground mb-4">История настроения</h2>
+              <h2 className="text-2xl font-bold text-foreground mb-4">Mood History</h2>
               <div className="space-y-3">
                 {moodData.map((item, idx) => {
                   const Icon = item.icon;
@@ -164,7 +164,7 @@ export default function Psychology() {
                         <Icon className="w-6 h-6 text-primary" />
                         <div>
                           <p className="font-medium text-foreground">{item.date}</p>
-                          <p className="text-sm text-foreground/60">Настроение: {item.value}/10</p>
+                          <p className="text-sm text-foreground/60">Mood: {item.value}/10</p>
                         </div>
                       </div>
                       <div className="w-24 h-2 bg-muted rounded-full overflow-hidden">
@@ -184,15 +184,15 @@ export default function Psychology() {
 
           <TabsContent value="mood" className="space-y-6">
             <div className="premium-card p-6">
-              <h2 className="text-2xl font-bold text-foreground mb-4">Трекер настроения</h2>
-              <p className="text-foreground/60">Раздел в разработке</p>
+              <h2 className="text-2xl font-bold text-foreground mb-4">Mood Tracker</h2>
+              <p className="text-foreground/60">Section under development</p>
             </div>
           </TabsContent>
 
           <TabsContent value="stress" className="space-y-6">
             <div className="premium-card p-6">
-              <h2 className="text-2xl font-bold text-foreground mb-4">Управление стрессом</h2>
-              <p className="text-foreground/60">Раздел в разработке</p>
+              <h2 className="text-2xl font-bold text-foreground mb-4">Stress Management</h2>
+              <p className="text-foreground/60">Section under development</p>
             </div>
           </TabsContent>
 
@@ -200,15 +200,15 @@ export default function Psychology() {
             <div className="premium-card p-6">
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground mb-2">Опросник ментального здоровья</h2>
+                  <h2 className="text-2xl font-bold text-foreground mb-2">Mental Health Questionnaire</h2>
                   <p className="text-foreground/60">
-                    Помогите нам лучше понять ваше ментальное состояние
+                    Help us better understand your mental state
                   </p>
                 </div>
                 {questionnaireCompleted && (
                   <div className="flex items-center gap-2 text-primary">
                     <CheckCircle2 className="h-5 w-5" />
-                    <span className="font-medium">Анкета заполнена</span>
+                    <span className="font-medium">Questionnaire Completed</span>
                   </div>
                 )}
               </div>
@@ -225,22 +225,22 @@ export default function Psychology() {
           <TabsContent value="tools" className="space-y-6">
             <div className="flex items-center justify-end gap-2 mb-4 flex-wrap">
               <FeatureButton
-                label="CBT инструменты"
-                featureName="Когнитивно-поведенческая терапия"
-                description="Интерактивные инструменты CBT для работы с негативными мыслями, когнитивными искажениями и поведенческими паттернами."
+                label="CBT Tools"
+                featureName="Cognitive Behavioral Therapy"
+                description="Interactive CBT tools for working with negative thoughts, cognitive distortions and behavioral patterns."
                 icon={<Brain className="h-4 w-4" />}
                 size="sm"
               />
               <FeatureButton
-                label="Дыхательные практики"
-                featureName="Breathwork модуль"
-                description="Управляемые дыхательные практики для снижения стресса, улучшения концентрации и расслабления. Включает различные техники дыхания."
+                label="Breathing Exercises"
+                featureName="Breathwork Module"
+                description="Guided breathing exercises for stress reduction, improved concentration and relaxation. Includes various breathing techniques."
                 size="sm"
               />
             </div>
             <div className="premium-card p-6">
-              <h2 className="text-2xl font-bold text-foreground mb-4">Инструменты</h2>
-              <p className="text-foreground/60">Используйте кнопки выше для доступа к инструментам</p>
+              <h2 className="text-2xl font-bold text-foreground mb-4">Tools</h2>
+              <p className="text-foreground/60">Use the buttons above to access tools</p>
             </div>
           </TabsContent>
         </Tabs>

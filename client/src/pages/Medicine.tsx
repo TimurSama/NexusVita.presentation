@@ -24,47 +24,47 @@ export default function Medicine() {
 
   const diagnosticAreas = [
     {
-      name: 'Кардиоваскулярная система',
+      name: 'Cardiovascular System',
       icon: 'heart' as const,
       metrics: [
-        { label: 'Артериальное давление', value: '120/80', status: 'normal' },
-        { label: 'Пульс', value: '72', unit: 'уд/мин', status: 'normal' },
-        { label: 'Холестерин', value: '4.8', unit: 'ммоль/л', status: 'normal' },
+        { label: 'Blood Pressure', value: '120/80', status: 'normal' },
+        { label: 'Heart Rate', value: '72', unit: 'bpm', status: 'normal' },
+        { label: 'Cholesterol', value: '4.8', unit: 'mmol/L', status: 'normal' },
       ]
     },
     {
-      name: 'Дыхательная система',
+      name: 'Respiratory System',
       icon: 'chart' as const,
       metrics: [
-        { label: 'Функция легких', value: 'FEV1', status: 'normal' },
-        { label: 'Кислород в крови', value: '98', unit: '%', status: 'normal' },
-        { label: 'Дыхательный индекс', value: 'Оптимальный', status: 'normal' },
+        { label: 'Lung Function', value: 'FEV1', status: 'normal' },
+        { label: 'Blood Oxygen', value: '98', unit: '%', status: 'normal' },
+        { label: 'Breathing Index', value: 'Optimal', status: 'normal' },
       ]
     },
     {
-      name: 'Метаболизм',
+      name: 'Metabolism',
       icon: 'scale' as const,
       metrics: [
-        { label: 'Глюкоза крови', value: '5.2', unit: 'ммоль/л', status: 'normal' },
-        { label: 'ИМТ', value: '23.5', status: 'normal' },
-        { label: 'Метаболический возраст', value: '28', unit: 'лет', status: 'normal' },
+        { label: 'Blood Glucose', value: '5.2', unit: 'mmol/L', status: 'normal' },
+        { label: 'BMI', value: '23.5', status: 'normal' },
+        { label: 'Metabolic Age', value: '28', unit: 'years', status: 'normal' },
       ]
     },
     {
-      name: 'Иммунная система',
+      name: 'Immune System',
       icon: 'monitor' as const,
       metrics: [
-        { label: 'Лейкоциты', value: '6.2', unit: '×10⁹/л', status: 'normal' },
-        { label: 'Антитела', value: 'Защита', status: 'normal' },
-        { label: 'Воспаление', value: 'Контроль', status: 'normal' },
+        { label: 'White Blood Cells', value: '6.2', unit: '×10⁹/L', status: 'normal' },
+        { label: 'Antibodies', value: 'Protected', status: 'normal' },
+        { label: 'Inflammation', value: 'Controlled', status: 'normal' },
       ]
     },
   ];
 
   const recentLabs = [
-    { date: '2025-02-10', type: 'Общий анализ крови', status: 'normal', icon: 'chart' },
-    { date: '2025-01-15', type: 'Биохимия', status: 'normal', icon: 'chart' },
-    { date: '2024-12-20', type: 'Гормоны', status: 'attention', icon: 'chart' },
+    { date: '2025-02-10', type: 'Complete Blood Count', status: 'normal', icon: 'chart' },
+    { date: '2025-01-15', type: 'Biochemistry', status: 'normal', icon: 'chart' },
+    { date: '2024-12-20', type: 'Hormones', status: 'attention', icon: 'chart' },
   ];
 
   return (
@@ -88,29 +88,29 @@ export default function Medicine() {
             <div className="flex items-center gap-3">
               <SketchIcon icon="medicine" size={32} className="text-primary" />
               <div>
-                <h1 className="text-4xl font-bold text-foreground">Медицина</h1>
-                <p className="text-foreground/60">Диагностика и профилактика</p>
+                <h1 className="text-4xl font-bold text-foreground">Medicine</h1>
+                <p className="text-foreground/60">Diagnostics and Prevention</p>
               </div>
             </div>
             <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
               <DialogTrigger asChild>
                 <Button variant="outline" className="gap-2">
                   <Settings className="h-4 w-4" />
-                  Настройки
+                  Settings
                 </Button>
               </DialogTrigger>
               <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
-                  <DialogTitle>Настройки модуля Медицина</DialogTitle>
+                  <DialogTitle>Medicine Module Settings</DialogTitle>
                 </DialogHeader>
                 <SettingsPanel
-                  title="Настройки"
+                  title="Settings"
                   settings={medicineSettings}
                   onSave={(settings) => {
                     console.log('Settings saved:', settings);
                     setIsSettingsOpen(false);
                   }}
-                  categories={['Общие', 'Уведомления', 'Интеграции']}
+                  categories={['General', 'Notifications', 'Integrations']}
                 />
               </DialogContent>
             </Dialog>
@@ -119,13 +119,13 @@ export default function Medicine() {
 
         <Tabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-6">
           <TabsList className="grid w-full grid-cols-5">
-            <TabsTrigger value="overview">Обзор</TabsTrigger>
-            <TabsTrigger value="labs">Анализы</TabsTrigger>
-            <TabsTrigger value="diagnostics">Диагностика</TabsTrigger>
-            <TabsTrigger value="prevention">Профилактика</TabsTrigger>
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="labs">Lab Tests</TabsTrigger>
+            <TabsTrigger value="diagnostics">Diagnostics</TabsTrigger>
+            <TabsTrigger value="prevention">Prevention</TabsTrigger>
             <TabsTrigger value="questionnaire">
               <ClipboardList className="w-4 h-4 mr-2" />
-              Анкета
+              Questionnaire
             </TabsTrigger>
           </TabsList>
 
@@ -139,10 +139,10 @@ export default function Medicine() {
               >
                 <div className="flex items-center gap-3 mb-2">
                   <FileText className="w-5 h-5 text-primary" />
-                  <h3 className="font-semibold text-foreground">Анализов</h3>
+                  <h3 className="font-semibold text-foreground">Lab Tests</h3>
                 </div>
                 <p className="text-3xl font-bold text-foreground">{recentLabs.length}</p>
-                <p className="text-sm text-foreground/60 mt-1">За последние 3 месяца</p>
+                <p className="text-sm text-foreground/60 mt-1">Last 3 months</p>
               </motion.div>
 
               <motion.div
@@ -153,10 +153,10 @@ export default function Medicine() {
               >
                 <div className="flex items-center gap-3 mb-2">
                   <TrendingUp className="w-5 h-5 text-primary" />
-                  <h3 className="font-semibold text-foreground">Тренд</h3>
+                  <h3 className="font-semibold text-foreground">Trend</h3>
                 </div>
                 <p className="text-3xl font-bold text-primary">+5%</p>
-                <p className="text-sm text-foreground/60 mt-1">Улучшение показателей</p>
+                <p className="text-sm text-foreground/60 mt-1">Improvement in indicators</p>
               </motion.div>
 
               <motion.div
@@ -167,20 +167,20 @@ export default function Medicine() {
               >
                 <div className="flex items-center gap-3 mb-2">
                   <AlertCircle className="w-5 h-5 text-primary" />
-                  <h3 className="font-semibold text-foreground">Внимание</h3>
+                  <h3 className="font-semibold text-foreground">Attention</h3>
                 </div>
                 <p className="text-3xl font-bold text-accent">1</p>
-                <p className="text-sm text-foreground/60 mt-1">Требует внимания</p>
+                <p className="text-sm text-foreground/60 mt-1">Requires attention</p>
               </motion.div>
             </div>
 
             {/* Recent Labs */}
             <div className="premium-card p-6">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-2xl font-bold text-foreground">Недавние анализы</h2>
+                <h2 className="text-2xl font-bold text-foreground">Recent Lab Tests</h2>
                 <Link href="/medicine/labs">
                   <Button variant="ghost" size="sm">
-                    Все анализы →
+                    All Tests →
                   </Button>
                 </Link>
               </div>
@@ -207,7 +207,7 @@ export default function Medicine() {
                         ? 'bg-primary/10 text-primary'
                         : 'bg-accent/10 text-accent'
                     }`}>
-                      {lab.status === 'normal' ? 'Норма' : 'Внимание'}
+                      {lab.status === 'normal' ? 'Normal' : 'Attention'}
                     </span>
                   </motion.div>
                 ))}
@@ -219,14 +219,14 @@ export default function Medicine() {
             <div className="premium-card p-6">
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground mb-2">Лабораторные анализы</h2>
-                  <p className="text-foreground/60">Загрузите результаты анализов для анализа</p>
+                  <h2 className="text-2xl font-bold text-foreground mb-2">Laboratory Tests</h2>
+                  <p className="text-foreground/60">Upload test results for analysis</p>
                 </div>
                 <Button className="btn-premium">
                   <FeatureButton
-                    label="Загрузить анализ"
-                    featureName="Загрузка анализов"
-                    description="Загружайте результаты анализов в формате PDF или изображений. Система автоматически распознает данные с помощью OCR технологии и добавит их в ваш профиль здоровья."
+                    label="Upload Test"
+                    featureName="Test Upload"
+                    description="Upload test results in PDF or image format. The system will automatically recognize data using OCR technology and add it to your health profile."
                     icon={<Upload className="h-4 w-4" />}
                     size="sm"
                   />
@@ -234,7 +234,7 @@ export default function Medicine() {
               </div>
               <div className="text-center py-12 text-foreground/60">
                 <FileText className="w-16 h-16 mx-auto mb-4 text-foreground/20" />
-                <p>Загрузите первый анализ для начала</p>
+                <p>Upload your first test to get started</p>
               </div>
             </div>
           </TabsContent>
@@ -268,7 +268,7 @@ export default function Medicine() {
                         <span className={`px-2 py-1 rounded-lg text-xs font-medium ${
                           metric.status === 'normal' ? 'bg-primary/10 text-primary' : 'bg-accent/10 text-accent'
                         }`}>
-                          {metric.status === 'normal' ? 'Норма' : 'Внимание'}
+                          {metric.status === 'normal' ? 'Normal' : 'Attention'}
                         </span>
                       </div>
                     ))}
@@ -282,15 +282,15 @@ export default function Medicine() {
             <div className="premium-card p-6">
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground mb-2">Медицинская анкета</h2>
+                  <h2 className="text-2xl font-bold text-foreground mb-2">Medical Questionnaire</h2>
                   <p className="text-foreground/60">
-                    Заполните анкету для создания полного профиля здоровья
+                    Complete the questionnaire to create a comprehensive health profile
                   </p>
                 </div>
                 {questionnaireCompleted && (
                   <div className="flex items-center gap-2 text-primary">
                     <CheckCircle2 className="h-5 w-5" />
-                    <span className="font-medium">Анкета заполнена</span>
+                    <span className="font-medium">Questionnaire Completed</span>
                   </div>
                 )}
               </div>
@@ -299,7 +299,7 @@ export default function Medicine() {
                 onComplete={(answers) => {
                   console.log('Medical questionnaire answers:', answers);
                   setQuestionnaireCompleted(true);
-                  // Здесь будет сохранение в API
+                  // Will be saved to API
                 }}
               />
             </div>
@@ -307,8 +307,8 @@ export default function Medicine() {
 
           <TabsContent value="prevention" className="space-y-6">
             <div className="premium-card p-6">
-              <h2 className="text-2xl font-bold text-foreground mb-4">Программы профилактики</h2>
-              <p className="text-foreground/60">Раздел в разработке</p>
+              <h2 className="text-2xl font-bold text-foreground mb-4">Prevention Programs</h2>
+              <p className="text-foreground/60">Section under development</p>
             </div>
           </TabsContent>
         </Tabs>

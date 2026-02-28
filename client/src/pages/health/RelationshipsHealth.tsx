@@ -48,14 +48,14 @@ export default function RelationshipsHealth() {
     try {
       const userId = user.id.toString();
       
-      // Загрузка метрик
+      // Load metrics
       const metricsRes = await fetch(`/api/users/${userId}/metrics?metric_type=relationship_quality&limit=30`);
       if (metricsRes.ok) {
         const data = await metricsRes.json();
         setMetrics(data.metrics || []);
       }
 
-      // Загрузка записей
+      // Load entries
       const entriesRes = await fetch(`/api/users/${userId}/plans?category=relationships`);
       if (entriesRes.ok) {
         const data = await entriesRes.json();
@@ -84,7 +84,7 @@ export default function RelationshipsHealth() {
       });
 
       if (res.ok) {
-        toast({ title: 'Сохранено!', description: 'Запись добавлена' });
+        toast({ title: 'Saved!', description: 'Entry added' });
         setShowAddForm(false);
         setFormData({
           relationship_quality: 5,
@@ -97,12 +97,12 @@ export default function RelationshipsHealth() {
         loadData();
       }
     } catch (error) {
-      toast({ title: 'Ошибка', description: 'Не удалось сохранить', variant: 'destructive' });
+      toast({ title: 'Error', description: 'Failed to save', variant: 'destructive' });
     }
   };
 
   const chartData = metrics.slice(-14).map((m: any) => ({
-    date: new Date(m.recorded_at).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' }),
+    date: new Date(m.recorded_at).toLocaleDateString('en-US', { day: 'numeric', month: 'short' }),
     quality: m.value,
   }));
 
@@ -124,8 +124,8 @@ export default function RelationshipsHealth() {
                   <Users className="w-6 h-6" />
                 </div>
                 <div>
-                  <h1 className="text-xl font-bold">Отношения</h1>
-                  <p className="text-white/80 text-sm">Социальное здоровье и связи</p>
+                  <h1 className="text-xl font-bold">Relationships</h1>
+                  <p className="text-white/80 text-sm">Social health and connections</p>
                 </div>
               </div>
             </div>
@@ -134,7 +134,7 @@ export default function RelationshipsHealth() {
               className="bg-white/20 hover:bg-white/30 text-white"
             >
               <Plus className="w-4 h-4 mr-2" />
-              Добавить
+              Add
             </Button>
           </div>
         </div>
@@ -143,9 +143,9 @@ export default function RelationshipsHealth() {
       <main className="max-w-5xl mx-auto px-4 py-6">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="grid w-full grid-cols-3 mb-6">
-            <TabsTrigger value="overview">Обзор</TabsTrigger>
-            <TabsTrigger value="entries">Записи</TabsTrigger>
-            <TabsTrigger value="stats">Статистика</TabsTrigger>
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="entries">Entries</TabsTrigger>
+            <TabsTrigger value="stats">Statistics</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
@@ -159,7 +159,7 @@ export default function RelationshipsHealth() {
                     </div>
                     <div>
                       <p className="text-2xl font-bold">{metrics.length > 0 ? metrics[metrics.length - 1].value : '-'}</p>
-                      <p className="text-xs text-slate-500">Качество отношений</p>
+                      <p className="text-xs text-slate-500">Relationship Quality</p>
                     </div>
                   </div>
                 </CardContent>
@@ -173,7 +173,7 @@ export default function RelationshipsHealth() {
                     </div>
                     <div>
                       <p className="text-2xl font-bold">{entries.filter((e: any) => e.completed).length}</p>
-                      <p className="text-xs text-slate-500">Взаимодействий</p>
+                      <p className="text-xs text-slate-500">Interactions</p>
                     </div>
                   </div>
                 </CardContent>
@@ -187,7 +187,7 @@ export default function RelationshipsHealth() {
                     </div>
                     <div>
                       <p className="text-2xl font-bold">{entries.length}</p>
-                      <p className="text-xs text-slate-500">Записей</p>
+                      <p className="text-xs text-slate-500">Entries</p>
                     </div>
                   </div>
                 </CardContent>
@@ -201,7 +201,7 @@ export default function RelationshipsHealth() {
                     </div>
                     <div>
                       <p className="text-2xl font-bold">{metrics.length > 0 ? Math.round(metrics.reduce((a: number, b: any) => a + b.value, 0) / metrics.length) : '-'}</p>
-                      <p className="text-xs text-slate-500">Среднее</p>
+                      <p className="text-xs text-slate-500">Average</p>
                     </div>
                   </div>
                 </CardContent>
@@ -211,7 +211,7 @@ export default function RelationshipsHealth() {
             {/* Chart */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">Динамика качества отношений</CardTitle>
+                <CardTitle className="text-base">Relationship Quality Dynamics</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="h-64">
@@ -242,10 +242,10 @@ export default function RelationshipsHealth() {
                     <Sparkles className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="font-semibold mb-2">Совет дня</h3>
+                    <h3 className="font-semibold mb-2">Tip of the Day</h3>
                     <p className="text-white/90 text-sm">
-                      Проводите качественное время с близкими. Даже 15 минут искреннего разговора 
-                      без отвлекающих факторов укрепляет отношения больше, чем часы совместного времяпрепровождения с телефонами.
+                      Spend quality time with loved ones. Even 15 minutes of sincere conversation 
+                      without distractions strengthens relationships more than hours of time together with phones.
                     </p>
                   </div>
                 </div>
@@ -259,13 +259,13 @@ export default function RelationshipsHealth() {
                 <Card>
                   <CardContent className="p-8 text-center">
                     <Users className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-                    <p className="text-slate-500">Пока нет записей</p>
+                    <p className="text-slate-500">No entries yet</p>
                     <Button 
                       onClick={() => setShowAddForm(true)}
                       className="mt-4"
                     >
                       <Plus className="w-4 h-4 mr-2" />
-                      Добавить первую запись
+                      Add First Entry
                     </Button>
                   </CardContent>
                 </Card>
@@ -284,7 +284,7 @@ export default function RelationshipsHealth() {
                             <p className="font-medium">{entry.title}</p>
                             <p className="text-sm text-slate-500 mt-1">{entry.description}</p>
                             <p className="text-xs text-slate-400 mt-2">
-                              {new Date(entry.date || entry.created_at).toLocaleDateString('ru-RU')}
+                              {new Date(entry.date || entry.created_at).toLocaleDateString('en-US')}
                             </p>
                           </div>
                           {entry.completed ? (
@@ -304,22 +304,22 @@ export default function RelationshipsHealth() {
           <TabsContent value="stats">
             <Card>
               <CardHeader>
-                <CardTitle>Подробная статистика</CardTitle>
-                <CardDescription>Анализ ваших социальных связей</CardDescription>
+                <CardTitle>Detailed Statistics</CardTitle>
+                <CardDescription>Analysis of your social connections</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg">
-                  <span className="text-slate-600">Всего записей</span>
+                  <span className="text-slate-600">Total Entries</span>
                   <span className="font-semibold">{entries.length}</span>
                 </div>
                 <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg">
-                  <span className="text-slate-600">Среднее качество отношений</span>
+                  <span className="text-slate-600">Average Relationship Quality</span>
                   <span className="font-semibold">
                     {metrics.length > 0 ? (metrics.reduce((a: number, b: any) => a + b.value, 0) / metrics.length).toFixed(1) : '-'}/10
                   </span>
                 </div>
                 <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg">
-                  <span className="text-slate-600">Лучший показатель</span>
+                  <span className="text-slate-600">Best Score</span>
                   <span className="font-semibold">
                     {metrics.length > 0 ? Math.max(...metrics.map((m: any) => m.value)) : '-'}/10
                   </span>
@@ -339,7 +339,7 @@ export default function RelationshipsHealth() {
             >
               <div className="p-6">
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-lg font-semibold">Новая запись</h2>
+                  <h2 className="text-lg font-semibold">New Entry</h2>
                   <button onClick={() => setShowAddForm(false)}>
                     <Plus className="w-6 h-6 rotate-45" />
                   </button>
@@ -347,7 +347,7 @@ export default function RelationshipsHealth() {
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium mb-2">Качество отношений (1-10)</label>
+                    <label className="block text-sm font-medium mb-2">Relationship Quality (1-10)</label>
                     <Slider
                       value={[formData.relationship_quality]}
                       onValueChange={([v]) => setFormData({ ...formData, relationship_quality: v })}
@@ -356,38 +356,38 @@ export default function RelationshipsHealth() {
                       step={1}
                     />
                     <div className="flex justify-between text-xs text-slate-500 mt-1">
-                      <span>Плохо</span>
+                      <span>Bad</span>
                       <span className="font-medium">{formData.relationship_quality}</span>
-                      <span>Отлично</span>
+                      <span>Excellent</span>
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-2">Заметки</label>
+                    <label className="block text-sm font-medium mb-2">Notes</label>
                     <Textarea
                       value={formData.notes}
                       onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                      placeholder="Как прошел день?"
+                      placeholder="How was your day?"
                       rows={3}
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-2">За что благодарны?</label>
+                    <label className="block text-sm font-medium mb-2">What are you grateful for?</label>
                     <Textarea
                       value={formData.gratitude}
                       onChange={(e) => setFormData({ ...formData, gratitude: e.target.value })}
-                      placeholder="Напишите, что вас порадовало..."
+                      placeholder="Write what made you happy..."
                       rows={2}
                     />
                   </div>
 
                   <div className="flex gap-3 pt-4">
                     <Button type="button" variant="outline" className="flex-1" onClick={() => setShowAddForm(false)}>
-                      Отмена
+                      Cancel
                     </Button>
                     <Button type="submit" className="flex-1 bg-gradient-to-r from-orange-500 to-amber-500">
-                      Сохранить
+                      Save
                     </Button>
                   </div>
                 </form>
