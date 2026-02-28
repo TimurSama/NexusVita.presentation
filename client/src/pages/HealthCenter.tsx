@@ -29,6 +29,8 @@ export default function HealthCenter() {
     { id: 'sleep', label: 'Sleep', icon: 'sleep', color: '#8B5CF6', path: '/health/sleep' },
     { id: 'psychology', label: 'Psychology', icon: 'psychology', color: '#F59E0B', path: '/health/psychology' },
     { id: 'medicine', label: 'Medicine', icon: 'medicine', color: '#EF4444', path: '/health/medicine' },
+    { id: 'relationships', label: 'Relationships', icon: 'relationships', color: '#EC4899', path: '/health/relationships' },
+    { id: 'habits', label: 'Habits', icon: 'spirituality', color: '#06B6D4', path: '/health/habits' },
   ];
 
   useEffect(() => {
@@ -150,7 +152,7 @@ export default function HealthCenter() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-5 gap-2">
+              <div className="grid grid-cols-7 gap-2">
                 {quickActions.map((action) => (
                   <button
                     key={action.id}

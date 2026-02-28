@@ -27,7 +27,6 @@ export default function AIChatPage() {
     privacyLevel: 'full',
   });
 
-  // Load chat history
   useEffect(() => {
     if (user?.token) {
       loadChatHistory();
@@ -64,7 +63,6 @@ export default function AIChatPage() {
   };
 
   const handleSendMessage = useCallback(async (userMessage: string) => {
-    // Add user message
     const userMsg: AIMessage = {
       id: `msg-${Date.now()}-user`,
       role: 'user',
@@ -91,8 +89,8 @@ export default function AIChatPage() {
       if (!res.ok) {
         if (res.status === 429) {
           toast({
-            title: 'Лимит сообщений',
-            description: 'Вы достигли дневного лимита сообщений. Обновите тариф для большего количества.',
+            title: 'Message Limit',
+            description: 'You have reached your daily message limit. Upgrade your plan for more.',
             variant: 'destructive',
           });
           setIsLoading(false);
@@ -115,25 +113,22 @@ export default function AIChatPage() {
       };
 
       setMessages((prev) => [...prev, aiResponse]);
-      
-      // Refresh history
       loadChatHistory();
     } catch (error) {
       console.error('AI chat error:', error);
       
-      // Fallback response
       const fallbackResponse: AIMessage = {
         id: `msg-${Date.now()}-ai`,
         role: 'assistant',
-        content: 'Извините, произошла ошибка при обработке вашего запроса. Пожалуйста, попробуйте позже или задайте другой вопрос.',
+        content: 'Sorry, an error occurred while processing your request. Please try again later or ask a different question.',
         timestamp: new Date(),
       };
       
       setMessages((prev) => [...prev, fallbackResponse]);
       
       toast({
-        title: 'Ошибка',
-        description: 'Не удалось получить ответ от ИИ',
+        title: 'Error',
+        description: 'Failed to get AI response',
         variant: 'destructive',
       });
     } finally {
@@ -147,43 +142,42 @@ export default function AIChatPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-20 md:pb-0 pt-20">
-      <main className="container py-6 md:py-12 h-[calc(100vh-5rem)] md:h-[calc(100vh-8rem)] flex flex-col">
-        {/* Header */}
+    <div className="min-h-screen bg-background pb-20 md:pb-0 pt-14">
+      <main className="container py-4 h-[calc(100vh-3.5rem)] flex flex-col">
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
+          initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-6"
+          className="mb-4"
         >
-          <div className="flex items-center justify-between flex-wrap gap-4">
+          <div className="flex items-center justify-between flex-wrap gap-2">
             <div>
-              <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-2 flex items-center gap-3">
-                <SketchIcon icon="ai" size={32} className="text-primary" />
-                ИИ+ Чат
+              <h1 className="text-xl font-bold text-foreground flex items-center gap-2">
+                <SketchIcon icon="ai" size={24} className="text-primary" />
+                AI Chat
               </h1>
-              <p className="text-foreground/60 text-lg">
-                Персональный помощник для анализа здоровья и рекомендаций
+              <p className="text-foreground/60 text-sm">
+                Personal assistant for health analysis and recommendations
               </p>
             </div>
             <div className="flex items-center gap-2">
-              <Button variant="outline" onClick={startNewChat}>
-                Новый чат
+              <Button variant="outline" size="sm" onClick={startNewChat}>
+                New Chat
               </Button>
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button variant="outline" className="gap-2">
+                  <Button variant="outline" size="sm" className="gap-1">
                     <History className="h-4 w-4" />
-                    История
+                    History
                   </Button>
                 </DialogTrigger>
                 <DialogContent className="max-w-md">
                   <DialogHeader>
-                    <DialogTitle>История чатов</DialogTitle>
+                    <DialogTitle>Chat History</DialogTitle>
                   </DialogHeader>
                   <div className="space-y-2 max-h-[400px] overflow-y-auto">
                     {chatHistory.length === 0 ? (
                       <p className="text-center text-muted-foreground py-4">
-                        История чатов пуста
+                        No chat history
                       </p>
                     ) : (
                       chatHistory.map((chat) => (
@@ -192,9 +186,9 @@ export default function AIChatPage() {
                           onClick={() => loadConversation(chat.id)}
                           className="w-full text-left p-3 rounded-lg hover:bg-muted transition-colors"
                         >
-                          <p className="font-medium truncate">{chat.title || 'Новый чат'}</p>
+                          <p className="font-medium truncate">{chat.title || 'New Chat'}</p>
                           <p className="text-xs text-muted-foreground">
-                            {new Date(chat.updated_at).toLocaleDateString('ru-RU')}
+                            {new Date(chat.updated_at).toLocaleDateString()}
                           </p>
                         </button>
                       ))
@@ -204,18 +198,18 @@ export default function AIChatPage() {
               </Dialog>
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button variant="outline" className="gap-2">
+                  <Button variant="outline" size="sm" className="gap-1">
                     <Settings className="h-4 w-4" />
-                    Настройки
+                    Settings
                   </Button>
                 </DialogTrigger>
                 <DialogContent className="max-w-2xl">
                   <DialogHeader>
-                    <DialogTitle>Настройки ИИ</DialogTitle>
+                    <DialogTitle>AI Settings</DialogTitle>
                   </DialogHeader>
-                  <div className="space-y-6 py-4">
+                  <div className="space-y-4 py-4">
                     <div>
-                      <Label>Уровень детализации</Label>
+                      <Label>Detail Level</Label>
                       <Select
                         value={settings.detailLevel}
                         onValueChange={(value: any) =>
@@ -226,14 +220,14 @@ export default function AIChatPage() {
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="brief">Краткий</SelectItem>
-                          <SelectItem value="normal">Обычный</SelectItem>
-                          <SelectItem value="detailed">Подробный</SelectItem>
+                          <SelectItem value="brief">Brief</SelectItem>
+                          <SelectItem value="normal">Normal</SelectItem>
+                          <SelectItem value="detailed">Detailed</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
                     <div>
-                      <Label>Стиль общения</Label>
+                      <Label>Communication Style</Label>
                       <Select
                         value={settings.communicationStyle}
                         onValueChange={(value: any) =>
@@ -244,9 +238,9 @@ export default function AIChatPage() {
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="formal">Формальный</SelectItem>
-                          <SelectItem value="friendly">Дружелюбный</SelectItem>
-                          <SelectItem value="casual">Неформальный</SelectItem>
+                          <SelectItem value="formal">Formal</SelectItem>
+                          <SelectItem value="friendly">Friendly</SelectItem>
+                          <SelectItem value="casual">Casual</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -257,20 +251,11 @@ export default function AIChatPage() {
           </div>
         </motion.div>
 
-        {/* Chat Area */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="flex-1 premium-card overflow-hidden flex flex-col"
-        >
-          <AIChatComponent
-            messages={messages}
-            onSendMessage={handleSendMessage}
-            isLoading={isLoading}
-            showQuickQuestions={messages.length === 0}
-          />
-        </motion.div>
+        <AIChatComponent
+          messages={messages}
+          onSendMessage={handleSendMessage}
+          isLoading={isLoading}
+        />
       </main>
     </div>
   );
